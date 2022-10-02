@@ -1,0 +1,25 @@
+postgres:
+	docker run --name moniesto-postgres14 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:14-alpine
+
+createdb:
+	docker exec -it moniesto-postgres14 createdb --username=root --owner=root moniesto
+
+dropdb:
+	docker exec -it moniesto-postgres14 dropdb moniesto
+
+migrateup:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/moniesto?sslmode=disable" -verbose up
+
+migratedown:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/moniesto?sslmode=disable" -verbose down
+
+sqlc:
+	sqlc generate
+
+sqlc-bash:
+	docker run --rm -v "$(pwd):/src" -w /src kjconroy/sqlc generate
+
+sqlc-win:
+	docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc generate
+
+.PHONY: postgres createdb dropdb migrateup migratedown sqlc sqlc-bash sqlc-win
