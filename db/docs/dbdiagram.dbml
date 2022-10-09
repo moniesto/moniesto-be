@@ -45,7 +45,7 @@ Table moniest as M {
   id varchar [not null, pk, unique]
   user_id varchar [not null, unique]
   bio varchar
-  description blob
+  description text
   score float [not null, default: 0]
   
   created_at timestamp [not null, default: `now()`]

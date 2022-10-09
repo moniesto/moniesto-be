@@ -1,4 +1,23 @@
-## Setup
+# RUN
+
+## 1 - [only once] Run Postgres Container (on Docker) 
+Make sure `Docker Daemon` is up. (simply run docker).
+```bash
+make postgres
+```
+
+## 2 - [only once] Create DB (do only once)
+```bash
+make createdb
+```
+
+## 3 - [only once/or when needed] Run Migrations
+```bash
+make migrateup
+```
+
+
+# Setup / Downloads
 
 ### 1 - Download Go (v1.19 latest)
 
@@ -34,7 +53,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 ---
 
-## Back-end Tech Stack
+# Back-end Tech Stack
 
 - Language: Golang
 

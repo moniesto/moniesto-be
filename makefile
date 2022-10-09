@@ -22,4 +22,8 @@ sqlc-bash:
 sqlc-win:
 	docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc generate
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc sqlc-bash sqlc-win
+# usage example: make create_migration name=init_schema
+create_migration:
+	migrate create -ext sql -dir db/migration -seq $(name)
+
+.PHONY: postgres createdb dropdb migrateup migratedown sqlc sqlc-bash sqlc-win create_migration
