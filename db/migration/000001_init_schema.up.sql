@@ -66,12 +66,12 @@ CREATE TABLE "card" (
 
 CREATE TABLE "user_card" (
     "user_id" varchar NOT NULL,
-    "card_id" varchar NOT NULL
+    "card_id" varchar UNIQUE NOT NULL
 );
 
 CREATE TABLE "moniest_card" (
     "moniest_id" varchar NOT NULL,
-    "card_id" varchar NOT NULL
+    "card_id" varchar UNIQUE NOT NULL
 );
 
 CREATE TABLE "password_reset_token" (

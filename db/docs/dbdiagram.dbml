@@ -113,7 +113,7 @@ Table card as C {
 
 Table user_card as UC {
   user_id varchar [not null]
-  card_id varchar [not null]
+  card_id varchar [not null, unique]
 
   indexes {
     (user_id, card_id) [unique]
@@ -124,7 +124,7 @@ Table user_card as UC {
 
 Table moniest_card as MC {
   moniest_id varchar [not null]
-  card_id varchar [not null]
+  card_id varchar [not null, unique]
 
   indexes {
     (moniest_id, card_id) [unique]

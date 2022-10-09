@@ -26,4 +26,9 @@ sqlc-win:
 create_migration:
 	migrate create -ext sql -dir db/migration -seq $(name)
 
+resetdb:
+	make dropdb
+	make createdb
+	make migrateup
+
 .PHONY: postgres createdb dropdb migrateup migratedown sqlc sqlc-bash sqlc-win create_migration
