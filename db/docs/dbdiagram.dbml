@@ -1,0 +1,145 @@
+Project moniesto {
+  // database_type: 'PostgreSQL'
+  Note: 'moniesto, invest wisely.'
+}
+
+
+Table user as U {
+  id varchar [not null, pk, unique]
+  name varchar [not null]
+  surname varchar [not null]
+  username varchar [not null, unique]
+  email varchar [not null, unique]
+  email_verified boolean [not null, default: false]
+  password varchar [not null]
+  location varchar
+  
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    username [unique]
+    email [unique]
+  }
+  
+  Note: 'Stores user data'
+}
+
+
+Table image as I {
+  id varchar [not null, pk, unique]
+  user_id varchar [not null]
+  link varchar [not null]
+  thumbnail_link varchar [not null]
+  type image_type [not null]
+  
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id, type) [unique]
+  }
+  
+  Note: 'Stores image data'
+}
+
+
+Table moniest as M {
+  id varchar [not null, pk, unique]
+  user_id varchar [not null, unique]
+  bio varchar
+  description blob
+  score float [not null, default: 0]
+  
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id) [unique]
+  }
+  
+  Note: 'Stores moniest data'
+}
+
+
+Table subscription_info as SI{
+  id varchar [not null, pk, unique]
+  moniest_id varchar [not null, unique]
+  fee float [not null, default: 5]
+  
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  Note: 'Stores subscription data of a moniest'
+}
+
+
+Table user_subscription as US {
+  id varchar [not null, pk, unique]
+  user_id varchar [not null]
+  moniest_id varchar [not null]
+  active boolean [not null, default: true]
+  
+  created_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id, moniest_id) [unique]
+  }
+}
+
+
+Table card as C {
+  id varchar [not null, pk, unique]
+  token varchar
+  deleted boolean [not null, default: false]
+  
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  Note: 'Stores single card data'
+}
+
+
+Table user_card as UC {
+  user_id varchar [not null]
+  card_id varchar [not null]
+
+  indexes {
+    (user_id, card_id) [unique]
+  }
+  
+  Note: 'Stores relation between user and card'
+}
+
+
+Table moniest_card as MC {
+  moniest_id varchar [not null]
+  card_id varchar [not null]
+
+  indexes {
+    (moniest_id, card_id) [unique]
+  }
+  
+  Note: 'Stores relation between moniest and card'
+}
+
+
+
+
+// > many-to-one; < one-to-many; - one-to-one; <> many-to-many
+// Refs
+Ref: I.user_id > U.id
+Ref: M.user_id - U.id
+Ref: UC.user_id > U.id
+Ref: UC.card_id - C.id
+Ref: MC.moniest_id > M.id
+Ref: MC.card_id - C.id
+Ref: SI.moniest_id - M.id
+Ref: US.user_id > U.id
+Ref: US.moniest_id > M.id
+
+// Enums
+Enum image_type {
+  profile_photo
+  background_photo
+}
