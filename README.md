@@ -1,21 +1,38 @@
 # RUN
 
-## 1 - [only once] Run Postgres Container (on Docker) 
+## 1 - [only once] Run Postgres Container (on Docker)
+
 Make sure `Docker Daemon` is up. (simply run docker).
+
 ```bash
 make postgres
 ```
 
 ## 2 - [only once] Create DB (do only once)
+
 ```bash
 make createdb
 ```
 
 ## 3 - [only once/or when needed] Run Migrations
+
 ```bash
 make migrateup
 ```
 
+## 4 - [when needed] Generate Go code from Queries
+
+- win:
+
+```bash
+docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc generate
+```
+
+- bash
+
+```bash
+docker run --rm -v "$(pwd):/src" -w /src kjconroy/sqlc generate
+```
 
 # Setup / Downloads
 
