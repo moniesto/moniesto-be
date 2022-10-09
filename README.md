@@ -20,7 +20,6 @@ DB tool
 
 You can donwload from [here.](https://dbeaver.io/download)
 
-
 ### 5 - TablePlus (Optional)
 
 DB tool
@@ -44,3 +43,5 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 - Go tool for DB: [sqlc](https://docs.sqlc.dev/en/stable/)
 
 - Containerization: Docker
+
+- Cloudinary (image service)
