@@ -20,6 +20,19 @@ DB tool
 
 You can donwload from [here.](https://dbeaver.io/download)
 
+
+### 5 - TablePlus (Optional)
+
+DB tool
+
+You can donwload from [here.](https://tableplus.com)
+
+### 6 - Golang Migrate
+
+Migration tool
+
+You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate)
+
 ---
 
 ## Back-end Tech Stack
