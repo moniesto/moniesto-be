@@ -8,7 +8,9 @@ DROP TABLE IF EXISTS 'user_card';
 
 DROP TABLE IF EXISTS 'card';
 
-DROP TABLE IF EXISTS 'post';
+DROP TABLE IF EXISTS 'post_crypto_description';
+
+DROP TABLE IF EXISTS 'post_crypto';
 
 DROP TABLE IF EXISTS 'user_subscription';
 

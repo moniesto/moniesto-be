@@ -1,5 +1,7 @@
 CREATE TYPE "image_type" AS ENUM ('profile_photo', 'background_photo');
 
+CREATE TYPE "entry_position" AS ENUM ('long', 'short');
+
 CREATE TABLE "user" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "name" varchar NOT NULL,
@@ -9,8 +11,11 @@ CREATE TABLE "user" (
     "email_verified" boolean NOT NULL DEFAULT false,
     "password" varchar NOT NULL,
     "location" varchar,
+    "login_count" integer NOT NULL DEFAULT 1,
+    "deleted" boolean NOT NULL DEFAULT false,
     "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+    "updated_at" timestamp NOT NULL DEFAULT (now()),
+    "last_login" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "image" (
@@ -29,6 +34,7 @@ CREATE TABLE "moniest" (
     "bio" varchar,
     "description" text,
     "score" float NOT NULL DEFAULT 0,
+    "deleted" boolean NOT NULL DEFAULT false,
     "created_at" timestamp NOT NULL DEFAULT (now()),
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
@@ -37,6 +43,8 @@ CREATE TABLE "subscription_info" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "moniest_id" varchar UNIQUE NOT NULL,
     "fee" float NOT NULL DEFAULT 5,
+    "message" varchar,
+    "deleted" boolean NOT NULL DEFAULT false,
     "created_at" timestamp NOT NULL DEFAULT (now()),
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
@@ -46,12 +54,31 @@ CREATE TABLE "user_subscription" (
     "user_id" varchar NOT NULL,
     "moniest_id" varchar NOT NULL,
     "active" boolean NOT NULL DEFAULT true,
-    "created_at" timestamp NOT NULL DEFAULT (now())
+    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "post" (
+CREATE TABLE "post_crypto" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "moniest_id" varchar NOT NULL,
+    "base_currency" varchar NOT NULL,
+    "quote_currency" varchar NOT NULL,
+    "start_price" float NOT NULL,
+    "duration" timestamp NOT NULL,
+    "target1" float NOT NULL,
+    "target2" float,
+    "target3" float,
+    "stop" float,
+    "direction" entry_position NOT NULL,
+    "deleted" boolean NOT NULL DEFAULT false,
+    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "updated_at" timestamp NOT NULL DEFAULT (now())
+);
+
+CREATE TABLE "post_crypto_description" (
+    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+    "post_id" varchar UNIQUE NOT NULL,
+    "description" text NOT NULL,
     "created_at" timestamp NOT NULL DEFAULT (now()),
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
@@ -79,6 +106,7 @@ CREATE TABLE "password_reset_token" (
     "user_id" varchar NOT NULL,
     "token" varchar UNIQUE NOT NULL,
     "token_expiry" timestamp NOT NULL,
+    "deleted" boolean NOT NULL DEFAULT false,
     "created_at" timestamp NOT NULL DEFAULT (now())
 );
 
@@ -87,6 +115,7 @@ CREATE TABLE "email_verification" (
     "user_id" varchar NOT NULL,
     "token" varchar UNIQUE NOT NULL,
     "token_expiry" timestamp NOT NULL,
+    "deleted" boolean NOT NULL DEFAULT false,
     "created_at" timestamp NOT NULL DEFAULT (now())
 );
 
@@ -102,7 +131,9 @@ CREATE INDEX ON "subscription_info" ("moniest_id");
 
 CREATE UNIQUE INDEX ON "user_subscription" ("user_id", "moniest_id");
 
-CREATE INDEX ON "post" ("moniest_id");
+CREATE INDEX ON "post_crypto" ("moniest_id");
+
+CREATE INDEX ON "post_crypto_description" ("post_id");
 
 CREATE UNIQUE INDEX ON "user_card" ("user_id", "card_id");
 
@@ -121,6 +152,10 @@ COMMENT ON TABLE "moniest" IS 'Stores moniest data';
 COMMENT ON TABLE "subscription_info" IS 'Stores subscription data of a moniest';
 
 COMMENT ON TABLE "user_subscription" IS 'Stores user subscription info';
+
+COMMENT ON TABLE "post_crypto" IS 'Stores crypto posts data';
+
+COMMENT ON TABLE "post_crypto_description" IS 'Stores crypto post description data';
 
 COMMENT ON TABLE "card" IS 'Stores single card data';
 
@@ -159,7 +194,7 @@ ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 ALTER TABLE "user_subscription"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
-ALTER TABLE "post"
+ALTER TABLE "post_crypto"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
 ALTER TABLE "password_reset_token"
@@ -167,3 +202,6 @@ ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "email_verification"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+
+ALTER TABLE "post_crypto_description"
+ADD FOREIGN KEY ("post_id") REFERENCES "post_crypto" ("id");

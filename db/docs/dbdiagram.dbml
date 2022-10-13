@@ -12,9 +12,13 @@ Table user as U {
   email_verified boolean [not null, default: false]
   password varchar [not null]
   location varchar
+  login_count integer [not null, default: 1]
+
+  deleted boolean [not null, default: false]
   
   created_at timestamp [not null, default: `now()`]
   updated_at timestamp [not null, default: `now()`]
+  last_login timestamp [not null, default: `now()`]
   
   indexes {
     username [unique]
@@ -48,6 +52,8 @@ Table moniest as M {
   description text
   score float [not null, default: 0]
   
+  deleted boolean [not null, default: false]
+  
   created_at timestamp [not null, default: `now()`]
   updated_at timestamp [not null, default: `now()`]
   
@@ -62,6 +68,9 @@ Table subscription_info as SI{
   id varchar [not null, pk, unique]
   moniest_id varchar [not null, unique]
   fee float [not null, default: 5]
+  message varchar
+  
+  deleted boolean [not null, default: false]
   
   created_at timestamp [not null, default: `now()`]
   updated_at timestamp [not null, default: `now()`]
@@ -80,6 +89,7 @@ Table user_subscription as US {
   active boolean [not null, default: true]
   
   created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
   
   indexes {
     (user_id, moniest_id) [unique]
@@ -88,9 +98,20 @@ Table user_subscription as US {
   Note: 'Stores user subscription info'
 }
 
-Table post as P {
+Table post_crypto as PC {
   id varchar [not null, pk, unique]
   moniest_id varchar [not null]
+  base_currency varchar [not null]
+  quote_currency varchar [not null]
+  start_price float [not null]
+  duration timestamp [not null]
+  target1 float [not null]
+  target2 float
+  target3 float
+  stop float
+  direction entry_position [not null]
+  
+  deleted boolean [not null, default: false]
   
   created_at timestamp [not null, default: `now()`]
   updated_at timestamp [not null, default: `now()`]
@@ -98,6 +119,23 @@ Table post as P {
   indexes {
     moniest_id
   }
+  
+  Note: 'Stores crypto posts data'
+}
+
+Table post_crypto_description as PCD {
+  id varchar [not null, pk, unique]
+  post_id varchar [not null, unique]
+  description text [not null]
+  
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    post_id
+  }
+  
+  Note: 'Stores crypto post description data'
 }
 
 Table card as C {
@@ -139,6 +177,8 @@ Table password_reset_token as PRT{
   token varchar [not null, unique]
   token_expiry timestamp [not null]
   
+  deleted boolean [not null, default: false]
+  
   created_at timestamp [not null, default: `now()`]
   
   indexes {
@@ -153,6 +193,8 @@ Table email_verification as EV {
   user_id varchar [not null]
   token varchar [not null, unique]
   token_expiry timestamp [not null]
+  
+  deleted boolean [not null, default: false]
   
   created_at timestamp [not null, default: `now()`]
 
@@ -175,12 +217,20 @@ Ref: MC.card_id - C.id
 Ref: SI.moniest_id - M.id
 Ref: US.user_id > U.id
 Ref: US.moniest_id > M.id
-Ref: P.moniest_id > M.id
+Ref: PC.moniest_id > M.id
 Ref: PRT.user_id > U.id
 Ref: EV.user_id > U.id
+Ref: PCD.post_id > PC.id
+
+
 
 // Enums
 Enum image_type {
   profile_photo
   background_photo
+}
+
+Enum entry_position {
+  long
+  short
 }
