@@ -34,6 +34,22 @@ docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc generate
 docker run --rm -v "$(pwd):/src" -w /src kjconroy/sqlc generate
 ```
 
+## 5 - Run the project
+
+run in live reload mode: (need to install nodemon: `npm install -g nodemon`)
+
+```bash
+make run-live
+```
+
+OR
+
+run (without live reload):
+
+```bash
+make run
+```
+
 # Setup / Downloads
 
 ### 1 - Download Go (v1.19 latest)

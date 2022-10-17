@@ -31,4 +31,10 @@ resetdb:
 	make createdb
 	make migrateup
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc sqlc-bash sqlc-win create_migration
+run:
+	go run cmd/main.go
+
+run-live:
+	nodemon --exec go run cmd/main.go --signal SIGTERM
+
+.PHONY: postgres createdb dropdb migrateup migratedown sqlc sqlc-bash sqlc-win create_migration resetdb run
