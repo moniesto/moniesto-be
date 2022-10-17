@@ -7,7 +7,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 )
 
-// Server serves HTTP requests for our banking service
+// Server serves HTTP requests
 type Server struct {
 	store  *db.Store
 	router *gin.Engine
