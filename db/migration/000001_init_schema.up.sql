@@ -13,9 +13,9 @@ CREATE TABLE "user" (
     "location" varchar,
     "login_count" integer NOT NULL DEFAULT 1,
     "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "created_at" timestamp NOT NULL,
     "updated_at" timestamp NOT NULL DEFAULT (now()),
-    "last_login" timestamp NOT NULL DEFAULT (now())
+    "last_login" timestamp NOT NULL
 );
 
 CREATE TABLE "image" (
@@ -24,7 +24,7 @@ CREATE TABLE "image" (
     "link" varchar NOT NULL,
     "thumbnail_link" varchar NOT NULL,
     "type" image_type NOT NULL,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "created_at" timestamp NOT NULL,
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
@@ -35,7 +35,7 @@ CREATE TABLE "moniest" (
     "description" text,
     "score" float NOT NULL DEFAULT 0,
     "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "created_at" timestamp NOT NULL,
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
@@ -45,7 +45,7 @@ CREATE TABLE "subscription_info" (
     "fee" float NOT NULL DEFAULT 5,
     "message" varchar,
     "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "created_at" timestamp NOT NULL,
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
@@ -54,7 +54,7 @@ CREATE TABLE "user_subscription" (
     "user_id" varchar NOT NULL,
     "moniest_id" varchar NOT NULL,
     "active" boolean NOT NULL DEFAULT true,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "created_at" timestamp NOT NULL,
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
@@ -71,7 +71,7 @@ CREATE TABLE "post_crypto" (
     "stop" float,
     "direction" entry_position NOT NULL,
     "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "created_at" timestamp NOT NULL,
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
@@ -79,7 +79,7 @@ CREATE TABLE "post_crypto_description" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "post_id" varchar UNIQUE NOT NULL,
     "description" text NOT NULL,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "created_at" timestamp NOT NULL,
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
@@ -87,7 +87,7 @@ CREATE TABLE "card" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "token" varchar,
     "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "created_at" timestamp NOT NULL,
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
@@ -107,7 +107,7 @@ CREATE TABLE "password_reset_token" (
     "token" varchar UNIQUE NOT NULL,
     "token_expiry" timestamp NOT NULL,
     "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now())
+    "created_at" timestamp NOT NULL
 );
 
 CREATE TABLE "email_verification" (
@@ -116,7 +116,7 @@ CREATE TABLE "email_verification" (
     "token" varchar UNIQUE NOT NULL,
     "token_expiry" timestamp NOT NULL,
     "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now())
+    "created_at" timestamp NOT NULL
 );
 
 CREATE UNIQUE INDEX ON "user" ("username");
