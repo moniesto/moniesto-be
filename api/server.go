@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/service"
@@ -38,6 +39,12 @@ func (server *Server) setupRouter() {
 	router := gin.Default()
 
 	router.POST("/account/login", server.loginUser)
+
+	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
+
+	authRoutes.GET("/user", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{})
+	})
 
 	server.router = router
 }
