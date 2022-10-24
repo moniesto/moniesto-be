@@ -23,7 +23,11 @@ type internalErrorMessageType map[string]func(error) string
 func report(errorMessage ErrorMessage) func(...string) (int, gin.H) {
 	return func(moreMessage ...string) (int, gin.H) {
 
-		message := errorMessage.message + strings.Join(moreMessage[:], ",")
+		message := errorMessage.message
+
+		if len(moreMessage) > 0 {
+			message += ": " + strings.Join(moreMessage[:], ", ")
+		}
 
 		return errorMessage.code, errorResponse(message)
 	}
@@ -55,6 +59,10 @@ var Messages = errorMessageType{
 	"Unsupported_AuthorizationType": report(ErrorMessage{
 		"Unsupported authorization type",
 		http.StatusUnauthorized,
+	}),
+	"Invalid_RequestBody_Register": report(ErrorMessage{
+		"Register request body is invalid",
+		http.StatusNotAcceptable,
 	}),
 }
 

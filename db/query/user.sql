@@ -45,7 +45,6 @@ RETURNING *;
 --     INNER JOIN image ON image.user_id = user.id
 -- WHERE 
 --  user.id = $1;
-
 --  -- name: GetUserByUsername :one
 -- SELECT (
 --         user.id,
@@ -66,7 +65,6 @@ RETURNING *;
 --     INNER JOIN image ON image.user_id = user.id
 -- WHERE 
 --  user.username = $1;
-
 -- -- name: GetUserByEmail :one
 -- SELECT (
 --         user.id,
@@ -87,24 +85,30 @@ RETURNING *;
 --     INNER JOIN image ON image.user_id = user.id
 -- WHERE 
 --  user.email = $1;
-
- -- name: GetActiveUsersVerifiedEmails :many
+-- name: GetActiveUsersVerifiedEmails :many
 SELECT email
 FROM "user"
-WHERE email_verified = true AND deleted = false;
+WHERE email_verified = true
+    AND deleted = false;
 
 -- name: GetInactiveUsersVerifiedEmails :many
 SELECT email
 FROM "user"
-WHERE email_verified = true AND deleted = true;
+WHERE email_verified = true
+    AND deleted = true;
 
 -- name: SetPassword :one
 UPDATE "user"
 SET password = $2
-WHERE id = $1 
+WHERE id = $1
 RETURNING *;
 
+-- name: CheckEmail :one
+SELECT COUNT(*) = 0 AS isEmailValid
+FROM "user"
+WHERE email = $1;
+
 -- name: CheckUsername :one
-SELECT COUNT(*)=0 AS isUsernameValid
+SELECT COUNT(*) = 0 AS isUsernameValid
 FROM "user"
 WHERE username = $1;

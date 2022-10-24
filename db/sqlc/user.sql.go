@@ -9,8 +9,21 @@ import (
 	"context"
 )
 
+const checkEmail = `-- name: CheckEmail :one
+SELECT COUNT(*) = 0 AS isEmailValid
+FROM "user"
+WHERE email = $1
+`
+
+func (q *Queries) CheckEmail(ctx context.Context, email string) (bool, error) {
+	row := q.db.QueryRowContext(ctx, checkEmail, email)
+	var isemailvalid bool
+	err := row.Scan(&isemailvalid)
+	return isemailvalid, err
+}
+
 const checkUsername = `-- name: CheckUsername :one
-SELECT COUNT(*)=0 AS isUsernameValid
+SELECT COUNT(*) = 0 AS isUsernameValid
 FROM "user"
 WHERE username = $1
 `
@@ -102,10 +115,118 @@ func (q *Queries) DeleteUser(ctx context.Context, id string) (User, error) {
 	return i, err
 }
 
+const getActiveUsersVerifiedEmails = `-- name: GetActiveUsersVerifiedEmails :many
+SELECT email
+FROM "user"
+WHERE email_verified = true
+    AND deleted = false
+`
+
+// -- name: GetUserByID :one
+// SELECT (
+//
+//	    user.id,
+//	    user.name,
+//	    user.surname,
+//	    user.username,
+//	    user.email,
+//	    user.email_verified,
+//	    user.location,
+//	    user.created_at,
+//	    user.updated_at,
+//	    image.link FILTER (WHERE image.type = 1) AS profile_photo_link,
+//	    image.thumbnail_link FILTER (WHERE image.type = 1) AS profile_photo_thumbnail_link,
+//	    image.link FILTER (WHERE image.type = 2) AS background_photo_link,
+//	    image.thumbnail_link FILTER (WHERE image.type = 2) AS background_photo_thumbnail_link,
+//	)
+//
+// FROM user
+//
+//	INNER JOIN image ON image.user_id = user.id
+//
+// WHERE
+//
+//	user.id = $1;
+//	-- name: GetUserByUsername :one
+//
+// SELECT (
+//
+//	    user.id,
+//	    user.name,
+//	    user.surname,
+//	    user.username,
+//	    user.email,
+//	    user.email_verified,
+//	    user.location,
+//	    user.created_at,
+//	    user.updated_at,
+//	    image.link FILTER (WHERE image.type = 1) AS profile_photo_link,
+//	    image.thumbnail_link FILTER (WHERE image.type = 1) AS profile_photo_thumbnail_link,
+//	    image.link FILTER (WHERE image.type = 2) AS background_photo_link,
+//	    image.thumbnail_link FILTER (WHERE image.type = 2) AS background_photo_thumbnail_link,
+//	)
+//
+// FROM user
+//
+//	INNER JOIN image ON image.user_id = user.id
+//
+// WHERE
+//
+//	user.username = $1;
+//
+// -- name: GetUserByEmail :one
+// SELECT (
+//
+//	    user.id,
+//	    user.name,
+//	    user.surname,
+//	    user.username,
+//	    user.email,
+//	    user.email_verified,
+//	    user.location,
+//	    user.created_at,
+//	    user.updated_at,
+//	    image.link FILTER (WHERE image.type = 1) AS profile_photo_link,
+//	    image.thumbnail_link FILTER (WHERE image.type = 1) AS profile_photo_thumbnail_link,
+//	    image.link FILTER (WHERE image.type = 2) AS background_photo_link,
+//	    image.thumbnail_link FILTER (WHERE image.type = 2) AS background_photo_thumbnail_link,
+//	)
+//
+// FROM user
+//
+//	INNER JOIN image ON image.user_id = user.id
+//
+// WHERE
+//
+//	user.email = $1;
+func (q *Queries) GetActiveUsersVerifiedEmails(ctx context.Context) ([]string, error) {
+	rows, err := q.db.QueryContext(ctx, getActiveUsersVerifiedEmails)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []string{}
+	for rows.Next() {
+		var email string
+		if err := rows.Scan(&email); err != nil {
+			return nil, err
+		}
+		items = append(items, email)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getInactiveUsersVerifiedEmails = `-- name: GetInactiveUsersVerifiedEmails :many
 SELECT email
 FROM "user"
-WHERE email_verified = true AND deleted = true
+WHERE email_verified = true
+    AND deleted = true
 `
 
 func (q *Queries) GetInactiveUsersVerifiedEmails(ctx context.Context) ([]string, error) {
@@ -134,7 +255,7 @@ func (q *Queries) GetInactiveUsersVerifiedEmails(ctx context.Context) ([]string,
 const setPassword = `-- name: SetPassword :one
 UPDATE "user"
 SET password = $2
-WHERE id = $1 
+WHERE id = $1
 RETURNING id, name, surname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
 `
 

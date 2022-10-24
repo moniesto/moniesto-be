@@ -38,7 +38,11 @@ func NewServer(config util.Config, service *service.Service) (*Server, error) {
 func (server *Server) setupRouter() {
 	router := gin.Default()
 
-	router.POST("/account/login", server.loginUser)
+	// Account routes
+	accountRouters := router.Group("/account")
+
+	accountRouters.POST("/register", server.registerUser)
+	accountRouters.POST("/login", server.loginUser)
 
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
 
