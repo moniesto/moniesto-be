@@ -43,9 +43,10 @@ INSERT INTO "user" (
         username,
         email,
         password,
-        created_at
+        created_at,
+        last_login
     )
-VALUES ($1, $2, $3, $4, $5, $6, ` + "`" + `now()` + "`" + `)
+VALUES ($1, $2, $3, $4, $5, $6, now(), now())
 RETURNING id, name, surname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
 `
 
@@ -89,7 +90,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 const deleteUser = `-- name: DeleteUser :one
 UPDATE "user"
 SET deleted = true,
-    updated_at = ` + "`" + `now()` + "`" + `
+    updated_at = now()
 WHERE id = $1
 RETURNING id, name, surname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
 `
@@ -288,7 +289,7 @@ func (q *Queries) SetPassword(ctx context.Context, arg SetPasswordParams) (User,
 const updateLoginStats = `-- name: UpdateLoginStats :one
 UPDATE "user"
 SET login_count = login_count + 1,
-    last_login = ` + "`" + `now()` + "`" + `
+    last_login = now()
 WHERE id = $1
 RETURNING id, name, surname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
 `

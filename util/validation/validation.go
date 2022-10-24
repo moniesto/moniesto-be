@@ -25,3 +25,11 @@ func Email(email string) (string, error) {
 
 	return addr.Address, nil
 }
+
+func Username(username string) error {
+	if len(username) > 0 {
+		return nil
+	}
+
+	return fmt.Errorf("username is not valid %s", username)
+}

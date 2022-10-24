@@ -17,7 +17,7 @@ INSERT INTO image (
     thumbnail_link, 
     type,
     created_at) 
-VALUES ($1, $2, $3, $4, $5, ` + "`" + `now()` + "`" + `)
+VALUES ($1, $2, $3, $4, $5, now())
 RETURNING id, user_id, link, thumbnail_link, type, created_at, updated_at
 `
 

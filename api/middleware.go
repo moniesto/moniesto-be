@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/token"
-	"github.com/moniesto/moniesto-be/util/error"
+	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 const (
@@ -19,26 +19,26 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		authorizationHeader := ctx.GetHeader(authorizationHeaderKey)
 
 		if len(authorizationHeader) == 0 {
-			ctx.AbortWithStatusJSON(error.Messages["NotProvided_AuthorizationHeader"]())
+			ctx.AbortWithStatusJSON(systemError.Messages["NotProvided_AuthorizationHeader"]())
 			return
 		}
 
 		fields := strings.Fields(authorizationHeader)
 		if len(fields) < 2 {
-			ctx.AbortWithStatusJSON(error.Messages["Invalid_AuthorizationHeader"]())
+			ctx.AbortWithStatusJSON(systemError.Messages["Invalid_AuthorizationHeader"]())
 			return
 		}
 
 		authorizationType := strings.ToLower(fields[0])
 		if authorizationType != authorizationTypeBearer {
-			ctx.AbortWithStatusJSON(error.Messages["Unsupported_AuthorizationType"](authorizationType))
+			ctx.AbortWithStatusJSON(systemError.Messages["Unsupported_AuthorizationType"](authorizationType))
 			return
 		}
 
 		accessToken := fields[1]
 		payload, err := tokenMaker.VerifyToken(accessToken)
 		if err != nil {
-			ctx.AbortWithStatusJSON(error.Messages["Invalid_Token"]())
+			ctx.AbortWithStatusJSON(systemError.Messages["Invalid_Token"]())
 			return
 		}
 

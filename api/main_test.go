@@ -10,7 +10,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/service"
 	"github.com/moniesto/moniesto-be/util"
-	"github.com/moniesto/moniesto-be/util/error"
+	"github.com/moniesto/moniesto-be/util/systemError"
 	"github.com/stretchr/testify/require"
 )
 
@@ -22,7 +22,7 @@ func newTestServer(t *testing.T, store *db.Store) *Server {
 
 	service, err := service.NewService(store)
 	if err != nil {
-		log.Fatal(error.InternalMessages["RunService"](err))
+		log.Fatal(systemError.InternalMessages["RunService"](err))
 	}
 
 	server, err := NewServer(config, service)

@@ -1,4 +1,4 @@
-package error
+package systemError
 
 import (
 	"fmt"
@@ -64,10 +64,23 @@ var Messages = errorMessageType{
 		"Register request body is invalid",
 		http.StatusNotAcceptable,
 	}),
+	"Server_CheckEmail": report(ErrorMessage{
+		"Check email server error",
+		http.StatusInternalServerError,
+	}),
 }
 
 var InternalMessages = internalErrorMessageType{
 	"RunService": internalReport(InternalErrorMessage{
 		message: "Running service failed",
+	}),
+	"CheckEmail": internalReport(InternalErrorMessage{
+		message: "Server error on check email",
+	}),
+	"CheckUsername": internalReport(InternalErrorMessage{
+		message: "Server error on check username",
+	}),
+	"CreateUser": internalReport(InternalErrorMessage{
+		message: "Server error on creating user",
 	}),
 }

@@ -18,7 +18,7 @@ INSERT INTO moniest (
         description,
         created_at
     )
-VALUES ($1, $2, $3, $4, ` + "`" + `now()` + "`" + `)
+VALUES ($1, $2, $3, $4, now())
 RETURNING id, user_id, bio, description, score, deleted, created_at, updated_at
 `
 
@@ -53,7 +53,7 @@ func (q *Queries) CreateMoniest(ctx context.Context, arg CreateMoniestParams) (M
 const deleteMoniest = `-- name: DeleteMoniest :one
 UPDATE moniest 
 SET deleted = true,
-    updated_at = ` + "`" + `now()` + "`" + `
+    updated_at = now()
 WHERE moniest.id = $1
 RETURNING id, user_id, bio, description, score, deleted, created_at, updated_at
 `
@@ -77,7 +77,7 @@ func (q *Queries) DeleteMoniest(ctx context.Context, id string) (Moniest, error)
 const updateMoniestBio = `-- name: UpdateMoniestBio :one
 UPDATE moniest
 SET bio = $2,
-    updated_at = ` + "`" + `now()` + "`" + `
+    updated_at = now()
 WHERE moniest.id = $1
 RETURNING id, user_id, bio, description, score, deleted, created_at, updated_at
 `
@@ -106,7 +106,7 @@ func (q *Queries) UpdateMoniestBio(ctx context.Context, arg UpdateMoniestBioPara
 const updateMoniestDescription = `-- name: UpdateMoniestDescription :one
 UPDATE moniest
 SET description = $2,
-    updated_at = ` + "`" + `now()` + "`" + `
+    updated_at = now()
 WHERE moniest.id = $1
 RETURNING id, user_id, bio, description, score, deleted, created_at, updated_at
 `

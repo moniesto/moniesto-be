@@ -6,20 +6,20 @@ INSERT INTO subscription_info
     message, 
     created_at) 
 VALUES
-    ($1, $2, $3, $4, `now()`)
+    ($1, $2, $3, $4, now())
 RETURNING *;
 
 -- name: DeleteSubscriptionInfo :one
 UPDATE "subscription_info"
 SET deleted = true,
-    updated_date = `now()`
+    updated_date = now()
 WHERE moniest_id = $1
 RETURNING *;
 
 -- name: UpdateFee :one
 UPDATE "subscription_info"
 SET fee = $2,
-    updated_at = `now()`
+    updated_at = now()
 WHERE moniest_id = $1
 RETURNING *;
 

@@ -1,11 +1,12 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/model"
-	"github.com/moniesto/moniesto-be/util/error"
+	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 type loginRequest struct {
@@ -43,15 +44,17 @@ func (server *Server) registerUser(ctx *gin.Context) {
 	var req model.RegisterRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(error.Messages["Invalid_RequestBody_Register"]())
+		ctx.JSON(systemError.Messages["Invalid_RequestBody_Register"]())
 		return
 	}
 
 	// save user to db
-	err := server.service.CreateUser(ctx, req)
+	createdUser, err := server.service.CreateUser(ctx, req)
 	if err != nil {
-		ctx.JSON(error.Messages["Invalid_RequestBody_Register"](err.Error()))
+		ctx.JSON(systemError.Messages["Invalid_RequestBody_Register"](err.Error()))
 		return
 	}
 
+	fmt.Println("createdUser", createdUser)
+	ctx.JSON(http.StatusOK, createdUser)
 }
