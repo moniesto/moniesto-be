@@ -33,6 +33,10 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	// any user with same username
 
 	// hash password
+	hashedPassword, err := util.HashPassword(registerRequest.Password)
+	if err != nil {
+		return err
+	}
 
 	user := db.CreateUserParams{
 		ID:       util.CreateID(),
@@ -40,12 +44,11 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 		Surname:  registerRequest.Surname,
 		Username: registerRequest.Username,
 		Email:    registerRequest.Email,
-		Password: registerRequest.Password,
+		Password: hashedPassword,
 	}
 
 	_ = user
 
-	// store password
 	// service.store.CreateUser(ctx, user)
 
 	return nil
