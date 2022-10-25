@@ -209,7 +209,7 @@ Table email_verification as EV {
 // > many-to-one; < one-to-many; - one-to-one; <> many-to-many
 // Refs
 Ref: I.user_id > U.id
-Ref: M.user_id - U.id
+Ref: M.user_id > U.id
 Ref: UC.user_id > U.id
 Ref: UC.card_id - C.id
 Ref: MC.moniest_id > M.id

@@ -6,22 +6,23 @@ INSERT INTO "user" (
         username,
         email,
         password,
-        created_at
+        created_at,
+        last_login
     )
-VALUES ($1, $2, $3, $4, $5, $6, `now()`)
+VALUES ($1, $2, $3, $4, $5, $6, now(), now())
 RETURNING *;
 
 -- name: DeleteUser :one
 UPDATE "user"
 SET deleted = true,
-    updated_at = `now()`
+    updated_at = now()
 WHERE id = $1
 RETURNING *;
 
 -- name: UpdateLoginStats :one
 UPDATE "user"
 SET login_count = login_count + 1,
-    last_login = `now()`
+    last_login = now()
 WHERE id = $1
 RETURNING *;
 
@@ -148,20 +149,27 @@ WHERE
  -- name: GetActiveUsersVerifiedEmails :many
 SELECT email
 FROM "user"
-WHERE email_verified = true AND deleted = false;
+WHERE email_verified = true
+    AND deleted = false;
 
 -- name: GetInactiveUsersVerifiedEmails :many
 SELECT email
 FROM "user"
-WHERE email_verified = true AND deleted = true;
+WHERE email_verified = true
+    AND deleted = true;
 
 -- name: SetPassword :one
 UPDATE "user"
 SET password = $2
-WHERE id = $1 
+WHERE id = $1
 RETURNING *;
 
+-- name: CheckEmail :one
+SELECT COUNT(*) = 0 AS isEmailValid
+FROM "user"
+WHERE email = $1;
+
 -- name: CheckUsername :one
-SELECT COUNT(*)=0 AS isUsernameValid
+SELECT COUNT(*) = 0 AS isUsernameValid
 FROM "user"
 WHERE username = $1;

@@ -19,7 +19,7 @@ INSERT INTO subscription_info
     message, 
     created_at) 
 VALUES
-    ($1, $2, $3, $4, ` + "`" + `now()` + "`" + `)
+    ($1, $2, $3, $4, now())
 RETURNING id, moniest_id, fee, message, deleted, created_at, updated_at
 `
 
@@ -53,7 +53,7 @@ func (q *Queries) CreateSubscriptionInfo(ctx context.Context, arg CreateSubscrip
 const deleteSubscriptionInfo = `-- name: DeleteSubscriptionInfo :one
 UPDATE "subscription_info"
 SET deleted = true,
-    updated_date = ` + "`" + `now()` + "`" + `
+    updated_date = now()
 WHERE moniest_id = $1
 RETURNING id, moniest_id, fee, message, deleted, created_at, updated_at
 `
@@ -97,7 +97,7 @@ func (q *Queries) GetSubscriptionInfoByMoniestId(ctx context.Context, moniestID 
 const updateFee = `-- name: UpdateFee :one
 UPDATE "subscription_info"
 SET fee = $2,
-    updated_at = ` + "`" + `now()` + "`" + `
+    updated_at = now()
 WHERE moniest_id = $1
 RETURNING id, moniest_id, fee, message, deleted, created_at, updated_at
 `

@@ -170,8 +170,8 @@ COMMENT ON TABLE "email_verification" IS 'Stores email verification token for ve
 ALTER TABLE "image"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "user"
-ADD FOREIGN KEY ("id") REFERENCES "moniest" ("user_id");
+ALTER TABLE "moniest"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "user_card"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");

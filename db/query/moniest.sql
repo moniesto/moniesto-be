@@ -6,27 +6,27 @@ INSERT INTO moniest (
         description,
         created_at
     )
-VALUES ($1, $2, $3, $4, `now()`)
+VALUES ($1, $2, $3, $4, now())
 RETURNING *;
 
 -- name: DeleteMoniest :one
 UPDATE moniest 
 SET deleted = true,
-    updated_at = `now()`
+    updated_at = now()
 WHERE moniest.id = $1
 RETURNING *;
 
 -- name: UpdateMoniestBio :one
 UPDATE moniest
 SET bio = $2,
-    updated_at = `now()`
+    updated_at = now()
 WHERE moniest.id = $1
 RETURNING *;
 
 -- name: UpdateMoniestDescription :one
 UPDATE moniest
 SET description = $2,
-    updated_at = `now()`
+    updated_at = now()
 WHERE moniest.id = $1
 RETURNING *;
 
