@@ -121,7 +121,8 @@ func (q *Queries) DeleteUser(ctx context.Context, id string) (User, error) {
 const getActiveUsersVerifiedEmails = `-- name: GetActiveUsersVerifiedEmails :many
 SELECT email
 FROM "user"
-WHERE email_verified = true AND deleted = false
+WHERE email_verified = true
+    AND deleted = false
 `
 
 func (q *Queries) GetActiveUsersVerifiedEmails(ctx context.Context) ([]string, error) {
