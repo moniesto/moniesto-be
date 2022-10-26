@@ -12,6 +12,7 @@ import (
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
+// CreateUser creates user in register operation
 func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.RegisterRequest) (createdUser db.User, err error) {
 	validEmail, err := validation.Email(registerRequest.Email)
 	if err != nil {
@@ -73,4 +74,43 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	}
 
 	return
+}
+
+// GetOwnUser get the users data with identifier[email or username] and password
+func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string) (createdUser db.User, err error) {
+	identifierIsEmail := true
+	validEmail, err := validation.Email(identifier)
+	_ = validEmail
+	if err != nil {
+
+		err = validation.Username(identifier)
+		if err != nil {
+			return
+		}
+		identifierIsEmail = false
+	}
+
+	var user db.LoginUserByEmailRow
+
+	if identifierIsEmail {
+		user, err = service.store.LoginUserByEmail(ctx, identifier)
+
+		if err != nil {
+			systemError.Log(systemError.InternalMessages["LoginByEmail"](err))
+			return createdUser, fmt.Errorf("server error on login by email")
+		}
+
+	} else {
+		user1, err := service.store.LoginUserByUsername(ctx, identifier)
+
+		if err != nil {
+			systemError.Log(systemError.InternalMessages["LoginByUsername"](err))
+			return createdUser, fmt.Errorf("server error on login by username")
+		}
+
+		user = db.LoginUserByEmailRow(user1)
+	}
+
+	fmt.Println("identifierIsEmail", user)
+	return createdUser, nil
 }

@@ -178,42 +178,121 @@ func (q *Queries) GetInactiveUsersVerifiedEmails(ctx context.Context) ([]string,
 	return items, nil
 }
 
+const getUserByEmail = `-- name: GetUserByEmail :one
+SELECT "user"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    (
+        SELECT "image"."link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."email" = $1
+            AND "image"."type" = "profile_photo"
+    ) AS "profile_photo_link",
+    (
+        SELECT "image"."thumbnail_link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."email" = $1
+            AND "image"."type" = "profile_photo"
+    ) AS "profile_photo_thumbnail_link",
+    (
+        SELECT "image"."link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."email" = $1
+            AND "image"."type" = "background_photo"
+    ) AS "background_photo_link",
+    (
+        SELECT "image"."thumbnail_link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."email" = $1
+            AND "image"."type" = "background_photo"
+    ) AS "background_photo_thumbnail_link"
+FROM "user"
+WHERE "user"."email" = $1
+`
+
+type GetUserByEmailRow struct {
+	ID                           string         `json:"id"`
+	Name                         string         `json:"name"`
+	Surname                      string         `json:"surname"`
+	Username                     string         `json:"username"`
+	Email                        string         `json:"email"`
+	EmailVerified                bool           `json:"email_verified"`
+	Location                     sql.NullString `json:"location"`
+	CreatedAt                    time.Time      `json:"created_at"`
+	UpdatedAt                    time.Time      `json:"updated_at"`
+	ProfilePhotoLink             string         `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          string         `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) GetUserByEmail(ctx context.Context, email string) (GetUserByEmailRow, error) {
+	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
+	var i GetUserByEmailRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Surname,
+		&i.Username,
+		&i.Email,
+		&i.EmailVerified,
+		&i.Location,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ProfilePhotoLink,
+		&i.ProfilePhotoThumbnailLink,
+		&i.BackgroundPhotoLink,
+		&i.BackgroundPhotoThumbnailLink,
+	)
+	return i, err
+}
+
 const getUserByID = `-- name: GetUserByID :one
 SELECT "user"."id",
-        "user"."name",
-        "user"."surname",
-        "user"."username",
-        "user"."email",
-        "user"."email_verified",
-        "user"."location",
-        "user"."created_at",
-        "user"."updated_at",
-        (SELECT "image"."link" 
-            FROM "image" 
-            WHERE "image"."user_id" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_link",
-        
-        (SELECT "image"."thumbnail_link" 
-            FROM "image"
-            WHERE "image"."user_id" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_thumbnail_link",
-        
-        (SELECT "image"."link" 
-            FROM "image" 
-            WHERE "image"."user_id" = $1 
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_link",
-        
-        (SELECT "image"."thumbnail_link" 
-            FROM "image" 
-            WHERE "image"."user_id" = $1 
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_thumbnail_link"
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    (
+        SELECT "image"."link"
+        FROM "image"
+        WHERE "image"."user_id" = $1
+            AND "image"."type" = "profile_photo"
+    ) AS "profile_photo_link",
+    (
+        SELECT "image"."thumbnail_link"
+        FROM "image"
+        WHERE "image"."user_id" = $1
+            AND "image"."type" = "profile_photo"
+    ) AS "profile_photo_thumbnail_link",
+    (
+        SELECT "image"."link"
+        FROM "image"
+        WHERE "image"."user_id" = $1
+            AND "image"."type" = "background_photo"
+    ) AS "background_photo_link",
+    (
+        SELECT "image"."thumbnail_link"
+        FROM "image"
+        WHERE "image"."user_id" = $1
+            AND "image"."type" = "background_photo"
+    ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE 
-    "user"."id" = $1
+WHERE "user"."id" = $1
 `
 
 type GetUserByIDRow struct {
@@ -254,46 +333,45 @@ func (q *Queries) GetUserByID(ctx context.Context, userID string) (GetUserByIDRo
 }
 
 const getUserByUsername = `-- name: GetUserByUsername :one
-SELECT  "user"."id",
-        "user"."name",
-        "user"."surname",
-        "user"."username",
-        "user"."email",
-        "user"."email_verified",
-        "user"."location",
-        "user"."created_at",
-        "user"."updated_at",
-        (SELECT "image"."link" 
-        FROM "image" 
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_link",
-        
-        (SELECT "image"."thumbnail_link" 
+SELECT "user"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    (
+        SELECT "image"."link"
         FROM "image"
             INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_thumbnail_link",
-        
-        (SELECT "image"."link" 
-        FROM "image" 
+        WHERE "user"."username" = $1
+            AND "image"."type" = "profile_photo"
+    ) AS "profile_photo_link",
+    (
+        SELECT "image"."thumbnail_link"
+        FROM "image"
             INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1 
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_link",
-        
-        (SELECT "image"."thumbnail_link" 
-        FROM "image" 
+        WHERE "user"."username" = $1
+            AND "image"."type" = "profile_photo"
+    ) AS "profile_photo_thumbnail_link",
+    (
+        SELECT "image"."link"
+        FROM "image"
             INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1 
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_thumbnail_link"
-
+        WHERE "user"."username" = $1
+            AND "image"."type" = "background_photo"
+    ) AS "background_photo_link",
+    (
+        SELECT "image"."thumbnail_link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."username" = $1
+            AND "image"."type" = "background_photo"
+    ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE 
-    "user"."username" = $1
+WHERE "user"."username" = $1
 `
 
 type GetUserByUsernameRow struct {
@@ -322,6 +400,170 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUs
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
+		&i.Location,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ProfilePhotoLink,
+		&i.ProfilePhotoThumbnailLink,
+		&i.BackgroundPhotoLink,
+		&i.BackgroundPhotoThumbnailLink,
+	)
+	return i, err
+}
+
+const loginUserByEmail = `-- name: LoginUserByEmail :one
+SELECT "user"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."password",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    (
+        SELECT "image"."link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."email" = $1
+            AND "image"."type" = "profile_photo"
+    ) AS "profile_photo_link",
+    (
+        SELECT "image"."thumbnail_link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."email" = $1
+            AND "image"."type" = "profile_photo"
+    ) AS "profile_photo_thumbnail_link",
+    (
+        SELECT "image"."link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."email" = $1
+            AND "image"."type" = "background_photo"
+    ) AS "background_photo_link",
+    (
+        SELECT "image"."thumbnail_link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."email" = $1
+            AND "image"."type" = "background_photo"
+    ) AS "background_photo_thumbnail_link"
+FROM "user"
+WHERE "user"."email" = $1
+`
+
+type LoginUserByEmailRow struct {
+	ID                           string         `json:"id"`
+	Name                         string         `json:"name"`
+	Surname                      string         `json:"surname"`
+	Username                     string         `json:"username"`
+	Email                        string         `json:"email"`
+	EmailVerified                bool           `json:"email_verified"`
+	Password                     string         `json:"password"`
+	Location                     sql.NullString `json:"location"`
+	CreatedAt                    time.Time      `json:"created_at"`
+	UpdatedAt                    time.Time      `json:"updated_at"`
+	ProfilePhotoLink             string         `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          string         `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) LoginUserByEmail(ctx context.Context, email string) (LoginUserByEmailRow, error) {
+	row := q.db.QueryRowContext(ctx, loginUserByEmail, email)
+	var i LoginUserByEmailRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Surname,
+		&i.Username,
+		&i.Email,
+		&i.EmailVerified,
+		&i.Password,
+		&i.Location,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ProfilePhotoLink,
+		&i.ProfilePhotoThumbnailLink,
+		&i.BackgroundPhotoLink,
+		&i.BackgroundPhotoThumbnailLink,
+	)
+	return i, err
+}
+
+const loginUserByUsername = `-- name: LoginUserByUsername :one
+SELECT "user"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."password",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    (
+        SELECT "image"."link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."username" = $1
+            AND "image"."type" = "profile_photo"
+    ) AS "profile_photo_link",
+    (
+        SELECT "image"."thumbnail_link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."username" = $1
+            AND "image"."type" = "profile_photo"
+    ) AS "profile_photo_thumbnail_link",
+    (
+        SELECT "image"."link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."username" = $1
+            AND "image"."type" = "background_photo"
+    ) AS "background_photo_link",
+    (
+        SELECT "image"."thumbnail_link"
+        FROM "image"
+            INNER JOIN "user" ON "user"."id" = "image"."user_id"
+        WHERE "user"."username" = $1
+            AND "image"."type" = "background_photo"
+    ) AS "background_photo_thumbnail_link"
+FROM "user"
+WHERE "user"."username" = $1
+`
+
+type LoginUserByUsernameRow struct {
+	ID                           string         `json:"id"`
+	Name                         string         `json:"name"`
+	Surname                      string         `json:"surname"`
+	Username                     string         `json:"username"`
+	Email                        string         `json:"email"`
+	EmailVerified                bool           `json:"email_verified"`
+	Password                     string         `json:"password"`
+	Location                     sql.NullString `json:"location"`
+	CreatedAt                    time.Time      `json:"created_at"`
+	UpdatedAt                    time.Time      `json:"updated_at"`
+	ProfilePhotoLink             string         `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          string         `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) LoginUserByUsername(ctx context.Context, username string) (LoginUserByUsernameRow, error) {
+	row := q.db.QueryRowContext(ctx, loginUserByUsername, username)
+	var i LoginUserByUsernameRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Surname,
+		&i.Username,
+		&i.Email,
+		&i.EmailVerified,
+		&i.Password,
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,

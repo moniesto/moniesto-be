@@ -10,9 +10,8 @@ import (
 )
 
 type loginRequest struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password" binding:"required,min=6"`
+	Identifier string `json:"identifier"`
+	Password   string `json:"password" binding:"required,min=6"`
 }
 
 type loginResponse struct {
@@ -27,8 +26,16 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		return
 	}
 
-	accessToken, err := server.tokenMaker.CreateToken(req.Username, server.config.AccessTokenDuration)
+	user, err := server.service.GetOwnUser(ctx, req.Identifier, req.Password)
 	if err != nil {
+		// TODO: update with systemError
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
+	accessToken, err := server.tokenMaker.CreateToken(user.Username, server.config.AccessTokenDuration)
+	if err != nil {
+		// TODO: update with systemError
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
@@ -54,6 +61,19 @@ func (server *Server) registerUser(ctx *gin.Context) {
 		ctx.JSON(systemError.Messages["Invalid_RequestBody_Register"](err.Error()))
 		return
 	}
+
+	// create token
+	accessToken, err := server.tokenMaker.CreateToken(req.Username, server.config.AccessTokenDuration)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	rsp := model.RegisterResponse{
+		Token: accessToken,
+	}
+
+	_ = rsp
 
 	fmt.Println("createdUser", createdUser)
 	ctx.JSON(http.StatusOK, createdUser)

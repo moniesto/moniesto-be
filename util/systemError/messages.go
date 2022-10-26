@@ -83,4 +83,10 @@ var InternalMessages = internalErrorMessageType{
 	"CreateUser": internalReport(InternalErrorMessage{
 		message: "Server error on creating user",
 	}),
+	"LoginByEmail": internalReport(InternalErrorMessage{
+		message: "Server error on login by email",
+	}),
+	"LoginByUsername": internalReport(InternalErrorMessage{
+		message: "Server error on login by username",
+	}),
 }
