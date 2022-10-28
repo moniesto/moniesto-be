@@ -36,29 +36,41 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
-    (
-        SELECT "image"."link"
-        FROM "image"
-        WHERE "image"."user_id" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-        WHERE "image"."user_id" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_thumbnail_link",
-    (
-        SELECT "image"."link"
-        FROM "image"
-        WHERE "image"."user_id" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-        WHERE "image"."user_id" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
 WHERE "user"."id" = $1;
@@ -73,33 +85,45 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_thumbnail_link",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
 WHERE "user"."username" = $1;
@@ -115,33 +139,45 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
     ) AS "profile_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
     ) AS "profile_photo_thumbnail_link",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
     ) AS "background_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
 WHERE "user"."username" = $1;
@@ -156,33 +192,45 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_thumbnail_link",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
 WHERE "user"."email" = $1;
@@ -198,33 +246,45 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_thumbnail_link",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
 WHERE "user"."email" = $1;

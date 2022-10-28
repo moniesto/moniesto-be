@@ -188,33 +188,45 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_thumbnail_link",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
 WHERE "user"."email" = $1
@@ -230,10 +242,10 @@ type GetUserByEmailRow struct {
 	Location                     sql.NullString `json:"location"`
 	CreatedAt                    time.Time      `json:"created_at"`
 	UpdatedAt                    time.Time      `json:"updated_at"`
-	ProfilePhotoLink             string         `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          string         `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (GetUserByEmailRow, error) {
@@ -267,29 +279,41 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
-    (
-        SELECT "image"."link"
-        FROM "image"
-        WHERE "image"."user_id" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-        WHERE "image"."user_id" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_thumbnail_link",
-    (
-        SELECT "image"."link"
-        FROM "image"
-        WHERE "image"."user_id" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-        WHERE "image"."user_id" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
 WHERE "user"."id" = $1
@@ -305,10 +329,10 @@ type GetUserByIDRow struct {
 	Location                     sql.NullString `json:"location"`
 	CreatedAt                    time.Time      `json:"created_at"`
 	UpdatedAt                    time.Time      `json:"updated_at"`
-	ProfilePhotoLink             string         `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          string         `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetUserByID(ctx context.Context, userID string) (GetUserByIDRow, error) {
@@ -342,33 +366,45 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_thumbnail_link",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
 WHERE "user"."username" = $1
@@ -384,10 +420,10 @@ type GetUserByUsernameRow struct {
 	Location                     sql.NullString `json:"location"`
 	CreatedAt                    time.Time      `json:"created_at"`
 	UpdatedAt                    time.Time      `json:"updated_at"`
-	ProfilePhotoLink             string         `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          string         `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error) {
@@ -422,33 +458,45 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
     ) AS "profile_photo_thumbnail_link",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
 WHERE "user"."email" = $1
@@ -465,10 +513,10 @@ type LoginUserByEmailRow struct {
 	Location                     sql.NullString `json:"location"`
 	CreatedAt                    time.Time      `json:"created_at"`
 	UpdatedAt                    time.Time      `json:"updated_at"`
-	ProfilePhotoLink             string         `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          string         `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) LoginUserByEmail(ctx context.Context, email string) (LoginUserByEmailRow, error) {
@@ -504,33 +552,45 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
     ) AS "profile_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "profile_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
     ) AS "profile_photo_thumbnail_link",
-    (
-        SELECT "image"."link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
     ) AS "background_photo_link",
-    (
-        SELECT "image"."thumbnail_link"
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1
-            AND "image"."type" = "background_photo"
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
 WHERE "user"."username" = $1
@@ -547,10 +607,10 @@ type LoginUserByUsernameRow struct {
 	Location                     sql.NullString `json:"location"`
 	CreatedAt                    time.Time      `json:"created_at"`
 	UpdatedAt                    time.Time      `json:"updated_at"`
-	ProfilePhotoLink             string         `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          string         `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) LoginUserByUsername(ctx context.Context, username string) (LoginUserByUsernameRow, error) {
