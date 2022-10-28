@@ -89,4 +89,7 @@ var InternalMessages = internalErrorMessageType{
 	"LoginByUsername": internalReport(InternalErrorMessage{
 		message: "Server error on login by username",
 	}),
+	"LoginFail": internalReport(InternalErrorMessage{
+		message: "Login failed",
+	}),
 }

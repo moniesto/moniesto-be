@@ -40,9 +40,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		return
 	}
 
-	rsp := loginResponse{
-		Token: accessToken,
-	}
+	rsp := model.NewRegisterResponse(accessToken, user)
 
 	ctx.JSON(http.StatusOK, rsp)
 }

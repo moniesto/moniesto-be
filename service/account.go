@@ -77,10 +77,9 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 }
 
 // GetOwnUser get the users data with identifier[email or username] and password
-func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string) (createdUser db.User, err error) {
+func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string) (createdUser db.LoginUserByEmailRow, err error) {
 	identifierIsEmail := true
-	validEmail, err := validation.Email(identifier)
-	_ = validEmail
+	_, err = validation.Email(identifier)
 	if err != nil {
 
 		err = validation.Username(identifier)
@@ -92,6 +91,7 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 
 	var user db.LoginUserByEmailRow
 
+	// fetch user data by email OR username
 	if identifierIsEmail {
 		user, err = service.store.LoginUserByEmail(ctx, identifier)
 
@@ -111,6 +111,14 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 		user = db.LoginUserByEmailRow(user1)
 	}
 
-	fmt.Println("identifierIsEmail", user)
+	// check the password
+	err = util.CheckPassword(password, user.Password)
+	if err != nil {
+		systemError.Log(systemError.InternalMessages["LoginFail"](err))
+		return createdUser, fmt.Errorf("login failed")
+	}
+
+	createdUser = user
+
 	return createdUser, nil
 }
