@@ -64,6 +64,18 @@ var Messages = errorMessageType{
 		"Register request body is invalid",
 		http.StatusNotAcceptable,
 	}),
+	"Invalid_RequestBody_Login": report(ErrorMessage{
+		"Login request body is invalid",
+		http.StatusNotAcceptable,
+	}),
+	"Wrong_LoginCredentials": report(ErrorMessage{
+		"Wrong credentials",
+		http.StatusUnauthorized,
+	}),
+	"Server_TokenCreate": report(ErrorMessage{
+		"Server error while creating token",
+		http.StatusInternalServerError,
+	}),
 	"Server_CheckEmail": report(ErrorMessage{
 		"Check email server error",
 		http.StatusInternalServerError,

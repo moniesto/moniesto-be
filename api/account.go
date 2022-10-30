@@ -16,24 +16,21 @@ func (server *Server) loginUser(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		// TODO: update with system error
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		ctx.JSON(systemError.Messages["Invalid_RequestBody_Login"]())
 		return
 	}
 
 	// STEP: get own user [+ checking password]
 	user, err := server.service.GetOwnUser(ctx, req.Identifier, req.Password)
 	if err != nil {
-		// TODO: update with systemError
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		ctx.JSON(systemError.Messages["Wrong_LoginCredentials"](err.Error()))
 		return
 	}
 
 	// STEP: create token
 	accessToken, err := server.tokenMaker.CreateToken(user.Username, server.config.AccessTokenDuration)
 	if err != nil {
-		// TODO: update with systemError
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(systemError.Messages["Server_TokenCreate"]())
 		return
 	}
 
