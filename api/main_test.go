@@ -22,6 +22,9 @@ func newTestServer(t *testing.T) *Server {
 	}
 
 	testDB, err := sql.Open(config.DBDriver, config.DBSourceTest)
+	if err != nil {
+		log.Fatal("cannot connect test database", err)
+	}
 	store := db.NewStore(testDB)
 
 	service, err := service.NewService(store)

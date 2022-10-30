@@ -3,7 +3,7 @@ package api
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -66,7 +66,7 @@ func (server *Server) registerUser(ctx *gin.Context) {
 	}
 	loginRequestBodyBytes := new(bytes.Buffer)
 	json.NewEncoder(loginRequestBodyBytes).Encode(loginRequestBody)
-	ctx.Request.Body = ioutil.NopCloser(bytes.NewBuffer(loginRequestBodyBytes.Bytes()))
+	ctx.Request.Body = io.NopCloser(bytes.NewBuffer(loginRequestBodyBytes.Bytes()))
 
 	server.loginUser(ctx)
 }
