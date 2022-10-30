@@ -1,12 +1,6 @@
-CREATE TYPE "image_type" AS ENUM (
-  'profile_photo',
-  'background_photo'
-);
+CREATE TYPE "image_type" AS ENUM ('profile_photo', 'background_photo');
 
-CREATE TYPE "entry_position" AS ENUM (
-  'long',
-  'short'
-);
+CREATE TYPE "entry_position" AS ENUM ('long', 'short');
 
 CREATE TABLE "user" (
   "id" varchar UNIQUE PRIMARY KEY NOT NULL,
@@ -173,28 +167,41 @@ COMMENT ON TABLE "password_reset_token" IS 'Stores reset token for forget passwo
 
 COMMENT ON TABLE "email_verification" IS 'Stores email verification token for verifying account';
 
-ALTER TABLE "image" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "image"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "moniest" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "moniest"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "user_card" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "user_card"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "card" ADD FOREIGN KEY ("id") REFERENCES "user_card" ("card_id");
+ALTER TABLE "user_card"
+ADD FOREIGN KEY ("card_id") REFERENCES "card" ("id");
 
-ALTER TABLE "moniest_card" ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
+ALTER TABLE "moniest_card"
+ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
-ALTER TABLE "card" ADD FOREIGN KEY ("id") REFERENCES "moniest_card" ("card_id");
+ALTER TABLE "moniest_card"
+ADD FOREIGN KEY ("card_id") REFERENCES "card" ("id");
 
-ALTER TABLE "moniest" ADD FOREIGN KEY ("id") REFERENCES "subscription_info" ("moniest_id");
+ALTER TABLE "subscription_info"
+ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
-ALTER TABLE "user_subscription" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "user_subscription"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "user_subscription" ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
+ALTER TABLE "user_subscription"
+ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
-ALTER TABLE "post_crypto" ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
+ALTER TABLE "post_crypto"
+ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
-ALTER TABLE "password_reset_token" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "password_reset_token"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "email_verification" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+ALTER TABLE "email_verification"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "post_crypto_description" ADD FOREIGN KEY ("post_id") REFERENCES "post_crypto" ("id");
+ALTER TABLE "post_crypto_description"
+ADD FOREIGN KEY ("post_id") REFERENCES "post_crypto" ("id");

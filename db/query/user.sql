@@ -19,13 +19,6 @@ SET deleted = true,
 WHERE id = $1
 RETURNING *;
 
--- name: UpdateLoginStats :one
-UPDATE "user"
-SET login_count = login_count + 1,
-    last_login = now()
-WHERE id = $1
-RETURNING *;
-
 -- name: GetUserByID :one
 SELECT "user"."id",
     "user"."name",

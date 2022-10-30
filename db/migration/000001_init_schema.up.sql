@@ -176,17 +176,17 @@ ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 ALTER TABLE "user_card"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "card"
-ADD FOREIGN KEY ("id") REFERENCES "user_card" ("card_id");
+ALTER TABLE "user_card"
+ADD FOREIGN KEY ("card_id") REFERENCES "card" ("id");
 
 ALTER TABLE "moniest_card"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
-ALTER TABLE "card"
-ADD FOREIGN KEY ("id") REFERENCES "moniest_card" ("card_id");
+ALTER TABLE "moniest_card"
+ADD FOREIGN KEY ("card_id") REFERENCES "card" ("id");
 
-ALTER TABLE "moniest"
-ADD FOREIGN KEY ("id") REFERENCES "subscription_info" ("moniest_id");
+ALTER TABLE "subscription_info"
+ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
 ALTER TABLE "user_subscription"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");

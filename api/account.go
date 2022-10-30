@@ -1,7 +1,9 @@
 package api
 
 import (
-	"fmt"
+	"bytes"
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,23 +11,17 @@ import (
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
-type loginRequest struct {
-	Identifier string `json:"identifier"`
-	Password   string `json:"password" binding:"required,min=6"`
-}
-
-type loginResponse struct {
-	Token string `json:"token"`
-}
-
 func (server *Server) loginUser(ctx *gin.Context) {
-	var req loginRequest
+	var req model.LoginRequest
 
+	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
+		// TODO: update with system error
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
+	// STEP: get own user [+ checking password]
 	user, err := server.service.GetOwnUser(ctx, req.Identifier, req.Password)
 	if err != nil {
 		// TODO: update with systemError
@@ -33,6 +29,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		return
 	}
 
+	// STEP: create token
 	accessToken, err := server.tokenMaker.CreateToken(user.Username, server.config.AccessTokenDuration)
 	if err != nil {
 		// TODO: update with systemError
@@ -40,7 +37,11 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		return
 	}
 
-	rsp := model.NewRegisterResponse(accessToken, user)
+	// STEP: update login stat
+	server.service.UpdateLoginStats(ctx, user.ID)
+
+	// STEP: create response object
+	rsp := model.NewLoginResponse(accessToken, user)
 
 	ctx.JSON(http.StatusOK, rsp)
 }
@@ -48,31 +49,27 @@ func (server *Server) loginUser(ctx *gin.Context) {
 func (server *Server) registerUser(ctx *gin.Context) {
 	var req model.RegisterRequest
 
+	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(systemError.Messages["Invalid_RequestBody_Register"]())
 		return
 	}
 
-	// save user to db
+	// STEP: create user
 	createdUser, err := server.service.CreateUser(ctx, req)
 	if err != nil {
 		ctx.JSON(systemError.Messages["Invalid_RequestBody_Register"](err.Error()))
 		return
 	}
 
-	// create token
-	accessToken, err := server.tokenMaker.CreateToken(req.Username, server.config.AccessTokenDuration)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-		return
+	// STEP: login
+	loginRequestBody := model.LoginRequest{
+		Identifier: createdUser.Email,
+		Password:   req.Password,
 	}
+	loginRequestBodyBytes := new(bytes.Buffer)
+	json.NewEncoder(loginRequestBodyBytes).Encode(loginRequestBody)
+	ctx.Request.Body = ioutil.NopCloser(bytes.NewBuffer(loginRequestBodyBytes.Bytes()))
 
-	rsp := model.RegisterResponse{
-		Token: accessToken,
-	}
-
-	_ = rsp
-
-	fmt.Println("createdUser", createdUser)
-	ctx.JSON(http.StatusOK, createdUser)
+	server.loginUser(ctx)
 }

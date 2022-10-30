@@ -32,7 +32,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_link",
@@ -42,7 +42,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_thumbnail_link",
@@ -52,7 +52,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_link",
@@ -62,34 +62,34 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-    INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
 WHERE "user"."email" = $1
 `
 
 type LoginUserByEmailRow struct {
-	ID                           string         `json:"id"`
-	MoniestID                    string         `json:"moniest_id"`
-	Name                         string         `json:"name"`
-	Surname                      string         `json:"surname"`
-	Username                     string         `json:"username"`
-	Email                        string         `json:"email"`
-	EmailVerified                bool           `json:"email_verified"`
-	Password                     string         `json:"password"`
-	Location                     sql.NullString `json:"location"`
-	CreatedAt                    time.Time      `json:"created_at"`
-	UpdatedAt                    time.Time      `json:"updated_at"`
-	Bio                          sql.NullString `json:"bio"`
-	Description                  sql.NullString `json:"description"`
-	Score                        float64        `json:"score"`
-	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
+	ID                           string          `json:"id"`
+	MoniestID                    sql.NullString  `json:"moniest_id"`
+	Name                         string          `json:"name"`
+	Surname                      string          `json:"surname"`
+	Username                     string          `json:"username"`
+	Email                        string          `json:"email"`
+	EmailVerified                bool            `json:"email_verified"`
+	Password                     string          `json:"password"`
+	Location                     sql.NullString  `json:"location"`
+	CreatedAt                    time.Time       `json:"created_at"`
+	UpdatedAt                    time.Time       `json:"updated_at"`
+	Bio                          sql.NullString  `json:"bio"`
+	Description                  sql.NullString  `json:"description"`
+	Score                        sql.NullFloat64 `json:"score"`
+	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}     `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) LoginUserByEmail(ctx context.Context, email string) (LoginUserByEmailRow, error) {
@@ -174,29 +174,29 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-    INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
 WHERE "user"."username" = $1
 `
 
 type LoginUserByUsernameRow struct {
-	ID                           string         `json:"id"`
-	MoniestID                    string         `json:"moniest_id"`
-	Name                         string         `json:"name"`
-	Surname                      string         `json:"surname"`
-	Username                     string         `json:"username"`
-	Email                        string         `json:"email"`
-	EmailVerified                bool           `json:"email_verified"`
-	Password                     string         `json:"password"`
-	Location                     sql.NullString `json:"location"`
-	CreatedAt                    time.Time      `json:"created_at"`
-	UpdatedAt                    time.Time      `json:"updated_at"`
-	Bio                          sql.NullString `json:"bio"`
-	Description                  sql.NullString `json:"description"`
-	Score                        float64        `json:"score"`
-	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
+	ID                           string          `json:"id"`
+	MoniestID                    sql.NullString  `json:"moniest_id"`
+	Name                         string          `json:"name"`
+	Surname                      string          `json:"surname"`
+	Username                     string          `json:"username"`
+	Email                        string          `json:"email"`
+	EmailVerified                bool            `json:"email_verified"`
+	Password                     string          `json:"password"`
+	Location                     sql.NullString  `json:"location"`
+	CreatedAt                    time.Time       `json:"created_at"`
+	UpdatedAt                    time.Time       `json:"updated_at"`
+	Bio                          sql.NullString  `json:"bio"`
+	Description                  sql.NullString  `json:"description"`
+	Score                        sql.NullFloat64 `json:"score"`
+	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}     `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) LoginUserByUsername(ctx context.Context, username string) (LoginUserByUsernameRow, error) {

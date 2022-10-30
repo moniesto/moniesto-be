@@ -209,12 +209,12 @@ Table email_verification as EV {
 // > many-to-one; < one-to-many; - one-to-one; <> many-to-many
 // Refs
 Ref: I.user_id > U.id
-Ref: M.user_id > U.id
+Ref: U.id - M.user_id 
 Ref: UC.user_id > U.id
-Ref: UC.card_id - C.id
+Ref: C.id - UC.card_id
 Ref: MC.moniest_id > M.id
-Ref: MC.card_id - C.id
-Ref: SI.moniest_id - M.id
+Ref: C.id - MC.card_id
+Ref: M.id - SI.moniest_id
 Ref: US.user_id > U.id
 Ref: US.moniest_id > M.id
 Ref: PC.moniest_id > M.id

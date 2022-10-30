@@ -92,4 +92,7 @@ var InternalMessages = internalErrorMessageType{
 	"LoginFail": internalReport(InternalErrorMessage{
 		message: "Login failed",
 	}),
+	"UpdateLoginStatsFail": internalReport(InternalErrorMessage{
+		message: "Server error on updating login stats",
+	}),
 }

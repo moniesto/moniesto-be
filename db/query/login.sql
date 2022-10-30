@@ -54,7 +54,7 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-    INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
 WHERE "user"."username" = $1;
 
 -- name: LoginUserByEmail :one
@@ -78,7 +78,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_link",
@@ -88,7 +88,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_thumbnail_link",
@@ -98,7 +98,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_link",
@@ -108,10 +108,17 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-    INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
 WHERE "user"."email" = $1;
+
+-- name: UpdateLoginStats :one
+UPDATE "user"
+SET login_count = login_count + 1,
+    last_login = now()
+WHERE id = $1
+RETURNING *;

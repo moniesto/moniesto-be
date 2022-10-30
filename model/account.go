@@ -19,34 +19,67 @@ type RegisterResponse struct {
 	User  OwnUser `json:"user"`
 }
 
-type OwnUser struct {
-	Id                       string
-	Name                     string
-	Surname                  string
-	Username                 string
-	Email                    string
-	EmailVerified            bool
-	Location                 string
-	ProfilePhoto             string
-	ProfilePhotoThumbnail    string
-	BackgroundPhoto          string
-	BackgroundPhotoThumbnail string
-	CreatedAt                time.Time `json:"created_at"`
-	UpdatedAt                time.Time `json:"updated_at"`
-	Moniest                  struct {
-		Bio              string  `json:"bio"`
-		Description      string  `json:"description"`
-		Score            float64 `json:"score"`
-		SubscriptionInfo struct {
-			Fee       float64   `json:""`
-			Message   string    `json:"message"`
-			UpdatedAt time.Time `json:"updated_at"`
-		} `json:"subscription_info"`
-	} `json:"moniest"`
+type LoginRequest struct {
+	Identifier string `json:"identifier" binding:"required,min=1"`
+	Password   string `json:"password" binding:"required,min=6"`
 }
 
-func NewRegisterResponse(token string, user db.LoginUserByEmailRow) RegisterResponse {
-	return RegisterResponse{
+type LoginResponse RegisterResponse
+
+type OwnUser struct {
+	Id                           string    `json:"id,omitempty"`
+	Name                         string    `json:"name,omitempty"`
+	Surname                      string    `json:"surname,omitempty"`
+	Username                     string    `json:"username,omitempty"`
+	Email                        string    `json:"email,omitempty"`
+	EmailVerified                bool      `json:"email_verified"`
+	Location                     string    `json:"location,omitempty"`
+	ProfilePhotoLink             string    `json:"profile_photo_link,omitempty"`
+	ProfilePhotoThumbnailLink    string    `json:"profile_photo_thumbnail_link,omitempty"`
+	BackgroundPhotoLink          string    `json:"background_photo_link,omitempty"`
+	BackgroundPhotoThumbnailLink string    `json:"background_photo_thumbnail_link,omitempty"`
+	CreatedAt                    time.Time `json:"created_at,omitempty"`
+	UpdatedAt                    time.Time `json:"updated_at,omitempty"`
+	Moniest                      *Moniest  `json:"moniest,omitempty"`
+}
+
+// MAKER
+
+// NewLoginResponse creates/return LoginResponse object
+func NewLoginResponse(token string, user db.LoginUserByEmailRow) (response LoginResponse) {
+	// asserting RegisterResponse to LoginResponse
+	return LoginResponse(NewRegisterResponse(token, user))
+}
+
+// NewRegisterResponse creates/return RegisterResponse object
+func NewRegisterResponse(token string, user db.LoginUserByEmailRow) (response RegisterResponse) {
+	response = RegisterResponse{
 		Token: token,
+		User: OwnUser{
+			Id:                           user.ID,
+			Name:                         user.Name,
+			Surname:                      user.Surname,
+			Username:                     user.Username,
+			Email:                        user.Email,
+			EmailVerified:                user.EmailVerified,
+			Location:                     user.Location.String,
+			ProfilePhotoLink:             user.ProfilePhotoLink.(string),
+			ProfilePhotoThumbnailLink:    user.ProfilePhotoThumbnailLink.(string),
+			BackgroundPhotoLink:          user.BackgroundPhotoLink.(string),
+			BackgroundPhotoThumbnailLink: user.BackgroundPhotoThumbnailLink.(string),
+			CreatedAt:                    user.CreatedAt,
+			UpdatedAt:                    user.UpdatedAt,
+		},
 	}
+
+	if user.MoniestID.String != "" {
+		response.User.Moniest = &Moniest{
+			ID:          user.MoniestID.String,
+			Bio:         user.Bio.String,
+			Description: user.Bio.String,
+			Score:       user.Score.Float64,
+		}
+	}
+
+	return
 }
