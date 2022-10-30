@@ -52,7 +52,7 @@ func (q *Queries) CreateMoniest(ctx context.Context, arg CreateMoniestParams) (M
 }
 
 const deleteMoniest = `-- name: DeleteMoniest :one
-UPDATE moniest 
+UPDATE moniest
 SET deleted = true,
     updated_at = now()
 WHERE moniest.id = $1
@@ -77,50 +77,61 @@ func (q *Queries) DeleteMoniest(ctx context.Context, id string) (Moniest, error)
 
 const getMoniestByEmail = `-- name: GetMoniestByEmail :one
 SELECT "user"."id",
-        "moniest"."id",
-        "user"."name",
-        "user"."surname",
-        "user"."username",
-        "user"."email",
-        "user"."email_verified",
-        "user"."location",
-        "user"."created_at",
-        "user"."updated_at",
-        "moniest"."bio",
-        "moniest"."description",
-        "moniest"."score",
-        (SELECT "image"."link" 
-        FROM "image" 
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_link",
-
-        (SELECT "image"."thumbnail_link" 
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_thumbnail_link",
-        
-        (SELECT "image"."link" 
-        FROM "image" 
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1 
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_link",
-
-        (SELECT "image"."thumbnail_link" 
-        FROM "image" 
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."email" = $1 
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_thumbnail_link"
-
+    "moniest"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "moniest"."score",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."email" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE 
-    "user"."email" = $1
+WHERE "user"."email" = $1
 `
 
 type GetMoniestByEmailRow struct {
@@ -137,10 +148,10 @@ type GetMoniestByEmailRow struct {
 	Bio                          sql.NullString `json:"bio"`
 	Description                  sql.NullString `json:"description"`
 	Score                        float64        `json:"score"`
-	ProfilePhotoLink             string         `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          string         `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetMoniestByEmail(ctx context.Context, email string) (GetMoniestByEmailRow, error) {
@@ -170,49 +181,61 @@ func (q *Queries) GetMoniestByEmail(ctx context.Context, email string) (GetMonie
 
 const getMoniestByMoniestId = `-- name: GetMoniestByMoniestId :one
 SELECT "user"."id",
-        "moniest"."id",
-        "user"."name",
-        "user"."surname",
-        "user"."username",
-        "user"."email",
-        "user"."email_verified",
-        "user"."location",
-        "user"."created_at",
-        "user"."updated_at",
-        "moniest"."bio",
-        "moniest"."description",
-        "moniest"."score",
-        (SELECT "image"."link" 
-        FROM "image" 
-            INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
-        WHERE "moniest"."id" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_link",
-
-        (SELECT "image"."thumbnail_link" 
-        FROM "image"
-            INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
-        WHERE "moniest"."id" = $1
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_thumbnail_link",
-        
-        (SELECT "image"."link" 
-        FROM "image" 
-            INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
-        WHERE "moniest"."id" = $1
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_link",
-
-        (SELECT "image"."thumbnail_link" 
-        FROM "image" 
-            INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
-        WHERE "moniest"."id" = $1
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_thumbnail_link"
+    "moniest"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "moniest"."score",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
+            WHERE "moniest"."id" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
+            WHERE "moniest"."id" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
+            WHERE "moniest"."id" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
+            WHERE "moniest"."id" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE 
-    "moniest"."id" = $1
+WHERE "moniest"."id" = $1
 `
 
 type GetMoniestByMoniestIdRow struct {
@@ -229,10 +252,10 @@ type GetMoniestByMoniestIdRow struct {
 	Bio                          sql.NullString `json:"bio"`
 	Description                  sql.NullString `json:"description"`
 	Score                        float64        `json:"score"`
-	ProfilePhotoLink             string         `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          string         `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetMoniestByMoniestId(ctx context.Context, id string) (GetMoniestByMoniestIdRow, error) {
@@ -262,42 +285,57 @@ func (q *Queries) GetMoniestByMoniestId(ctx context.Context, id string) (GetMoni
 
 const getMoniestByUserId = `-- name: GetMoniestByUserId :one
 SELECT "user"."id",
-        "moniest"."id",
-        "user"."name",
-        "user"."surname",
-        "user"."username",
-        "user"."email",
-        "user"."email_verified",
-        "user"."location",
-        "user"."created_at",
-        "user"."updated_at",
-        "moniest"."bio",
-        "moniest"."description",
-        "moniest"."score",
-        (SELECT "image"."link" 
-            FROM "image" 
-            WHERE "image"."user_id" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_link",
-        (SELECT "image"."thumbnail_link" 
+    "moniest"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "moniest"."score",
+    COALESCE (
+        (
+            SELECT "image"."link"
             FROM "image"
-            WHERE "image"."user_id" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_thumbnail_link",
-        (SELECT "image"."link" 
-            FROM "image" 
-            WHERE "image"."user_id" = $1 
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_link",
-        (SELECT "image"."thumbnail_link" 
-            FROM "image" 
-            WHERE "image"."user_id" = $1 
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_thumbnail_link"
-FROM "user" 
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE 
-    "user"."id" = $1
+WHERE "user"."id" = $1
 `
 
 type GetMoniestByUserIdRow struct {
@@ -314,10 +352,10 @@ type GetMoniestByUserIdRow struct {
 	Bio                          sql.NullString `json:"bio"`
 	Description                  sql.NullString `json:"description"`
 	Score                        float64        `json:"score"`
-	ProfilePhotoLink             string         `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          string         `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMoniestByUserIdRow, error) {
@@ -347,49 +385,61 @@ func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMon
 
 const getMoniestByUsername = `-- name: GetMoniestByUsername :one
 SELECT "user"."id",
-        "moniest"."id",
-        "user"."name",
-        "user"."surname",
-        "user"."username",
-        "user"."email",
-        "user"."email_verified",
-        "user"."location",
-        "user"."created_at",
-        "user"."updated_at",
-        "moniest"."bio",
-        "moniest"."description",
-        "moniest"."score",
-        (SELECT "image"."link" 
-        FROM "image" 
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_link",
-
-        (SELECT "image"."thumbnail_link" 
-        FROM "image"
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1 
-            AND "image"."type" = "profile_photo") 
-        AS "profile_photo_thumbnail_link",
-        
-        (SELECT "image"."link" 
-        FROM "image" 
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1 
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_link",
-
-        (SELECT "image"."thumbnail_link" 
-        FROM "image" 
-            INNER JOIN "user" ON "user"."id" = "image"."user_id"
-        WHERE "user"."username" = $1 
-            AND "image"."type" = "background_photo") 
-        AS "background_photo_thumbnail_link"
+    "moniest"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "moniest"."score",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "profile_photo"
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = "background_photo"
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE 
-    "user"."username" = $1
+WHERE "user"."username" = $1
 `
 
 type GetMoniestByUsernameRow struct {
@@ -406,10 +456,10 @@ type GetMoniestByUsernameRow struct {
 	Bio                          sql.NullString `json:"bio"`
 	Description                  sql.NullString `json:"description"`
 	Score                        float64        `json:"score"`
-	ProfilePhotoLink             string         `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    string         `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          string         `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink string         `json:"background_photo_thumbnail_link"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetMoniestByUsername(ctx context.Context, username string) (GetMoniestByUsernameRow, error) {
