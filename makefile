@@ -4,14 +4,26 @@ postgres:
 createdb:
 	docker exec -it moniesto-postgres14 createdb --username=root --owner=root moniesto
 
+createdb-test:
+	docker exec -it moniesto-postgres14 createdb --username=root --owner=root moniesto-test
+
 dropdb:
 	docker exec -it moniesto-postgres14 dropdb moniesto
+
+dropdb-test:
+	docker exec -it moniesto-postgres14 dropdb moniesto-test
 
 migrateup:
 	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/moniesto?sslmode=disable" -verbose up
 
+migrateup-test:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/moniesto-test?sslmode=disable" -verbose up
+
 migratedown:
 	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/moniesto?sslmode=disable" -verbose down
+
+migratedown-test:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/moniesto-test?sslmode=disable" -verbose down
 
 sqlc:
 	sqlc generate

@@ -1,10 +1,10 @@
 package api
 
 import (
+	"database/sql"
 	"log"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
@@ -14,11 +14,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func newTestServer(t *testing.T, store *db.Store) *Server {
-	config := util.Config{
-		TokenKey:            util.RandomString(32),
-		AccessTokenDuration: time.Minute,
+// newTestServer creates a new server with Test DB
+func newTestServer(t *testing.T) *Server {
+	config, err := util.LoadConfig("../..")
+	if err != nil {
+		log.Fatal("cannot load config on test:", err)
 	}
+
+	testDB, err := sql.Open(config.DBDriver, config.DBSourceTest)
+	store := db.NewStore(testDB)
 
 	service, err := service.NewService(store)
 	if err != nil {
