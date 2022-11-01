@@ -3,9 +3,14 @@ package util
 import (
 	"math/rand"
 	"strings"
+	"time"
 )
 
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 // RandomString generates a random string of length n
 func RandomString(n int) string {
@@ -18,4 +23,24 @@ func RandomString(n int) string {
 	}
 
 	return sb.String()
+}
+
+func RandomEmail() string {
+	return RandomString(8) + "@" + RandomString(5) + "." + RandomString(3)
+}
+
+func RandomUsername() string {
+	return RandomString(10)
+}
+
+func RandomPassword() string {
+	return RandomString(6)
+}
+
+func RandomName() string {
+	return RandomString(6)
+}
+
+func RandomSurname() string {
+	return RandomString(6)
 }

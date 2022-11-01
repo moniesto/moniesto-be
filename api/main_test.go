@@ -12,18 +12,20 @@ import (
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/systemError"
 	"github.com/stretchr/testify/require"
+
+	_ "github.com/lib/pq"
 )
 
 // newTestServer creates a new server with Test DB
 func newTestServer(t *testing.T) *Server {
-	config, err := util.LoadConfig("../..")
+	config, err := util.LoadConfig("../")
 	if err != nil {
 		log.Fatal("cannot load config on test:", err)
 	}
 
 	testDB, err := sql.Open(config.DBDriver, config.DBSourceTest)
 	if err != nil {
-		log.Fatal("cannot connect test database", err)
+		log.Fatal("cannot connect test database ", err)
 	}
 	store := db.NewStore(testDB)
 

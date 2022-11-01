@@ -31,9 +31,19 @@ func Email(email string) (string, error) {
 
 // Username checks the username is valid
 func Username(username string) error {
-	if len(username) == 0 || strings.Contains(username, " ") {
+	if len(username) == 0 || strings.Contains(username, " ") || contains(InvalidUsernames, username) {
 		return fmt.Errorf("username is not valid %s", username)
 	}
 
 	return nil
+}
+
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+
+	return false
 }

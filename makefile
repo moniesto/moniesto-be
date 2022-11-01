@@ -49,4 +49,17 @@ run:
 run-live:
 	nodemon --exec go run cmd/main.go --signal SIGTERM
 
+test:
+	go test ./...
+
+test-c:
+	go test ./... -cover
+
+test-v:
+	go test ./... -v
+
+test-coverage-out:
+	go test -coverprofile=coverage.out ./...
+	go tool cover -html=coverage.out
+
 .PHONY: postgres createdb dropdb migrateup migratedown sqlc sqlc-bash sqlc-win create_migration resetdb run
