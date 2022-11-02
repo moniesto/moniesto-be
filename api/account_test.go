@@ -17,11 +17,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestRegisterUser(t *testing.T) {
-
-}
-
-var users []model.RegisterRequest
+var loginUsers []model.RegisterRequest
 
 type LoginCases []struct {
 	name       string
@@ -30,8 +26,15 @@ type LoginCases []struct {
 	check      func(t *testing.T, recoder *httptest.ResponseRecorder)
 }
 
+type RegisterCases []struct {
+	name       string
+	initialize func(t *testing.T, ctx *gin.Context, service *service.Service)
+	body       any
+	check      func(t *testing.T, ctx *gin.Context, recoder *httptest.ResponseRecorder)
+}
+
 func TestLogin(t *testing.T) {
-	users = getRandomUsersData(6)
+	loginUsers = getRandomUsersData(6)
 
 	loginTestCases := getLoginCases()
 
@@ -55,6 +58,33 @@ func TestLogin(t *testing.T) {
 	}
 }
 
+func TestRegister(t *testing.T) {
+
+	registerTestCases := getRegisterCases()
+
+	for _, testCase := range registerTestCases {
+
+		t.Run(fmt.Sprintf("CASE:%s", testCase.name), func(t *testing.T) {
+			server := newTestServer(t)
+
+			recorder := httptest.NewRecorder()
+			ctx_test, _ := gin.CreateTestContext(recorder)
+			testCase.initialize(t, ctx_test, server.service)
+
+			url := "/account/register"
+
+			request, err := http.NewRequest(http.MethodPost, url, createBody(testCase.body))
+			require.NoError(t, err)
+
+			server.router.ServeHTTP(recorder, request)
+			testCase.check(t, ctx_test, recorder)
+
+		})
+	}
+}
+
+// HELPERS
+// createBody converts body into byte format
 func createBody(body any) *bytes.Reader {
 	bodyBytes := new(bytes.Buffer)
 	json.NewEncoder(bodyBytes).Encode(body)
@@ -143,7 +173,7 @@ func getLoginCases() LoginCases {
 			name:       "Invalid Email",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
 			body: model.LoginRequest{
-				Identifier: "test@t.c",
+				Identifier: "test@t.c", // is invalid
 				Password:   "testtest",
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
@@ -155,7 +185,7 @@ func getLoginCases() LoginCases {
 			name:       "Invalid Username",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
 			body: model.LoginRequest{
-				Identifier: "test test",
+				Identifier: "test test", // is invalid
 				Password:   "testtest",
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
@@ -167,7 +197,7 @@ func getLoginCases() LoginCases {
 			name:       "Invalid Identifier",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
 			body: model.LoginRequest{
-				Identifier: "",
+				Identifier: "", // is invalid
 				Password:   "tesstest",
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
@@ -180,7 +210,7 @@ func getLoginCases() LoginCases {
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
 			body: model.LoginRequest{
 				Identifier: "testtest",
-				Password:   "tes",
+				Password:   "tes", // is invalid
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
@@ -212,13 +242,13 @@ func getLoginCases() LoginCases {
 			},
 		},
 		{
-			name: "Success with Email",
+			name: "Successful Login with Email",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
-				createUser(t, ctx, service, users[0])
+				createUser(t, ctx, service, loginUsers[0])
 			},
 			body: model.LoginRequest{
-				Identifier: users[0].Email,
-				Password:   users[0].Password,
+				Identifier: loginUsers[0].Email,
+				Password:   loginUsers[0].Password,
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				checkSuccessLoginResponse(t, recorder.Body)
@@ -226,13 +256,13 @@ func getLoginCases() LoginCases {
 			},
 		},
 		{
-			name: "Success with Username",
+			name: "Successful Login with Username",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
-				createUser(t, ctx, service, users[1])
+				createUser(t, ctx, service, loginUsers[1])
 			},
 			body: model.LoginRequest{
-				Identifier: users[1].Username,
-				Password:   users[1].Password,
+				Identifier: loginUsers[1].Username,
+				Password:   loginUsers[1].Password,
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				checkSuccessLoginResponse(t, recorder.Body)
@@ -242,11 +272,11 @@ func getLoginCases() LoginCases {
 		{
 			name: "Wrong username",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
-				createUser(t, ctx, service, users[2])
+				createUser(t, ctx, service, loginUsers[2])
 			},
 			body: model.LoginRequest{
-				Identifier: users[2].Username + util.RandomString(2),
-				Password:   users[2].Password,
+				Identifier: loginUsers[2].Username + util.RandomString(2),
+				Password:   loginUsers[2].Password,
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
@@ -256,11 +286,11 @@ func getLoginCases() LoginCases {
 		{
 			name: "Wrong email",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
-				createUser(t, ctx, service, users[3])
+				createUser(t, ctx, service, loginUsers[3])
 			},
 			body: model.LoginRequest{
-				Identifier: util.RandomString(2) + users[3].Username,
-				Password:   users[3].Password,
+				Identifier: util.RandomString(2) + loginUsers[3].Username,
+				Password:   loginUsers[3].Password,
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
@@ -270,11 +300,11 @@ func getLoginCases() LoginCases {
 		{
 			name: "Wrong password with Username",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
-				createUser(t, ctx, service, users[4])
+				createUser(t, ctx, service, loginUsers[4])
 			},
 			body: model.LoginRequest{
-				Identifier: users[4].Username,
-				Password:   users[4].Password + util.RandomString(2),
+				Identifier: loginUsers[4].Username,
+				Password:   loginUsers[4].Password + util.RandomString(2),
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
@@ -284,15 +314,135 @@ func getLoginCases() LoginCases {
 		{
 			name: "Wrong password with Email",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
-				createUser(t, ctx, service, users[5])
+				createUser(t, ctx, service, loginUsers[5])
 			},
 			body: model.LoginRequest{
-				Identifier: users[5].Email,
-				Password:   users[5].Password + util.RandomString(2),
+				Identifier: loginUsers[5].Email,
+				Password:   loginUsers[5].Password + util.RandomString(2),
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
 				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+			},
+		},
+	}
+}
+
+func getRegisterCases() RegisterCases {
+	return RegisterCases{
+		{
+			name:       "Invalid Body",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			body: struct {
+				Invalid string
+			}{
+				Invalid: "invalid",
+			},
+			check: func(t *testing.T, ctx *gin.Context, recoder *httptest.ResponseRecorder) {
+				// TODO: check there is an error message
+				require.Equal(t, http.StatusNotAcceptable, recoder.Code)
+			},
+		},
+		{
+			name:       "Empty Body",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			body:       model.RegisterRequest{},
+			check: func(t *testing.T, ctx *gin.Context, recoder *httptest.ResponseRecorder) {
+				// TODO: check there is an error message
+				require.Equal(t, http.StatusNotAcceptable, recoder.Code)
+			},
+		},
+		{
+			name:       "Invalid Email",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			body: model.RegisterRequest{
+				Name:     "TestName",
+				Surname:  "TestSurname",
+				Username: "TestUsername",
+				Email:    "test@t.c", // is invalid
+				Password: "testtest",
+			},
+			check: func(t *testing.T, ctx *gin.Context, recoder *httptest.ResponseRecorder) {
+				// TODO: check there is an error message
+				// TODO: check error code
+				// TODO: check user is not created
+			},
+		},
+		{
+			name:       "Invalid Password",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			body: model.RegisterRequest{
+				Name:     "TestName",
+				Surname:  "TestSurname",
+				Username: "TestUsername",
+				Email:    "test@test.ccom",
+				Password: "tes", // is invalid
+			},
+			check: func(t *testing.T, ctx *gin.Context, recoder *httptest.ResponseRecorder) {
+				// TODO: check there is an error message
+				// TODO: check error code
+				// TODO: check user is not created
+			},
+		},
+		{
+			name:       "Invalid Username",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			body: model.RegisterRequest{
+				Name:     "TestName",
+				Surname:  "TestSurname",
+				Username: "Test Username", // is invalid
+				Email:    "test@test.ccom",
+				Password: "tes",
+			},
+			check: func(t *testing.T, ctx *gin.Context, recoder *httptest.ResponseRecorder) {
+				// TODO: check there is an error message
+				// TODO: check error code
+				// TODO: check user is not created
+			},
+		},
+		{
+			name: "Email already in system",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
+				// TODO: check there is not any user like this
+				// TODO: create user
+			},
+			body: model.RegisterRequest{
+				// TODO: include created user's info
+			},
+			check: func(t *testing.T, ctx *gin.Context, recoder *httptest.ResponseRecorder) {
+				// TODO: check there is an error message
+				// TODO: check error code
+				// TODO: check there is only one user with this email
+			},
+		},
+		{
+			name: "Username already in system",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
+				// TODO: check there is not any user like this
+				// TODO: create user
+			},
+			body: model.RegisterRequest{
+				// TODO: include created user's info
+			},
+			check: func(t *testing.T, ctx *gin.Context, recoder *httptest.ResponseRecorder) {
+				// TODO: check there is an error message
+				// TODO: check error code
+				// TODO: check there is only one user with this email
+			},
+		},
+		{
+			name: "Successful Register",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
+				// TODO: check there is not any user like this
+				// TODO: create user
+			},
+			body: model.RegisterRequest{
+				// TODO: include created user's info
+			},
+			check: func(t *testing.T, ctx *gin.Context, recoder *httptest.ResponseRecorder) {
+				// TODO: the body of response [same with login]
+				// TODO: check status code
+				// TODO: check user is created in db
 			},
 		},
 	}
