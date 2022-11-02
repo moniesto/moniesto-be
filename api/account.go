@@ -70,3 +70,20 @@ func (server *Server) registerUser(ctx *gin.Context) {
 
 	server.loginUser(ctx)
 }
+
+func (server *Server) checkUsername(ctx *gin.Context) {
+	// STEP: get username from param
+	username := ctx.Param("username")
+
+	// STEP: check username validity
+	validity, err := server.service.CheckUsername(ctx, username)
+	if err != nil {
+		ctx.JSON(systemError.Messages["Invalid_Username"]())
+		return
+	}
+
+	// STEP: create response object
+	rsp := model.NewCheckUsernameResponse(validity)
+
+	ctx.JSON(http.StatusOK, rsp)
+}

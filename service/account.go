@@ -124,10 +124,30 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 	return createdUser, nil
 }
 
+// UpdateLoginStats update the latest login status of the user
 func (service *Service) UpdateLoginStats(ctx *gin.Context, user_id string) {
 	_, err := service.Store.UpdateLoginStats(ctx, user_id)
 
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["UpdateLoginStatsFail"](err))
 	}
+}
+
+// CheckUsername checks the validity of the username [valid/used]
+func (service *Service) CheckUsername(ctx *gin.Context, username string) (bool, error) {
+	err := validation.Username(username)
+	if err != nil {
+		return false, err
+	}
+
+	checkUsername, err := service.Store.CheckUsername(ctx, username)
+	if err != nil {
+		systemError.Log(systemError.InternalMessages["CheckUsername"](err))
+		return false, errors.New("server error on check username")
+	}
+	if !checkUsername {
+		return false, nil
+	}
+
+	return true, nil
 }

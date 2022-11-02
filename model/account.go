@@ -26,6 +26,10 @@ type LoginRequest struct {
 
 type LoginResponse RegisterResponse
 
+type CheckUsernameResponse struct {
+	Validity bool `json:"validity"`
+}
+
 type OwnUser struct {
 	Id                           string    `json:"id,omitempty"`
 	Name                         string    `json:"name,omitempty"`
@@ -49,6 +53,15 @@ type OwnUser struct {
 func NewLoginResponse(token string, user db.LoginUserByEmailRow) (response LoginResponse) {
 	// asserting RegisterResponse to LoginResponse
 	return LoginResponse(NewRegisterResponse(token, user))
+}
+
+// NewCheckUsernameResponse creates/return CheckUsernameResponse object
+func NewCheckUsernameResponse(validity bool) (response CheckUsernameResponse) {
+	response = CheckUsernameResponse{
+		Validity: validity,
+	}
+
+	return
 }
 
 // NewRegisterResponse creates/return RegisterResponse object

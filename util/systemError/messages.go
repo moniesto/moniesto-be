@@ -56,6 +56,10 @@ var Messages = errorMessageType{
 		"Token is invalid",
 		http.StatusUnauthorized,
 	}),
+	"Invalid_Username": report(ErrorMessage{
+		"Username is invalid",
+		http.StatusBadRequest,
+	}),
 	"Unsupported_AuthorizationType": report(ErrorMessage{
 		"Unsupported authorization type",
 		http.StatusUnauthorized,
