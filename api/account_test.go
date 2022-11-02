@@ -21,6 +21,7 @@ import (
 
 var loginUsers []model.RegisterRequest
 var registerUsers []model.RegisterRequest
+var checkUsernameUsers []model.RegisterRequest
 
 type LoginCases []struct {
 	name       string
@@ -33,6 +34,13 @@ type RegisterCases []struct {
 	name       string
 	initialize func(t *testing.T, ctx *gin.Context, service *service.Service)
 	body       any
+	check      func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder)
+}
+
+type CheckUsernameCases []struct {
+	name       string
+	initialize func(t *testing.T, ctx *gin.Context, service *service.Service)
+	username   string
 	check      func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder)
 }
 
@@ -82,9 +90,35 @@ func TestRegister(t *testing.T) {
 
 			server.router.ServeHTTP(recorder, request)
 			testCase.check(t, ctx_test, server.service, recorder)
-
 		})
 	}
+}
+
+func TestCheckUsername(t *testing.T) {
+	checkUsernameUsers = getRandomUsersData(2)
+
+	checkUsernameTestCases := getCheckUsernameCases()
+
+	for _, testCase := range checkUsernameTestCases {
+
+		t.Run(fmt.Sprintf("CASE:%s", testCase.name), func(t *testing.T) {
+			server := newTestServer(t)
+
+			recorder := httptest.NewRecorder()
+			ctx_test, _ := gin.CreateTestContext(recorder)
+			testCase.initialize(t, ctx_test, server.service)
+
+			url := fmt.Sprintf("/account/usernames/%s/check", testCase.username)
+
+			request, err := http.NewRequest(http.MethodGet, url, http.NoBody)
+			require.NoError(t, err)
+
+			server.router.ServeHTTP(recorder, request)
+			testCase.check(t, ctx_test, server.service, recorder)
+		})
+
+	}
+
 }
 
 // HELPERS
@@ -179,6 +213,17 @@ func checkUserInSystemByUsername(t *testing.T, ctx *gin.Context, service *servic
 func checkUserNotInSystemByUsername(t *testing.T, ctx *gin.Context, service *service.Service, username string) {
 	_, err := service.Store.GetUserByUsername(ctx, username)
 	require.Equal(t, err, sql.ErrNoRows)
+}
+
+func checkUsernameValidityBody(t *testing.T, body *bytes.Buffer, expected bool) {
+	data, err := io.ReadAll(body)
+	require.NoError(t, err)
+
+	var gotResponse model.CheckUsernameResponse
+	err = json.Unmarshal(data, &gotResponse)
+	require.NoError(t, err)
+
+	require.Equal(t, gotResponse.Validity, expected)
 }
 
 // TEST CASES
@@ -519,6 +564,52 @@ func getRegisterCases() RegisterCases {
 				checkUserInSystemByEmail(t, ctx, service, registerUsers[5].Email)
 
 				checkUserInSystemByUsername(t, ctx, service, registerUsers[5].Username)
+			},
+		},
+	}
+}
+
+func getCheckUsernameCases() CheckUsernameCases {
+	return CheckUsernameCases{
+		{
+			name:       "Invalid Username",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			username:   "",
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check there is an error message
+				require.Equal(t, http.StatusBadRequest, recorder.Code)
+			},
+		},
+		{
+			name:       "Invalid Username",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			username:   "test username",
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check there is an error message
+				require.Equal(t, http.StatusBadRequest, recorder.Code)
+			},
+		},
+		{
+			name: "Validity true",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
+			},
+			username: checkUsernameUsers[0].Username,
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				checkUserNotInSystemByUsername(t, ctx, service, checkUsernameUsers[0].Username)
+				require.Equal(t, http.StatusOK, recorder.Code)
+				checkUsernameValidityBody(t, recorder.Body, true)
+			},
+		},
+		{
+			name: "Validity false",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
+				createUser(t, ctx, service, checkUsernameUsers[1])
+			},
+			username: checkUsernameUsers[1].Username,
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				checkUserInSystemByUsername(t, ctx, service, checkUsernameUsers[1].Username)
+				require.Equal(t, http.StatusOK, recorder.Code)
+				checkUsernameValidityBody(t, recorder.Body, false)
 			},
 		},
 	}
