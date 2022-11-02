@@ -97,3 +97,43 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 - Containerization: Docker
 
 - Cloudinary (image service)
+
+# ENDPOINTS
+
+:heavy_check_mark: POST /account/login
+
+:heavy_check_mark: POST /account/register
+
+- [ ] GET /account/usernames/:username/check
+
+- [ ] PUT /account/password -> [unauthenticated case] [forget password - send email case]
+
+- [ ] PUT /account/password -> [unauthenticated user] [forget password - change password case]
+
+- [ ] PUT /account/password -> [authenticated user] [change password case]
+
+- [ ] GET /content/posts?subscribed=<subscribed>&limit=<limit>&offset=<offset>
+
+- [ ] GET /content/moniests?subscribed=<subscribed>&limit=<limit>&offset=<offset>
+
+- [ ] GET /users/:username
+
+- [ ] GET /users/:username/posts?limit=<limit>&offset=<offset>
+
+- [ ] GET /users/:username/posts/:post_id
+
+- [ ] GET /users/:username/subscriptions?limit=<limit>&offset=<offset>
+
+- [ ] GET /users/:username/subscribers?limit=<limit>&offset=<offset>
+
+- [ ] POST /moniests
+
+- [ ] POST /moniests/posts
+
+- [ ] PATCH /account/profile
+
+- [ ] PATCH /moniest/subscription-info
+
+- [ ] POST /moniest/:username/subscriptions
+
+- [ ] ...
