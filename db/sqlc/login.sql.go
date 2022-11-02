@@ -224,3 +224,32 @@ func (q *Queries) LoginUserByUsername(ctx context.Context, username string) (Log
 	)
 	return i, err
 }
+
+const updateLoginStats = `-- name: UpdateLoginStats :one
+UPDATE "user"
+SET login_count = login_count + 1,
+    last_login = now()
+WHERE id = $1
+RETURNING id, name, surname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
+`
+
+func (q *Queries) UpdateLoginStats(ctx context.Context, id string) (User, error) {
+	row := q.db.QueryRowContext(ctx, updateLoginStats, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Surname,
+		&i.Username,
+		&i.Email,
+		&i.EmailVerified,
+		&i.Password,
+		&i.Location,
+		&i.LoginCount,
+		&i.Deleted,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.LastLogin,
+	)
+	return i, err
+}

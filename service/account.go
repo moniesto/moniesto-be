@@ -31,7 +31,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	}
 
 	// any user with same email
-	checkEmail, err := service.store.CheckEmail(ctx, validEmail)
+	checkEmail, err := service.Store.CheckEmail(ctx, validEmail)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["CheckEmail"](err))
 		return createdUser, errors.New("server error on check email")
@@ -41,7 +41,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	}
 
 	// any user with same username
-	checkUsername, err := service.store.CheckUsername(ctx, registerRequest.Username)
+	checkUsername, err := service.Store.CheckUsername(ctx, registerRequest.Username)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["CheckUsername"](err))
 		return createdUser, errors.New("server error on check username")
@@ -65,7 +65,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 		Password: hashedPassword,
 	}
 
-	createdUser, err = service.store.CreateUser(ctx, user)
+	createdUser, err = service.Store.CreateUser(ctx, user)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["CreateUser"](err))
 		return createdUser, errors.New("server error on create user")
@@ -93,7 +93,7 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 
 	// STEP: fetch user from DB by email or username
 	if identifierIsEmail { // identifier is email case
-		user, err = service.store.LoginUserByEmail(ctx, identifier)
+		user, err = service.Store.LoginUserByEmail(ctx, identifier)
 
 		if err != nil {
 			systemError.Log(systemError.InternalMessages["LoginByEmail"](err))
@@ -101,7 +101,7 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 		}
 
 	} else { // identifier is username case
-		user1, err := service.store.LoginUserByUsername(ctx, identifier)
+		user1, err := service.Store.LoginUserByUsername(ctx, identifier)
 
 		if err != nil {
 			systemError.Log(systemError.InternalMessages["LoginByUsername"](err))
@@ -125,7 +125,7 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 }
 
 func (service *Service) UpdateLoginStats(ctx *gin.Context, user_id string) {
-	_, err := service.store.UpdateLoginStats(ctx, user_id)
+	_, err := service.Store.UpdateLoginStats(ctx, user_id)
 
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["UpdateLoginStatsFail"](err))

@@ -95,7 +95,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_link",
@@ -105,7 +105,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_thumbnail_link",
@@ -115,7 +115,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_link",
@@ -125,7 +125,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."email" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_thumbnail_link"
@@ -199,7 +199,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
             WHERE "moniest"."id" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_link",
@@ -209,7 +209,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
             WHERE "moniest"."id" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_thumbnail_link",
@@ -219,7 +219,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
             WHERE "moniest"."id" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_link",
@@ -229,7 +229,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "moniest" ON "moniest"."user_id" = "image"."user_id"
             WHERE "moniest"."id" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_thumbnail_link"
@@ -302,7 +302,7 @@ SELECT "user"."id",
             SELECT "image"."link"
             FROM "image"
             WHERE "image"."user_id" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_link",
@@ -311,7 +311,7 @@ SELECT "user"."id",
             SELECT "image"."thumbnail_link"
             FROM "image"
             WHERE "image"."user_id" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_thumbnail_link",
@@ -320,7 +320,7 @@ SELECT "user"."id",
             SELECT "image"."link"
             FROM "image"
             WHERE "image"."user_id" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_link",
@@ -329,7 +329,7 @@ SELECT "user"."id",
             SELECT "image"."thumbnail_link"
             FROM "image"
             WHERE "image"."user_id" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_thumbnail_link"
@@ -403,7 +403,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."username" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_link",
@@ -413,7 +413,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."username" = $1
-                AND "image"."type" = "profile_photo"
+                AND "image"."type" = 'profile_photo'
         ),
         ''
     ) AS "profile_photo_thumbnail_link",
@@ -423,7 +423,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."username" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_link",
@@ -433,7 +433,7 @@ SELECT "user"."id",
             FROM "image"
                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
             WHERE "user"."username" = $1
-                AND "image"."type" = "background_photo"
+                AND "image"."type" = 'background_photo'
         ),
         ''
     ) AS "background_photo_thumbnail_link"
