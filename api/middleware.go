@@ -9,10 +9,24 @@ import (
 )
 
 const (
-	authorizationHeaderKey  = "authorization"
-	authorizationTypeBearer = "bearer"
-	authorizationPayloadKey = "authorization_payload"
+	authorizationHeaderKey          = "authorization"
+	authorizationTypeBearer         = "bearer"
+	authorizationPayloadKey         = "authorization_payload"
+	authorizationPayloadValidityKey = "authorization_payload_validity"
 )
+
+func authMiddlewareOptional(token token.Maker) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		authorizationHeader := ctx.GetHeader(authorizationHeaderKey)
+
+		if len(authorizationHeader) == 0 {
+			ctx.Set(authorizationPayloadValidityKey, false)
+			return
+		}
+		ctx.Set(authorizationPayloadValidityKey, true)
+		authMiddleware(token)(ctx)
+	}
+}
 
 func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 	return func(ctx *gin.Context) {

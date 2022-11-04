@@ -13,6 +13,13 @@ import (
 	"github.com/moniesto/moniesto-be/token"
 )
 
+type TestCases []struct {
+	name          string
+	setupAuth     func(t *testing.T, request *http.Request, tokenMaker token.Maker)
+	checkResponse func(t *testing.T, recorder *httptest.ResponseRecorder)
+	checkOptional func(t *testing.T, ctx *gin.Context)
+}
+
 func addAuthorzation(
 	t *testing.T,
 	request *http.Request,
@@ -30,11 +37,7 @@ func addAuthorzation(
 
 func TestAuthMiddleware(t *testing.T) {
 
-	testCases := []struct {
-		name          string
-		setupAuth     func(t *testing.T, request *http.Request, tokenMaker token.Maker)
-		checkResponse func(t *testing.T, recorder *httptest.ResponseRecorder)
-	}{
+	testCases := TestCases{
 		{
 			name: "OK",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
@@ -106,4 +109,89 @@ func TestAuthMiddleware(t *testing.T) {
 		})
 	}
 
+}
+
+func TestAuthMiddlewareOptional(t *testing.T) {
+	testCases := TestCases{
+		{
+			name: "OK [with auth]",
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
+				addAuthorzation(t, request, tokenMaker, authorizationTypeBearer, "default_username", time.Minute)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusOK, recorder.Code)
+			},
+			checkOptional: func(t *testing.T, ctx *gin.Context) {
+				validAuth := ctx.MustGet(authorizationPayloadValidityKey).(bool)
+				require.Equal(t, validAuth, true)
+			},
+		},
+		{
+			name: "OK [without auth]",
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusOK, recorder.Code)
+			},
+			checkOptional: func(t *testing.T, ctx *gin.Context) {
+				validAuth := ctx.MustGet(authorizationPayloadValidityKey).(bool)
+				require.Equal(t, validAuth, false)
+			},
+		},
+		{
+			name: "UnsupportedAuthorization",
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
+				addAuthorzation(t, request, tokenMaker, "unsupported", "default_username", time.Minute)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+			},
+		},
+		{
+			name: "InvalidAuthorizationFormat",
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
+				addAuthorzation(t, request, tokenMaker, "", "default_username", time.Minute)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+			},
+		},
+		{
+			name: "ExpiredAuthorization",
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
+				addAuthorzation(t, request, tokenMaker, authorizationTypeBearer, "default_username", -time.Minute)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+			},
+		},
+	}
+
+	for i := range testCases {
+		tc := testCases[i]
+
+		t.Run(tc.name, func(t *testing.T) {
+			server := newTestServer(t)
+			recorder := httptest.NewRecorder()
+
+			authPath := "/authOptional"
+			server.router.GET(
+				authPath,
+				authMiddlewareOptional(server.tokenMaker),
+				func(ctx *gin.Context) {
+
+					tc.checkOptional(t, ctx)
+
+					ctx.JSON(http.StatusOK, gin.H{})
+				},
+			)
+
+			request, err := http.NewRequest(http.MethodGet, authPath, nil)
+			require.NoError(t, err)
+
+			tc.setupAuth(t, request, server.tokenMaker)
+			server.router.ServeHTTP(recorder, request)
+			tc.checkResponse(t, recorder)
+		})
+	}
 }
