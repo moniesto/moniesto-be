@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/model"
+	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
@@ -28,7 +29,12 @@ func (server *Server) loginUser(ctx *gin.Context) {
 	}
 
 	// STEP: create token
-	accessToken, err := server.tokenMaker.CreateToken(user.Username, server.config.AccessTokenDuration)
+	accessToken, err := server.tokenMaker.CreateToken(token.GeneralPaylod{
+		UserPayload: token.UserPayload{
+			Username: user.Username,
+			ID:       user.ID,
+		},
+	}, server.config.AccessTokenDuration)
 	if err != nil {
 		ctx.JSON(systemError.Messages["Server_TokenCreate"]())
 		return

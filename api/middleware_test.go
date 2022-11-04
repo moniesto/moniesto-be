@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/moniesto/moniesto-be/token"
+	"github.com/moniesto/moniesto-be/util"
 )
 
 type TestCases []struct {
@@ -25,10 +26,10 @@ func addAuthorzation(
 	request *http.Request,
 	tokenMaker token.Maker,
 	authorizationType string,
-	username string,
+	generalPaylod token.GeneralPaylod,
 	duration time.Duration) {
 
-	token, err := tokenMaker.CreateToken(username, duration)
+	token, err := tokenMaker.CreateToken(generalPaylod, duration)
 	require.NoError(t, err)
 
 	authorizationHeader := fmt.Sprintf("%s %s", authorizationType, token)
@@ -41,7 +42,15 @@ func TestAuthMiddleware(t *testing.T) {
 		{
 			name: "OK",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthorzation(t, request, tokenMaker, authorizationTypeBearer, "default_username", time.Minute)
+
+				generalPayload := token.GeneralPaylod{
+					UserPayload: token.UserPayload{
+						ID:       util.CreateID(),
+						Username: "default_username",
+					},
+				}
+
+				addAuthorzation(t, request, tokenMaker, authorizationTypeBearer, generalPayload, time.Minute)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusOK, recorder.Code)
@@ -58,7 +67,14 @@ func TestAuthMiddleware(t *testing.T) {
 		{
 			name: "UnsupportedAuthorization",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthorzation(t, request, tokenMaker, "unsupported", "default_username", time.Minute)
+				generalPayload := token.GeneralPaylod{
+					UserPayload: token.UserPayload{
+						ID:       util.CreateID(),
+						Username: "default_username",
+					},
+				}
+
+				addAuthorzation(t, request, tokenMaker, "unsupported", generalPayload, time.Minute)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusUnauthorized, recorder.Code)
@@ -67,7 +83,14 @@ func TestAuthMiddleware(t *testing.T) {
 		{
 			name: "InvalidAuthorizationFormat",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthorzation(t, request, tokenMaker, "", "default_username", time.Minute)
+				generalPayload := token.GeneralPaylod{
+					UserPayload: token.UserPayload{
+						ID:       util.CreateID(),
+						Username: "default_username",
+					},
+				}
+
+				addAuthorzation(t, request, tokenMaker, "", generalPayload, time.Minute)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusUnauthorized, recorder.Code)
@@ -76,7 +99,14 @@ func TestAuthMiddleware(t *testing.T) {
 		{
 			name: "ExpiredAuthorization",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthorzation(t, request, tokenMaker, authorizationTypeBearer, "default_username", -time.Minute)
+				generalPayload := token.GeneralPaylod{
+					UserPayload: token.UserPayload{
+						ID:       util.CreateID(),
+						Username: "default_username",
+					},
+				}
+
+				addAuthorzation(t, request, tokenMaker, authorizationTypeBearer, generalPayload, -time.Minute)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusUnauthorized, recorder.Code)
@@ -116,7 +146,15 @@ func TestAuthMiddlewareOptional(t *testing.T) {
 		{
 			name: "OK [with auth]",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthorzation(t, request, tokenMaker, authorizationTypeBearer, "default_username", time.Minute)
+
+				generalPayload := token.GeneralPaylod{
+					UserPayload: token.UserPayload{
+						ID:       util.CreateID(),
+						Username: "default_username",
+					},
+				}
+
+				addAuthorzation(t, request, tokenMaker, authorizationTypeBearer, generalPayload, time.Minute)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusOK, recorder.Code)
@@ -141,7 +179,14 @@ func TestAuthMiddlewareOptional(t *testing.T) {
 		{
 			name: "UnsupportedAuthorization",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthorzation(t, request, tokenMaker, "unsupported", "default_username", time.Minute)
+				generalPayload := token.GeneralPaylod{
+					UserPayload: token.UserPayload{
+						ID:       util.CreateID(),
+						Username: "default_username",
+					},
+				}
+
+				addAuthorzation(t, request, tokenMaker, "unsupported", generalPayload, time.Minute)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusUnauthorized, recorder.Code)
@@ -150,7 +195,14 @@ func TestAuthMiddlewareOptional(t *testing.T) {
 		{
 			name: "InvalidAuthorizationFormat",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthorzation(t, request, tokenMaker, "", "default_username", time.Minute)
+				generalPayload := token.GeneralPaylod{
+					UserPayload: token.UserPayload{
+						ID:       util.CreateID(),
+						Username: "default_username",
+					},
+				}
+
+				addAuthorzation(t, request, tokenMaker, "", generalPayload, time.Minute)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusUnauthorized, recorder.Code)
@@ -159,7 +211,14 @@ func TestAuthMiddlewareOptional(t *testing.T) {
 		{
 			name: "ExpiredAuthorization",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
-				addAuthorzation(t, request, tokenMaker, authorizationTypeBearer, "default_username", -time.Minute)
+				generalPayload := token.GeneralPaylod{
+					UserPayload: token.UserPayload{
+						ID:       util.CreateID(),
+						Username: "default_username",
+					},
+				}
+
+				addAuthorzation(t, request, tokenMaker, authorizationTypeBearer, generalPayload, -time.Minute)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusUnauthorized, recorder.Code)
