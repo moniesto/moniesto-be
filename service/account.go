@@ -1,6 +1,7 @@
 package service
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 
@@ -96,6 +97,12 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 		user, err = service.Store.LoginUserByEmail(ctx, identifier)
 
 		if err != nil {
+
+			if err == sql.ErrNoRows {
+				systemError.Log(systemError.InternalMessages["LoginFail"](err))
+				return createdUser, fmt.Errorf("email is not in system")
+			}
+
 			systemError.Log(systemError.InternalMessages["LoginByEmail"](err))
 			return createdUser, fmt.Errorf("server error on login by email")
 		}
@@ -104,6 +111,12 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 		user1, err := service.Store.LoginUserByUsername(ctx, identifier)
 
 		if err != nil {
+
+			if err == sql.ErrNoRows {
+				systemError.Log(systemError.InternalMessages["LoginFail"](err))
+				return createdUser, fmt.Errorf("username is not in system")
+			}
+
 			systemError.Log(systemError.InternalMessages["LoginByUsername"](err))
 			return createdUser, fmt.Errorf("server error on login by username")
 		}
@@ -116,7 +129,7 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 	err = util.CheckPassword(password, user.Password)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["LoginFail"](err))
-		return createdUser, fmt.Errorf("login failed")
+		return createdUser, fmt.Errorf("wrong password")
 	}
 
 	createdUser = user
