@@ -40,13 +40,21 @@ func (server *Server) setupRouter() {
 
 	// Account routes
 	accountRouters := router.Group("/account")
+	{
+		accountRouters.POST("/register", server.registerUser)
+		accountRouters.POST("/login", server.loginUser)
+		accountRouters.GET("/usernames/:username/check", server.checkUsername)
 
-	accountRouters.POST("/register", server.registerUser)
-	accountRouters.POST("/login", server.loginUser)
-	accountRouters.GET("/usernames/:username/check", server.checkUsername)
+		// [Optional] Need Auth
+		accountRoutersAuth := accountRouters.Group("/").Use(authMiddlewareOptional(server.tokenMaker))
+		accountRoutersAuth.PUT("/password", server.ChangePassword)
+	}
+
+	// Moniest routes - [need Auth]
+	moniestRouters := router.Group("/moniest").Use(authMiddleware(server.tokenMaker))
+	moniestRouters.POST("/", server.CreateMoniest)
 
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
-
 	authRoutes.GET("/user", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{})
 	})

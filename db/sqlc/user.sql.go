@@ -178,6 +178,19 @@ func (q *Queries) GetInactiveUsersVerifiedEmails(ctx context.Context) ([]string,
 	return items, nil
 }
 
+const getPasswordByID = `-- name: GetPasswordByID :one
+SELECT password
+FROM "user"
+WHERE id = $1
+`
+
+func (q *Queries) GetPasswordByID(ctx context.Context, id string) (string, error) {
+	row := q.db.QueryRowContext(ctx, getPasswordByID, id)
+	var password string
+	err := row.Scan(&password)
+	return password, err
+}
+
 const getUserByEmail = `-- name: GetUserByEmail :one
 SELECT "user"."id",
     "user"."name",
@@ -447,11 +460,10 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUs
 	return i, err
 }
 
-const setPassword = `-- name: SetPassword :one
+const setPassword = `-- name: SetPassword :exec
 UPDATE "user"
 SET password = $2
 WHERE id = $1
-RETURNING id, name, surname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
 `
 
 type SetPasswordParams struct {
@@ -459,23 +471,7 @@ type SetPasswordParams struct {
 	Password string `json:"password"`
 }
 
-func (q *Queries) SetPassword(ctx context.Context, arg SetPasswordParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, setPassword, arg.ID, arg.Password)
-	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Surname,
-		&i.Username,
-		&i.Email,
-		&i.EmailVerified,
-		&i.Password,
-		&i.Location,
-		&i.LoginCount,
-		&i.Deleted,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.LastLogin,
-	)
-	return i, err
+func (q *Queries) SetPassword(ctx context.Context, arg SetPasswordParams) error {
+	_, err := q.db.ExecContext(ctx, setPassword, arg.ID, arg.Password)
+	return err
 }

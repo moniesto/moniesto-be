@@ -19,7 +19,6 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	if err != nil {
 		return
 	}
-	_ = validEmail
 
 	err = validation.Password(registerRequest.Password)
 	if err != nil {

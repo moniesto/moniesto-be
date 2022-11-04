@@ -186,11 +186,15 @@ FROM "user"
 WHERE email_verified = true
     AND deleted = true;
 
--- name: SetPassword :one
+-- name: GetPasswordByID :one
+SELECT password
+FROM "user"
+WHERE id = $1;
+
+-- name: SetPassword :exec
 UPDATE "user"
 SET password = $2
-WHERE id = $1
-RETURNING *;
+WHERE id = $1;
 
 -- name: CheckEmail :one
 SELECT COUNT(*) = 0 AS isEmailValid

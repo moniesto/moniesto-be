@@ -84,6 +84,10 @@ var Messages = errorMessageType{
 		"Check email server error",
 		http.StatusInternalServerError,
 	}),
+	"Invalid_RequestBody_ChangePassword": report(ErrorMessage{
+		"Change Password request body is invalid",
+		http.StatusNotAcceptable,
+	}),
 }
 
 var InternalMessages = internalErrorMessageType{
@@ -110,5 +114,11 @@ var InternalMessages = internalErrorMessageType{
 	}),
 	"UpdateLoginStatsFail": internalReport(InternalErrorMessage{
 		message: "Server error on updating login stats",
+	}),
+	"GetPassword": internalReport(InternalErrorMessage{
+		message: "Server error on getting password",
+	}),
+	"UpdatePassword": internalReport(InternalErrorMessage{
+		message: "Server error on updating password",
 	}),
 }
