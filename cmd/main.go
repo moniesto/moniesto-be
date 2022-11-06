@@ -5,16 +5,16 @@ import (
 	"log"
 
 	"github.com/moniesto/moniesto-be/api"
+	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/service"
-	"github.com/moniesto/moniesto-be/util"
 
 	_ "github.com/lib/pq"
 )
 
 func main() {
 	// get config files
-	config, err := util.LoadConfig(".")
+	config, err := config.LoadConfig(".")
 	if err != nil {
 		log.Fatal("error while reading config file:", err)
 	}

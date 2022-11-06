@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
@@ -57,7 +58,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	}
 
 	user := db.CreateUserParams{
-		ID:       util.CreateID(),
+		ID:       core.CreateID(),
 		Name:     registerRequest.Name,
 		Surname:  registerRequest.Surname,
 		Username: registerRequest.Username,

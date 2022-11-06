@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/service"
@@ -157,7 +158,7 @@ func createUser(t *testing.T, ctx *gin.Context, service *service.Service, regist
 
 func createUserDBLevel(t *testing.T, ctx *gin.Context, service *service.Service, registerRequest model.RegisterRequest) {
 	dbUser := db.CreateUserParams{
-		ID:       util.CreateID(),
+		ID:       core.CreateID(),
 		Name:     registerRequest.Name,
 		Surname:  registerRequest.Surname,
 		Username: registerRequest.Username,

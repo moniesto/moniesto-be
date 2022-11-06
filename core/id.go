@@ -1,8 +1,6 @@
-package util
+package core
 
-import (
-	"github.com/google/uuid"
-)
+import "github.com/google/uuid"
 
 func CreateID() string {
 	id := uuid.New()

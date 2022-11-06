@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/moniesto/moniesto-be/core"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/stretchr/testify/require"
 )
@@ -14,7 +15,7 @@ func TestJWTMaker(t *testing.T) {
 	require.NoError(t, err)
 
 	username := util.RandomString(6)
-	user_id := util.CreateID()
+	user_id := core.CreateID()
 	duration := time.Minute
 
 	issuedAt := time.Now()
@@ -45,7 +46,7 @@ func TestExpiredJWTToken(t *testing.T) {
 	require.NoError(t, err)
 
 	username := util.RandomString(6)
-	user_id := util.CreateID()
+	user_id := core.CreateID()
 	duration := -time.Minute
 
 	token, err := maker.CreateToken(GeneralPaylod{
@@ -65,7 +66,7 @@ func TestExpiredJWTToken(t *testing.T) {
 
 func TestInvalidJWTTokenAlgNone(t *testing.T) {
 	username := util.RandomString(6)
-	user_id := util.CreateID()
+	user_id := core.CreateID()
 	duration := time.Minute
 
 	payload, err := NewPayload(GeneralPaylod{

@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	_ "github.com/lib/pq"
-	"github.com/moniesto/moniesto-be/util"
+	"github.com/moniesto/moniesto-be/config"
 )
 
 const (
@@ -20,7 +20,7 @@ var testDB *sql.DB
 
 // TestMain is the entry point of tests
 func TestMain(m *testing.M) {
-	config, err := util.LoadConfig("../..")
+	config, err := config.LoadConfig("../..")
 	if err != nil {
 		log.Fatal("cannot load config:", err)
 	}

@@ -7,9 +7,9 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/service"
-	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/systemError"
 	"github.com/stretchr/testify/require"
 
@@ -18,7 +18,7 @@ import (
 
 // newTestServer creates a new server with Test DB
 func newTestServer(t *testing.T) *Server {
-	config, err := util.LoadConfig("../")
+	config, err := config.LoadConfig("../")
 	if err != nil {
 		log.Fatal("cannot load config on test:", err)
 	}

@@ -10,8 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 
+	"github.com/moniesto/moniesto-be/core"
 	"github.com/moniesto/moniesto-be/token"
-	"github.com/moniesto/moniesto-be/util"
 )
 
 type TestCases []struct {
@@ -45,7 +45,7 @@ func TestAuthMiddleware(t *testing.T) {
 
 				generalPayload := token.GeneralPaylod{
 					UserPayload: token.UserPayload{
-						ID:       util.CreateID(),
+						ID:       core.CreateID(),
 						Username: "default_username",
 					},
 				}
@@ -69,7 +69,7 @@ func TestAuthMiddleware(t *testing.T) {
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				generalPayload := token.GeneralPaylod{
 					UserPayload: token.UserPayload{
-						ID:       util.CreateID(),
+						ID:       core.CreateID(),
 						Username: "default_username",
 					},
 				}
@@ -85,7 +85,7 @@ func TestAuthMiddleware(t *testing.T) {
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				generalPayload := token.GeneralPaylod{
 					UserPayload: token.UserPayload{
-						ID:       util.CreateID(),
+						ID:       core.CreateID(),
 						Username: "default_username",
 					},
 				}
@@ -101,7 +101,7 @@ func TestAuthMiddleware(t *testing.T) {
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				generalPayload := token.GeneralPaylod{
 					UserPayload: token.UserPayload{
-						ID:       util.CreateID(),
+						ID:       core.CreateID(),
 						Username: "default_username",
 					},
 				}
@@ -149,7 +149,7 @@ func TestAuthMiddlewareOptional(t *testing.T) {
 
 				generalPayload := token.GeneralPaylod{
 					UserPayload: token.UserPayload{
-						ID:       util.CreateID(),
+						ID:       core.CreateID(),
 						Username: "default_username",
 					},
 				}
@@ -181,7 +181,7 @@ func TestAuthMiddlewareOptional(t *testing.T) {
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				generalPayload := token.GeneralPaylod{
 					UserPayload: token.UserPayload{
-						ID:       util.CreateID(),
+						ID:       core.CreateID(),
 						Username: "default_username",
 					},
 				}
@@ -197,7 +197,7 @@ func TestAuthMiddlewareOptional(t *testing.T) {
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				generalPayload := token.GeneralPaylod{
 					UserPayload: token.UserPayload{
-						ID:       util.CreateID(),
+						ID:       core.CreateID(),
 						Username: "default_username",
 					},
 				}
@@ -213,7 +213,7 @@ func TestAuthMiddlewareOptional(t *testing.T) {
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				generalPayload := token.GeneralPaylod{
 					UserPayload: token.UserPayload{
-						ID:       util.CreateID(),
+						ID:       core.CreateID(),
 						Username: "default_username",
 					},
 				}

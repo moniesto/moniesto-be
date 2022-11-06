@@ -5,21 +5,21 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/config"
 	"github.com/moniesto/moniesto-be/service"
 	"github.com/moniesto/moniesto-be/token"
-	"github.com/moniesto/moniesto-be/util"
 )
 
 // Server serves HTTP requests
 type Server struct {
-	config     util.Config
+	config     config.Config
 	service    *service.Service
 	tokenMaker token.Maker
 	router     *gin.Engine
 }
 
 // NewServer creates a new HTTP server and setup routing
-func NewServer(config util.Config, service *service.Service) (*Server, error) {
+func NewServer(config config.Config, service *service.Service) (*Server, error) {
 	tokenMaker, err := token.NewJWTMaker(config.TokenKey)
 	if err != nil {
 		return nil, fmt.Errorf("cannot create token maker: %w", err)
