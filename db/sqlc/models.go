@@ -166,6 +166,8 @@ type PostCrypto struct {
 	Target3       sql.NullFloat64 `json:"target3"`
 	Stop          sql.NullFloat64 `json:"stop"`
 	Direction     EntryPosition   `json:"direction"`
+	Score         float64         `json:"score"`
+	Finished      bool            `json:"finished"`
 	Deleted       bool            `json:"deleted"`
 	CreatedAt     time.Time       `json:"created_at"`
 	UpdatedAt     time.Time       `json:"updated_at"`

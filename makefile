@@ -40,8 +40,11 @@ create_migration:
 
 resetdb:
 	make dropdb
+	make dropdb-test
 	make createdb
+	make createdb-test
 	make migrateup
+	make migrateup-test
 
 run:
 	go run cmd/main.go

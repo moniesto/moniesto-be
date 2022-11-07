@@ -13,23 +13,36 @@ import (
 
 const createPost = `-- name: CreatePost :one
 INSERT INTO "post_crypto" (
-    id,
-    moniest_id,
-    base_currency,
-    quote_currency,
-    duration,
-    target1,
-    target2,
-    target3,
-    stop,
-    direction,
-    created_at,
-    updated_at
-)
+        id,
+        moniest_id,
+        base_currency,
+        quote_currency,
+        duration,
+        target1,
+        target2,
+        target3,
+        stop,
+        direction,
+        score,
+        created_at,
+        updated_at
+    )
 VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now(), now() 
-)
-RETURNING id, moniest_id, base_currency, quote_currency, start_price, duration, target1, target2, target3, stop, direction, deleted, created_at, updated_at
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6,
+        $7,
+        $8,
+        $9,
+        $10,
+        $11,
+        now(),
+        now()
+    )
+RETURNING id, moniest_id, base_currency, quote_currency, start_price, duration, target1, target2, target3, stop, direction, score, finished, deleted, created_at, updated_at
 `
 
 type CreatePostParams struct {
@@ -43,6 +56,7 @@ type CreatePostParams struct {
 	Target3       sql.NullFloat64 `json:"target3"`
 	Stop          sql.NullFloat64 `json:"stop"`
 	Direction     EntryPosition   `json:"direction"`
+	Score         float64         `json:"score"`
 }
 
 func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (PostCrypto, error) {
@@ -57,6 +71,7 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (PostCry
 		arg.Target3,
 		arg.Stop,
 		arg.Direction,
+		arg.Score,
 	)
 	var i PostCrypto
 	err := row.Scan(
@@ -71,6 +86,8 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (PostCry
 		&i.Target3,
 		&i.Stop,
 		&i.Direction,
+		&i.Score,
+		&i.Finished,
 		&i.Deleted,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -83,7 +100,7 @@ UPDATE "post_crypto"
 SET "deleted" = true,
     "updated_at" = now()
 WHERE "id" = $1
-RETURNING id, moniest_id, base_currency, quote_currency, start_price, duration, target1, target2, target3, stop, direction, deleted, created_at, updated_at
+RETURNING id, moniest_id, base_currency, quote_currency, start_price, duration, target1, target2, target3, stop, direction, score, finished, deleted, created_at, updated_at
 `
 
 func (q *Queries) DeletePost(ctx context.Context, id string) (PostCrypto, error) {
@@ -101,6 +118,8 @@ func (q *Queries) DeletePost(ctx context.Context, id string) (PostCrypto, error)
 		&i.Target3,
 		&i.Stop,
 		&i.Direction,
+		&i.Score,
+		&i.Finished,
 		&i.Deleted,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -109,17 +128,15 @@ func (q *Queries) DeletePost(ctx context.Context, id string) (PostCrypto, error)
 }
 
 const updatePost = `-- name: UpdatePost :one
-    -- Post update queryleri yazılacak! her field overwrite edilecek mi?
-
 UPDATE "post_crypto"
 SET "duration" = $2,
     "target1" = $3,
     "target2" = $4,
-    "target3" = $5, 
+    "target3" = $5,
     "stop" = $6,
     "updated_at" = now()
 WHERE "id" = $1
-RETURNING id, moniest_id, base_currency, quote_currency, start_price, duration, target1, target2, target3, stop, direction, deleted, created_at, updated_at
+RETURNING id, moniest_id, base_currency, quote_currency, start_price, duration, target1, target2, target3, stop, direction, score, finished, deleted, created_at, updated_at
 `
 
 type UpdatePostParams struct {
@@ -132,6 +149,7 @@ type UpdatePostParams struct {
 }
 
 // TODO:
+// Post update queryleri yazılacak! her field overwrite edilecek mi?
 // FIXME:
 // tahmin girildikten sonra direction değiştirilebilir mi?
 func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) (PostCrypto, error) {
@@ -156,6 +174,8 @@ func (q *Queries) UpdatePost(ctx context.Context, arg UpdatePostParams) (PostCry
 		&i.Target3,
 		&i.Stop,
 		&i.Direction,
+		&i.Score,
+		&i.Finished,
 		&i.Deleted,
 		&i.CreatedAt,
 		&i.UpdatedAt,

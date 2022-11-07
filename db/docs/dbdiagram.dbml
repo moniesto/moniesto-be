@@ -110,6 +110,8 @@ Table post_crypto as PC {
   target3 float
   stop float
   direction entry_position [not null]
+  score float [not null, default: 0]
+  finished boolean [not null, default: false]
   
   deleted boolean [not null, default: false]
   

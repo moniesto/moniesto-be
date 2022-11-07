@@ -70,6 +70,8 @@ CREATE TABLE "post_crypto" (
     "target3" float,
     "stop" float,
     "direction" entry_position NOT NULL,
+    "score" float NOT NULL DEFAULT 0,
+    "finished" boolean NOT NULL DEFAULT false,
     "deleted" boolean NOT NULL DEFAULT false,
     "created_at" timestamp NOT NULL DEFAULT (now()),
     "updated_at" timestamp NOT NULL DEFAULT (now())
