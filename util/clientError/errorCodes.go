@@ -24,6 +24,9 @@ const (
 	Account_Register_ServerErrorPassword      = "Account_Register_ServerErrorPassword"
 	Account_Register_ServerErrorCreateUser    = "Account_Register_ServerErrorCreateUser"
 
+	Account_CheckUsername_InvalidUsername          = "Account_CheckUsername_InvalidUsername"
+	Account_CheckUsername_ServerErrorCheckUsername = "Account_CheckUsername_ServerErrorCheckUsername"
+
 	Account_ChangePassword_InvalidBody               = "Account_ChangePassword_InvalidBody"
 	Account_ChangePassword_InvalidOldPassword        = "Account_ChangePassword_InvalidOldPassword"
 	Account_ChangePassword_InvalidNewPassword        = "Account_ChangePassword_InvalidNewPassword"
@@ -54,6 +57,9 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_Register_RegisteredUsername:       "Username is already registered",
 	Account_Register_ServerErrorPassword:      "Server error on password operation",
 	Account_Register_ServerErrorCreateUser:    "Server error on creating user",
+
+	Account_CheckUsername_InvalidUsername:          "Username is invalid",
+	Account_CheckUsername_ServerErrorCheckUsername: "Server error on checking username",
 
 	Account_ChangePassword_InvalidBody:               "Change password request body is invalid",
 	Account_ChangePassword_InvalidOldPassword:        "Old password is invalid",

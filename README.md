@@ -110,7 +110,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] PUT /account/password -> [unauthenticated user] [forget password - change password case]
 
-:heavy_check_mark: `need tests` PUT /account/password -> [authenticated user] [change password case]
+:heavy_check_mark: PUT /account/password -> [authenticated user] [change password case]
 
 - [ ] GET /content/posts?subscribed=<subscribed>&limit=<limit>&offset=<offset>
 

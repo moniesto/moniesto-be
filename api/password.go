@@ -18,14 +18,18 @@ func (server *Server) ChangePassword(ctx *gin.Context) {
 	if validAuth {
 		authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 
-		server.changeLoggedUserPassword(ctx, authPayload.User.ID)
+		server.changeLoggedInUserPassword(ctx, authPayload.User.ID)
 	} else {
-		sendForgetPasswordEmail()
-		verifyToken()
+		server.changeLoggedOutUserPassword(ctx)
 	}
 }
 
+func (server *Server) changeLoggedOutUserPassword(ctx *gin.Context) {
+
+}
+
 func sendForgetPasswordEmail() {
+
 	fmt.Println("sendForgetPasswordEmail")
 }
 
@@ -33,7 +37,7 @@ func verifyToken() {
 	fmt.Println("verifyToken")
 }
 
-func (server *Server) changeLoggedUserPassword(ctx *gin.Context, user_id string) {
+func (server *Server) changeLoggedInUserPassword(ctx *gin.Context, user_id string) {
 	var req model.ChangePasswordRequest
 
 	// STEP: bind/validation

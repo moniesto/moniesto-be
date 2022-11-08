@@ -21,7 +21,7 @@ type registeredUserWithID struct {
 
 var changePasswordUsers []registeredUserWithID
 
-type ChangeLoggedUserPasswordCases []struct {
+type ChangeLoggedInUserPasswordCases []struct {
 	name       string
 	initialize func(t *testing.T, ctx *gin.Context, service *service.Service)
 	setupAuth  func(t *testing.T, request *http.Request, tokenMaker token.Maker)
@@ -29,12 +29,12 @@ type ChangeLoggedUserPasswordCases []struct {
 	check      func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder)
 }
 
-func TestChangeLoggedUserPassword(t *testing.T) {
+func TestChangeLoggedInUserPassword(t *testing.T) {
 	changePasswordUsers = getRandomUsersDataWithID(5)
 
-	changeLoggedUserPasswordCases := getChangeLoggedUserPasswordCases()
+	changeLoggedInUserPasswordCases := getChangeLoggedInUserPasswordCases()
 
-	for _, testCase := range changeLoggedUserPasswordCases {
+	for _, testCase := range changeLoggedInUserPasswordCases {
 		server := newTestServer(t)
 
 		recorder := httptest.NewRecorder()
@@ -61,8 +61,8 @@ func checkUserPasswordIs(t *testing.T, ctx *gin.Context, service *service.Servic
 	require.NoError(t, err)
 }
 
-func getChangeLoggedUserPasswordCases() ChangeLoggedUserPasswordCases {
-	return ChangeLoggedUserPasswordCases{
+func getChangeLoggedInUserPasswordCases() ChangeLoggedInUserPasswordCases {
+	return ChangeLoggedInUserPasswordCases{
 		{
 			name: "Invalid body",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {

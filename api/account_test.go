@@ -529,7 +529,7 @@ func getCheckUsernameCases() CheckUsernameCases {
 			username:   "",
 			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusBadRequest, recorder.Code)
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
 			},
 		},
 		{
@@ -538,7 +538,7 @@ func getCheckUsernameCases() CheckUsernameCases {
 			username:   "test username",
 			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusBadRequest, recorder.Code)
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
 			},
 		},
 		{

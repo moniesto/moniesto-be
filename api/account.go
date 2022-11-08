@@ -10,7 +10,6 @@ import (
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 func (server *Server) loginUser(ctx *gin.Context) {
@@ -85,7 +84,7 @@ func (server *Server) checkUsername(ctx *gin.Context) {
 	// STEP: check username validity
 	validity, err := server.service.CheckUsername(ctx, username)
 	if err != nil {
-		ctx.JSON(systemError.Messages["Invalid_Username"]())
+		ctx.JSON(clientError.ParseError(err))
 		return
 	}
 

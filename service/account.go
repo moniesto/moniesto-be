@@ -2,7 +2,6 @@ package service
 
 import (
 	"database/sql"
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -151,13 +150,13 @@ func (service *Service) UpdateLoginStats(ctx *gin.Context, user_id string) {
 func (service *Service) CheckUsername(ctx *gin.Context, username string) (bool, error) {
 	err := validation.Username(username)
 	if err != nil {
-		return false, err
+		return false, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_CheckUsername_InvalidUsername)
 	}
 
 	checkUsername, err := service.Store.CheckUsername(ctx, username)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["CheckUsername"](err))
-		return false, errors.New("server error on check username")
+		return false, clientError.CreateError(http.StatusInternalServerError, clientError.Account_CheckUsername_ServerErrorCheckUsername)
 	}
 	if !checkUsername {
 		return false, nil
