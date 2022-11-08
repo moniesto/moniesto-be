@@ -1,12 +1,12 @@
 package service
 
 import (
-	"errors"
-	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util"
+	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
@@ -15,14 +15,14 @@ func (service *Service) CheckPassword(ctx *gin.Context, user_id, password string
 	hashedPasword, err := service.Store.GetPasswordByID(ctx, user_id)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["GetPassword"](err))
-		return errors.New("server error check password")
+		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckPassword)
 	}
 
 	// STEP: check the password
 	err = util.CheckPassword(password, hashedPasword)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["LoginFail"](err))
-		return fmt.Errorf("wrong password")
+		return clientError.CreateError(http.StatusForbidden, clientError.Account_ChangePassword_WrongPassword)
 	}
 
 	return
@@ -32,7 +32,7 @@ func (service *Service) UpdatePassword(ctx *gin.Context, user_id, password strin
 	// STEP: hash password
 	hashedPassword, err := util.HashPassword(password)
 	if err != nil {
-		return
+		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorPassword)
 	}
 
 	setPasswordParams := db.SetPasswordParams{
@@ -44,7 +44,7 @@ func (service *Service) UpdatePassword(ctx *gin.Context, user_id, password strin
 	err = service.Store.SetPassword(ctx, setPasswordParams)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["UpdatePassword"](err))
-		return fmt.Errorf("server error on update password")
+		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorUpdatePassword)
 	}
 
 	return

@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/token"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -38,35 +38,35 @@ func (server *Server) changeLoggedUserPassword(ctx *gin.Context, user_id string)
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(systemError.Messages["Invalid_RequestBody_ChangePassword"]())
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
 		return
 	}
 
 	// STEP: check old password is in valid form
 	err := validation.Password(req.OldPassword)
 	if err != nil {
-		ctx.JSON(systemError.Messages["Invalid_RequestBody_ChangePassword"]("old password is not in valid form"))
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidOldPassword))
 		return
 	}
 
 	// STEP: check new password is in valid form
 	err = validation.Password(req.NewPassword)
 	if err != nil {
-		ctx.JSON(systemError.Messages["Invalid_RequestBody_ChangePassword"]("new password is not in valid form"))
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidNewPassword))
 		return
 	}
 
 	// STEP: check old password is correct
 	err = server.service.CheckPassword(ctx, user_id, req.OldPassword)
 	if err != nil {
-		ctx.JSON(systemError.Messages["Invalid_RequestBody_ChangePassword"](err.Error()))
+		ctx.JSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: update password with new one
 	err = server.service.UpdatePassword(ctx, user_id, req.NewPassword)
 	if err != nil {
-		ctx.JSON(systemError.Messages["Invalid_RequestBody_ChangePassword"](err.Error()))
+		ctx.JSON(clientError.ParseError(err))
 		return
 	}
 

@@ -23,6 +23,14 @@ const (
 	Account_Register_RegisteredUsername       = "Account_Register_RegisteredUsername"
 	Account_Register_ServerErrorPassword      = "Account_Register_ServerErrorPassword"
 	Account_Register_ServerErrorCreateUser    = "Account_Register_ServerErrorCreateUser"
+
+	Account_ChangePassword_InvalidBody               = "Account_ChangePassword_InvalidBody"
+	Account_ChangePassword_InvalidOldPassword        = "Account_ChangePassword_InvalidOldPassword"
+	Account_ChangePassword_InvalidNewPassword        = "Account_ChangePassword_InvalidNewPassword"
+	Account_ChangePassword_ServerErrorCheckPassword  = "Account_ChangePassword_ServerErrorCheckPassword"
+	Account_ChangePassword_WrongPassword             = "Account_ChangePassword_WrongPassword"
+	Account_ChangePassword_ServerErrorPassword       = "Account_ChangePassword_ServerErrorPassword"
+	Account_ChangePassword_ServerErrorUpdatePassword = "Account_ChangePassword_ServerErrorUpdatePassword"
 )
 
 var errorMessages errorMessagesType = errorMessagesType{
@@ -47,5 +55,11 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_Register_ServerErrorPassword:      "Server error on password operation",
 	Account_Register_ServerErrorCreateUser:    "Server error on creating user",
 
-	"Account_Login_InvalidPassword": "Password is invalid",
+	Account_ChangePassword_InvalidBody:               "Change password request body is invalid",
+	Account_ChangePassword_InvalidOldPassword:        "Old password is invalid",
+	Account_ChangePassword_InvalidNewPassword:        "New password is invalid",
+	Account_ChangePassword_ServerErrorCheckPassword:  "Server error on checking password",
+	Account_ChangePassword_WrongPassword:             "Wrong old Password",
+	Account_ChangePassword_ServerErrorPassword:       "Server error on password operation",
+	Account_ChangePassword_ServerErrorUpdatePassword: "Server error on updating password",
 }
