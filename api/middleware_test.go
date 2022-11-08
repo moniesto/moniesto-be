@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -21,24 +20,39 @@ type TestCases []struct {
 	checkOptional func(t *testing.T, ctx *gin.Context)
 }
 
-func addAuthorzation(
-	t *testing.T,
-	request *http.Request,
-	tokenMaker token.Maker,
-	authorizationType string,
-	generalPaylod token.GeneralPaylod,
-	duration time.Duration) {
-
-	token, err := tokenMaker.CreateToken(generalPaylod, duration)
-	require.NoError(t, err)
-
-	authorizationHeader := fmt.Sprintf("%s %s", authorizationType, token)
-	request.Header.Set(authorizationHeaderKey, authorizationHeader)
-}
-
 func TestAuthMiddleware(t *testing.T) {
 
-	testCases := TestCases{
+	testCases := getAuthMiddlewareCases()
+
+	for i := range testCases {
+		tc := testCases[i]
+
+		t.Run(tc.name, func(t *testing.T) {
+			server := newTestServer(t)
+
+			authPath := "/auth"
+			server.router.GET(
+				authPath,
+				authMiddleware(server.tokenMaker),
+				func(ctx *gin.Context) {
+					ctx.JSON(http.StatusOK, gin.H{})
+				},
+			)
+
+			recorder := httptest.NewRecorder()
+			request, err := http.NewRequest(http.MethodGet, authPath, nil)
+			require.NoError(t, err)
+
+			tc.setupAuth(t, request, server.tokenMaker)
+			server.router.ServeHTTP(recorder, request)
+			tc.checkResponse(t, recorder)
+		})
+	}
+
+}
+
+func getAuthMiddlewareCases() TestCases {
+	return TestCases{
 		{
 			name: "OK",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
@@ -113,23 +127,30 @@ func TestAuthMiddleware(t *testing.T) {
 			},
 		},
 	}
+}
+
+func TestAuthMiddlewareOptional(t *testing.T) {
+	testCases := getAuthMiddlewareOptionalCases()
 
 	for i := range testCases {
 		tc := testCases[i]
 
 		t.Run(tc.name, func(t *testing.T) {
 			server := newTestServer(t)
+			recorder := httptest.NewRecorder()
 
-			authPath := "/auth"
+			authPath := "/authOptional"
 			server.router.GET(
 				authPath,
-				authMiddleware(server.tokenMaker),
+				authMiddlewareOptional(server.tokenMaker),
 				func(ctx *gin.Context) {
+
+					tc.checkOptional(t, ctx)
+
 					ctx.JSON(http.StatusOK, gin.H{})
 				},
 			)
 
-			recorder := httptest.NewRecorder()
 			request, err := http.NewRequest(http.MethodGet, authPath, nil)
 			require.NoError(t, err)
 
@@ -138,11 +159,10 @@ func TestAuthMiddleware(t *testing.T) {
 			tc.checkResponse(t, recorder)
 		})
 	}
-
 }
 
-func TestAuthMiddlewareOptional(t *testing.T) {
-	testCases := TestCases{
+func getAuthMiddlewareOptionalCases() TestCases {
+	return TestCases{
 		{
 			name: "OK [with auth]",
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
@@ -224,33 +244,5 @@ func TestAuthMiddlewareOptional(t *testing.T) {
 				require.Equal(t, http.StatusUnauthorized, recorder.Code)
 			},
 		},
-	}
-
-	for i := range testCases {
-		tc := testCases[i]
-
-		t.Run(tc.name, func(t *testing.T) {
-			server := newTestServer(t)
-			recorder := httptest.NewRecorder()
-
-			authPath := "/authOptional"
-			server.router.GET(
-				authPath,
-				authMiddlewareOptional(server.tokenMaker),
-				func(ctx *gin.Context) {
-
-					tc.checkOptional(t, ctx)
-
-					ctx.JSON(http.StatusOK, gin.H{})
-				},
-			)
-
-			request, err := http.NewRequest(http.MethodGet, authPath, nil)
-			require.NoError(t, err)
-
-			tc.setupAuth(t, request, server.tokenMaker)
-			server.router.ServeHTTP(recorder, request)
-			tc.checkResponse(t, recorder)
-		})
 	}
 }

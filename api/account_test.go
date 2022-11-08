@@ -12,8 +12,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/moniesto/moniesto-be/core"
-	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/service"
 	"github.com/moniesto/moniesto-be/util"
@@ -122,54 +120,7 @@ func TestCheckUsername(t *testing.T) {
 
 }
 
-// HELPERS
-// createBody converts body into byte format
-func createBody(body any) *bytes.Reader {
-	bodyBytes := new(bytes.Buffer)
-	json.NewEncoder(bodyBytes).Encode(body)
-
-	return bytes.NewReader(bodyBytes.Bytes())
-}
-
-func getRandomUserData() model.RegisterRequest {
-	return model.RegisterRequest{
-		Name:     util.RandomName(),
-		Surname:  util.RandomSurname(),
-		Username: util.RandomUsername(),
-		Email:    util.RandomEmail(),
-		Password: util.RandomPassword(),
-	}
-}
-
-func getRandomUsersData(count int) []model.RegisterRequest {
-	all_users := []model.RegisterRequest{}
-
-	for i := 0; i < count; i++ {
-		all_users = append(all_users, getRandomUserData())
-	}
-
-	return all_users
-}
-
-func createUser(t *testing.T, ctx *gin.Context, service *service.Service, registerRequest model.RegisterRequest) {
-	_, err := service.CreateUser(ctx, registerRequest)
-	require.NoError(t, err)
-}
-
-func createUserDBLevel(t *testing.T, ctx *gin.Context, service *service.Service, registerRequest model.RegisterRequest) {
-	dbUser := db.CreateUserParams{
-		ID:       core.CreateID(),
-		Name:     registerRequest.Name,
-		Surname:  registerRequest.Surname,
-		Username: registerRequest.Username,
-		Email:    registerRequest.Email,
-		Password: registerRequest.Password,
-	}
-
-	_, err := service.Store.CreateUser(ctx, dbUser)
-	require.NoError(t, err)
-}
-
+// CHECK HELPERS
 func checkSuccessLoginResponse(t *testing.T, body *bytes.Buffer) {
 	data, err := io.ReadAll(body)
 	require.NoError(t, err)

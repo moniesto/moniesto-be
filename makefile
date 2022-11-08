@@ -63,7 +63,7 @@ test-c:
 test-v:
 	go test ./... -v
 
-test-coverage-out:
+test-c-out:
 	go test -coverprofile=coverage.out ./...
 	go tool cover -html=coverage.out
 
