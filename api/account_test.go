@@ -512,7 +512,7 @@ func getRegisterCases() RegisterCases {
 			},
 			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
+				require.Equal(t, http.StatusForbidden, recorder.Code)
 
 				checkUserInSystemByEmail(t, ctx, service, registerUsers[3].Email)
 			},
@@ -540,7 +540,7 @@ func getRegisterCases() RegisterCases {
 			},
 			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
+				require.Equal(t, http.StatusForbidden, recorder.Code)
 
 				checkUserInSystemByUsername(t, ctx, service, registerUsers[4].Username)
 			},

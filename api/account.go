@@ -55,14 +55,14 @@ func (server *Server) registerUser(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(systemError.Messages["Invalid_RequestBody_Register"]())
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_Register_InvalidBody))
 		return
 	}
 
 	// STEP: create user
 	createdUser, err := server.service.CreateUser(ctx, req)
 	if err != nil {
-		ctx.JSON(systemError.Messages["Invalid_RequestBody_Register"](err.Error()))
+		ctx.JSON(clientError.ParseError(err))
 		return
 	}
 

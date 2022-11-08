@@ -1,5 +1,7 @@
+PORT=5432
+
 postgres:
-	docker run --name moniesto-postgres14 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:14-alpine
+	docker run --name moniesto-postgres14 -p $(PORT):5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:14-alpine
 
 createdb:
 	docker exec -it moniesto-postgres14 createdb --username=root --owner=root moniesto
@@ -14,16 +16,16 @@ dropdb-test:
 	docker exec -it moniesto-postgres14 dropdb moniesto-test
 
 migrateup:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/moniesto?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgresql://root:secret@localhost:$(PORT)/moniesto?sslmode=disable" -verbose up
 
 migrateup-test:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/moniesto-test?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgresql://root:secret@localhost:$(PORT)/moniesto-test?sslmode=disable" -verbose up
 
 migratedown:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/moniesto?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgresql://root:secret@localhost:$(PORT)/moniesto?sslmode=disable" -verbose down
 
 migratedown-test:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/moniesto-test?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgresql://root:secret@localhost:$(PORT)/moniesto-test?sslmode=disable" -verbose down
 
 sqlc:
 	sqlc generate

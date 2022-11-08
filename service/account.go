@@ -19,43 +19,43 @@ import (
 func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.RegisterRequest) (createdUser db.User, err error) {
 	validEmail, err := validation.Email(registerRequest.Email)
 	if err != nil {
-		return
+		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidEmail)
 	}
 
 	err = validation.Password(registerRequest.Password)
 	if err != nil {
-		return
+		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidPassword)
 	}
 
 	err = validation.Username(registerRequest.Username)
 	if err != nil {
-		return
+		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidUsername)
 	}
 
 	// any user with same email
 	checkEmail, err := service.Store.CheckEmail(ctx, validEmail)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["CheckEmail"](err))
-		return createdUser, errors.New("server error on check email")
+		return db.User{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Register_ServerErrorCheckEmail)
 	}
 	if !checkEmail {
-		return createdUser, errors.New("this email is already in use")
+		return db.User{}, clientError.CreateError(http.StatusForbidden, clientError.Account_Register_RegisteredEmail)
 	}
 
 	// any user with same username
 	checkUsername, err := service.Store.CheckUsername(ctx, registerRequest.Username)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["CheckUsername"](err))
-		return createdUser, errors.New("server error on check username")
+		return db.User{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Register_ServerErrorCheckUsername)
 	}
 	if !checkUsername {
-		return createdUser, errors.New("this username is already in use")
+		return db.User{}, clientError.CreateError(http.StatusForbidden, clientError.Account_Register_RegisteredUsername)
 	}
 
 	// hash password
 	hashedPassword, err := util.HashPassword(registerRequest.Password)
 	if err != nil {
-		return
+		return db.User{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Register_ServerErrorPassword)
 	}
 
 	user := db.CreateUserParams{
@@ -70,7 +70,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	createdUser, err = service.Store.CreateUser(ctx, user)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["CreateUser"](err))
-		return createdUser, errors.New("server error on create user")
+		return db.User{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Register_ServerErrorCreateUser)
 	}
 
 	return
