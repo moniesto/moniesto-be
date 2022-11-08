@@ -66,7 +66,7 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."id" = $1;
+WHERE "user"."id" = $1 AND "user"."deleted" = false;
 
 -- name: GetUserByUsername :one
 SELECT "user"."id",
@@ -119,7 +119,7 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."username" = $1;
+WHERE "user"."username" = $1 AND "user"."deleted" = false;
 
 -- name: GetUserByEmail :one
 SELECT "user"."id",
@@ -172,7 +172,7 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."email" = $1;
+WHERE "user"."email" = $1 AND "user"."deleted" = false;
 
 -- name: GetActiveUsersVerifiedEmails :many
 SELECT email
@@ -189,7 +189,7 @@ WHERE email_verified = true
 -- name: GetPasswordByID :one
 SELECT password
 FROM "user"
-WHERE id = $1;
+WHERE id = $1 AND "user"."deleted" = false;
 
 -- name: SetPassword :exec
 UPDATE "user"

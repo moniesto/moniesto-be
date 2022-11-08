@@ -82,7 +82,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."id" = $1;
+WHERE "user"."id" = $1 AND "user"."deleted" = false;
 
 -- name: GetMoniestByMoniestId :one
 SELECT "user"."id",
@@ -140,7 +140,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "moniest"."id" = $1;
+WHERE "moniest"."id" = $1 AND "user"."deleted" = false;
 
 -- name: GetMoniestByEmail :one
 SELECT "user"."id",
@@ -198,7 +198,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."email" = $1;
+WHERE "user"."email" = $1 AND "user"."deleted" = false;
 
 -- name: GetMoniestByUsername :one
 SELECT "user"."id",
@@ -256,4 +256,4 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."username" = $1;
+WHERE "user"."username" = $1 AND "user"."deleted" = false;

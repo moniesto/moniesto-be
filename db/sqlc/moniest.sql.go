@@ -131,7 +131,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."email" = $1
+WHERE "user"."email" = $1 AND "user"."deleted" = false
 `
 
 type GetMoniestByEmailRow struct {
@@ -235,7 +235,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "moniest"."id" = $1
+WHERE "moniest"."id" = $1 AND "user"."deleted" = false
 `
 
 type GetMoniestByMoniestIdRow struct {
@@ -335,7 +335,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."id" = $1
+WHERE "user"."id" = $1 AND "user"."deleted" = false
 `
 
 type GetMoniestByUserIdRow struct {
@@ -439,7 +439,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."username" = $1
+WHERE "user"."username" = $1 AND "user"."deleted" = false
 `
 
 type GetMoniestByUsernameRow struct {

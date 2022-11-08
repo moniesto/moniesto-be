@@ -55,7 +55,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."username" = $1;
+WHERE "user"."username" = $1 AND "user"."deleted" = false;
 
 -- name: LoginUserByEmail :one
 SELECT "user"."id",
@@ -114,7 +114,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."email" = $1;
+WHERE "user"."email" = $1 AND "user"."deleted" = false;
 
 -- name: UpdateLoginStats :one
 UPDATE "user"

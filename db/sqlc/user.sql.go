@@ -181,7 +181,7 @@ func (q *Queries) GetInactiveUsersVerifiedEmails(ctx context.Context) ([]string,
 const getPasswordByID = `-- name: GetPasswordByID :one
 SELECT password
 FROM "user"
-WHERE id = $1
+WHERE id = $1 AND "user"."deleted" = false
 `
 
 func (q *Queries) GetPasswordByID(ctx context.Context, id string) (string, error) {
@@ -242,7 +242,7 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."email" = $1
+WHERE "user"."email" = $1 AND "user"."deleted" = false
 `
 
 type GetUserByEmailRow struct {
@@ -329,7 +329,7 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."id" = $1
+WHERE "user"."id" = $1 AND "user"."deleted" = false
 `
 
 type GetUserByIDRow struct {
@@ -420,7 +420,7 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."username" = $1
+WHERE "user"."username" = $1 AND "user"."deleted" = false
 `
 
 type GetUserByUsernameRow struct {

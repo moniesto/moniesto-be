@@ -4,6 +4,7 @@ INSERT INTO "post_crypto" (
         moniest_id,
         base_currency,
         quote_currency,
+        start_price,
         duration,
         target1,
         target2,
@@ -26,6 +27,7 @@ VALUES (
         $9,
         $10,
         $11,
+        $12,
         now(),
         now()
     )
@@ -39,16 +41,28 @@ WHERE "id" = $1
 RETURNING *;
 
 -- TODO:
--- Post update queryleri yazılacak! her field overwrite edilecek mi?
--- FIXME:
--- tahmin girildikten sonra direction değiştirilebilir mi?
--- name: UpdatePost :one
-UPDATE "post_crypto"
-SET "duration" = $2,
-    "target1" = $3,
-    "target2" = $4,
-    "target3" = $5,
-    "stop" = $6,
-    "updated_at" = now()
-WHERE "id" = $1
-RETURNING *;
+-- Get moniests live posts, ended posts, all posts by username
+
+-- name: GetActivePostsByUsername :many
+SELECT "post_crypto".*, "post_crypto_description"."description" 
+FROM "post_crypto"
+    INNER JOIN "moniest" ON "moniest"."id" = "post_crypto"."moniest_id"
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id" 
+    INNER JOIN "post_crypto_description" ON "post_crypto_description"."post_id" = "post_crypto"."id" 
+WHERE "user"."username" = $1 AND "user"."deleted" = false AND duration > now();
+
+-- name: GetInactivePostsByUsername :many
+SELECT "post_crypto".*, "post_crypto_description"."description" 
+FROM "post_crypto"
+    INNER JOIN "moniest" ON "moniest"."id" = "post_crypto"."moniest_id"
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id" 
+    INNER JOIN "post_crypto_description" ON "post_crypto_description"."post_id" = "post_crypto"."id"
+WHERE "user"."username" = $1 AND "user"."deleted" = false AND duration < now();
+
+-- name: GetAllPostsByUsername :many
+SELECT "post_crypto".*, "post_crypto_description"."description" 
+FROM "post_crypto"
+    INNER JOIN "moniest" ON "moniest"."id" = "post_crypto"."moniest_id"
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id" 
+    INNER JOIN "post_crypto_description" ON "post_crypto_description"."post_id" = "post_crypto"."id"
+WHERE "user"."username" = $1 AND "user"."deleted" = false;
