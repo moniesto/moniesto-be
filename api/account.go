@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/token"
+	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
@@ -17,14 +18,14 @@ func (server *Server) loginUser(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(systemError.Messages["Invalid_RequestBody_Login"]())
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_Login_InvalidBody))
 		return
 	}
 
 	// STEP: get own user [+ checking password]
 	user, err := server.service.GetOwnUser(ctx, req.Identifier, req.Password)
 	if err != nil {
-		ctx.JSON(systemError.Messages["Wrong_LoginCredentials"](err.Error()))
+		ctx.JSON(clientError.ParseError(err))
 		return
 	}
 
@@ -36,7 +37,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		},
 	}, server.config.AccessTokenDuration)
 	if err != nil {
-		ctx.JSON(systemError.Messages["Server_TokenCreate"]())
+		ctx.JSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_Login_ServerErrorToken))
 		return
 	}
 

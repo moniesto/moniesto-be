@@ -262,7 +262,7 @@ func getLoginCases() LoginCases {
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+				require.Equal(t, http.StatusNotFound, recorder.Code)
 			},
 		},
 		{
@@ -274,7 +274,7 @@ func getLoginCases() LoginCases {
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
 			},
 		},
 		{
@@ -310,7 +310,7 @@ func getLoginCases() LoginCases {
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+				require.Equal(t, http.StatusNotFound, recorder.Code)
 			},
 		},
 		{
@@ -322,7 +322,7 @@ func getLoginCases() LoginCases {
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+				require.Equal(t, http.StatusNotFound, recorder.Code)
 			},
 		},
 		{
@@ -364,7 +364,7 @@ func getLoginCases() LoginCases {
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+				require.Equal(t, http.StatusNotFound, recorder.Code)
 			},
 		},
 		{
@@ -378,7 +378,7 @@ func getLoginCases() LoginCases {
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+				require.Equal(t, http.StatusNotFound, recorder.Code)
 			},
 		},
 		{
@@ -392,7 +392,7 @@ func getLoginCases() LoginCases {
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+				require.Equal(t, http.StatusForbidden, recorder.Code)
 			},
 		},
 		{
@@ -406,7 +406,7 @@ func getLoginCases() LoginCases {
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusUnauthorized, recorder.Code)
+				require.Equal(t, http.StatusForbidden, recorder.Code)
 			},
 		},
 	}

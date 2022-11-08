@@ -10,11 +10,6 @@ import (
 	"github.com/moniesto/moniesto-be/config"
 )
 
-const (
-	dbDriver = `postgres`
-	dbSource = `postgres://root:secret@localhost:5432/moniesto?sslmode=disable`
-)
-
 var testQueries *Queries
 var testDB *sql.DB
 

@@ -3,13 +3,14 @@ package service
 import (
 	"database/sql"
 	"errors"
-	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
+	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/systemError"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
@@ -85,7 +86,7 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 
 		err = validation.Username(identifier)
 		if err != nil {
-			return
+			return db.LoginUserByEmailRow{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Login_InvalidUsername)
 		}
 		identifierIsEmail = false
 	}
@@ -100,11 +101,11 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 
 			if err == sql.ErrNoRows {
 				systemError.Log(systemError.InternalMessages["LoginFail"](err))
-				return createdUser, fmt.Errorf("email is not in system")
+				return db.LoginUserByEmailRow{}, clientError.CreateError(http.StatusNotFound, clientError.Account_Login_NotFoundEmail)
 			}
 
 			systemError.Log(systemError.InternalMessages["LoginByEmail"](err))
-			return createdUser, fmt.Errorf("server error on login by email")
+			return db.LoginUserByEmailRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Login_ServerErrorEmail)
 		}
 
 	} else { // identifier is username case
@@ -114,11 +115,11 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 
 			if err == sql.ErrNoRows {
 				systemError.Log(systemError.InternalMessages["LoginFail"](err))
-				return createdUser, fmt.Errorf("username is not in system")
+				return db.LoginUserByEmailRow{}, clientError.CreateError(http.StatusNotFound, clientError.Account_Login_NotFoundUsername)
 			}
 
 			systemError.Log(systemError.InternalMessages["LoginByUsername"](err))
-			return createdUser, fmt.Errorf("server error on login by username")
+			return db.LoginUserByEmailRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Login_ServerErrorUsername)
 		}
 
 		// assert object always to db.LoginUserByEmailRow
@@ -129,7 +130,7 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 	err = util.CheckPassword(password, user.Password)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["LoginFail"](err))
-		return createdUser, fmt.Errorf("wrong password")
+		return db.LoginUserByEmailRow{}, clientError.CreateError(http.StatusForbidden, clientError.Account_Login_WrongPassword)
 	}
 
 	createdUser = user
