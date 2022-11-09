@@ -25,15 +25,43 @@ func (server *Server) ChangePassword(ctx *gin.Context) {
 }
 
 func (server *Server) changeLoggedOutUserPassword(ctx *gin.Context) {
+	var req model.ChangePasswordRequest
 
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
+		return
+	}
+
+	// STEP: choose which kind of request is it [send email OR verify token&change password]
+	if req.Token == "" && req.NewPassword == "" && req.Email != "" {
+		server.sendForgetPasswordEmail(ctx, &req)
+	} else if req.Token != "" && req.NewPassword != "" && req.Email == "" {
+		server.verifyToken(ctx, &req)
+	} else {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
+		return
+	}
 }
+func (server *Server) sendForgetPasswordEmail(ctx *gin.Context, req *model.ChangePasswordRequest) {
+	/*
+		3-create password_reset_token object, save to db
+		4-create email content, send email
+		5-return 200 OK
+	*/
 
-func sendForgetPasswordEmail() {
+	// STEP: check it is in the system -> if not dont send any email and return 200 OK
+	err := server.service.CheckEmailExistidy(ctx, req.Email)
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusOK) // send success case to client in email is not exist case too (security)
+		// ctx.JSON(clientError.ParseError(err)) // send exact error on the client
+		return
+	}
 
 	fmt.Println("sendForgetPasswordEmail")
 }
 
-func verifyToken() {
+func (server *Server) verifyToken(ctx *gin.Context, req *model.ChangePasswordRequest) {
 	fmt.Println("verifyToken")
 }
 

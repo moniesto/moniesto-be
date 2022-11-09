@@ -8,6 +8,7 @@ import (
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/validation"
 )
 
 func (service *Service) CheckPassword(ctx *gin.Context, user_id, password string) (err error) {
@@ -48,4 +49,36 @@ func (service *Service) UpdatePassword(ctx *gin.Context, user_id, password strin
 	}
 
 	return
+}
+
+func (service *Service) CheckEmailExistidy(ctx *gin.Context, email string) (err error) {
+	// STEP: validate email
+	validEmail, err := validation.Email(email)
+	if err != nil {
+		return clientError.CreateError(http.StatusNotAcceptable, clientError.Account_ChangePassword_InvalidEmail)
+	}
+
+	// STEP: get email existidy in the system
+	checkEmail, err := service.Store.CheckEmail(ctx, validEmail)
+	if err != nil {
+		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckEmail)
+	}
+
+	// STEP: return error if email is not in the system
+	if checkEmail {
+		return clientError.CreateError(http.StatusNotFound, clientError.Account_ChangePassword_NotFoundEmail)
+	}
+	return nil
+}
+
+func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string) {
+	// // STEP: get user by email (need ID)
+	// user, err := service.Store.GetUserByEmail(ctx, email)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// STEP: create token
+
+	// STEP: insert DB
 }

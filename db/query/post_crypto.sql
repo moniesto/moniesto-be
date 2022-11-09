@@ -42,27 +42,34 @@ RETURNING *;
 
 -- TODO:
 -- Get moniests live posts, ended posts, all posts by username
-
 -- name: GetActivePostsByUsername :many
-SELECT "post_crypto".*, "post_crypto_description"."description" 
+SELECT "post_crypto".*,
+    "post_crypto_description"."description"
 FROM "post_crypto"
     INNER JOIN "moniest" ON "moniest"."id" = "post_crypto"."moniest_id"
-    INNER JOIN "user" ON "user"."id" = "moniest"."user_id" 
-    INNER JOIN "post_crypto_description" ON "post_crypto_description"."post_id" = "post_crypto"."id" 
-WHERE "user"."username" = $1 AND "user"."deleted" = false AND duration > now();
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
+    INNER JOIN "post_crypto_description" ON "post_crypto_description"."post_id" = "post_crypto"."id"
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false
+    AND duration > now();
 
 -- name: GetInactivePostsByUsername :many
-SELECT "post_crypto".*, "post_crypto_description"."description" 
+SELECT "post_crypto".*,
+    "post_crypto_description"."description"
 FROM "post_crypto"
     INNER JOIN "moniest" ON "moniest"."id" = "post_crypto"."moniest_id"
-    INNER JOIN "user" ON "user"."id" = "moniest"."user_id" 
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
     INNER JOIN "post_crypto_description" ON "post_crypto_description"."post_id" = "post_crypto"."id"
-WHERE "user"."username" = $1 AND "user"."deleted" = false AND duration < now();
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false
+    AND duration < now();
 
 -- name: GetAllPostsByUsername :many
-SELECT "post_crypto".*, "post_crypto_description"."description" 
+SELECT "post_crypto".*,
+    "post_crypto_description"."description"
 FROM "post_crypto"
     INNER JOIN "moniest" ON "moniest"."id" = "post_crypto"."moniest_id"
-    INNER JOIN "user" ON "user"."id" = "moniest"."user_id" 
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
     INNER JOIN "post_crypto_description" ON "post_crypto_description"."post_id" = "post_crypto"."id"
-WHERE "user"."username" = $1 AND "user"."deleted" = false;
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false;
