@@ -10,5 +10,7 @@ INSERT INTO "password_reset_token" (
 VALUEs ($1, $2, $3, $4, false, now())
 RETURNING *;
 
--- -- name: GetPasswordResetTokenByToken :one
--- SELECT * FROM
+-- name: GetPasswordResetTokenByToken :one
+SELECT *
+FROM "password_reset_token"
+WHERE "token" = $1;

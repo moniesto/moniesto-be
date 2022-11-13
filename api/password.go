@@ -51,13 +51,16 @@ func (server *Server) sendForgetPasswordEmail(ctx *gin.Context, req *model.Chang
 	*/
 
 	// STEP: check it is in the system -> if not dont send any email and return 200 OK
-	err := server.service.CheckEmailExistidy(ctx, req.Email)
+	validEmail, err := server.service.CheckEmailExistidy(ctx, req.Email)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusOK) // send success case to client in email is not exist case too (security)
 		// ctx.JSON(clientError.ParseError(err)) // send exact error on the client
 		return
 	}
 
+	// STEP: create password_reset_token in DB
+	password_reset_token, err := server.service.CreatePasswordResetToken(ctx, validEmail, server.config.PasswordResetTokenDuration)
+	_ = password_reset_token
 	fmt.Println("sendForgetPasswordEmail")
 }
 

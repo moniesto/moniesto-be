@@ -2,9 +2,12 @@ package service
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
+	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/systemError"
@@ -51,34 +54,51 @@ func (service *Service) UpdatePassword(ctx *gin.Context, user_id, password strin
 	return
 }
 
-func (service *Service) CheckEmailExistidy(ctx *gin.Context, email string) (err error) {
+func (service *Service) CheckEmailExistidy(ctx *gin.Context, email string) (validEmail string, err error) {
 	// STEP: validate email
-	validEmail, err := validation.Email(email)
+	validEmail, err = validation.Email(email)
 	if err != nil {
-		return clientError.CreateError(http.StatusNotAcceptable, clientError.Account_ChangePassword_InvalidEmail)
+		return "", clientError.CreateError(http.StatusNotAcceptable, clientError.Account_ChangePassword_InvalidEmail)
 	}
 
 	// STEP: get email existidy in the system
 	checkEmail, err := service.Store.CheckEmail(ctx, validEmail)
 	if err != nil {
-		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckEmail)
+		return "", clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckEmail)
 	}
 
 	// STEP: return error if email is not in the system
 	if checkEmail {
-		return clientError.CreateError(http.StatusNotFound, clientError.Account_ChangePassword_NotFoundEmail)
+		return "", clientError.CreateError(http.StatusNotFound, clientError.Account_ChangePassword_NotFoundEmail)
 	}
-	return nil
+	return validEmail, nil
 }
 
-func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string) {
-	// // STEP: get user by email (need ID)
-	// user, err := service.Store.GetUserByEmail(ctx, email)
-	// if err != nil {
-	// 	return nil, err
-	// }
+// TODO: update function
+func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string, expiryAt time.Duration) (db.PasswordResetToken, error) {
+	// STEP: get user by email (need ID)
+	user, err := service.Store.GetUserByEmail(ctx, email)
+	if err != nil {
+		// TODO: return client error
+		return db.PasswordResetToken{}, err
+	}
 
-	// STEP: create token
+	// STEP: create password reset token object
+	token := token.CreateValidatingToken()
+
+	params := db.CreatePasswordResetTokenParams{
+		ID:          core.CreateID(),
+		UserID:      user.ID,
+		Token:       token,
+		TokenExpiry: time.Now().Add(expiryAt),
+	}
 
 	// STEP: insert DB
+	password_reset_token, err := service.Store.CreatePasswordResetToken(ctx, params)
+	if err != nil {
+		// TODO: return client error
+		return db.PasswordResetToken{}, err
+	}
+
+	return password_reset_token, nil
 }
