@@ -1,11 +1,12 @@
 package api
 
 import (
+	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/token"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
 const (
@@ -33,30 +34,26 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		authorizationHeader := ctx.GetHeader(authorizationHeaderKey)
 
 		if len(authorizationHeader) == 0 {
-			// TODO: update with new error handler
-			ctx.AbortWithStatusJSON(systemError.Messages["NotProvided_AuthorizationHeader"]())
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_NotProvidedHeader))
 			return
 		}
 
 		fields := strings.Fields(authorizationHeader)
 		if len(fields) < 2 {
-			// TODO: update with new error handler
-			ctx.AbortWithStatusJSON(systemError.Messages["Invalid_AuthorizationHeader"]())
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_InvalidHeader))
 			return
 		}
 
 		authorizationType := strings.ToLower(fields[0])
 		if authorizationType != authorizationTypeBearer {
-			// TODO: update with new error handler
-			ctx.AbortWithStatusJSON(systemError.Messages["Unsupported_AuthorizationType"](authorizationType))
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_UnsupportedType))
 			return
 		}
 
 		accessToken := fields[1]
 		payload, err := tokenMaker.VerifyToken(accessToken)
 		if err != nil {
-			// TODO: update with new error handler
-			ctx.AbortWithStatusJSON(systemError.Messages["Invalid_Token"]())
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_InvalidToken))
 			return
 		}
 

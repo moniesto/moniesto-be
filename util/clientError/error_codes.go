@@ -3,6 +3,11 @@ package clientError
 type errorMessagesType map[string]string
 
 const (
+	Account_Authorization_NotProvidedHeader = "Account_Authorization_NotProvidedHeader"
+	Account_Authorization_InvalidHeader     = "Account_Authorization_InvalidHeader"
+	Account_Authorization_UnsupportedType   = "Account_Authorization_UnsupportedType"
+	Account_Authorization_InvalidToken      = "Account_Authorization_InvalidToken"
+
 	Account_Login_InvalidBody         = "Account_Login_InvalidBody"
 	Account_Login_InvalidEmail        = "Account_Login_InvalidEmail"
 	Account_Login_InvalidUsername     = "Account_Login_InvalidUsername"
@@ -42,6 +47,11 @@ const (
 )
 
 var errorMessages errorMessagesType = errorMessagesType{
+	Account_Authorization_NotProvidedHeader: "Authorization Header is not provided",
+	Account_Authorization_InvalidHeader:     "Authorization Header is not valid",
+	Account_Authorization_UnsupportedType:   "Authorization Type is not supported",
+	Account_Authorization_InvalidToken:      "Authorization Token is not valid",
+
 	Account_Login_InvalidBody:         "Login request body is invalid",
 	Account_Login_InvalidEmail:        "Email is invalid",
 	Account_Login_InvalidUsername:     "Username is invalid",

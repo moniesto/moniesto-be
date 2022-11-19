@@ -36,16 +36,19 @@ func (server *Server) changeLoggedOutUserPassword(ctx *gin.Context) {
 
 	// STEP: choose which kind of request is it [send email OR verify token&change password]
 	if req.Token == "" && req.NewPassword == "" && req.Email != "" {
-		server.sendForgetPasswordEmail(ctx, &req)
+		// STEP: send reset password email case
+		server.sendResetPasswordEmail(ctx, &req)
 	} else if req.Token != "" && req.NewPassword != "" && req.Email == "" {
+		// STEP: verify token case
 		server.verifyToken(ctx, &req)
 	} else {
 		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
 		return
 	}
 }
-func (server *Server) sendForgetPasswordEmail(ctx *gin.Context, req *model.ChangePasswordRequest) {
-	// STEP: check email is in the system -> if not don't send any email and return 200 OK
+
+func (server *Server) sendResetPasswordEmail(ctx *gin.Context, req *model.ChangePasswordRequest) {
+	// STEP: check email is in the system -> if not don't send any email and return 202 ACCEPTED
 	validEmail, err := server.service.CheckEmailExistidy(ctx, req.Email)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusAccepted) // send success case to client in email is not exist case too (security)
