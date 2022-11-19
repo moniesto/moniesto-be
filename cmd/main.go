@@ -29,7 +29,7 @@ func main() {
 	store := db.NewStore(conn)
 
 	// get service
-	service, err := service.NewService(store)
+	service, err := service.NewService(store, config)
 	if err != nil {
 		log.Fatal("cannot create service", err)
 	}

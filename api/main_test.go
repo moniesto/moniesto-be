@@ -29,7 +29,7 @@ func newTestServer(t *testing.T) *Server {
 	}
 	store := db.NewStore(testDB)
 
-	service, err := service.NewService(store)
+	service, err := service.NewService(store, config)
 	if err != nil {
 		log.Fatal(systemError.InternalMessages["RunService"](err))
 	}

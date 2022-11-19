@@ -1,6 +1,7 @@
 package service
 
 import (
+	"database/sql"
 	"net/http"
 	"time"
 
@@ -64,6 +65,7 @@ func (service *Service) CheckEmailExistidy(ctx *gin.Context, email string) (vali
 	// STEP: get email existidy in the system
 	checkEmail, err := service.Store.CheckEmail(ctx, validEmail)
 	if err != nil {
+		systemError.Log(systemError.InternalMessages["CheckEmail"](err))
 		return "", clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckEmail)
 	}
 
@@ -75,12 +77,15 @@ func (service *Service) CheckEmailExistidy(ctx *gin.Context, email string) (vali
 }
 
 // TODO: update function
-func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string, expiryAt time.Duration) (db.PasswordResetToken, error) {
+func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string, expiryAt time.Duration) (string, db.PasswordResetToken, error) {
 	// STEP: get user by email (need ID)
 	user, err := service.Store.GetUserByEmail(ctx, email)
 	if err != nil {
-		// TODO: return client error
-		return db.PasswordResetToken{}, err
+		if err == sql.ErrNoRows {
+			return "", db.PasswordResetToken{}, clientError.CreateError(http.StatusNotFound, clientError.Account_ChangePassword_NotFoundEmail)
+		}
+		systemError.Log(systemError.InternalMessages["GetUserByEmail"](err))
+		return "", db.PasswordResetToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckEmail)
 	}
 
 	// STEP: create password reset token object
@@ -96,9 +101,9 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 	// STEP: insert DB
 	password_reset_token, err := service.Store.CreatePasswordResetToken(ctx, params)
 	if err != nil {
-		// TODO: return client error
-		return db.PasswordResetToken{}, err
+		systemError.Log(systemError.InternalMessages["CreatePasswordResetToken"](err))
+		return "", db.PasswordResetToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCreateToken)
 	}
 
-	return password_reset_token, nil
+	return user.Name, password_reset_token, nil
 }

@@ -33,18 +33,21 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		authorizationHeader := ctx.GetHeader(authorizationHeaderKey)
 
 		if len(authorizationHeader) == 0 {
+			// TODO: update with new error handler
 			ctx.AbortWithStatusJSON(systemError.Messages["NotProvided_AuthorizationHeader"]())
 			return
 		}
 
 		fields := strings.Fields(authorizationHeader)
 		if len(fields) < 2 {
+			// TODO: update with new error handler
 			ctx.AbortWithStatusJSON(systemError.Messages["Invalid_AuthorizationHeader"]())
 			return
 		}
 
 		authorizationType := strings.ToLower(fields[0])
 		if authorizationType != authorizationTypeBearer {
+			// TODO: update with new error handler
 			ctx.AbortWithStatusJSON(systemError.Messages["Unsupported_AuthorizationType"](authorizationType))
 			return
 		}
@@ -52,6 +55,7 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		accessToken := fields[1]
 		payload, err := tokenMaker.VerifyToken(accessToken)
 		if err != nil {
+			// TODO: update with new error handler
 			ctx.AbortWithStatusJSON(systemError.Messages["Invalid_Token"]())
 			return
 		}

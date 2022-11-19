@@ -20,6 +20,10 @@ type Config struct {
 	ClientURL                      string        `mapstructure:"CLIENT_URL"`
 	PasswordResetTokenDuration     time.Duration `mapstructure:"PASSWORD_RESER_TOKEN_DURATION"`
 	PasswordResetTokenDurationTest time.Duration `mapstructure:"PASSWORD_RESER_TOKEN_DURATION_TEST"`
+	NoReplyEmail                   string        `mapstructure:"NO_REPLY_EMAIL"`
+	NoReplyPassword                string        `mapstructure:"NO_REPLY_PASSWORD"`
+	SmtpHost                       string        `mapstructure:"SMTP_HOST"`
+	SmtpPort                       string        `mapstructure:"SMTP_PORT"`
 }
 
 // LoadConfig reads configuration from file

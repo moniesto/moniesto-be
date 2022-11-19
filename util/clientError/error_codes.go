@@ -37,6 +37,8 @@ const (
 	Account_ChangePassword_WrongPassword             = "Account_ChangePassword_WrongPassword"
 	Account_ChangePassword_ServerErrorPassword       = "Account_ChangePassword_ServerErrorPassword"
 	Account_ChangePassword_ServerErrorUpdatePassword = "Account_ChangePassword_ServerErrorUpdatePassword"
+	Account_ChangePassword_ServerErrorCreateToken    = "Account_ChangePassword_ServerErrorCreateToken"
+	Account_ChangePassowrd_SendEmail                 = "Account_ChangePassowrd_SendEmail"
 )
 
 var errorMessages errorMessagesType = errorMessagesType{
@@ -74,4 +76,6 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_ChangePassword_WrongPassword:             "Wrong old Password",
 	Account_ChangePassword_ServerErrorPassword:       "Server error on password operation",
 	Account_ChangePassword_ServerErrorUpdatePassword: "Server error on updating password",
+	Account_ChangePassword_ServerErrorCreateToken:    "Server error on creating token",
+	Account_ChangePassowrd_SendEmail:                 "Server error on sending email",
 }

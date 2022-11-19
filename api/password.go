@@ -8,6 +8,7 @@ import (
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/mailing"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -44,24 +45,29 @@ func (server *Server) changeLoggedOutUserPassword(ctx *gin.Context) {
 	}
 }
 func (server *Server) sendForgetPasswordEmail(ctx *gin.Context, req *model.ChangePasswordRequest) {
-	/*
-		3-create password_reset_token object, save to db
-		4-create email content, send email
-		5-return 200 OK
-	*/
-
-	// STEP: check it is in the system -> if not dont send any email and return 200 OK
+	// STEP: check email is in the system -> if not don't send any email and return 200 OK
 	validEmail, err := server.service.CheckEmailExistidy(ctx, req.Email)
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusOK) // send success case to client in email is not exist case too (security)
+		ctx.AbortWithStatus(http.StatusAccepted) // send success case to client in email is not exist case too (security)
 		// ctx.JSON(clientError.ParseError(err)) // send exact error on the client
 		return
 	}
 
 	// STEP: create password_reset_token in DB
-	password_reset_token, err := server.service.CreatePasswordResetToken(ctx, validEmail, server.config.PasswordResetTokenDuration)
-	_ = password_reset_token
-	fmt.Println("sendForgetPasswordEmail")
+	name, password_reset_token, err := server.service.CreatePasswordResetToken(ctx, validEmail, server.config.PasswordResetTokenDuration)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: send password reset- email
+	err = mailing.SendPasswordResetEmail(validEmail, server.config, name, password_reset_token.Token)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_ChangePassowrd_SendEmail))
+		return
+	}
+
+	ctx.AbortWithStatus(http.StatusAccepted)
 }
 
 func (server *Server) verifyToken(ctx *gin.Context, req *model.ChangePasswordRequest) {

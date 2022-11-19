@@ -106,7 +106,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: GET /account/usernames/:username/check
 
-- [ ] PUT /account/password -> [unauthenticated case] [forget password - send email case]
+:heavy_check_mark: [need test] PUT /account/password -> [unauthenticated case] [forget password - send email case]
 
 - [ ] PUT /account/password -> [unauthenticated user] [forget password - change password case]
 

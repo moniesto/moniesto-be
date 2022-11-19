@@ -121,4 +121,13 @@ var InternalMessages = internalErrorMessageType{
 	"UpdatePassword": internalReport(InternalErrorMessage{
 		message: "Server error on updating password",
 	}),
+	"GetUserByEmail": internalReport(InternalErrorMessage{
+		message: "Server error on getting user by email",
+	}),
+	"CreatePasswordResetToken": internalReport(InternalErrorMessage{
+		message: "Server error on creating password reset token instance on db",
+	}),
+	"SendPasswordResetEmail": internalReport(InternalErrorMessage{
+		message: "Server error on sending password reset email",
+	}),
 }
