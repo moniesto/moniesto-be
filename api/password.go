@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -40,7 +39,7 @@ func (server *Server) changeLoggedOutUserPassword(ctx *gin.Context) {
 		server.sendResetPasswordEmail(ctx, &req)
 	} else if req.Token != "" && req.NewPassword != "" && req.Email == "" {
 		// STEP: verify token case
-		server.verifyToken(ctx, &req)
+		server.verifyTokenChangePassword(ctx, &req)
 	} else {
 		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
 		return
@@ -73,8 +72,35 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context, req *model.Change
 	ctx.AbortWithStatus(http.StatusAccepted)
 }
 
-func (server *Server) verifyToken(ctx *gin.Context, req *model.ChangePasswordRequest) {
-	fmt.Println("verifyToken")
+func (server *Server) verifyTokenChangePassword(ctx *gin.Context, req *model.ChangePasswordRequest) {
+	// STEP: validating password reset token [decode + expiry check]
+	password_reset_token, err := server.service.GetPasswordResetToken(ctx, req.Token)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: check new password is in valid form
+	err = validation.Password(req.NewPassword)
+	if err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidNewPassword))
+		return
+	}
+
+	// STEP: update password with new one
+	err = server.service.UpdatePassword(ctx, password_reset_token.UserID, req.NewPassword)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	err = server.service.DeletePasswordResetToken(ctx, password_reset_token.Token)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.Status(http.StatusOK)
 }
 
 func (server *Server) changeLoggedInUserPassword(ctx *gin.Context, user_id string) {

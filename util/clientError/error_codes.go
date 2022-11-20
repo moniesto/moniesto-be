@@ -44,13 +44,18 @@ const (
 	Account_ChangePassword_ServerErrorUpdatePassword = "Account_ChangePassword_ServerErrorUpdatePassword"
 	Account_ChangePassword_ServerErrorCreateToken    = "Account_ChangePassword_ServerErrorCreateToken"
 	Account_ChangePassowrd_SendEmail                 = "Account_ChangePassowrd_SendEmail"
+	Account_ChangePassword_InvalidToken              = "Account_ChangePassword_InvalidToken"
+	Account_ChangePassword_NotFoundToken             = "Account_ChangePassword_NotFoundToken"
+	Account_ChangePassword_ServerErrorGetToken       = "Account_ChangePassword_ServerErrorGetToken"
+	Account_ChangePassword_ExpiredToken              = "Account_ChangePassword_ExpiredToken"
+	Account_ChangePassword_ServerErrorDeleteToken    = "Account_ChangePassword_ServerErrorDeleteToken"
 )
 
 var errorMessages errorMessagesType = errorMessagesType{
 	Account_Authorization_NotProvidedHeader: "Authorization Header is not provided",
-	Account_Authorization_InvalidHeader:     "Authorization Header is not valid",
+	Account_Authorization_InvalidHeader:     "Authorization Header is invalid",
 	Account_Authorization_UnsupportedType:   "Authorization Type is not supported",
-	Account_Authorization_InvalidToken:      "Authorization Token is not valid",
+	Account_Authorization_InvalidToken:      "Authorization Token is invalid",
 
 	Account_Login_InvalidBody:         "Login request body is invalid",
 	Account_Login_InvalidEmail:        "Email is invalid",
@@ -88,4 +93,9 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_ChangePassword_ServerErrorUpdatePassword: "Server error on updating password",
 	Account_ChangePassword_ServerErrorCreateToken:    "Server error on creating token",
 	Account_ChangePassowrd_SendEmail:                 "Server error on sending email",
+	Account_ChangePassword_InvalidToken:              "Password Reset Token is invalid",
+	Account_ChangePassword_NotFoundToken:             "Password Reset Token is not in the system",
+	Account_ChangePassword_ServerErrorGetToken:       "Server error on getting Password Reset Token from system",
+	Account_ChangePassword_ExpiredToken:              "Password Reset Token is expired",
+	Account_ChangePassword_ServerErrorDeleteToken:    "Server error on deleting Password Reset Token",
 }

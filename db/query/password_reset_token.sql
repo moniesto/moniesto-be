@@ -13,4 +13,10 @@ RETURNING *;
 -- name: GetPasswordResetTokenByToken :one
 SELECT *
 FROM "password_reset_token"
+WHERE "token" = $1
+    AND "deleted" = false;
+
+-- name: DeletePasswordResetTokenByToken :exec
+UPDATE "password_reset_token"
+SET deleted = true
 WHERE "token" = $1;

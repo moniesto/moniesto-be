@@ -36,6 +36,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		},
 	}, server.config.AccessTokenDuration)
 	if err != nil {
+		// TODO: add server error
 		ctx.JSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_Login_ServerErrorToken))
 		return
 	}

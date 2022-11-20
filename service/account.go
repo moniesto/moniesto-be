@@ -54,6 +54,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	// hash password
 	hashedPassword, err := util.HashPassword(registerRequest.Password)
 	if err != nil {
+		// TODO: add server error
 		return db.User{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Register_ServerErrorPassword)
 	}
 

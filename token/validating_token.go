@@ -8,6 +8,10 @@ import (
 func CreateValidatingToken() string {
 	token := core.CreateID() + "-" + core.CreateID()
 
+	return token
+}
+
+func EncodeValidatingToken(token string) string {
 	encodedToken := util.Encode(token)
 
 	return encodedToken
