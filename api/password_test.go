@@ -21,7 +21,7 @@ type registeredUserWithID struct {
 
 var changePasswordUsers []registeredUserWithID
 
-type ChangeLoggedInUserPasswordCases []struct {
+type ChangePasswordCases []struct {
 	name       string
 	initialize func(t *testing.T, ctx *gin.Context, service *service.Service)
 	setupAuth  func(t *testing.T, request *http.Request, tokenMaker token.Maker)
@@ -53,6 +53,28 @@ func TestChangeLoggedInUserPassword(t *testing.T) {
 	}
 }
 
+func TestChangeLoggedOutUserPassword(t *testing.T) {
+
+	changeLoggedOutUserPasswordCases := getChangeLoggedOutUserPasswordCases()
+
+	for _, testCase := range changeLoggedOutUserPasswordCases {
+		server := newTestServer(t)
+
+		recorder := httptest.NewRecorder()
+		ctx_test, _ := gin.CreateTestContext(recorder)
+		testCase.initialize(t, ctx_test, server.service)
+
+		url := "/account/password"
+
+		request, err := http.NewRequest(http.MethodPut, url, createBody(testCase.body))
+		require.NoError(t, err)
+
+		server.router.ServeHTTP(recorder, request)
+		testCase.check(t, ctx_test, server.service, recorder)
+	}
+
+}
+
 func checkUserPasswordIs(t *testing.T, ctx *gin.Context, service *service.Service, user_id, password string) {
 	hashedPassword, err := service.Store.GetPasswordByID(ctx, user_id)
 	require.NoError(t, err)
@@ -61,8 +83,8 @@ func checkUserPasswordIs(t *testing.T, ctx *gin.Context, service *service.Servic
 	require.NoError(t, err)
 }
 
-func getChangeLoggedInUserPasswordCases() ChangeLoggedInUserPasswordCases {
-	return ChangeLoggedInUserPasswordCases{
+func getChangeLoggedInUserPasswordCases() ChangePasswordCases {
+	return ChangePasswordCases{
 		{
 			name: "Invalid body",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
@@ -187,4 +209,119 @@ func getChangeLoggedInUserPasswordCases() ChangeLoggedInUserPasswordCases {
 		},
 	}
 
+}
+
+func getChangeLoggedOutUserPasswordCases() ChangePasswordCases {
+	/*
+			cases:
+
+			- invalid body:
+		done	- token and email in the same time
+		done	- email and new password in the same time
+		done	- token alone
+		done	- new password alone
+			- send email case:
+		done		- email is not exist on the system (still returns 202)
+					- success with email (moniesto.test@gmail.com email)
+			- verify token case:
+				- invalid token (can not be decoded)
+				- no record with this token
+				- expired token with email (moniesto.test@gmail.com email)
+				- success with email (moniesto.test@gmail.com email)
+
+	*/
+
+	return ChangePasswordCases{
+		{
+			name:       "Invalid body",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
+			},
+		},
+		{
+			name:       "Invalid body [Token and Email fields provided in the same time]",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			body: struct {
+				Email string `json:"email"`
+				Token string `json:"token"`
+			}{
+				Email: util.RandomEmail(),
+				Token: util.RandomString(30),
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
+			},
+		},
+		{
+			name:       "Invalid body [Email and New Password fields provided in the same time]",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			body: struct {
+				Email       string `json:"email"`
+				NewPassword string `json:"new"`
+			}{
+				Email:       util.RandomEmail(),
+				NewPassword: util.RandomPassword(),
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
+			},
+		},
+		{
+			name:       "Invalid body [Only Token field provided (not new password)]",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			body: struct {
+				Token string `json:"token"`
+			}{
+				Token: util.RandomString(30),
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
+			},
+		},
+		{
+			name:       "Invalid body [Only New Password field provided]",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			body: struct {
+				NewPassword string `json:"new"`
+			}{
+				NewPassword: util.RandomPassword(),
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
+			},
+		},
+
+		// SEND EMAIL cases
+		{
+			name:       "[SEND RESET PASSWORD EMAIL] Not exist email on system",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			body: struct {
+				Email string `json:"email"`
+			}{
+				Email: util.RandomEmail(),
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusAccepted, recorder.Code)
+			},
+		},
+		{
+			name:       "[SUCCESS RESET PASSWORD EMAIL] Email sent successfully",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			// TODO: complete success case of send email
+		},
+	}
 }
