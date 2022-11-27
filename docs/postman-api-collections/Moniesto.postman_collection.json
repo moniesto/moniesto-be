@@ -1,0 +1,188 @@
+{
+	"info": {
+		"_postman_id": "8a4ee439-4bf2-42e2-ac82-dfb971c5a75e",
+		"name": "Moniesto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12879359"
+	},
+	"item": [
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "[local] Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"identifier\": \"parvin@gmail.com\",\r\n \"password\": \"parvin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"name\": \"Parvin\",\r\n \"surname\": \"Eyvazov\",\r\n \"username\": \"eyvzov\",\r\n \"email\": \"parvin@gmail.com\",\r\n \"password\": \"parvin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Check Username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/account/usernames/sadas/check",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"usernames",
+								"sadas",
+								"check"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Change Password  [send email]",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"email\": \"test@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Change Password [Unauth]",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"token\": \"string\",\r\n \"new\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Change Password [Auth]",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MWY0ZTc2LTg4NmQtNDNmOC1hODNjLWIzOGVmMTFjOGVjMCIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6ImE0YjEyODdkLTIzZWEtNDUyNC1hNmMzLTIzMTU1ZTNmNzRiNiJ9LCJpc3N1ZWRfYXQiOiIyMDIyLTExLTA1VDAwOjA1OjQzLjU2OTY5MDQrMDM6MDAiLCJleHBpcmVkX2F0IjoiMjAyMi0xMS0wNVQwMDoyMDo0My41Njk2OTA0KzAzOjAwIn0.6cqMiYcQMPe8OaUtqblPzQq2QIq17Qf9wwohAK-c9uI",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"old\": \"parvin1\",\r\n \"new\": \"parvin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
