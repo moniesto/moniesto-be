@@ -1,37 +1,21 @@
-FROM golang:1.18.4-alpine
-
-LABEL maintainer="ParvinEyvazov"
-
-# Install git (to get dependencies)
-RUN apk update && apk add --no-cache git && apk add --no-cach bash && apk add build-base
-
-ENV PROJECTNAME=moniesto
-ENV PROJECTPATH=/app/${PROJECTNAME}
-
-RUN mkdir -p ${PROJECTPATH}/
-WORKDIR ${PROJECTPATH}
-COPY go.mod go.sum ${PROJECTPATH}/
-RUN go mod download
-ADD . ${PROJECTPATH}/
-
-# Download all the dependencies
-RUN go get -d -v ./...
-
-# Install the package
-RUN go install -v ./...
-
-# Build the Go app
-RUN go build -o /build -v cmd/main.go
-
-# Copy the source from the current directory to the working Directory inside the container
+# Build
+FROM golang:1.19.3-alpine3.15 as builder
+WORKDIR /app
 COPY . .
+RUN go build -o main cmd/main.go
+RUN apk --no-cache add curl
+RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.14.1/migrate.linux-amd64.tar.gz | tar xvz
+
+# Run
+FROM alpine:3.15
+WORKDIR /app
+COPY --from=builder /app/main .
+COPY --from=builder /app/migrate.linux-amd64 ./migrate
 COPY .env .
+COPY start.sh .
+COPY wait-for.sh .
+COPY db/migration ./migration
 
-# # Build the Go app
-# RUN go build -o /build
-
-# Expose port 8080 to the outside world
 EXPOSE 8080
-
-# Run the executable
-CMD [ "/build" ]
+CMD ["/app/main"]
+ENTRYPOINT [ "/app/start.sh" ]

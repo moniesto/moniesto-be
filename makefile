@@ -48,6 +48,9 @@ resetdb:
 	make migrateup
 	make migrateup-test
 
+build:
+	go build cmd/main.go
+
 run:
 	go run cmd/main.go
 
@@ -67,4 +70,27 @@ test-c-out:
 	go test -coverprofile=coverage.out ./...
 	go tool cover -html=coverage.out
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc sqlc-bash sqlc-win create_migration resetdb run
+docker-build:
+	docker build -t moniesto:latest .
+
+# compose
+compose:
+	docker compose down
+	docker rmi moniesto_api || true
+	docker compose up
+
+# run in development mode
+docker-run:
+	docker run --name moniesto --network moniesto-network -p 8080:8080 -e DB_SOURCE="postgres://root:secret@moniesto-postgres14:5432/moniesto?sslmode=disable" moniesto:latest
+
+# run in release mode
+docker-run-release:
+	docker run --name moniesto -p 8080:8080 -e GIN_MODE=release moniesto:latest
+
+# create moniesto docker network
+create-docker-network:
+	docker network create moniesto-network
+
+# db: connect to docker network
+connect-network-db:
+	docker network connect moniesto-network moniesto-postgres14
