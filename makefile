@@ -76,7 +76,9 @@ docker-build:
 # compose
 compose:
 	docker compose down
-	docker rmi moniesto_api || true
+	docker rmi moniesto-be-api || true
+	chmod +x wait-for.sh
+	chmod +x start.sh
 	docker compose up
 
 # run in development mode

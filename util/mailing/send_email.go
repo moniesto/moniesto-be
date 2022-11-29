@@ -12,13 +12,16 @@ func send(to []string, fromEmail, fromPassword, smtpHost, smtpPort, templatePath
 	auth := smtp.PlainAuth("", fromEmail, fromPassword, smtpHost)
 
 	// STEP: fill template
-	t, _ := template.ParseFiles(templatePath)
+	t, err := template.ParseFiles(templatePath)
+	if err != nil {
+		return err
+	}
 	var body bytes.Buffer
 
 	mimeHeaders := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
 	body.Write([]byte(fmt.Sprintf("Subject: %s \n%s\n\n", subject, mimeHeaders)))
 
-	err := t.Execute(&body, data)
+	err = t.Execute(&body, data)
 	if err != nil {
 		return err
 	}
