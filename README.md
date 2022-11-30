@@ -126,7 +126,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] GET /users/:username/subscribers?limit=<limit>&offset=<offset>
 
-- [ ] POST /moniests
+:heavy_check_mark: [need test + latest check] POST /moniests
 
 - [ ] POST /moniests/posts
 

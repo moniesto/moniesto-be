@@ -49,6 +49,20 @@ const (
 	Account_ChangePassword_ServerErrorGetToken       = "Account_ChangePassword_ServerErrorGetToken"
 	Account_ChangePassword_ExpiredToken              = "Account_ChangePassword_ExpiredToken"
 	Account_ChangePassword_ServerErrorDeleteToken    = "Account_ChangePassword_ServerErrorDeleteToken"
+
+	Moniest_CreateMoniest_InvalidBody              = "Moniest_CreateMoniest_InvalidBody"
+	Moniest_CreateMoniest_ServerErrorUserIsMoniest = "Moniest_CreateMoniest_ServerErrorUserIsMoniest"
+	Moniest_CreateMoniest_UserIsAlreadyMoniest     = "Moniest_CreateMoniest_UserIsAlreadyMoniest"
+	Moniest_CreateMoniest_InvalidBio               = "Moniest_CreateMoniest_InvalidBio"
+	Moniest_CreateMoniest_InvalidDescription       = "Moniest_CreateMoniest_InvalidDescription"
+	Moniest_CreateMoniest_ServerErrorCreateMoniest = "Moniest_CreateMoniest_ServerErrorCreateMoniest"
+
+	Moniest_GetMoniest_NoMoniest             = "Moniest_GetMoniest_NoMoniest"
+	Moniest_GetMoniest_ServerErrorGetMoniest = "Moniest_GetMoniest_ServerErrorGetMoniest"
+
+	Moniest_CreateSubscriptionInfo_InvalidFee                 = "Moniest_CreateSubscriptionInfo_InvalidFee"
+	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage = "Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage"
+	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate        = "Moniest_CreateSubscriptionInfo_ServerErrorOnCreate"
 )
 
 var errorMessages errorMessagesType = errorMessagesType{
@@ -98,4 +112,17 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_ChangePassword_ServerErrorGetToken:       "Server error on getting Password Reset Token from system",
 	Account_ChangePassword_ExpiredToken:              "Password Reset Token is expired",
 	Account_ChangePassword_ServerErrorDeleteToken:    "Server error on deleting Password Reset Token",
+
+	Moniest_CreateMoniest_InvalidBody:              "Create moniest request body is invalid",
+	Moniest_CreateMoniest_ServerErrorUserIsMoniest: "Server error on user is moniest check",
+	Moniest_CreateMoniest_UserIsAlreadyMoniest:     "This user is already a moniest",
+	Moniest_CreateMoniest_InvalidBio:               "Bio is invalid",
+	Moniest_CreateMoniest_InvalidDescription:       "Description is invalid",
+	Moniest_CreateMoniest_ServerErrorCreateMoniest: "Server error on create moniest",
+	Moniest_GetMoniest_NoMoniest:                   "Not any moniest exist",
+	Moniest_GetMoniest_ServerErrorGetMoniest:       "Server error on getting moniest",
+
+	Moniest_CreateSubscriptionInfo_InvalidFee:                 "Fee is invalid",
+	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage: "Subscription message is invalid",
+	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate:        "Server error on create subscription info",
 }

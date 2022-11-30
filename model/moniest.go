@@ -2,6 +2,14 @@ package model
 
 import "time"
 
+type CreateMoniestRequest struct {
+	Bio         string  `json:"bio"`         // optional
+	Description string  `json:"description"` // optional
+	Fee         float64 `json:"fee" binding:"required"`
+	Message     string  `json:"message"` // optional
+	CardID      string  `json:"card_id" binding:"required"`
+}
+
 type Moniest struct {
 	ID               string            `json:"id,omitempty"`
 	Bio              string            `json:"bio,omitempty"`

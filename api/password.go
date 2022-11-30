@@ -61,7 +61,7 @@ func (server *Server) changeLoggedInUserPassword(ctx *gin.Context, user_id strin
 		return
 	}
 
-	ctx.AbortWithStatus(http.StatusOK)
+	ctx.Status(http.StatusOK)
 }
 
 func (server *Server) changeLoggedOutUserPassword(ctx *gin.Context) {
@@ -111,7 +111,7 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context, req *model.Change
 		return
 	}
 
-	ctx.AbortWithStatus(http.StatusAccepted)
+	ctx.Status(http.StatusAccepted)
 }
 
 func (server *Server) verifyTokenChangePassword(ctx *gin.Context, req *model.ChangePasswordRequest) {

@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/config"
@@ -52,12 +51,9 @@ func (server *Server) setupRouter() {
 
 	// Moniest routes - [need Auth]
 	moniestRouters := router.Group("/moniest").Use(authMiddleware(server.tokenMaker))
-	moniestRouters.POST("/", server.CreateMoniest)
-
-	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
-	authRoutes.GET("/user", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{})
-	})
+	{
+		moniestRouters.POST("/", server.CreateMoniest)
+	}
 
 	server.router = router
 }

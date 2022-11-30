@@ -77,7 +77,7 @@ func (q *Queries) DeleteMoniest(ctx context.Context, id string) (Moniest, error)
 
 const getMoniestByEmail = `-- name: GetMoniestByEmail :one
 SELECT "user"."id",
-    "moniest"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -131,12 +131,13 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."email" = $1 AND "user"."deleted" = false
+WHERE "user"."email" = $1
+    AND "user"."deleted" = false
 `
 
 type GetMoniestByEmailRow struct {
 	ID                           string         `json:"id"`
-	ID_2                         string         `json:"id_2"`
+	MoniestID                    string         `json:"moniest_id"`
 	Name                         string         `json:"name"`
 	Surname                      string         `json:"surname"`
 	Username                     string         `json:"username"`
@@ -159,7 +160,7 @@ func (q *Queries) GetMoniestByEmail(ctx context.Context, email string) (GetMonie
 	var i GetMoniestByEmailRow
 	err := row.Scan(
 		&i.ID,
-		&i.ID_2,
+		&i.MoniestID,
 		&i.Name,
 		&i.Surname,
 		&i.Username,
@@ -181,7 +182,7 @@ func (q *Queries) GetMoniestByEmail(ctx context.Context, email string) (GetMonie
 
 const getMoniestByMoniestId = `-- name: GetMoniestByMoniestId :one
 SELECT "user"."id",
-    "moniest"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -235,12 +236,13 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "moniest"."id" = $1 AND "user"."deleted" = false
+WHERE "moniest"."id" = $1
+    AND "user"."deleted" = false
 `
 
 type GetMoniestByMoniestIdRow struct {
 	ID                           string         `json:"id"`
-	ID_2                         string         `json:"id_2"`
+	MoniestID                    string         `json:"moniest_id"`
 	Name                         string         `json:"name"`
 	Surname                      string         `json:"surname"`
 	Username                     string         `json:"username"`
@@ -263,7 +265,7 @@ func (q *Queries) GetMoniestByMoniestId(ctx context.Context, id string) (GetMoni
 	var i GetMoniestByMoniestIdRow
 	err := row.Scan(
 		&i.ID,
-		&i.ID_2,
+		&i.MoniestID,
 		&i.Name,
 		&i.Surname,
 		&i.Username,
@@ -285,7 +287,7 @@ func (q *Queries) GetMoniestByMoniestId(ctx context.Context, id string) (GetMoni
 
 const getMoniestByUserId = `-- name: GetMoniestByUserId :one
 SELECT "user"."id",
-    "moniest"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -335,12 +337,13 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."id" = $1 AND "user"."deleted" = false
+WHERE "user"."id" = $1
+    AND "user"."deleted" = false
 `
 
 type GetMoniestByUserIdRow struct {
 	ID                           string         `json:"id"`
-	ID_2                         string         `json:"id_2"`
+	MoniestID                    string         `json:"moniest_id"`
 	Name                         string         `json:"name"`
 	Surname                      string         `json:"surname"`
 	Username                     string         `json:"username"`
@@ -363,7 +366,7 @@ func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMon
 	var i GetMoniestByUserIdRow
 	err := row.Scan(
 		&i.ID,
-		&i.ID_2,
+		&i.MoniestID,
 		&i.Name,
 		&i.Surname,
 		&i.Username,
@@ -385,7 +388,7 @@ func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMon
 
 const getMoniestByUsername = `-- name: GetMoniestByUsername :one
 SELECT "user"."id",
-    "moniest"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -439,12 +442,13 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."username" = $1 AND "user"."deleted" = false
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false
 `
 
 type GetMoniestByUsernameRow struct {
 	ID                           string         `json:"id"`
-	ID_2                         string         `json:"id_2"`
+	MoniestID                    string         `json:"moniest_id"`
 	Name                         string         `json:"name"`
 	Surname                      string         `json:"surname"`
 	Username                     string         `json:"username"`
@@ -467,7 +471,7 @@ func (q *Queries) GetMoniestByUsername(ctx context.Context, username string) (Ge
 	var i GetMoniestByUsernameRow
 	err := row.Scan(
 		&i.ID,
-		&i.ID_2,
+		&i.MoniestID,
 		&i.Name,
 		&i.Surname,
 		&i.Username,

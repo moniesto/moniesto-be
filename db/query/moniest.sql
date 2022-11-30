@@ -32,7 +32,7 @@ RETURNING *;
 
 -- name: GetMoniestByUserId :one
 SELECT "user"."id",
-    "moniest"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -82,11 +82,12 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."id" = $1 AND "user"."deleted" = false;
+WHERE "user"."id" = $1
+    AND "user"."deleted" = false;
 
 -- name: GetMoniestByMoniestId :one
 SELECT "user"."id",
-    "moniest"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -140,11 +141,12 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "moniest"."id" = $1 AND "user"."deleted" = false;
+WHERE "moniest"."id" = $1
+    AND "user"."deleted" = false;
 
 -- name: GetMoniestByEmail :one
 SELECT "user"."id",
-    "moniest"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -198,11 +200,12 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."email" = $1 AND "user"."deleted" = false;
+WHERE "user"."email" = $1
+    AND "user"."deleted" = false;
 
 -- name: GetMoniestByUsername :one
 SELECT "user"."id",
-    "moniest"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -256,4 +259,5 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."username" = $1 AND "user"."deleted" = false;
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false;
