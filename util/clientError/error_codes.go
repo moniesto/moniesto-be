@@ -29,6 +29,9 @@ const (
 	Account_Register_ServerErrorPassword      = "Account_Register_ServerErrorPassword"
 	Account_Register_ServerErrorCreateUser    = "Account_Register_ServerErrorCreateUser"
 
+	Account_GetUser_NotFound    = "Account_GetUser_NotFound"
+	Account_GetUser_ServerError = "Account_GetUser_ServerError"
+
 	Account_CheckUsername_InvalidUsername          = "Account_CheckUsername_InvalidUsername"
 	Account_CheckUsername_ServerErrorCheckUsername = "Account_CheckUsername_ServerErrorCheckUsername"
 
@@ -56,6 +59,7 @@ const (
 	Moniest_CreateMoniest_InvalidBio               = "Moniest_CreateMoniest_InvalidBio"
 	Moniest_CreateMoniest_InvalidDescription       = "Moniest_CreateMoniest_InvalidDescription"
 	Moniest_CreateMoniest_ServerErrorCreateMoniest = "Moniest_CreateMoniest_ServerErrorCreateMoniest"
+	Moniest_CreateMoniest_UnverifiedEmail          = "Moniest_CreateMoniest_UnverifiedEmail"
 
 	Moniest_GetMoniest_NoMoniest             = "Moniest_GetMoniest_NoMoniest"
 	Moniest_GetMoniest_ServerErrorGetMoniest = "Moniest_GetMoniest_ServerErrorGetMoniest"
@@ -92,6 +96,9 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_Register_ServerErrorPassword:      "Server error on password operation",
 	Account_Register_ServerErrorCreateUser:    "Server error on creating user",
 
+	Account_GetUser_NotFound:    "User not found",
+	Account_GetUser_ServerError: "Server error getting user",
+
 	Account_CheckUsername_InvalidUsername:          "Username is invalid",
 	Account_CheckUsername_ServerErrorCheckUsername: "Server error on checking username",
 
@@ -119,8 +126,10 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Moniest_CreateMoniest_InvalidBio:               "Bio is invalid",
 	Moniest_CreateMoniest_InvalidDescription:       "Description is invalid",
 	Moniest_CreateMoniest_ServerErrorCreateMoniest: "Server error on create moniest",
-	Moniest_GetMoniest_NoMoniest:                   "Not any moniest exist",
-	Moniest_GetMoniest_ServerErrorGetMoniest:       "Server error on getting moniest",
+	Moniest_CreateMoniest_UnverifiedEmail:          "Email is not verified yet",
+
+	Moniest_GetMoniest_NoMoniest:             "Not any moniest exist",
+	Moniest_GetMoniest_ServerErrorGetMoniest: "Server error on getting moniest",
 
 	Moniest_CreateSubscriptionInfo_InvalidFee:                 "Fee is invalid",
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage: "Subscription message is invalid",

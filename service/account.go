@@ -138,6 +138,24 @@ func (service *Service) GetOwnUser(ctx *gin.Context, identifier, password string
 	return createdUser, nil
 }
 
+// GetUserByID get user by user_id
+func (service *Service) GetUserByID(ctx *gin.Context, user_id string) (db.GetUserByIDRow, error) {
+	// STEP: get user
+	user, err := service.Store.GetUserByID(ctx, user_id)
+	if err != nil {
+
+		// STEP: user not found
+		if err == sql.ErrNoRows {
+			return db.GetUserByIDRow{}, clientError.CreateError(http.StatusNotFound, clientError.Account_GetUser_NotFound)
+		}
+
+		// TODO: add server error
+		return db.GetUserByIDRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_GetUser_ServerError)
+	}
+
+	return user, nil
+}
+
 // UpdateLoginStats update the latest login status of the user
 func (service *Service) UpdateLoginStats(ctx *gin.Context, user_id string) {
 	_, err := service.Store.UpdateLoginStats(ctx, user_id)

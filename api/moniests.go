@@ -9,6 +9,7 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
+// CreateMoniest creates moniest if do
 func (server *Server) CreateMoniest(ctx *gin.Context) {
 	var req model.CreateMoniestRequest
 
@@ -30,6 +31,16 @@ func (server *Server) CreateMoniest(ctx *gin.Context) {
 	if userIsMoniest {
 		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.Moniest_CreateMoniest_UserIsAlreadyMoniest))
 		return
+	}
+
+	// STEP: check the email of user is verified
+	user, err := server.service.GetUserByID(ctx, user_id)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+	if !user.EmailVerified {
+		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_CreateMoniest_UnverifiedEmail))
 	}
 
 	// STEP: create moniest
@@ -54,5 +65,4 @@ func (server *Server) CreateMoniest(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, createdMoniest)
-	return
 }
