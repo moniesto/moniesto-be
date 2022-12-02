@@ -77,5 +77,8 @@ func (server *Server) CreateMoniest(ctx *gin.Context) {
 
 	// TODO: add card payment info
 
-	ctx.JSON(http.StatusOK, createdMoniest)
+	// STEP: update data form
+	response := model.NewCreateMoniestResponse(createdMoniest)
+
+	ctx.JSON(http.StatusOK, response)
 }

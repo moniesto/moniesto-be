@@ -89,7 +89,7 @@ func NewRegisterResponse(token string, user db.LoginUserByEmailRow) (response Re
 		response.User.Moniest = &Moniest{
 			ID:          user.MoniestID.String,
 			Bio:         user.Bio.String,
-			Description: user.Bio.String,
+			Description: user.Description.String,
 			Score:       user.Score.Float64,
 		}
 	}
