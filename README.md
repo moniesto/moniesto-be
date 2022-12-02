@@ -1,4 +1,8 @@
-# RUN
+# Run Types
+
+<details><summary>RUN [you need local development]</summary>
+
+</br>
 
 ## 1 - [only once] Run Postgres Container (on Docker)
 
@@ -50,6 +54,34 @@ run (without live reload):
 make run
 ```
 
+</details>
+
+</br>
+
+<details><summary>RUN [all on docker, just using endpoints]</summary>
+</br>
+
+Make sure Docker is installed on your machine and `Docker Daemon` is up. (simply run docker).
+
+## Run with using make
+
+```bash
+make compose
+```
+
+`OR if it failed to run the make command, you can run them manually by:`
+
+```bash
+docker compose down
+docker rmi moniesto-be-api || true
+chmod +x wait-for.sh
+chmod +x start.sh
+docker compose up
+```
+
+</details>
+
+</br>
 # Setup / Downloads
 
 ### 1 - Download Go (v1.19 latest)

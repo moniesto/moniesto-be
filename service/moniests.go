@@ -63,6 +63,19 @@ func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req mode
 		moniestParams.Description = sql.NullString{String: req.Description, Valid: true}
 	}
 
+	// STEP: check all subscription info is valid [double check before creating invalid moniest]
+	// STEP: fee is valid
+	if err := validation.Fee(req.Fee); err != nil {
+		return db.Moniest{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateSubscriptionInfo_InvalidFee)
+	}
+
+	// STEP: message is valid
+	if req.Message != "" {
+		if err := validation.SubscriptionMessage(req.Message); err != nil {
+			return db.Moniest{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage)
+		}
+	}
+
 	// STEP: create moniest
 	moniest, err := service.Store.CreateMoniest(ctx, moniestParams)
 	if err != nil {

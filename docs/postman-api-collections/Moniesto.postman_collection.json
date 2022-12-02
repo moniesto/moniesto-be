@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"identifier\": \"parvin@gmail.com\",\r\n \"password\": \"parvin\"\r\n}",
+							"raw": "{\r\n \"identifier\": \"test@gmail.com\",\r\n \"password\": \"testtest\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -45,7 +45,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"name\": \"Parvin\",\r\n \"surname\": \"Eyvazov\",\r\n \"username\": \"eyvzov\",\r\n \"email\": \"parvin@gmail.com\",\r\n \"password\": \"parvin\"\r\n}",
+							"raw": "{\r\n \"name\": \"Test\",\r\n \"surname\": \"Test 1\",\r\n \"username\": \"testtest\",\r\n \"email\": \"test@gmail.com\",\r\n \"password\": \"testtest\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -73,7 +73,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/account/usernames/sadas/check",
+							"raw": "http://localhost:8080/account/usernames/testtest/check",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -82,7 +82,7 @@
 							"path": [
 								"account",
 								"usernames",
-								"sadas",
+								"testtest",
 								"check"
 							]
 						}
@@ -160,7 +160,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"old\": \"parvin1\",\r\n \"new\": \"parvin\"\r\n}",
+							"raw": "{\r\n \"old\": \"testtest\",\r\n \"new\": \"testtest1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -177,6 +177,45 @@
 							"path": [
 								"account",
 								"password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Moniests",
+			"item": [
+				{
+					"name": "[local] Create Moniest",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODc3MTQ5LWNkMmMtNDRlZC1iYTUyLTBkY2IzZTgzNGI1OSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjIyMWQyZjg2LWZmZmItNDEzNC05NGZhLTMyOTI1ZTI1ZTBkZCJ9LCJpc3N1ZWRfYXQiOiIyMDIyLTEyLTAxVDAyOjQzOjEzLjUyNzYzMDQrMDM6MDAiLCJleHBpcmVkX2F0IjoiMjAyMi0xMi0wMVQwMjo1ODoxMy41Mjc2MzA0KzAzOjAwIn0.45MXICIX5aRvie7luDAe9ihEljDZWY1aJWn3Hkyr558",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"bio\": \"test bio\",\r\n \"description\": \"test description\",\r\n \"fee\": 6,\r\n \"message\": \"test message\",\r\n \"card_id\": \"test card_id\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/moniests",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"moniests"
 							]
 						}
 					},

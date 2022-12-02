@@ -43,6 +43,16 @@ func (server *Server) CreateMoniest(ctx *gin.Context) {
 		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_CreateMoniest_UnverifiedEmail))
 	}
 
+	/*
+		TODO:
+			create moniest
+			create subscription info
+			add card payment info
+
+		should be converted to db transaction
+		[one fail, all should fail, done ones should be converted back]
+	*/
+
 	// STEP: create moniest
 	moniest, err := server.service.CreateMoniest(ctx, user_id, req)
 	if err != nil {
@@ -63,6 +73,8 @@ func (server *Server) CreateMoniest(ctx *gin.Context) {
 		ctx.JSON(clientError.ParseError(err))
 		return
 	}
+
+	// TODO: add card payment info
 
 	ctx.JSON(http.StatusOK, createdMoniest)
 }
