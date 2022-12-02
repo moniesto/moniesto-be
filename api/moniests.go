@@ -41,6 +41,7 @@ func (server *Server) CreateMoniest(ctx *gin.Context) {
 	}
 	if !user.EmailVerified {
 		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_CreateMoniest_UnverifiedEmail))
+		return
 	}
 
 	/*

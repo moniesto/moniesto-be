@@ -120,6 +120,7 @@ WHERE "user"."id" = $1
 
 -- name: GetUserByUsername :one
 SELECT "user"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -127,6 +128,9 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "moniest"."score",
     COALESCE (
         (
             SELECT "image"."link"
@@ -168,11 +172,13 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
 WHERE "user"."username" = $1
     AND "user"."deleted" = false;
 
 -- name: GetOwnUserByUsername :one
 SELECT "user"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -181,6 +187,9 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "moniest"."score",
     COALESCE (
         (
             SELECT "image"."link"
@@ -222,6 +231,7 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
 WHERE "user"."username" = $1
     AND "user"."deleted" = false;
 

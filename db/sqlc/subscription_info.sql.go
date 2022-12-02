@@ -8,7 +8,6 @@ package db
 import (
 	"context"
 	"database/sql"
-	"time"
 )
 
 const createSubscriptionInfo = `-- name: CreateSubscriptionInfo :one
@@ -37,106 +36,6 @@ func (q *Queries) CreateSubscriptionInfo(ctx context.Context, arg CreateSubscrip
 		arg.Fee,
 		arg.Message,
 	)
-	var i SubscriptionInfo
-	err := row.Scan(
-		&i.ID,
-		&i.MoniestID,
-		&i.Fee,
-		&i.Message,
-		&i.Deleted,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const deleteSubscriptionInfo = `-- name: DeleteSubscriptionInfo :one
-UPDATE "subscription_info"
-SET deleted = true,
-    updated_date = now()
-WHERE moniest_id = $1
-RETURNING id, moniest_id, fee, message, deleted, created_at, updated_at
-`
-
-func (q *Queries) DeleteSubscriptionInfo(ctx context.Context, moniestID string) (SubscriptionInfo, error) {
-	row := q.db.QueryRowContext(ctx, deleteSubscriptionInfo, moniestID)
-	var i SubscriptionInfo
-	err := row.Scan(
-		&i.ID,
-		&i.MoniestID,
-		&i.Fee,
-		&i.Message,
-		&i.Deleted,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const getSubscriptionInfoByMoniestId = `-- name: GetSubscriptionInfoByMoniestId :one
-SELECT fee,
-       message,
-       updated_at 
-FROM "subscription_info"
-WHERE moniest_id = $1
-`
-
-type GetSubscriptionInfoByMoniestIdRow struct {
-	Fee       float64        `json:"fee"`
-	Message   sql.NullString `json:"message"`
-	UpdatedAt time.Time      `json:"updated_at"`
-}
-
-func (q *Queries) GetSubscriptionInfoByMoniestId(ctx context.Context, moniestID string) (GetSubscriptionInfoByMoniestIdRow, error) {
-	row := q.db.QueryRowContext(ctx, getSubscriptionInfoByMoniestId, moniestID)
-	var i GetSubscriptionInfoByMoniestIdRow
-	err := row.Scan(&i.Fee, &i.Message, &i.UpdatedAt)
-	return i, err
-}
-
-const updateFee = `-- name: UpdateFee :one
-UPDATE "subscription_info"
-SET fee = $2,
-    updated_at = now()
-WHERE moniest_id = $1
-RETURNING id, moniest_id, fee, message, deleted, created_at, updated_at
-`
-
-type UpdateFeeParams struct {
-	MoniestID string  `json:"moniest_id"`
-	Fee       float64 `json:"fee"`
-}
-
-func (q *Queries) UpdateFee(ctx context.Context, arg UpdateFeeParams) (SubscriptionInfo, error) {
-	row := q.db.QueryRowContext(ctx, updateFee, arg.MoniestID, arg.Fee)
-	var i SubscriptionInfo
-	err := row.Scan(
-		&i.ID,
-		&i.MoniestID,
-		&i.Fee,
-		&i.Message,
-		&i.Deleted,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const updateMessage = `-- name: UpdateMessage :one
-UPDATE "subscription_info"
-SET message = $2,
-    updated_at = now()
-WHERE moniest_id = $1
-RETURNING id, moniest_id, fee, message, deleted, created_at, updated_at
-`
-
-type UpdateMessageParams struct {
-	MoniestID string         `json:"moniest_id"`
-	Message   sql.NullString `json:"message"`
-}
-
-func (q *Queries) UpdateMessage(ctx context.Context, arg UpdateMessageParams) (SubscriptionInfo, error) {
-	row := q.db.QueryRowContext(ctx, updateMessage, arg.MoniestID, arg.Message)
 	var i SubscriptionInfo
 	err := row.Scan(
 		&i.ID,

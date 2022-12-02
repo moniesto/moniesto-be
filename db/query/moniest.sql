@@ -9,26 +9,26 @@ INSERT INTO moniest (
 VALUES ($1, $2, $3, $4, now())
 RETURNING *;
 
--- name: DeleteMoniest :one
-UPDATE moniest
-SET deleted = true,
-    updated_at = now()
-WHERE moniest.id = $1
-RETURNING *;
+-- -- name: DeleteMoniest :one
+-- UPDATE moniest
+-- SET deleted = true,
+--     updated_at = now()
+-- WHERE moniest.id = $1
+-- RETURNING *;
 
--- name: UpdateMoniestBio :one
-UPDATE moniest
-SET bio = $2,
-    updated_at = now()
-WHERE moniest.id = $1
-RETURNING *;
+-- -- name: UpdateMoniestBio :one
+-- UPDATE moniest
+-- SET bio = $2,
+--     updated_at = now()
+-- WHERE moniest.id = $1
+-- RETURNING *;
 
--- name: UpdateMoniestDescription :one
-UPDATE moniest
-SET description = $2,
-    updated_at = now()
-WHERE moniest.id = $1
-RETURNING *;
+-- -- name: UpdateMoniestDescription :one
+-- UPDATE moniest
+-- SET description = $2,
+--     updated_at = now()
+-- WHERE moniest.id = $1
+-- RETURNING *;
 
 -- name: GetMoniestByUserId :one
 SELECT "user"."id",
@@ -144,120 +144,120 @@ FROM "user"
 WHERE "moniest"."id" = $1
     AND "user"."deleted" = false;
 
--- name: GetMoniestByEmail :one
-SELECT "user"."id",
-    "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
-    "user"."username",
-    "user"."email",
-    "user"."email_verified",
-    "user"."location",
-    "user"."created_at",
-    "user"."updated_at",
-    "moniest"."bio",
-    "moniest"."description",
-    "moniest"."score",
-    COALESCE (
-        (
-            SELECT "image"."link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."email" = $1
-                AND "image"."type" = 'profile_photo'
-        ),
-        ''
-    ) AS "profile_photo_link",
-    COALESCE (
-        (
-            SELECT "image"."thumbnail_link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."email" = $1
-                AND "image"."type" = 'profile_photo'
-        ),
-        ''
-    ) AS "profile_photo_thumbnail_link",
-    COALESCE (
-        (
-            SELECT "image"."link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."email" = $1
-                AND "image"."type" = 'background_photo'
-        ),
-        ''
-    ) AS "background_photo_link",
-    COALESCE (
-        (
-            SELECT "image"."thumbnail_link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."email" = $1
-                AND "image"."type" = 'background_photo'
-        ),
-        ''
-    ) AS "background_photo_thumbnail_link"
-FROM "user"
-    INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."email" = $1
-    AND "user"."deleted" = false;
+-- -- name: GetMoniestByEmail :one
+-- SELECT "user"."id",
+--     "moniest"."id" as "moniest_id",
+--     "user"."name",
+--     "user"."surname",
+--     "user"."username",
+--     "user"."email",
+--     "user"."email_verified",
+--     "user"."location",
+--     "user"."created_at",
+--     "user"."updated_at",
+--     "moniest"."bio",
+--     "moniest"."description",
+--     "moniest"."score",
+--     COALESCE (
+--         (
+--             SELECT "image"."link"
+--             FROM "image"
+--                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
+--             WHERE "user"."email" = $1
+--                 AND "image"."type" = 'profile_photo'
+--         ),
+--         ''
+--     ) AS "profile_photo_link",
+--     COALESCE (
+--         (
+--             SELECT "image"."thumbnail_link"
+--             FROM "image"
+--                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
+--             WHERE "user"."email" = $1
+--                 AND "image"."type" = 'profile_photo'
+--         ),
+--         ''
+--     ) AS "profile_photo_thumbnail_link",
+--     COALESCE (
+--         (
+--             SELECT "image"."link"
+--             FROM "image"
+--                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
+--             WHERE "user"."email" = $1
+--                 AND "image"."type" = 'background_photo'
+--         ),
+--         ''
+--     ) AS "background_photo_link",
+--     COALESCE (
+--         (
+--             SELECT "image"."thumbnail_link"
+--             FROM "image"
+--                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
+--             WHERE "user"."email" = $1
+--                 AND "image"."type" = 'background_photo'
+--         ),
+--         ''
+--     ) AS "background_photo_thumbnail_link"
+-- FROM "user"
+--     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+-- WHERE "user"."email" = $1
+--     AND "user"."deleted" = false;
 
--- name: GetMoniestByUsername :one
-SELECT "user"."id",
-    "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
-    "user"."username",
-    "user"."email",
-    "user"."email_verified",
-    "user"."location",
-    "user"."created_at",
-    "user"."updated_at",
-    "moniest"."bio",
-    "moniest"."description",
-    "moniest"."score",
-    COALESCE (
-        (
-            SELECT "image"."link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."username" = $1
-                AND "image"."type" = 'profile_photo'
-        ),
-        ''
-    ) AS "profile_photo_link",
-    COALESCE (
-        (
-            SELECT "image"."thumbnail_link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."username" = $1
-                AND "image"."type" = 'profile_photo'
-        ),
-        ''
-    ) AS "profile_photo_thumbnail_link",
-    COALESCE (
-        (
-            SELECT "image"."link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."username" = $1
-                AND "image"."type" = 'background_photo'
-        ),
-        ''
-    ) AS "background_photo_link",
-    COALESCE (
-        (
-            SELECT "image"."thumbnail_link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."username" = $1
-                AND "image"."type" = 'background_photo'
-        ),
-        ''
-    ) AS "background_photo_thumbnail_link"
-FROM "user"
-    INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."username" = $1
-    AND "user"."deleted" = false;
+-- -- name: GetMoniestByUsername :one
+-- SELECT "user"."id",
+--     "moniest"."id" as "moniest_id",
+--     "user"."name",
+--     "user"."surname",
+--     "user"."username",
+--     "user"."email",
+--     "user"."email_verified",
+--     "user"."location",
+--     "user"."created_at",
+--     "user"."updated_at",
+--     "moniest"."bio",
+--     "moniest"."description",
+--     "moniest"."score",
+--     COALESCE (
+--         (
+--             SELECT "image"."link"
+--             FROM "image"
+--                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
+--             WHERE "user"."username" = $1
+--                 AND "image"."type" = 'profile_photo'
+--         ),
+--         ''
+--     ) AS "profile_photo_link",
+--     COALESCE (
+--         (
+--             SELECT "image"."thumbnail_link"
+--             FROM "image"
+--                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
+--             WHERE "user"."username" = $1
+--                 AND "image"."type" = 'profile_photo'
+--         ),
+--         ''
+--     ) AS "profile_photo_thumbnail_link",
+--     COALESCE (
+--         (
+--             SELECT "image"."link"
+--             FROM "image"
+--                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
+--             WHERE "user"."username" = $1
+--                 AND "image"."type" = 'background_photo'
+--         ),
+--         ''
+--     ) AS "background_photo_link",
+--     COALESCE (
+--         (
+--             SELECT "image"."thumbnail_link"
+--             FROM "image"
+--                 INNER JOIN "user" ON "user"."id" = "image"."user_id"
+--             WHERE "user"."username" = $1
+--                 AND "image"."type" = 'background_photo'
+--         ),
+--         ''
+--     ) AS "background_photo_thumbnail_link"
+-- FROM "user"
+--     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+-- WHERE "user"."username" = $1
+--     AND "user"."deleted" = false;

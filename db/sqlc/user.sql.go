@@ -268,6 +268,7 @@ func (q *Queries) GetOwnUserByID(ctx context.Context, userID string) (GetOwnUser
 
 const getOwnUserByUsername = `-- name: GetOwnUserByUsername :one
 SELECT "user"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -276,6 +277,9 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "moniest"."score",
     COALESCE (
         (
             SELECT "image"."link"
@@ -317,24 +321,29 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
 WHERE "user"."username" = $1
     AND "user"."deleted" = false
 `
 
 type GetOwnUserByUsernameRow struct {
-	ID                           string         `json:"id"`
-	Name                         string         `json:"name"`
-	Surname                      string         `json:"surname"`
-	Username                     string         `json:"username"`
-	Email                        string         `json:"email"`
-	EmailVerified                bool           `json:"email_verified"`
-	Location                     sql.NullString `json:"location"`
-	CreatedAt                    time.Time      `json:"created_at"`
-	UpdatedAt                    time.Time      `json:"updated_at"`
-	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
+	ID                           string          `json:"id"`
+	MoniestID                    sql.NullString  `json:"moniest_id"`
+	Name                         string          `json:"name"`
+	Surname                      string          `json:"surname"`
+	Username                     string          `json:"username"`
+	Email                        string          `json:"email"`
+	EmailVerified                bool            `json:"email_verified"`
+	Location                     sql.NullString  `json:"location"`
+	CreatedAt                    time.Time       `json:"created_at"`
+	UpdatedAt                    time.Time       `json:"updated_at"`
+	Bio                          sql.NullString  `json:"bio"`
+	Description                  sql.NullString  `json:"description"`
+	Score                        sql.NullFloat64 `json:"score"`
+	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}     `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetOwnUserByUsername(ctx context.Context, username string) (GetOwnUserByUsernameRow, error) {
@@ -342,6 +351,7 @@ func (q *Queries) GetOwnUserByUsername(ctx context.Context, username string) (Ge
 	var i GetOwnUserByUsernameRow
 	err := row.Scan(
 		&i.ID,
+		&i.MoniestID,
 		&i.Name,
 		&i.Surname,
 		&i.Username,
@@ -350,6 +360,9 @@ func (q *Queries) GetOwnUserByUsername(ctx context.Context, username string) (Ge
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Bio,
+		&i.Description,
+		&i.Score,
 		&i.ProfilePhotoLink,
 		&i.ProfilePhotoThumbnailLink,
 		&i.BackgroundPhotoLink,
@@ -551,6 +564,7 @@ func (q *Queries) GetUserByID(ctx context.Context, userID string) (GetUserByIDRo
 
 const getUserByUsername = `-- name: GetUserByUsername :one
 SELECT "user"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -558,6 +572,9 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "moniest"."score",
     COALESCE (
         (
             SELECT "image"."link"
@@ -599,23 +616,28 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
 WHERE "user"."username" = $1
     AND "user"."deleted" = false
 `
 
 type GetUserByUsernameRow struct {
-	ID                           string         `json:"id"`
-	Name                         string         `json:"name"`
-	Surname                      string         `json:"surname"`
-	Username                     string         `json:"username"`
-	EmailVerified                bool           `json:"email_verified"`
-	Location                     sql.NullString `json:"location"`
-	CreatedAt                    time.Time      `json:"created_at"`
-	UpdatedAt                    time.Time      `json:"updated_at"`
-	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
+	ID                           string          `json:"id"`
+	MoniestID                    sql.NullString  `json:"moniest_id"`
+	Name                         string          `json:"name"`
+	Surname                      string          `json:"surname"`
+	Username                     string          `json:"username"`
+	EmailVerified                bool            `json:"email_verified"`
+	Location                     sql.NullString  `json:"location"`
+	CreatedAt                    time.Time       `json:"created_at"`
+	UpdatedAt                    time.Time       `json:"updated_at"`
+	Bio                          sql.NullString  `json:"bio"`
+	Description                  sql.NullString  `json:"description"`
+	Score                        sql.NullFloat64 `json:"score"`
+	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}     `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error) {
@@ -623,6 +645,7 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUs
 	var i GetUserByUsernameRow
 	err := row.Scan(
 		&i.ID,
+		&i.MoniestID,
 		&i.Name,
 		&i.Surname,
 		&i.Username,
@@ -630,6 +653,9 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUs
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Bio,
+		&i.Description,
+		&i.Score,
 		&i.ProfilePhotoLink,
 		&i.ProfilePhotoThumbnailLink,
 		&i.BackgroundPhotoLink,

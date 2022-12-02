@@ -51,135 +51,6 @@ func (q *Queries) CreateMoniest(ctx context.Context, arg CreateMoniestParams) (M
 	return i, err
 }
 
-const deleteMoniest = `-- name: DeleteMoniest :one
-UPDATE moniest
-SET deleted = true,
-    updated_at = now()
-WHERE moniest.id = $1
-RETURNING id, user_id, bio, description, score, deleted, created_at, updated_at
-`
-
-func (q *Queries) DeleteMoniest(ctx context.Context, id string) (Moniest, error) {
-	row := q.db.QueryRowContext(ctx, deleteMoniest, id)
-	var i Moniest
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Bio,
-		&i.Description,
-		&i.Score,
-		&i.Deleted,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const getMoniestByEmail = `-- name: GetMoniestByEmail :one
-SELECT "user"."id",
-    "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
-    "user"."username",
-    "user"."email",
-    "user"."email_verified",
-    "user"."location",
-    "user"."created_at",
-    "user"."updated_at",
-    "moniest"."bio",
-    "moniest"."description",
-    "moniest"."score",
-    COALESCE (
-        (
-            SELECT "image"."link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."email" = $1
-                AND "image"."type" = 'profile_photo'
-        ),
-        ''
-    ) AS "profile_photo_link",
-    COALESCE (
-        (
-            SELECT "image"."thumbnail_link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."email" = $1
-                AND "image"."type" = 'profile_photo'
-        ),
-        ''
-    ) AS "profile_photo_thumbnail_link",
-    COALESCE (
-        (
-            SELECT "image"."link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."email" = $1
-                AND "image"."type" = 'background_photo'
-        ),
-        ''
-    ) AS "background_photo_link",
-    COALESCE (
-        (
-            SELECT "image"."thumbnail_link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."email" = $1
-                AND "image"."type" = 'background_photo'
-        ),
-        ''
-    ) AS "background_photo_thumbnail_link"
-FROM "user"
-    INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."email" = $1
-    AND "user"."deleted" = false
-`
-
-type GetMoniestByEmailRow struct {
-	ID                           string         `json:"id"`
-	MoniestID                    string         `json:"moniest_id"`
-	Name                         string         `json:"name"`
-	Surname                      string         `json:"surname"`
-	Username                     string         `json:"username"`
-	Email                        string         `json:"email"`
-	EmailVerified                bool           `json:"email_verified"`
-	Location                     sql.NullString `json:"location"`
-	CreatedAt                    time.Time      `json:"created_at"`
-	UpdatedAt                    time.Time      `json:"updated_at"`
-	Bio                          sql.NullString `json:"bio"`
-	Description                  sql.NullString `json:"description"`
-	Score                        float64        `json:"score"`
-	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
-}
-
-func (q *Queries) GetMoniestByEmail(ctx context.Context, email string) (GetMoniestByEmailRow, error) {
-	row := q.db.QueryRowContext(ctx, getMoniestByEmail, email)
-	var i GetMoniestByEmailRow
-	err := row.Scan(
-		&i.ID,
-		&i.MoniestID,
-		&i.Name,
-		&i.Surname,
-		&i.Username,
-		&i.Email,
-		&i.EmailVerified,
-		&i.Location,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.Bio,
-		&i.Description,
-		&i.Score,
-		&i.ProfilePhotoLink,
-		&i.ProfilePhotoThumbnailLink,
-		&i.BackgroundPhotoLink,
-		&i.BackgroundPhotoThumbnailLink,
-	)
-	return i, err
-}
-
 const getMoniestByMoniestId = `-- name: GetMoniestByMoniestId :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
@@ -286,6 +157,9 @@ func (q *Queries) GetMoniestByMoniestId(ctx context.Context, id string) (GetMoni
 }
 
 const getMoniestByUserId = `-- name: GetMoniestByUserId :one
+
+
+
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
     "user"."name",
@@ -361,6 +235,30 @@ type GetMoniestByUserIdRow struct {
 	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
+// -- name: DeleteMoniest :one
+// UPDATE moniest
+// SET deleted = true,
+//
+//	updated_at = now()
+//
+// WHERE moniest.id = $1
+// RETURNING *;
+// -- name: UpdateMoniestBio :one
+// UPDATE moniest
+// SET bio = $2,
+//
+//	updated_at = now()
+//
+// WHERE moniest.id = $1
+// RETURNING *;
+// -- name: UpdateMoniestDescription :one
+// UPDATE moniest
+// SET description = $2,
+//
+//	updated_at = now()
+//
+// WHERE moniest.id = $1
+// RETURNING *;
 func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMoniestByUserIdRow, error) {
 	row := q.db.QueryRowContext(ctx, getMoniestByUserId, userID)
 	var i GetMoniestByUserIdRow
@@ -382,169 +280,6 @@ func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMon
 		&i.ProfilePhotoThumbnailLink,
 		&i.BackgroundPhotoLink,
 		&i.BackgroundPhotoThumbnailLink,
-	)
-	return i, err
-}
-
-const getMoniestByUsername = `-- name: GetMoniestByUsername :one
-SELECT "user"."id",
-    "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
-    "user"."username",
-    "user"."email",
-    "user"."email_verified",
-    "user"."location",
-    "user"."created_at",
-    "user"."updated_at",
-    "moniest"."bio",
-    "moniest"."description",
-    "moniest"."score",
-    COALESCE (
-        (
-            SELECT "image"."link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."username" = $1
-                AND "image"."type" = 'profile_photo'
-        ),
-        ''
-    ) AS "profile_photo_link",
-    COALESCE (
-        (
-            SELECT "image"."thumbnail_link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."username" = $1
-                AND "image"."type" = 'profile_photo'
-        ),
-        ''
-    ) AS "profile_photo_thumbnail_link",
-    COALESCE (
-        (
-            SELECT "image"."link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."username" = $1
-                AND "image"."type" = 'background_photo'
-        ),
-        ''
-    ) AS "background_photo_link",
-    COALESCE (
-        (
-            SELECT "image"."thumbnail_link"
-            FROM "image"
-                INNER JOIN "user" ON "user"."id" = "image"."user_id"
-            WHERE "user"."username" = $1
-                AND "image"."type" = 'background_photo'
-        ),
-        ''
-    ) AS "background_photo_thumbnail_link"
-FROM "user"
-    INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."username" = $1
-    AND "user"."deleted" = false
-`
-
-type GetMoniestByUsernameRow struct {
-	ID                           string         `json:"id"`
-	MoniestID                    string         `json:"moniest_id"`
-	Name                         string         `json:"name"`
-	Surname                      string         `json:"surname"`
-	Username                     string         `json:"username"`
-	Email                        string         `json:"email"`
-	EmailVerified                bool           `json:"email_verified"`
-	Location                     sql.NullString `json:"location"`
-	CreatedAt                    time.Time      `json:"created_at"`
-	UpdatedAt                    time.Time      `json:"updated_at"`
-	Bio                          sql.NullString `json:"bio"`
-	Description                  sql.NullString `json:"description"`
-	Score                        float64        `json:"score"`
-	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
-}
-
-func (q *Queries) GetMoniestByUsername(ctx context.Context, username string) (GetMoniestByUsernameRow, error) {
-	row := q.db.QueryRowContext(ctx, getMoniestByUsername, username)
-	var i GetMoniestByUsernameRow
-	err := row.Scan(
-		&i.ID,
-		&i.MoniestID,
-		&i.Name,
-		&i.Surname,
-		&i.Username,
-		&i.Email,
-		&i.EmailVerified,
-		&i.Location,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-		&i.Bio,
-		&i.Description,
-		&i.Score,
-		&i.ProfilePhotoLink,
-		&i.ProfilePhotoThumbnailLink,
-		&i.BackgroundPhotoLink,
-		&i.BackgroundPhotoThumbnailLink,
-	)
-	return i, err
-}
-
-const updateMoniestBio = `-- name: UpdateMoniestBio :one
-UPDATE moniest
-SET bio = $2,
-    updated_at = now()
-WHERE moniest.id = $1
-RETURNING id, user_id, bio, description, score, deleted, created_at, updated_at
-`
-
-type UpdateMoniestBioParams struct {
-	ID  string         `json:"id"`
-	Bio sql.NullString `json:"bio"`
-}
-
-func (q *Queries) UpdateMoniestBio(ctx context.Context, arg UpdateMoniestBioParams) (Moniest, error) {
-	row := q.db.QueryRowContext(ctx, updateMoniestBio, arg.ID, arg.Bio)
-	var i Moniest
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Bio,
-		&i.Description,
-		&i.Score,
-		&i.Deleted,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const updateMoniestDescription = `-- name: UpdateMoniestDescription :one
-UPDATE moniest
-SET description = $2,
-    updated_at = now()
-WHERE moniest.id = $1
-RETURNING id, user_id, bio, description, score, deleted, created_at, updated_at
-`
-
-type UpdateMoniestDescriptionParams struct {
-	ID          string         `json:"id"`
-	Description sql.NullString `json:"description"`
-}
-
-func (q *Queries) UpdateMoniestDescription(ctx context.Context, arg UpdateMoniestDescriptionParams) (Moniest, error) {
-	row := q.db.QueryRowContext(ctx, updateMoniestDescription, arg.ID, arg.Description)
-	var i Moniest
-	err := row.Scan(
-		&i.ID,
-		&i.UserID,
-		&i.Bio,
-		&i.Description,
-		&i.Score,
-		&i.Deleted,
-		&i.CreatedAt,
-		&i.UpdatedAt,
 	)
 	return i, err
 }
