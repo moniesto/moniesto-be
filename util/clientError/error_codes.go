@@ -67,6 +67,9 @@ const (
 	Moniest_CreateSubscriptionInfo_InvalidFee                 = "Moniest_CreateSubscriptionInfo_InvalidFee"
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage = "Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage"
 	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate        = "Moniest_CreateSubscriptionInfo_ServerErrorOnCreate"
+
+	User_GetUser_NotFoundUser       = "User_GetUser_NotFoundUser"
+	User_GetUser_ServerErrorGetUser = "User_GetUser_ServerErrorGetUser"
 )
 
 var errorMessages errorMessagesType = errorMessagesType{
@@ -83,7 +86,7 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_Login_ServerErrorEmail:    "Server error on login with email",
 	Account_Login_ServerErrorUsername: "Server error on login with username",
 	Account_Login_WrongPassword:       "Wrong password",
-	Account_Login_ServerErrorToken:    "Server error token operation",
+	Account_Login_ServerErrorToken:    "Server error on token operation",
 
 	Account_Register_InvalidBody:              "Register request body is invalid",
 	Account_Register_InvalidEmail:             "Email is invalid",
@@ -97,7 +100,7 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_Register_ServerErrorCreateUser:    "Server error on creating user",
 
 	Account_GetUser_NotFound:    "User not found",
-	Account_GetUser_ServerError: "Server error getting user",
+	Account_GetUser_ServerError: "Server error on getting user",
 
 	Account_CheckUsername_InvalidUsername:          "Username is invalid",
 	Account_CheckUsername_ServerErrorCheckUsername: "Server error on checking username",
@@ -134,4 +137,7 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Moniest_CreateSubscriptionInfo_InvalidFee:                 "Fee is invalid",
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage: "Subscription message is invalid",
 	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate:        "Server error on create subscription info",
+
+	User_GetUser_NotFoundUser:       "User not found",
+	User_GetUser_ServerErrorGetUser: "Server error on getting user",
 }

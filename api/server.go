@@ -49,10 +49,16 @@ func (server *Server) setupRouter() {
 		accountRoutersAuth.PUT("/password", server.ChangePassword)
 	}
 
-	// Moniest routes - [need Auth]
-	moniestRouters := router.Group("/moniests").Use(authMiddleware(server.tokenMaker))
+	// Moniests routes - [need Auth]
+	moniestsRouters := router.Group("/moniests").Use(authMiddleware(server.tokenMaker))
 	{
-		moniestRouters.POST("/", server.CreateMoniest)
+		moniestsRouters.POST("/", server.CreateMoniest)
+	}
+
+	// User routes
+	usersRouters := router.Group("/users").Use(authMiddleware(server.tokenMaker))
+	{
+		usersRouters.GET("/:username", server.GetUserByUsername)
 	}
 
 	server.router = router

@@ -24,6 +24,55 @@ SELECT "user"."id",
     "user"."name",
     "user"."surname",
     "user"."username",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "user"
+WHERE "user"."id" = $1
+    AND "user"."deleted" = false;
+
+-- name: GetOwnUserByID :one
+SELECT "user"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
     "user"."email",
     "user"."email_verified",
     "user"."location",
@@ -66,9 +115,63 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."id" = $1 AND "user"."deleted" = false;
+WHERE "user"."id" = $1
+    AND "user"."deleted" = false;
 
 -- name: GetUserByUsername :one
+SELECT "user"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "user"
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false;
+
+-- name: GetOwnUserByUsername :one
 SELECT "user"."id",
     "user"."name",
     "user"."surname",
@@ -119,7 +222,8 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."username" = $1 AND "user"."deleted" = false;
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false;
 
 -- name: GetUserByEmail :one
 SELECT "user"."id",
@@ -172,7 +276,8 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."email" = $1 AND "user"."deleted" = false;
+WHERE "user"."email" = $1
+    AND "user"."deleted" = false;
 
 -- name: GetActiveUsersVerifiedEmails :many
 SELECT email
@@ -189,7 +294,8 @@ WHERE email_verified = true
 -- name: GetPasswordByID :one
 SELECT password
 FROM "user"
-WHERE id = $1 AND "user"."deleted" = false;
+WHERE id = $1
+    AND "user"."deleted" = false;
 
 -- name: SetPassword :exec
 UPDATE "user"

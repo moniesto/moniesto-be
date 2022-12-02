@@ -178,10 +178,191 @@ func (q *Queries) GetInactiveUsersVerifiedEmails(ctx context.Context) ([]string,
 	return items, nil
 }
 
+const getOwnUserByID = `-- name: GetOwnUserByID :one
+SELECT "user"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "user"
+WHERE "user"."id" = $1
+    AND "user"."deleted" = false
+`
+
+type GetOwnUserByIDRow struct {
+	ID                           string         `json:"id"`
+	Name                         string         `json:"name"`
+	Surname                      string         `json:"surname"`
+	Username                     string         `json:"username"`
+	Email                        string         `json:"email"`
+	EmailVerified                bool           `json:"email_verified"`
+	Location                     sql.NullString `json:"location"`
+	CreatedAt                    time.Time      `json:"created_at"`
+	UpdatedAt                    time.Time      `json:"updated_at"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) GetOwnUserByID(ctx context.Context, userID string) (GetOwnUserByIDRow, error) {
+	row := q.db.QueryRowContext(ctx, getOwnUserByID, userID)
+	var i GetOwnUserByIDRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Surname,
+		&i.Username,
+		&i.Email,
+		&i.EmailVerified,
+		&i.Location,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ProfilePhotoLink,
+		&i.ProfilePhotoThumbnailLink,
+		&i.BackgroundPhotoLink,
+		&i.BackgroundPhotoThumbnailLink,
+	)
+	return i, err
+}
+
+const getOwnUserByUsername = `-- name: GetOwnUserByUsername :one
+SELECT "user"."id",
+    "user"."name",
+    "user"."surname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+                INNER JOIN "user" ON "user"."id" = "image"."user_id"
+            WHERE "user"."username" = $1
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "user"
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false
+`
+
+type GetOwnUserByUsernameRow struct {
+	ID                           string         `json:"id"`
+	Name                         string         `json:"name"`
+	Surname                      string         `json:"surname"`
+	Username                     string         `json:"username"`
+	Email                        string         `json:"email"`
+	EmailVerified                bool           `json:"email_verified"`
+	Location                     sql.NullString `json:"location"`
+	CreatedAt                    time.Time      `json:"created_at"`
+	UpdatedAt                    time.Time      `json:"updated_at"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) GetOwnUserByUsername(ctx context.Context, username string) (GetOwnUserByUsernameRow, error) {
+	row := q.db.QueryRowContext(ctx, getOwnUserByUsername, username)
+	var i GetOwnUserByUsernameRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Surname,
+		&i.Username,
+		&i.Email,
+		&i.EmailVerified,
+		&i.Location,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.ProfilePhotoLink,
+		&i.ProfilePhotoThumbnailLink,
+		&i.BackgroundPhotoLink,
+		&i.BackgroundPhotoThumbnailLink,
+	)
+	return i, err
+}
+
 const getPasswordByID = `-- name: GetPasswordByID :one
 SELECT password
 FROM "user"
-WHERE id = $1 AND "user"."deleted" = false
+WHERE id = $1
+    AND "user"."deleted" = false
 `
 
 func (q *Queries) GetPasswordByID(ctx context.Context, id string) (string, error) {
@@ -242,7 +423,8 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."email" = $1 AND "user"."deleted" = false
+WHERE "user"."email" = $1
+    AND "user"."deleted" = false
 `
 
 type GetUserByEmailRow struct {
@@ -287,7 +469,6 @@ SELECT "user"."id",
     "user"."name",
     "user"."surname",
     "user"."username",
-    "user"."email",
     "user"."email_verified",
     "user"."location",
     "user"."created_at",
@@ -329,7 +510,8 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."id" = $1 AND "user"."deleted" = false
+WHERE "user"."id" = $1
+    AND "user"."deleted" = false
 `
 
 type GetUserByIDRow struct {
@@ -337,7 +519,6 @@ type GetUserByIDRow struct {
 	Name                         string         `json:"name"`
 	Surname                      string         `json:"surname"`
 	Username                     string         `json:"username"`
-	Email                        string         `json:"email"`
 	EmailVerified                bool           `json:"email_verified"`
 	Location                     sql.NullString `json:"location"`
 	CreatedAt                    time.Time      `json:"created_at"`
@@ -356,7 +537,6 @@ func (q *Queries) GetUserByID(ctx context.Context, userID string) (GetUserByIDRo
 		&i.Name,
 		&i.Surname,
 		&i.Username,
-		&i.Email,
 		&i.EmailVerified,
 		&i.Location,
 		&i.CreatedAt,
@@ -374,7 +554,6 @@ SELECT "user"."id",
     "user"."name",
     "user"."surname",
     "user"."username",
-    "user"."email",
     "user"."email_verified",
     "user"."location",
     "user"."created_at",
@@ -420,7 +599,8 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
-WHERE "user"."username" = $1 AND "user"."deleted" = false
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false
 `
 
 type GetUserByUsernameRow struct {
@@ -428,7 +608,6 @@ type GetUserByUsernameRow struct {
 	Name                         string         `json:"name"`
 	Surname                      string         `json:"surname"`
 	Username                     string         `json:"username"`
-	Email                        string         `json:"email"`
 	EmailVerified                bool           `json:"email_verified"`
 	Location                     sql.NullString `json:"location"`
 	CreatedAt                    time.Time      `json:"created_at"`
@@ -447,7 +626,6 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUs
 		&i.Name,
 		&i.Surname,
 		&i.Username,
-		&i.Email,
 		&i.EmailVerified,
 		&i.Location,
 		&i.CreatedAt,

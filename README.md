@@ -164,8 +164,8 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] PATCH /account/profile
 
-- [ ] PATCH /moniest/subscription-info
+- [ ] PATCH /moniests/subscription-info
 
-- [ ] POST /moniest/:username/subscriptions
+- [ ] POST /moniests/:username/subscriptions
 
 - [ ] ...
