@@ -82,6 +82,7 @@ docker compose up
 </details>
 
 </br>
+
 # Setup / Downloads
 
 ### 1 - Download Go (v1.19 latest)
