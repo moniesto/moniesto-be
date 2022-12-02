@@ -20,14 +20,14 @@ func (service *Service) CreateSubsriptionInfo(ctx *gin.Context, moniest_id strin
 	}
 
 	// STEP: fee is valid
-	if err := validation.Fee(req.Fee); err != nil {
+	if err := validation.Fee(req.Fee, service.config); err != nil {
 		return db.SubscriptionInfo{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateSubscriptionInfo_InvalidFee)
 	}
 	subscriptionInfoParams.Fee = req.Fee
 
 	// STEP: message is valid
 	if req.Message != "" {
-		if err := validation.SubscriptionMessage(req.Message); err != nil {
+		if err := validation.SubscriptionMessage(req.Message, service.config); err != nil {
 			return db.SubscriptionInfo{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage)
 		}
 

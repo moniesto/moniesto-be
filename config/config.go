@@ -9,21 +9,30 @@ import (
 // Config stores all configuration of the application
 // the values are read by viper from a config file
 type Config struct {
-	DBDriver                       string        `mapstructure:"DB_DRIVER"`
-	DBSource                       string        `mapstructure:"DB_SOURCE"`
-	DBSourceTest                   string        `mapstructure:"DB_SOURCE_TEST"`
-	ServerAddress                  string        `mapstructure:"SERVER_ADDRESS"`
-	TokenKey                       string        `mapstructure:"TOKEN_KEY"`
-	TokenKeyTest                   string        `mapstructure:"TOKEN_KEY_TEST"`
+	// APP SERVER CONFIG
+	DBDriver      string `mapstructure:"DB_DRIVER"`
+	DBSource      string `mapstructure:"DB_SOURCE"`
+	DBSourceTest  string `mapstructure:"DB_SOURCE_TEST"`
+	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
+	SmtpHost      string `mapstructure:"SMTP_HOST"`
+	SmtpPort      string `mapstructure:"SMTP_PORT"`
+
+	// APP LOGIC CONFIG
 	AccessTokenDuration            time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	AccessTokenDurationTest        time.Duration `mapstructure:"ACCESS_TOKEN_DURATION_TEST"`
 	ClientURL                      string        `mapstructure:"CLIENT_URL"`
-	PasswordResetTokenDuration     time.Duration `mapstructure:"PASSWORD_RESER_TOKEN_DURATION"`
-	PasswordResetTokenDurationTest time.Duration `mapstructure:"PASSWORD_RESER_TOKEN_DURATION_TEST"`
-	NoReplyEmail                   string        `mapstructure:"NO_REPLY_EMAIL"`
-	NoReplyPassword                string        `mapstructure:"NO_REPLY_PASSWORD"`
-	SmtpHost                       string        `mapstructure:"SMTP_HOST"`
-	SmtpPort                       string        `mapstructure:"SMTP_PORT"`
+	PasswordResetTokenDuration     time.Duration `mapstructure:"PASSWORD_RESET_TOKEN_DURATION"`
+	PasswordResetTokenDurationTest time.Duration `mapstructure:"PASSWORD_RESET_TOKEN_DURATION_TEST"`
+	MinFee                         float64       `mapstructure:"MIN_FEE"`
+	MaxBioLenght                   int           `mapstructure:"MAX_BIO_LENGTH"`
+	MaxDescriptionLength           int           `mapstructure:"MAX_DESCRIPTION_LENGTH"`
+	MaxSubscriptionMessageLength   int           `mapstructure:"MAX_SUBSCRIPTION_MESSAGE_LENGTH"`
+
+	// CREDENTIALS
+	TokenKey        string `mapstructure:"TOKEN_KEY"`
+	TokenKeyTest    string `mapstructure:"TOKEN_KEY_TEST"`
+	NoReplyEmail    string `mapstructure:"NO_REPLY_EMAIL"`
+	NoReplyPassword string `mapstructure:"NO_REPLY_PASSWORD"`
 }
 
 // LoadConfig reads configuration from file

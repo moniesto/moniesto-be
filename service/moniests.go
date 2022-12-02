@@ -46,7 +46,7 @@ func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req mode
 	// STEP: if bio is added, add to param
 	if req.Bio != "" {
 
-		if err := validation.Bio(req.Bio); err != nil {
+		if err := validation.Bio(req.Bio, service.config); err != nil {
 			return db.Moniest{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateMoniest_InvalidBio)
 		}
 
@@ -56,7 +56,7 @@ func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req mode
 	// STEP: if description is added, add to param
 	if req.Description != "" {
 
-		if err := validation.Description(req.Description); err != nil {
+		if err := validation.Description(req.Description, service.config); err != nil {
 			return db.Moniest{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateMoniest_InvalidDescription)
 		}
 
@@ -65,13 +65,13 @@ func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req mode
 
 	// STEP: check all subscription info is valid [double check before creating invalid moniest]
 	// STEP: fee is valid
-	if err := validation.Fee(req.Fee); err != nil {
+	if err := validation.Fee(req.Fee, service.config); err != nil {
 		return db.Moniest{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateSubscriptionInfo_InvalidFee)
 	}
 
 	// STEP: message is valid
 	if req.Message != "" {
-		if err := validation.SubscriptionMessage(req.Message); err != nil {
+		if err := validation.SubscriptionMessage(req.Message, service.config); err != nil {
 			return db.Moniest{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage)
 		}
 	}

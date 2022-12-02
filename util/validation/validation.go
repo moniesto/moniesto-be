@@ -6,6 +6,7 @@ import (
 
 	"net/mail"
 
+	"github.com/moniesto/moniesto-be/config"
 	"github.com/moniesto/moniesto-be/util"
 )
 
@@ -39,9 +40,8 @@ func Username(username string) error {
 }
 
 // Fee checks the fee is valid
-func Fee(fee float64) error {
-	// TODO: add min fee to config file
-	if fee < 5 {
+func Fee(fee float64, config config.Config) error {
+	if fee < config.MinFee {
 		return fmt.Errorf("fee is not valid %f", fee)
 	}
 
@@ -49,9 +49,8 @@ func Fee(fee float64) error {
 }
 
 // Bio checks the bio is valid
-func Bio(bio string) error {
-	// TODO: add max bio lenght to config file
-	if len(bio) > 250 {
+func Bio(bio string, config config.Config) error {
+	if len(bio) > config.MaxBioLenght {
 		return fmt.Errorf("bio is not valid %s", bio)
 	}
 
@@ -59,9 +58,8 @@ func Bio(bio string) error {
 }
 
 // Description checks the description is valid
-func Description(description string) error {
-	// TODO: add max description length to config file
-	if len(description) > 5000 {
+func Description(description string, config config.Config) error {
+	if len(description) > config.MaxDescriptionLength {
 		return fmt.Errorf("description is not valid %s", description)
 	}
 
@@ -69,9 +67,8 @@ func Description(description string) error {
 }
 
 // SubscriptionMessage checks the message is valid
-func SubscriptionMessage(message string) error {
-	// TODO: add max message length to config file
-	if len(message) > 200 {
+func SubscriptionMessage(message string, config config.Config) error {
+	if len(message) > config.MaxSubscriptionMessageLength {
 		return fmt.Errorf("message is not valid %s", message)
 	}
 
