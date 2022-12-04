@@ -1,8 +1,6 @@
 package model
 
 import (
-	"time"
-
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 )
 
@@ -30,25 +28,7 @@ type CheckUsernameResponse struct {
 	Validity bool `json:"validity"`
 }
 
-type OwnUser struct {
-	Id                           string    `json:"id,omitempty"`
-	Name                         string    `json:"name,omitempty"`
-	Surname                      string    `json:"surname,omitempty"`
-	Username                     string    `json:"username,omitempty"`
-	Email                        string    `json:"email,omitempty"`
-	EmailVerified                bool      `json:"email_verified"`
-	Location                     string    `json:"location,omitempty"`
-	ProfilePhotoLink             string    `json:"profile_photo_link,omitempty"`
-	ProfilePhotoThumbnailLink    string    `json:"profile_photo_thumbnail_link,omitempty"`
-	BackgroundPhotoLink          string    `json:"background_photo_link,omitempty"`
-	BackgroundPhotoThumbnailLink string    `json:"background_photo_thumbnail_link,omitempty"`
-	CreatedAt                    time.Time `json:"created_at,omitempty"`
-	UpdatedAt                    time.Time `json:"updated_at,omitempty"`
-	Moniest                      *Moniest  `json:"moniest,omitempty"`
-}
-
 // MAKER
-
 // NewLoginResponse creates/return LoginResponse object
 func NewLoginResponse(token string, user db.LoginUserByEmailRow) (response LoginResponse) {
 	// asserting RegisterResponse to LoginResponse

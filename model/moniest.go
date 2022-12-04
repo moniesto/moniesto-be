@@ -28,6 +28,7 @@ type SubscriptionInfo struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
+// MAKER
 func NewCreateMoniestResponse(moniest db.GetMoniestByMoniestIdRow) OwnUser {
 	response := OwnUser{
 		Id:                           moniest.ID,

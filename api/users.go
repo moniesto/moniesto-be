@@ -4,12 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
 // GetUserByUsername gets user data
-// PRIMARY TODO: update user db requests with moniest db requests
+// PRIMARY TODO: update user db requests with moniest db requests (dont have idea why)
 func (server *Server) GetUserByUsername(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")
@@ -19,18 +20,27 @@ func (server *Server) GetUserByUsername(ctx *gin.Context) {
 	own_username := authPayload.User.Username
 
 	// STEP: get user by username [if own user, additional +email field]
-	var user interface{}
-	var err error
+	var response interface{}
 
 	if username == own_username {
-		user, err = server.service.GetOwnUserByUsername(ctx, username)
+		user, err := server.service.GetOwnUserByUsername(ctx, username)
+
+		if err != nil {
+			ctx.JSON(clientError.ParseError(err))
+			return
+		}
+
+		response = model.NewGetOwnUserResponse(user)
 	} else {
-		user, err = server.service.GetUserByUsername(ctx, username)
-	}
-	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
-		return
+		user, err := server.service.GetUserByUsername(ctx, username)
+
+		if err != nil {
+			ctx.JSON(clientError.ParseError(err))
+			return
+		}
+
+		response = model.NewGetUserResponse(user)
 	}
 
-	ctx.JSON(http.StatusOK, user)
+	ctx.JSON(http.StatusOK, response)
 }

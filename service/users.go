@@ -24,7 +24,6 @@ func (service *Service) GetOwnUserByUsername(ctx *gin.Context, username string) 
 	}
 
 	return user, nil
-
 }
 
 func (service *Service) GetUserByUsername(ctx *gin.Context, username string) (db.GetUserByUsernameRow, error) {

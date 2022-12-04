@@ -34,26 +34,26 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		authorizationHeader := ctx.GetHeader(authorizationHeaderKey)
 
 		if len(authorizationHeader) == 0 {
-			ctx.JSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_NotProvidedHeader))
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_NotProvidedHeader))
 			return
 		}
 
 		fields := strings.Fields(authorizationHeader)
 		if len(fields) < 2 {
-			ctx.JSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_InvalidHeader))
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_InvalidHeader))
 			return
 		}
 
 		authorizationType := strings.ToLower(fields[0])
 		if authorizationType != authorizationTypeBearer {
-			ctx.JSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_UnsupportedType))
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_UnsupportedType))
 			return
 		}
 
 		accessToken := fields[1]
 		payload, err := tokenMaker.VerifyToken(accessToken)
 		if err != nil {
-			ctx.JSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_InvalidToken))
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_InvalidToken))
 			return
 		}
 
