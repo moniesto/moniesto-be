@@ -14,9 +14,9 @@ type CloudinaryUploader struct {
 	cloudinary cloudinary.Cloudinary
 }
 
-func NewCloudinaryUploader(cloudName, apiKey, apiSecret string) (Uploader, error) {
+func NewCloudinaryUploader(cloudUrl string) (Uploader, error) {
 
-	cld, err := cloudinary.NewFromParams(cloudName, apiKey, apiSecret)
+	cld, err := cloudinary.NewFromURL(cloudUrl)
 	if err != nil {
 		return nil, fmt.Errorf("cloudinary initialize failed: %s", err.Error())
 	}
@@ -25,11 +25,7 @@ func NewCloudinaryUploader(cloudName, apiKey, apiSecret string) (Uploader, error
 }
 
 // TODO: update file field for according base64
-func (cloudinaryUploader *CloudinaryUploader) Upload(ctx *gin.Context, file string) {
+func (cloudinaryUploader *CloudinaryUploader) Upload(ctx *gin.Context, file string) (*uploader.UploadResult, error) {
 
-	// Upload the my_picture.jpg image and set the PublicID to "my_image".
-
-	resp, err := cloudinaryUploader.cloudinary.Upload.Upload(ctx, file, uploader.UploadParams{PublicID: "my_image"})
-	_ = resp
-	_ = err
+	return cloudinaryUploader.cloudinary.Upload.Upload(ctx, file, uploader.UploadParams{PublicID: "my_image1"})
 }

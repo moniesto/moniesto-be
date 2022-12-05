@@ -33,6 +33,7 @@ type Config struct {
 	TokenKeyTest    string `mapstructure:"TOKEN_KEY_TEST"`
 	NoReplyEmail    string `mapstructure:"NO_REPLY_EMAIL"`
 	NoReplyPassword string `mapstructure:"NO_REPLY_PASSWORD"`
+	CloudinaryURL   string `mapstructure:"CLOUDINARY_URL"`
 }
 
 // LoadConfig reads configuration from file
