@@ -31,6 +31,5 @@ func send(to []string, fromEmail, fromPassword, smtpHost, smtpPort, templatePath
 	if err != nil {
 		return err
 	}
-	fmt.Println("Email Sent!")
 	return nil
 }
