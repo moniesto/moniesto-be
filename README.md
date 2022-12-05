@@ -83,6 +83,14 @@ docker compose up
 
 </br>
 
+## Get Environment Variables
+
+1 - Create file with name `.env`
+
+2 - Go to [moniesto test environment variable](https://docs.google.com/document/d/1jgmkveKCvKAi9UTUsUfRwLrHdB65s2XM5ofS3iQVCcM/edit?usp=sharing)
+
+3 - Copy the content inside `.env` file
+
 # Setup / Downloads
 
 ### 1 - Download Go (v1.19 latest)
