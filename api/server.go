@@ -45,8 +45,12 @@ func (server *Server) setupRouter() {
 		accountRouters.GET("/usernames/:username/check", server.checkUsername)
 
 		// [Optional] Need Auth
-		accountRoutersAuth := accountRouters.Group("/").Use(authMiddlewareOptional(server.tokenMaker))
-		accountRoutersAuth.PUT("/password", server.ChangePassword)
+		accountRoutersAuthOptional := accountRouters.Group("/").Use(authMiddlewareOptional(server.tokenMaker))
+		accountRoutersAuthOptional.PUT("/password", server.ChangePassword)
+
+		// Need auth
+		accountRoutersAuth := accountRouters.Group("/").Use(authMiddleware(server.tokenMaker))
+		accountRoutersAuth.PATCH("/profile", server.updateProfile)
 	}
 
 	// Moniests routes - [need Auth]

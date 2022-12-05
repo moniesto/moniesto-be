@@ -3,6 +3,7 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -93,4 +94,10 @@ func (server *Server) checkUsername(ctx *gin.Context) {
 	rsp := model.NewCheckUsernameResponse(validity)
 
 	ctx.JSON(http.StatusOK, rsp)
+}
+
+func (server *Server) updateProfile(ctx *gin.Context) {
+
+	fmt.Println("updateProfile")
+
 }
