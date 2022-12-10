@@ -10,6 +10,11 @@ import (
 
 var splittedWith string = "*_*"
 
+type ErrorResponse struct {
+	ErrorCode string `json:"error_code"`
+	Error     string `json:"error"`
+}
+
 func CreateError(http_code int, error_code string) error {
 	error_str := strconv.Itoa(http_code) + splittedWith + error_code + splittedWith + errorMessages[error_code]
 
@@ -25,9 +30,9 @@ func ParseError(err error) (int, gin.H) {
 	return code, gin.H{"error_code": messages[1], "error": messages[2]}
 }
 
-func GetError(error_code string) gin.H {
-	return gin.H{
-		"error_code": error_code,
-		"error":      errorMessages[error_code],
+func GetError(error_code string) ErrorResponse {
+	return ErrorResponse{
+		ErrorCode: error_code,
+		Error:     errorMessages[error_code],
 	}
 }

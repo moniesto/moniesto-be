@@ -13,6 +13,16 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
+// @Summary Login
+// @Description Login with [email & password] OR [username & password]
+// @Tags account
+// @Accept json
+// @Produce  json
+// @Param account body model.LoginRequest true "Add account"
+// @Success 200 {object} model.LoginResponse
+// @Failure 400 {object} clientError.ErrorResponse "notfoundasdsad"
+// @Failure 401 {object} clientError.ErrorResponse
+// @Router /account/login [post]
 func (server *Server) loginUser(ctx *gin.Context) {
 	var req model.LoginRequest
 

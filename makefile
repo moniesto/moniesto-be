@@ -96,3 +96,8 @@ create-docker-network:
 # db: connect to docker network
 connect-network-db:
 	docker network connect moniesto-network moniesto-postgres14
+
+# swagger init
+swagger:
+	chmod +x swagger.sh
+	./swagger.sh

@@ -7,6 +7,9 @@ import (
 	"github.com/moniesto/moniesto-be/config"
 	"github.com/moniesto/moniesto-be/service"
 	"github.com/moniesto/moniesto-be/token"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // Server serves HTTP requests
@@ -64,6 +67,9 @@ func (server *Server) setupRouter() {
 	{
 		usersRouters.GET("/:username", server.GetUserByUsername)
 	}
+
+	// Swagger docs
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	server.router = router
 }
