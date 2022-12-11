@@ -69,6 +69,34 @@ definitions:
       username:
         type: string
     type: object
+  model.RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        minLength: 1
+        type: string
+      password:
+        type: string
+      surname:
+        minLength: 1
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    - surname
+    - username
+    type: object
+  model.RegisterResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/model.OwnUser'
+    type: object
   model.SubscriptionInfo:
     properties:
       fee:
@@ -87,9 +115,9 @@ paths:
       - application/json
       description: Login with [email & password] OR [username & password]
       parameters:
-      - description: Add account
+      - description: identifier can be email OR username
         in: body
-        name: account
+        name: LoginBody
         required: true
         schema:
           $ref: '#/definitions/model.LoginRequest'
@@ -100,15 +128,57 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.LoginResponse'
-        "400":
-          description: notfoundasdsad
+        "403":
+          description: wrong password
           schema:
             $ref: '#/definitions/clientError.ErrorResponse'
-        "401":
-          description: Unauthorized
+        "404":
+          description: email OR username not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body & data
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
           schema:
             $ref: '#/definitions/clientError.ErrorResponse'
       summary: Login
+      tags:
+      - account
+  /account/register:
+    post:
+      consumes:
+      - application/json
+      description: Register as user
+      parameters:
+      - description: ' '
+        in: body
+        name: body"
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.RegisterResponse'
+        "403":
+          description: wrong password
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body & data
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      summary: Register
       tags:
       - account
 securityDefinitions:

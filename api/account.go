@@ -17,11 +17,13 @@ import (
 // @Description Login with [email & password] OR [username & password]
 // @Tags account
 // @Accept json
-// @Produce  json
-// @Param account body model.LoginRequest true "Add account"
+// @Produce json
+// @Param LoginBody body model.LoginRequest true "identifier can be email OR username"
 // @Success 200 {object} model.LoginResponse
-// @Failure 400 {object} clientError.ErrorResponse "notfoundasdsad"
-// @Failure 401 {object} clientError.ErrorResponse
+// @Failure 403 {object} clientError.ErrorResponse "wrong password"
+// @Failure 404 {object} clientError.ErrorResponse "email OR username not found"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body & data"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /account/login [post]
 func (server *Server) loginUser(ctx *gin.Context) {
 	var req model.LoginRequest
@@ -61,6 +63,17 @@ func (server *Server) loginUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, rsp)
 }
 
+// @Summary Register
+// @Description Register as user
+// @Tags account
+// @Accept json
+// @Produce json
+// @Param "Register body" body model.RegisterRequest true " "
+// @Success 200 {object} model.RegisterResponse
+// @Failure 403 {object} clientError.ErrorResponse "wrong password"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body & data"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /account/register [post]
 func (server *Server) registerUser(ctx *gin.Context) {
 	var req model.RegisterRequest
 
@@ -89,6 +102,12 @@ func (server *Server) registerUser(ctx *gin.Context) {
 	server.loginUser(ctx)
 }
 
+// @Summary Check username
+// @Description Check username is valid of not
+// @Tags account
+// @Accept json
+// @Produce json
+// @Param "Register body" body model.RegisterRequest true " "
 func (server *Server) checkUsername(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")
