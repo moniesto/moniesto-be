@@ -6,6 +6,11 @@ definitions:
       error_code:
         type: string
     type: object
+  model.CheckUsernameResponse:
+    properties:
+      validity:
+        type: boolean
+    type: object
   model.LoginRequest:
     properties:
       identifier:
@@ -179,6 +184,35 @@ paths:
           schema:
             $ref: '#/definitions/clientError.ErrorResponse'
       summary: Register
+      tags:
+      - account
+  /usernames/:username/check:
+    get:
+      consumes:
+      - application/json
+      description: Check username is valid of not
+      parameters:
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CheckUsernameResponse'
+        "406":
+          description: invalid username
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      summary: Check username
       tags:
       - account
 securityDefinitions:

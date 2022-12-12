@@ -125,6 +125,50 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/usernames/:username/check": {
+            "get": {
+                "description": "Check username is valid of not",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "Check username",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.CheckUsernameResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid username",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -136,6 +180,14 @@ const docTemplate = `{
                 },
                 "error_code": {
                     "type": "string"
+                }
+            }
+        },
+        "model.CheckUsernameResponse": {
+            "type": "object",
+            "properties": {
+                "validity": {
+                    "type": "boolean"
                 }
             }
         },

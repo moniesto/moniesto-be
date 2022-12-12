@@ -107,7 +107,11 @@ func (server *Server) registerUser(ctx *gin.Context) {
 // @Tags account
 // @Accept json
 // @Produce json
-// @Param "Register body" body model.RegisterRequest true " "
+// @Param username path int true "username"
+// @Success 200 {object} model.CheckUsernameResponse
+// @Failure 406 {object} clientError.ErrorResponse "invalid username"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /usernames/:username/check [get]
 func (server *Server) checkUsername(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")
