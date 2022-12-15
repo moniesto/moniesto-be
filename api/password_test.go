@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/core"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/service"
 	"github.com/moniesto/moniesto-be/token"
@@ -21,6 +24,9 @@ type registeredUserWithID struct {
 }
 
 var changePasswordUsers []registeredUserWithID
+var sendPasswordResetEmailUsers []registeredUserWithID
+var verifyTokenChangePasswordUsers []registeredUserWithID
+var passwordResetTokens []string
 
 const (
 	SendPasswordResetEmailEndpoint    = "/account/password/send_email"
@@ -63,6 +69,7 @@ func TestChangePassword(t *testing.T) {
 }
 
 func TestSendPasswordResetEmail(t *testing.T) {
+	sendPasswordResetEmailUsers = getRandomUsersDataWithID(1)
 
 	sendPasswordResetEmailCases := getSendPasswordResetEmailCases()
 
@@ -83,10 +90,11 @@ func TestSendPasswordResetEmail(t *testing.T) {
 		})
 
 	}
-
 }
 
 func TestVerifyTokenChangePassword(t *testing.T) {
+	verifyTokenChangePasswordUsers = getRandomUsersDataWithID(3)
+	passwordResetTokens = createValidatingTokens(3)
 
 	verifyTokenChangePasswordCases := getVerifyTokenChangePasswordCases()
 
@@ -108,7 +116,6 @@ func TestVerifyTokenChangePassword(t *testing.T) {
 		})
 
 	}
-
 }
 
 func checkUserPasswordIs(t *testing.T, ctx *gin.Context, service *service.Service, user_id, password string) {
@@ -246,6 +253,49 @@ func getChangePasswordCases() ChangePasswordCases {
 	}
 }
 
+func getSendPasswordResetEmailCases() ChangePasswordCases {
+	return ChangePasswordCases{
+		{
+			name:       "Invalid Body [Email does not provided]",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
+			},
+		},
+		{
+			name:       "Not exist email on system",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			body: model.SendResetPasswordEmailRequest{
+				Email: util.RandomEmail(),
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusAccepted, recorder.Code)
+			},
+		},
+		{
+			name: "Password Reset Email sent successfully",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
+				users := createUser(t, ctx, service, sendPasswordResetEmailUsers[0].RegisterRequest)
+				sendPasswordResetEmailUsers[0].ID = users.ID
+
+				// working directory from ./api -> ./ [to find the template]
+				os.Chdir("../")
+			},
+			body: model.SendResetPasswordEmailRequest{
+				Email: sendPasswordResetEmailUsers[0].Email,
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusAccepted, recorder.Code)
+			},
+		},
+	}
+}
+
 func getVerifyTokenChangePasswordCases() ChangePasswordCases {
 	return ChangePasswordCases{
 		{
@@ -317,50 +367,107 @@ func getVerifyTokenChangePasswordCases() ChangePasswordCases {
 				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
 			},
 		},
-	}
-}
-
-func getSendPasswordResetEmailCases() ChangePasswordCases {
-	/*
-			cases:
-
-			- invalid body:
-		done	- token and email in the same time
-		done	- email and new password in the same time
-		done	- token alone
-		done	- new password alone
-			- send email case:
-		done		- email is not exist on the system (still returns 202)
-					- success with email (moniesto.test@gmail.com email)
-			- verify token case:
-				- invalid token (can not be decoded)
-				- no record with this token
-				- expired token with email (moniesto.test@gmail.com email)
-				- success with email (moniesto.test@gmail.com email)
-
-	*/
-
-	return ChangePasswordCases{
-		// SEND EMAIL cases
 		{
-			name:       "[SEND RESET PASSWORD EMAIL] Not exist email on system",
+			name:       "Invalid Token [can't be decoded]",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
 			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
-			body: struct {
-				Email string `json:"email"`
-			}{
-				Email: util.RandomEmail(),
+			body: model.VerifyPasswordResetRequest{
+				Token:       util.RandomString(30),
+				NewPassword: util.RandomPassword(),
 			},
 			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
 				// TODO: check error code
-				require.Equal(t, http.StatusAccepted, recorder.Code)
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
 			},
 		},
-		// {
-		// 	name:       "[SUCCESS RESET PASSWORD EMAIL] Email sent successfully",
-		// 	initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
-		// 	setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
-		// 	// TODO: complete success case of send email
-		// },
+		{
+			name:       "Valid Token [but not found/deleted]",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			body: model.VerifyPasswordResetRequest{
+				Token:       token.EncodeValidatingToken(token.CreateValidatingToken()), // create new one
+				NewPassword: util.RandomPassword(),
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusNotFound, recorder.Code)
+			},
+		},
+		{
+			name: "Expired Token",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
+				user := createUser(t, ctx, service, verifyTokenChangePasswordUsers[0].RegisterRequest)
+				verifyTokenChangePasswordUsers[0].ID = user.ID
+
+				params := db.CreatePasswordResetTokenParams{
+					ID:          core.CreateID(),
+					UserID:      verifyTokenChangePasswordUsers[0].ID,
+					Token:       passwordResetTokens[0],
+					TokenExpiry: time.Now().Add(-25 * time.Hour),
+				}
+				_, err := service.Store.CreatePasswordResetToken(ctx, params)
+				require.NoError(t, err)
+			},
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			body: model.VerifyPasswordResetRequest{
+				Token:       util.Encode(passwordResetTokens[0]),
+				NewPassword: util.RandomPassword(),
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusForbidden, recorder.Code)
+			},
+		},
+		{
+			name: "Invalid Password",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
+				user := createUser(t, ctx, service, verifyTokenChangePasswordUsers[1].RegisterRequest)
+				verifyTokenChangePasswordUsers[1].ID = user.ID
+
+				params := db.CreatePasswordResetTokenParams{
+					ID:          core.CreateID(),
+					UserID:      verifyTokenChangePasswordUsers[1].ID,
+					Token:       passwordResetTokens[1],
+					TokenExpiry: time.Now().Add(25 * time.Hour),
+				}
+				_, err := service.Store.CreatePasswordResetToken(ctx, params)
+				require.NoError(t, err)
+			},
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			body: model.VerifyPasswordResetRequest{
+				Token:       util.Encode(passwordResetTokens[1]),
+				NewPassword: "",
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
+			},
+		},
+		{
+			name: "Successful Password Reset Token Validate & Password change",
+			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {
+				user := createUser(t, ctx, service, verifyTokenChangePasswordUsers[2].RegisterRequest)
+				verifyTokenChangePasswordUsers[2].ID = user.ID
+
+				params := db.CreatePasswordResetTokenParams{
+					ID:          core.CreateID(),
+					UserID:      verifyTokenChangePasswordUsers[2].ID,
+					Token:       passwordResetTokens[2],
+					TokenExpiry: time.Now().Add(25 * time.Hour),
+				}
+				_, err := service.Store.CreatePasswordResetToken(ctx, params)
+				require.NoError(t, err)
+			},
+			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+			body: model.VerifyPasswordResetRequest{
+				Token:       util.Encode(passwordResetTokens[2]),
+				NewPassword: "newpassword",
+			},
+			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
+				// TODO: check error code
+				require.Equal(t, http.StatusOK, recorder.Code)
+				checkUserPasswordIs(t, ctx, service, verifyTokenChangePasswordUsers[2].ID, "newpassword")
+			},
+		},
 	}
 }

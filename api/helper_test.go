@@ -105,3 +105,13 @@ func createBody(body any) *bytes.Reader {
 
 	return bytes.NewReader(bodyBytes.Bytes())
 }
+
+func createValidatingTokens(count int) []string {
+	passwordResetTokens := []string{}
+
+	for i := 0; i < count; i++ {
+		passwordResetTokens = append(passwordResetTokens, token.CreateValidatingToken())
+	}
+
+	return passwordResetTokens
+}

@@ -147,9 +147,9 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: GET /account/usernames/:username/check
 
-:heavy_check_mark: [need test, need docs] POST /account/password/send_email -> [unauthenticated case] [forget password - send email case]
+:heavy_check_mark: [need docs] POST /account/password/send_email -> [unauthenticated case] [forget password - send email case]
 
-:heavy_check_mark: [need test, need docs] POST /account/password/verify_token -> [unauthenticated user] [forget password - change password case]
+:heavy_check_mark: [need docs] POST /account/password/verify_token -> [unauthenticated user] [forget password - change password case]
 
 :heavy_check_mark: [need docs] PUT /account/password -> [authenticated user] [change password case]
 
