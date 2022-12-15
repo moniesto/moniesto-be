@@ -6,6 +6,16 @@ definitions:
       error_code:
         type: string
     type: object
+  model.ChangePasswordRequest:
+    properties:
+      new:
+        type: string
+      old:
+        type: string
+    required:
+    - new
+    - old
+    type: object
   model.CheckUsernameResponse:
     properties:
       validity:
@@ -102,6 +112,13 @@ definitions:
       user:
         $ref: '#/definitions/model.OwnUser'
     type: object
+  model.SendResetPasswordEmailRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
   model.SubscriptionInfo:
     properties:
       fee:
@@ -111,9 +128,63 @@ definitions:
       updated_at:
         type: string
     type: object
+  model.VerifyPasswordResetRequest:
+    properties:
+      new:
+        type: string
+      token:
+        type: string
+    required:
+    - new
+    - token
+    type: object
 info:
   contact: {}
 paths:
+  /account//password/send_email:
+    put:
+      consumes:
+      - application/json
+      description: Unauthenticated user send reset password email
+      parameters:
+      - description: email field is required
+        in: body
+        name: SendEmailBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.SendResetPasswordEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      summary: Send Reset Password Email
+      tags:
+      - account
+  /account//password/verify_token:
+    put:
+      consumes:
+      - application/json
+      description: Unauthenticated verify token & change password
+      parameters:
+      - description: token & new fiels are required
+        in: body
+        name: VerifyTokenBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.VerifyPasswordResetRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Verify Token & Change Password
+      tags:
+      - account
   /account/login:
     post:
       consumes:
@@ -150,6 +221,40 @@ paths:
           schema:
             $ref: '#/definitions/clientError.ErrorResponse'
       summary: Login
+      tags:
+      - account
+  /account/password:
+    put:
+      consumes:
+      - application/json
+      description: Authenticated user password change
+      parameters:
+      - description: new and old fields are required
+        in: body
+        name: ChangePasswordBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: wrong password
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body & data
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Change Password
       tags:
       - account
   /account/register:

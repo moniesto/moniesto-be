@@ -43,16 +43,17 @@ func (server *Server) setupRouter() {
 	// Account routes
 	accountRouters := router.Group("/account")
 	{
+		// No Need Auth
 		accountRouters.POST("/register", server.registerUser)
 		accountRouters.POST("/login", server.loginUser)
 		accountRouters.GET("/usernames/:username/check", server.checkUsername)
 
-		// [Optional] Need Auth
-		accountRoutersAuthOptional := accountRouters.Group("/").Use(authMiddlewareOptional(server.tokenMaker))
-		accountRoutersAuthOptional.PUT("/password", server.ChangePassword)
+		accountRouters.POST("/password/send_email", server.sendResetPasswordEmail)
+		accountRouters.POST("/password/verify_token", server.verifyTokenChangePassword)
 
 		// Need auth
 		accountRoutersAuth := accountRouters.Group("/").Use(authMiddleware(server.tokenMaker))
+		accountRoutersAuth.PUT("/password", server.changePassword)
 		accountRoutersAuth.PATCH("/profile", server.updateProfile)
 	}
 

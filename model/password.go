@@ -1,13 +1,15 @@
 package model
 
 type ChangePasswordRequest struct {
-	// Send Email case
-	Email string `json:"email"`
+	NewPassword string `json:"new" binding:"required"`
+	OldPassword string `json:"old" binding:"required"`
+}
 
-	// Verify & Change case [unauth]
-	Token       string `json:"token"`
-	NewPassword string `json:"new"`
+type SendResetPasswordEmailRequest struct {
+	Email string `json:"email" binding:"required"`
+}
 
-	// Change Case [auth]
-	OldPassword string `json:"old"`
+type VerifyPasswordResetRequest struct {
+	Token       string `json:"token" binding:"required"`
+	NewPassword string `json:"new" binding:"required"`
 }

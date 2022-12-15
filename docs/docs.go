@@ -16,6 +16,74 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/account//password/send_email": {
+            "put": {
+                "description": "Unauthenticated user send reset password email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "Send Reset Password Email",
+                "parameters": [
+                    {
+                        "description": "email field is required",
+                        "name": "SendEmailBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SendResetPasswordEmailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted"
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account//password/verify_token": {
+            "put": {
+                "description": "Unauthenticated verify token \u0026 change password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "Verify Token \u0026 Change Password",
+                "parameters": [
+                    {
+                        "description": "token \u0026 new fiels are required",
+                        "name": "VerifyTokenBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.VerifyPasswordResetRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/account/login": {
             "post": {
                 "description": "Login with [email \u0026 password] OR [username \u0026 password]",
@@ -55,6 +123,60 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "email OR username not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body \u0026 data",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/password": {
+            "put": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Authenticated user password change",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "Change Password",
+                "parameters": [
+                    {
+                        "description": "new and old fields are required",
+                        "name": "ChangePasswordBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ChangePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "wrong password",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorResponse"
                         }
@@ -179,6 +301,21 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "error_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ChangePasswordRequest": {
+            "type": "object",
+            "required": [
+                "new",
+                "old"
+            ],
+            "properties": {
+                "new": {
+                    "type": "string"
+                },
+                "old": {
                     "type": "string"
                 }
             }
@@ -326,6 +463,17 @@ const docTemplate = `{
                 }
             }
         },
+        "model.SendResetPasswordEmailRequest": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
         "model.SubscriptionInfo": {
             "type": "object",
             "properties": {
@@ -336,6 +484,21 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.VerifyPasswordResetRequest": {
+            "type": "object",
+            "required": [
+                "new",
+                "token"
+            ],
+            "properties": {
+                "new": {
+                    "type": "string"
+                },
+                "token": {
                     "type": "string"
                 }
             }

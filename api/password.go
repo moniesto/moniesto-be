@@ -11,20 +11,19 @@ import (
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
-func (server *Server) ChangePassword(ctx *gin.Context) {
-
-	validAuth := ctx.MustGet(authorizationPayloadValidityKey).(bool)
-
-	if validAuth {
-		authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-
-		server.changeLoggedInUserPassword(ctx, authPayload.User.ID)
-	} else {
-		server.changeLoggedOutUserPassword(ctx)
-	}
-}
-
-func (server *Server) changeLoggedInUserPassword(ctx *gin.Context, user_id string) {
+// @Summary Change Password
+// @Description Authenticated user password change
+// @Security bearerAuth
+// @Tags account
+// @Accept json
+// @Produce json
+// @Param ChangePasswordBody body model.ChangePasswordRequest true "new and old fields are required"
+// @Success 200
+// @Failure 403 {object} clientError.ErrorResponse "wrong password"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body & data"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /account/password [put]
+func (server *Server) changePassword(ctx *gin.Context) {
 	var req model.ChangePasswordRequest
 
 	// STEP: bind/validation
@@ -47,6 +46,10 @@ func (server *Server) changeLoggedInUserPassword(ctx *gin.Context, user_id strin
 		return
 	}
 
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
 	// STEP: check old password is correct
 	err = server.service.CheckPassword(ctx, user_id, req.OldPassword)
 	if err != nil {
@@ -64,8 +67,17 @@ func (server *Server) changeLoggedInUserPassword(ctx *gin.Context, user_id strin
 	ctx.Status(http.StatusOK)
 }
 
-func (server *Server) changeLoggedOutUserPassword(ctx *gin.Context) {
-	var req model.ChangePasswordRequest
+// @Summary Send Reset Password Email
+// @Description Unauthenticated user send reset password email
+// @Tags account
+// @Accept json
+// @Produce json
+// @Param SendEmailBody body model.SendResetPasswordEmailRequest true "email field is required"
+// @Success 202
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /account//password/send_email [put]
+func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
+	var req model.SendResetPasswordEmailRequest
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -73,22 +85,6 @@ func (server *Server) changeLoggedOutUserPassword(ctx *gin.Context) {
 		return
 	}
 
-	// STEP: choose which kind of request is it [send email OR verify token&change password]
-	if req.Token == "" && req.NewPassword == "" && req.Email != "" {
-		// STEP: send reset password email case
-		server.sendResetPasswordEmail(ctx, &req)
-		return
-	} else if req.Token != "" && req.NewPassword != "" && req.Email == "" {
-		// STEP: verify token case
-		server.verifyTokenChangePassword(ctx, &req)
-		return
-	} else {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
-		return
-	}
-}
-
-func (server *Server) sendResetPasswordEmail(ctx *gin.Context, req *model.ChangePasswordRequest) {
 	// STEP: check email is in the system -> if not don't send any email and return 202 ACCEPTED
 	validEmail, err := server.service.CheckEmailExistidy(ctx, req.Email)
 	if err != nil {
@@ -114,7 +110,23 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context, req *model.Change
 	ctx.Status(http.StatusAccepted)
 }
 
-func (server *Server) verifyTokenChangePassword(ctx *gin.Context, req *model.ChangePasswordRequest) {
+// @Summary Verify Token & Change Password
+// @Description Unauthenticated verify token & change password
+// @Tags account
+// @Accept json
+// @Produce json
+// @Param VerifyTokenBody body model.VerifyPasswordResetRequest true "token & new fiels are required"
+// @Success 200
+// @Router /account//password/verify_token [put]
+func (server *Server) verifyTokenChangePassword(ctx *gin.Context) {
+	var req model.VerifyPasswordResetRequest
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
+		return
+	}
+
 	// STEP: validating password reset token [decode + expiry check]
 	password_reset_token, err := server.service.GetPasswordResetToken(ctx, req.Token)
 	if err != nil {

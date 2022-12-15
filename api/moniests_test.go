@@ -20,7 +20,7 @@ type CreateMoniestCases []struct {
 	check      func(t *testing.T, recorder *httptest.ResponseRecorder)
 }
 
-func TestCreateMoniest(t *testing.T) {
+func _TestCreateMoniest(t *testing.T) {
 
 	createMoniestCases := getCreateMoniestTestCases()
 
