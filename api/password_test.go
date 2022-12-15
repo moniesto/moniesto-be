@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -22,7 +23,7 @@ type registeredUserWithID struct {
 var changePasswordUsers []registeredUserWithID
 
 const (
-	SendEmailEndpoint                 = "/account/password/send_email"
+	SendPasswordResetEmailEndpoint    = "/account/password/send_email"
 	VerifyTokenChangePasswordEndpoint = "/account/password/verify_token"
 	ChangePasswordEndpoint            = "/account/password"
 )
@@ -38,43 +39,74 @@ type ChangePasswordCases []struct {
 func TestChangePassword(t *testing.T) {
 	changePasswordUsers = getRandomUsersDataWithID(5)
 
-	changeLoggedInUserPasswordCases := getChangeLoggedInUserPasswordCases()
+	changePasswordCases := getChangePasswordCases()
 
-	for _, testCase := range changeLoggedInUserPasswordCases {
-		server := newTestServer(t)
+	for _, testCase := range changePasswordCases {
 
-		recorder := httptest.NewRecorder()
-		ctx_test, _ := gin.CreateTestContext(recorder)
-		testCase.initialize(t, ctx_test, server.service)
+		t.Run(fmt.Sprintf("CASE:%s", testCase.name), func(t *testing.T) {
+			server := newTestServer(t)
 
-		request, err := http.NewRequest(http.MethodPut, ChangePasswordEndpoint, createBody(testCase.body))
-		require.NoError(t, err)
+			recorder := httptest.NewRecorder()
+			ctx_test, _ := gin.CreateTestContext(recorder)
+			testCase.initialize(t, ctx_test, server.service)
 
-		testCase.setupAuth(t, request, server.tokenMaker)
+			request, err := http.NewRequest(http.MethodPut, ChangePasswordEndpoint, createBody(testCase.body))
+			require.NoError(t, err)
 
-		server.router.ServeHTTP(recorder, request)
-		testCase.check(t, ctx_test, server.service, recorder)
+			testCase.setupAuth(t, request, server.tokenMaker)
+
+			server.router.ServeHTTP(recorder, request)
+			testCase.check(t, ctx_test, server.service, recorder)
+		})
+
 	}
 }
 
-func _TestChangeLoggedOutUserPassword(t *testing.T) {
+func TestSendPasswordResetEmail(t *testing.T) {
 
-	changeLoggedOutUserPasswordCases := getChangeLoggedOutUserPasswordCases()
+	sendPasswordResetEmailCases := getSendPasswordResetEmailCases()
 
-	for _, testCase := range changeLoggedOutUserPasswordCases {
-		server := newTestServer(t)
+	for _, testCase := range sendPasswordResetEmailCases {
 
-		recorder := httptest.NewRecorder()
-		ctx_test, _ := gin.CreateTestContext(recorder)
-		testCase.initialize(t, ctx_test, server.service)
+		t.Run(fmt.Sprintf("CASE:%s", testCase.name), func(t *testing.T) {
+			server := newTestServer(t)
 
-		url := "/account/password"
+			recorder := httptest.NewRecorder()
+			ctx_test, _ := gin.CreateTestContext(recorder)
+			testCase.initialize(t, ctx_test, server.service)
 
-		request, err := http.NewRequest(http.MethodPut, url, createBody(testCase.body))
-		require.NoError(t, err)
+			request, err := http.NewRequest(http.MethodPost, SendPasswordResetEmailEndpoint, createBody(testCase.body))
+			require.NoError(t, err)
 
-		server.router.ServeHTTP(recorder, request)
-		testCase.check(t, ctx_test, server.service, recorder)
+			server.router.ServeHTTP(recorder, request)
+			testCase.check(t, ctx_test, server.service, recorder)
+		})
+
+	}
+
+}
+
+func TestVerifyTokenChangePassword(t *testing.T) {
+
+	verifyTokenChangePasswordCases := getVerifyTokenChangePasswordCases()
+
+	for _, testCase := range verifyTokenChangePasswordCases {
+
+		t.Run(fmt.Sprintf("CASE:%s", testCase.name), func(t *testing.T) {
+
+			server := newTestServer(t)
+
+			recorder := httptest.NewRecorder()
+			ctx_test, _ := gin.CreateTestContext(recorder)
+			testCase.initialize(t, ctx_test, server.service)
+
+			request, err := http.NewRequest(http.MethodPost, VerifyTokenChangePasswordEndpoint, createBody(testCase.body))
+			require.NoError(t, err)
+
+			server.router.ServeHTTP(recorder, request)
+			testCase.check(t, ctx_test, server.service, recorder)
+		})
+
 	}
 
 }
@@ -87,7 +119,7 @@ func checkUserPasswordIs(t *testing.T, ctx *gin.Context, service *service.Servic
 	require.NoError(t, err)
 }
 
-func getChangeLoggedInUserPasswordCases() ChangePasswordCases {
+func getChangePasswordCases() ChangePasswordCases {
 	return ChangePasswordCases{
 		{
 			name: "Invalid body",
@@ -212,29 +244,9 @@ func getChangeLoggedInUserPasswordCases() ChangePasswordCases {
 			},
 		},
 	}
-
 }
 
-func getChangeLoggedOutUserPasswordCases() ChangePasswordCases {
-	/*
-			cases:
-
-			- invalid body:
-		done	- token and email in the same time
-		done	- email and new password in the same time
-		done	- token alone
-		done	- new password alone
-			- send email case:
-		done		- email is not exist on the system (still returns 202)
-					- success with email (moniesto.test@gmail.com email)
-			- verify token case:
-				- invalid token (can not be decoded)
-				- no record with this token
-				- expired token with email (moniesto.test@gmail.com email)
-				- success with email (moniesto.test@gmail.com email)
-
-	*/
-
+func getVerifyTokenChangePasswordCases() ChangePasswordCases {
 	return ChangePasswordCases{
 		{
 			name:       "Invalid body",
@@ -305,7 +317,30 @@ func getChangeLoggedOutUserPasswordCases() ChangePasswordCases {
 				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
 			},
 		},
+	}
+}
 
+func getSendPasswordResetEmailCases() ChangePasswordCases {
+	/*
+			cases:
+
+			- invalid body:
+		done	- token and email in the same time
+		done	- email and new password in the same time
+		done	- token alone
+		done	- new password alone
+			- send email case:
+		done		- email is not exist on the system (still returns 202)
+					- success with email (moniesto.test@gmail.com email)
+			- verify token case:
+				- invalid token (can not be decoded)
+				- no record with this token
+				- expired token with email (moniesto.test@gmail.com email)
+				- success with email (moniesto.test@gmail.com email)
+
+	*/
+
+	return ChangePasswordCases{
 		// SEND EMAIL cases
 		{
 			name:       "[SEND RESET PASSWORD EMAIL] Not exist email on system",
@@ -321,11 +356,11 @@ func getChangeLoggedOutUserPasswordCases() ChangePasswordCases {
 				require.Equal(t, http.StatusAccepted, recorder.Code)
 			},
 		},
-		{
-			name:       "[SUCCESS RESET PASSWORD EMAIL] Email sent successfully",
-			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
-			setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
-			// TODO: complete success case of send email
-		},
+		// {
+		// 	name:       "[SUCCESS RESET PASSWORD EMAIL] Email sent successfully",
+		// 	initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
+		// 	setupAuth:  func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
+		// 	// TODO: complete success case of send email
+		// },
 	}
 }
