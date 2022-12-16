@@ -4,74 +4,6 @@
         "contact": {}
     },
     "paths": {
-        "/account//password/send_email": {
-            "put": {
-                "description": "Unauthenticated user send reset password email",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "account"
-                ],
-                "summary": "Send Reset Password Email",
-                "parameters": [
-                    {
-                        "description": "email field is required",
-                        "name": "SendEmailBody",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.SendResetPasswordEmailRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "202": {
-                        "description": "Accepted"
-                    },
-                    "500": {
-                        "description": "server error",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/account//password/verify_token": {
-            "put": {
-                "description": "Unauthenticated verify token \u0026 change password",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "account"
-                ],
-                "summary": "Verify Token \u0026 Change Password",
-                "parameters": [
-                    {
-                        "description": "token \u0026 new fiels are required",
-                        "name": "VerifyTokenBody",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.VerifyPasswordResetRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
         "/account/login": {
             "post": {
                 "description": "Login with [email \u0026 password] OR [username \u0026 password]",
@@ -82,7 +14,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "account"
+                    "Auth"
                 ],
                 "summary": "Login",
                 "parameters": [
@@ -145,12 +77,12 @@
                     "application/json"
                 ],
                 "tags": [
-                    "account"
+                    "Password"
                 ],
                 "summary": "Change Password",
                 "parameters": [
                     {
-                        "description": "new and old fields are required",
+                        "description": " ",
                         "name": "ChangePasswordBody",
                         "in": "body",
                         "required": true,
@@ -184,6 +116,104 @@
                 }
             }
         },
+        "/account/password/send_email": {
+            "post": {
+                "description": "Unauthenticated user send reset password email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Password"
+                ],
+                "summary": "Send Reset Password Email",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "SendEmailBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SendResetPasswordEmailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted"
+                    },
+                    "406": {
+                        "description": "invalid body \u0026 data",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/password/verify_token": {
+            "post": {
+                "description": "Unauthenticated verify token \u0026 change password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Password"
+                ],
+                "summary": "Verify Token \u0026 Change Password",
+                "parameters": [
+                    {
+                        "description": "token \u0026 new fiels are required",
+                        "name": "VerifyTokenBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.VerifyPasswordResetRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "token is expired",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "reset token not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body \u0026 data",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/account/register": {
             "post": {
                 "description": "Register as user",
@@ -194,7 +224,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "account"
+                    "Auth"
                 ],
                 "summary": "Register",
                 "parameters": [
@@ -246,7 +276,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "account"
+                    "Account"
                 ],
                 "summary": "Check username",
                 "parameters": [

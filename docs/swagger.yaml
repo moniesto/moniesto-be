@@ -141,50 +141,6 @@ definitions:
 info:
   contact: {}
 paths:
-  /account//password/send_email:
-    put:
-      consumes:
-      - application/json
-      description: Unauthenticated user send reset password email
-      parameters:
-      - description: email field is required
-        in: body
-        name: SendEmailBody
-        required: true
-        schema:
-          $ref: '#/definitions/model.SendResetPasswordEmailRequest'
-      produces:
-      - application/json
-      responses:
-        "202":
-          description: Accepted
-        "500":
-          description: server error
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-      summary: Send Reset Password Email
-      tags:
-      - account
-  /account//password/verify_token:
-    put:
-      consumes:
-      - application/json
-      description: Unauthenticated verify token & change password
-      parameters:
-      - description: token & new fiels are required
-        in: body
-        name: VerifyTokenBody
-        required: true
-        schema:
-          $ref: '#/definitions/model.VerifyPasswordResetRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      summary: Verify Token & Change Password
-      tags:
-      - account
   /account/login:
     post:
       consumes:
@@ -222,14 +178,14 @@ paths:
             $ref: '#/definitions/clientError.ErrorResponse'
       summary: Login
       tags:
-      - account
+      - Auth
   /account/password:
     put:
       consumes:
       - application/json
       description: Authenticated user password change
       parameters:
-      - description: new and old fields are required
+      - description: ' '
         in: body
         name: ChangePasswordBody
         required: true
@@ -256,7 +212,71 @@ paths:
       - bearerAuth: []
       summary: Change Password
       tags:
-      - account
+      - Password
+  /account/password/send_email:
+    post:
+      consumes:
+      - application/json
+      description: Unauthenticated user send reset password email
+      parameters:
+      - description: ' '
+        in: body
+        name: SendEmailBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.SendResetPasswordEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+        "406":
+          description: invalid body & data
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      summary: Send Reset Password Email
+      tags:
+      - Password
+  /account/password/verify_token:
+    post:
+      consumes:
+      - application/json
+      description: Unauthenticated verify token & change password
+      parameters:
+      - description: token & new fiels are required
+        in: body
+        name: VerifyTokenBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.VerifyPasswordResetRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: token is expired
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: reset token not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body & data
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      summary: Verify Token & Change Password
+      tags:
+      - Password
   /account/register:
     post:
       consumes:
@@ -290,7 +310,7 @@ paths:
             $ref: '#/definitions/clientError.ErrorResponse'
       summary: Register
       tags:
-      - account
+      - Auth
   /usernames/:username/check:
     get:
       consumes:
@@ -319,7 +339,7 @@ paths:
             $ref: '#/definitions/clientError.ErrorResponse'
       summary: Check username
       tags:
-      - account
+      - Account
 securityDefinitions:
   bearerAuth:
     in: header

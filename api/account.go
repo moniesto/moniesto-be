@@ -15,7 +15,7 @@ import (
 
 // @Summary Login
 // @Description Login with [email & password] OR [username & password]
-// @Tags account
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param LoginBody body model.LoginRequest true "identifier can be email OR username"
@@ -65,7 +65,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 
 // @Summary Register
 // @Description Register as user
-// @Tags account
+// @Tags Auth
 // @Accept json
 // @Produce json
 // @Param "Register body" body model.RegisterRequest true " "
@@ -104,7 +104,7 @@ func (server *Server) registerUser(ctx *gin.Context) {
 
 // @Summary Check username
 // @Description Check username is valid of not
-// @Tags account
+// @Tags Account
 // @Accept json
 // @Produce json
 // @Param username path int true "username"

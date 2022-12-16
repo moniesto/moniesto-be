@@ -14,10 +14,10 @@ import (
 // @Summary Change Password
 // @Description Authenticated user password change
 // @Security bearerAuth
-// @Tags account
+// @Tags Password
 // @Accept json
 // @Produce json
-// @Param ChangePasswordBody body model.ChangePasswordRequest true "new and old fields are required"
+// @Param ChangePasswordBody body model.ChangePasswordRequest true " "
 // @Success 200
 // @Failure 403 {object} clientError.ErrorResponse "wrong password"
 // @Failure 406 {object} clientError.ErrorResponse "invalid body & data"
@@ -69,13 +69,14 @@ func (server *Server) changePassword(ctx *gin.Context) {
 
 // @Summary Send Reset Password Email
 // @Description Unauthenticated user send reset password email
-// @Tags account
+// @Tags Password
 // @Accept json
 // @Produce json
-// @Param SendEmailBody body model.SendResetPasswordEmailRequest true "email field is required"
+// @Param SendEmailBody body model.SendResetPasswordEmailRequest true " "
 // @Success 202
+// @Failure 406 {object} clientError.ErrorResponse "invalid body & data"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
-// @Router /account//password/send_email [put]
+// @Router /account/password/send_email [post]
 func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
 	var req model.SendResetPasswordEmailRequest
 
@@ -112,12 +113,16 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
 
 // @Summary Verify Token & Change Password
 // @Description Unauthenticated verify token & change password
-// @Tags account
+// @Tags Password
 // @Accept json
 // @Produce json
 // @Param VerifyTokenBody body model.VerifyPasswordResetRequest true "token & new fiels are required"
 // @Success 200
-// @Router /account//password/verify_token [put]
+// @Failure 403 {object} clientError.ErrorResponse "token is expired"
+// @Failure 404 {object} clientError.ErrorResponse "reset token not found"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body & data"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /account/password/verify_token [post]
 func (server *Server) verifyTokenChangePassword(ctx *gin.Context) {
 	var req model.VerifyPasswordResetRequest
 
