@@ -147,17 +147,17 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: GET /account/usernames/:username/check
 
-:heavy_check_mark: [need docs] POST /account/password/send_email -> [unauthenticated case] [forget password - send email case]
+:heavy_check_mark: POST /account/password/send_email -> [unauthenticated case] [forget password - send email case]
 
-:heavy_check_mark: [need docs] POST /account/password/verify_token -> [unauthenticated user] [forget password - change password case]
+:heavy_check_mark: POST /account/password/verify_token -> [unauthenticated user] [forget password - change password case]
 
-:heavy_check_mark: [need docs] PUT /account/password -> [authenticated user] [change password case]
+:heavy_check_mark: PUT /account/password -> [authenticated user] [change password case]
 
 - [ ] GET /content/posts?subscribed=<subscribed>&limit=<limit>&offset=<offset>
 
 - [ ] GET /content/moniests?subscribed=<subscribed>&limit=<limit>&offset=<offset>
 
-:heavy_check_mark: [need test, need docs] GET /users/:username
+:heavy_check_mark: [need test] GET /users/:username
 
 - [ ] GET /users/:username/posts?limit=<limit>&offset=<offset>
 
@@ -167,7 +167,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] GET /users/:username/subscribers?limit=<limit>&offset=<offset>
 
-:heavy_check_mark: [need test + latest check, need docs] POST /moniests
+:heavy_check_mark: [need test + latest check] POST /moniests
 
 - [ ] POST /moniests/posts
 

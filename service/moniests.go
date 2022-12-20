@@ -47,7 +47,7 @@ func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req mode
 	if req.Bio != "" {
 
 		if err := validation.Bio(req.Bio, service.config); err != nil {
-			return db.Moniest{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateMoniest_InvalidBio)
+			return db.Moniest{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_CreateMoniest_InvalidBio)
 		}
 
 		moniestParams.Bio = sql.NullString{String: req.Bio, Valid: true}
@@ -57,7 +57,7 @@ func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req mode
 	if req.Description != "" {
 
 		if err := validation.Description(req.Description, service.config); err != nil {
-			return db.Moniest{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateMoniest_InvalidDescription)
+			return db.Moniest{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_CreateMoniest_InvalidDescription)
 		}
 
 		moniestParams.Description = sql.NullString{String: req.Description, Valid: true}
@@ -66,13 +66,13 @@ func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req mode
 	// STEP: check all subscription info is valid [double check before creating invalid moniest]
 	// STEP: fee is valid
 	if err := validation.Fee(req.Fee, service.config); err != nil {
-		return db.Moniest{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateSubscriptionInfo_InvalidFee)
+		return db.Moniest{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_CreateSubscriptionInfo_InvalidFee)
 	}
 
 	// STEP: message is valid
 	if req.Message != "" {
 		if err := validation.SubscriptionMessage(req.Message, service.config); err != nil {
-			return db.Moniest{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage)
+			return db.Moniest{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage)
 		}
 	}
 

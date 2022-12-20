@@ -278,6 +278,75 @@ const docTemplate = `{
                 }
             }
         },
+        "/moniests": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Turn into moniest",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Moniest"
+                ],
+                "summary": "Be Moniest",
+                "parameters": [
+                    {
+                        "description": " ",
+                        "name": "CreateMoniest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateMoniestRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.OwnUser"
+                        }
+                    },
+                    "400": {
+                        "description": "user is already moniest",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "forbidden operation: email is not verified",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "not found user",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/usernames/:username/check": {
             "get": {
                 "description": "Check username is valid of not",
@@ -305,6 +374,61 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/model.CheckUsernameResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid username",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/:username": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "get user info with username",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user by username",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "'email' field will be visible if user request for own account",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    },
+                    "404": {
+                        "description": "not any user with this username",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
                         }
                     },
                     "406": {
@@ -355,6 +479,33 @@ const docTemplate = `{
             "properties": {
                 "validity": {
                     "type": "boolean"
+                }
+            }
+        },
+        "model.CreateMoniestRequest": {
+            "type": "object",
+            "required": [
+                "card_id",
+                "fee"
+            ],
+            "properties": {
+                "bio": {
+                    "description": "optional",
+                    "type": "string"
+                },
+                "card_id": {
+                    "type": "string"
+                },
+                "description": {
+                    "description": "optional",
+                    "type": "string"
+                },
+                "fee": {
+                    "type": "number"
+                },
+                "message": {
+                    "description": "optional",
+                    "type": "string"
                 }
             }
         },
@@ -514,6 +665,50 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.User": {
+            "type": "object",
+            "properties": {
+                "background_photo_link": {
+                    "type": "string"
+                },
+                "background_photo_thumbnail_link": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email_verified": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "moniest": {
+                    "$ref": "#/definitions/model.Moniest"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "profile_photo_link": {
+                    "type": "string"
+                },
+                "profile_photo_thumbnail_link": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

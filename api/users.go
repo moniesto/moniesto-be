@@ -11,6 +11,18 @@ import (
 
 // GetUserByUsername gets user data
 // PRIMARY TODO: update user db requests with moniest db requests (dont have idea why)
+// @Summary Get user by username
+// @Description get user info with username
+// @Security bearerAuth
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param username path int true "username"
+// @Success 200 {object} model.User "'email' field will be visible if user request for own account"
+// @Failure 404 {object} clientError.ErrorResponse "not any user with this username"
+// @Failure 406 {object} clientError.ErrorResponse "invalid username"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /users/:username [get]
 func (server *Server) GetUserByUsername(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")

@@ -10,6 +10,20 @@ import (
 )
 
 // CreateMoniest creates moniest if do
+// @Summary Be Moniest
+// @Description Turn into moniest
+// @Security bearerAuth
+// @Tags Moniest
+// @Accept json
+// @Produce json
+// @Param CreateMoniest body model.CreateMoniestRequest true " "
+// @Success 200 {object} model.OwnUser
+// @Failure 400 {object} clientError.ErrorResponse "user is already moniest"
+// @Failure 403 {object} clientError.ErrorResponse "forbidden operation: email is not verified"
+// @Failure 404 {object} clientError.ErrorResponse "not found user"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests [post]
 func (server *Server) CreateMoniest(ctx *gin.Context) {
 	var req model.CreateMoniestRequest
 
@@ -43,16 +57,6 @@ func (server *Server) CreateMoniest(ctx *gin.Context) {
 		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_CreateMoniest_UnverifiedEmail))
 		return
 	}
-
-	/*
-		TODO:
-			create moniest
-			create subscription info
-			add card payment info
-
-		should be converted to db transaction
-		[one fail, all should fail, done ones should be converted back]
-	*/
 
 	// STEP: create moniest
 	moniest, err := server.service.CreateMoniest(ctx, user_id, req)
