@@ -147,11 +147,11 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: GET /account/usernames/:username/check
 
-:heavy_check_mark: POST /account/password/send_email -> [unauthenticated case] [forget password - send email case]
+:heavy_check_mark: POST /account/password/send_email -> send password reset email
 
-:heavy_check_mark: POST /account/password/verify_token -> [unauthenticated user] [forget password - change password case]
+:heavy_check_mark: POST /account/password/verify_token -> verify token & change password
 
-:heavy_check_mark: PUT /account/password -> [authenticated user] [change password case]
+:heavy_check_mark: PUT /account/password -> change password
 
 - [ ] GET /content/posts?subscribed=<subscribed>&limit=<limit>&offset=<offset>
 
@@ -167,7 +167,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] GET /users/:username/subscribers?limit=<limit>&offset=<offset>
 
-:heavy_check_mark: [need test + latest check] POST /moniests
+:heavy_check_mark: [need test + latest check + update after payment] POST /moniests
 
 - [ ] POST /moniests/posts
 
