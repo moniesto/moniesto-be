@@ -155,21 +155,21 @@ type PasswordResetToken struct {
 
 // Stores crypto posts data
 type PostCrypto struct {
-	ID         string          `json:"id"`
-	MoniestID  string          `json:"moniest_id"`
-	Currency   string          `json:"currency"`
-	StartPrice float64         `json:"start_price"`
-	Duration   time.Time       `json:"duration"`
-	Target1    float64         `json:"target1"`
-	Target2    sql.NullFloat64 `json:"target2"`
-	Target3    sql.NullFloat64 `json:"target3"`
-	Stop       sql.NullFloat64 `json:"stop"`
-	Direction  EntryPosition   `json:"direction"`
-	Score      float64         `json:"score"`
-	Finished   bool            `json:"finished"`
-	Deleted    bool            `json:"deleted"`
-	CreatedAt  time.Time       `json:"created_at"`
-	UpdatedAt  time.Time       `json:"updated_at"`
+	ID         string        `json:"id"`
+	MoniestID  string        `json:"moniest_id"`
+	Currency   string        `json:"currency"`
+	StartPrice float64       `json:"start_price"`
+	Duration   time.Time     `json:"duration"`
+	Target1    float64       `json:"target1"`
+	Target2    float64       `json:"target2"`
+	Target3    float64       `json:"target3"`
+	Stop       float64       `json:"stop"`
+	Direction  EntryPosition `json:"direction"`
+	Score      float64       `json:"score"`
+	Finished   bool          `json:"finished"`
+	Deleted    bool          `json:"deleted"`
+	CreatedAt  time.Time     `json:"created_at"`
+	UpdatedAt  time.Time     `json:"updated_at"`
 }
 
 // Stores crypto post description data

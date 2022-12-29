@@ -105,9 +105,9 @@ Table post_crypto as PC {
   start_price float [not null]
   duration timestamp [not null]
   target1 float [not null]
-  target2 float
-  target3 float
-  stop float
+  target2 float [not null]
+  target3 float [not null]
+  stop float [not null]
   direction entry_position [not null]
   score float [not null, default: 0]
   finished boolean [not null, default: false]

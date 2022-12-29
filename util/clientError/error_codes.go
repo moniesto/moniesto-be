@@ -70,6 +70,8 @@ const (
 
 	User_GetUser_NotFoundUser       = "User_GetUser_NotFoundUser"
 	User_GetUser_ServerErrorGetUser = "User_GetUser_ServerErrorGetUser"
+
+	Post_CreatePost_InvalidBody = "Post_CreatePost_InvalidBody"
 )
 
 var errorMessages errorMessagesType = errorMessagesType{
@@ -140,4 +142,6 @@ var errorMessages errorMessagesType = errorMessagesType{
 
 	User_GetUser_NotFoundUser:       "User not found",
 	User_GetUser_ServerErrorGetUser: "Server error on getting user",
+
+	Post_CreatePost_InvalidBody: "Create post request body is invalid",
 }
