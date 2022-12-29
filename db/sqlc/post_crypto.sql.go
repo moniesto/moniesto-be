@@ -15,8 +15,7 @@ const createPost = `-- name: CreatePost :one
 INSERT INTO "post_crypto" (
         id,
         moniest_id,
-        base_currency,
-        quote_currency,
+        currency,
         start_price,
         duration,
         target1,
@@ -40,34 +39,31 @@ VALUES (
         $9,
         $10,
         $11,
-        $12,
         now(),
         now()
     )
-RETURNING id, moniest_id, base_currency, quote_currency, start_price, duration, target1, target2, target3, stop, direction, score, finished, deleted, created_at, updated_at
+RETURNING id, moniest_id, currency, start_price, duration, target1, target2, target3, stop, direction, score, finished, deleted, created_at, updated_at
 `
 
 type CreatePostParams struct {
-	ID            string          `json:"id"`
-	MoniestID     string          `json:"moniest_id"`
-	BaseCurrency  string          `json:"base_currency"`
-	QuoteCurrency string          `json:"quote_currency"`
-	StartPrice    float64         `json:"start_price"`
-	Duration      time.Time       `json:"duration"`
-	Target1       float64         `json:"target1"`
-	Target2       sql.NullFloat64 `json:"target2"`
-	Target3       sql.NullFloat64 `json:"target3"`
-	Stop          sql.NullFloat64 `json:"stop"`
-	Direction     EntryPosition   `json:"direction"`
-	Score         float64         `json:"score"`
+	ID         string          `json:"id"`
+	MoniestID  string          `json:"moniest_id"`
+	Currency   string          `json:"currency"`
+	StartPrice float64         `json:"start_price"`
+	Duration   time.Time       `json:"duration"`
+	Target1    float64         `json:"target1"`
+	Target2    sql.NullFloat64 `json:"target2"`
+	Target3    sql.NullFloat64 `json:"target3"`
+	Stop       sql.NullFloat64 `json:"stop"`
+	Direction  EntryPosition   `json:"direction"`
+	Score      float64         `json:"score"`
 }
 
 func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (PostCrypto, error) {
 	row := q.db.QueryRowContext(ctx, createPost,
 		arg.ID,
 		arg.MoniestID,
-		arg.BaseCurrency,
-		arg.QuoteCurrency,
+		arg.Currency,
 		arg.StartPrice,
 		arg.Duration,
 		arg.Target1,
@@ -81,8 +77,7 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (PostCry
 	err := row.Scan(
 		&i.ID,
 		&i.MoniestID,
-		&i.BaseCurrency,
-		&i.QuoteCurrency,
+		&i.Currency,
 		&i.StartPrice,
 		&i.Duration,
 		&i.Target1,
@@ -97,256 +92,4 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (PostCry
 		&i.UpdatedAt,
 	)
 	return i, err
-}
-
-const deletePost = `-- name: DeletePost :one
-UPDATE "post_crypto"
-SET "deleted" = true,
-    "updated_at" = now()
-WHERE "id" = $1
-RETURNING id, moniest_id, base_currency, quote_currency, start_price, duration, target1, target2, target3, stop, direction, score, finished, deleted, created_at, updated_at
-`
-
-func (q *Queries) DeletePost(ctx context.Context, id string) (PostCrypto, error) {
-	row := q.db.QueryRowContext(ctx, deletePost, id)
-	var i PostCrypto
-	err := row.Scan(
-		&i.ID,
-		&i.MoniestID,
-		&i.BaseCurrency,
-		&i.QuoteCurrency,
-		&i.StartPrice,
-		&i.Duration,
-		&i.Target1,
-		&i.Target2,
-		&i.Target3,
-		&i.Stop,
-		&i.Direction,
-		&i.Score,
-		&i.Finished,
-		&i.Deleted,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const getActivePostsByUsername = `-- name: GetActivePostsByUsername :many
-SELECT post_crypto.id, post_crypto.moniest_id, post_crypto.base_currency, post_crypto.quote_currency, post_crypto.start_price, post_crypto.duration, post_crypto.target1, post_crypto.target2, post_crypto.target3, post_crypto.stop, post_crypto.direction, post_crypto.score, post_crypto.finished, post_crypto.deleted, post_crypto.created_at, post_crypto.updated_at.*,
-    "post_crypto_description"."description"
-FROM "post_crypto"
-    INNER JOIN "moniest" ON "moniest"."id" = "post_crypto"."moniest_id"
-    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
-    INNER JOIN "post_crypto_description" ON "post_crypto_description"."post_id" = "post_crypto"."id"
-WHERE "user"."username" = $1
-    AND "user"."deleted" = false
-    AND duration > now()
-`
-
-type GetActivePostsByUsernameRow struct {
-	ID            string          `json:"id"`
-	MoniestID     string          `json:"moniest_id"`
-	BaseCurrency  string          `json:"base_currency"`
-	QuoteCurrency string          `json:"quote_currency"`
-	StartPrice    float64         `json:"start_price"`
-	Duration      time.Time       `json:"duration"`
-	Target1       float64         `json:"target1"`
-	Target2       sql.NullFloat64 `json:"target2"`
-	Target3       sql.NullFloat64 `json:"target3"`
-	Stop          sql.NullFloat64 `json:"stop"`
-	Direction     EntryPosition   `json:"direction"`
-	Score         float64         `json:"score"`
-	Finished      bool            `json:"finished"`
-	Deleted       bool            `json:"deleted"`
-	CreatedAt     time.Time       `json:"created_at"`
-	UpdatedAt     time.Time       `json:"updated_at"`
-	Description   string          `json:"description"`
-}
-
-// TODO:
-// Get moniests live posts, ended posts, all posts by username
-func (q *Queries) GetActivePostsByUsername(ctx context.Context, username string) ([]GetActivePostsByUsernameRow, error) {
-	rows, err := q.db.QueryContext(ctx, getActivePostsByUsername, username)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []GetActivePostsByUsernameRow{}
-	for rows.Next() {
-		var i GetActivePostsByUsernameRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.MoniestID,
-			&i.BaseCurrency,
-			&i.QuoteCurrency,
-			&i.StartPrice,
-			&i.Duration,
-			&i.Target1,
-			&i.Target2,
-			&i.Target3,
-			&i.Stop,
-			&i.Direction,
-			&i.Score,
-			&i.Finished,
-			&i.Deleted,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-			&i.Description,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAllPostsByUsername = `-- name: GetAllPostsByUsername :many
-SELECT post_crypto.id, post_crypto.moniest_id, post_crypto.base_currency, post_crypto.quote_currency, post_crypto.start_price, post_crypto.duration, post_crypto.target1, post_crypto.target2, post_crypto.target3, post_crypto.stop, post_crypto.direction, post_crypto.score, post_crypto.finished, post_crypto.deleted, post_crypto.created_at, post_crypto.updated_at.*,
-    "post_crypto_description"."description"
-FROM "post_crypto"
-    INNER JOIN "moniest" ON "moniest"."id" = "post_crypto"."moniest_id"
-    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
-    INNER JOIN "post_crypto_description" ON "post_crypto_description"."post_id" = "post_crypto"."id"
-WHERE "user"."username" = $1
-    AND "user"."deleted" = false
-`
-
-type GetAllPostsByUsernameRow struct {
-	ID            string          `json:"id"`
-	MoniestID     string          `json:"moniest_id"`
-	BaseCurrency  string          `json:"base_currency"`
-	QuoteCurrency string          `json:"quote_currency"`
-	StartPrice    float64         `json:"start_price"`
-	Duration      time.Time       `json:"duration"`
-	Target1       float64         `json:"target1"`
-	Target2       sql.NullFloat64 `json:"target2"`
-	Target3       sql.NullFloat64 `json:"target3"`
-	Stop          sql.NullFloat64 `json:"stop"`
-	Direction     EntryPosition   `json:"direction"`
-	Score         float64         `json:"score"`
-	Finished      bool            `json:"finished"`
-	Deleted       bool            `json:"deleted"`
-	CreatedAt     time.Time       `json:"created_at"`
-	UpdatedAt     time.Time       `json:"updated_at"`
-	Description   string          `json:"description"`
-}
-
-func (q *Queries) GetAllPostsByUsername(ctx context.Context, username string) ([]GetAllPostsByUsernameRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAllPostsByUsername, username)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []GetAllPostsByUsernameRow{}
-	for rows.Next() {
-		var i GetAllPostsByUsernameRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.MoniestID,
-			&i.BaseCurrency,
-			&i.QuoteCurrency,
-			&i.StartPrice,
-			&i.Duration,
-			&i.Target1,
-			&i.Target2,
-			&i.Target3,
-			&i.Stop,
-			&i.Direction,
-			&i.Score,
-			&i.Finished,
-			&i.Deleted,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-			&i.Description,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getInactivePostsByUsername = `-- name: GetInactivePostsByUsername :many
-SELECT post_crypto.id, post_crypto.moniest_id, post_crypto.base_currency, post_crypto.quote_currency, post_crypto.start_price, post_crypto.duration, post_crypto.target1, post_crypto.target2, post_crypto.target3, post_crypto.stop, post_crypto.direction, post_crypto.score, post_crypto.finished, post_crypto.deleted, post_crypto.created_at, post_crypto.updated_at.*,
-    "post_crypto_description"."description"
-FROM "post_crypto"
-    INNER JOIN "moniest" ON "moniest"."id" = "post_crypto"."moniest_id"
-    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
-    INNER JOIN "post_crypto_description" ON "post_crypto_description"."post_id" = "post_crypto"."id"
-WHERE "user"."username" = $1
-    AND "user"."deleted" = false
-    AND duration < now()
-`
-
-type GetInactivePostsByUsernameRow struct {
-	ID            string          `json:"id"`
-	MoniestID     string          `json:"moniest_id"`
-	BaseCurrency  string          `json:"base_currency"`
-	QuoteCurrency string          `json:"quote_currency"`
-	StartPrice    float64         `json:"start_price"`
-	Duration      time.Time       `json:"duration"`
-	Target1       float64         `json:"target1"`
-	Target2       sql.NullFloat64 `json:"target2"`
-	Target3       sql.NullFloat64 `json:"target3"`
-	Stop          sql.NullFloat64 `json:"stop"`
-	Direction     EntryPosition   `json:"direction"`
-	Score         float64         `json:"score"`
-	Finished      bool            `json:"finished"`
-	Deleted       bool            `json:"deleted"`
-	CreatedAt     time.Time       `json:"created_at"`
-	UpdatedAt     time.Time       `json:"updated_at"`
-	Description   string          `json:"description"`
-}
-
-func (q *Queries) GetInactivePostsByUsername(ctx context.Context, username string) ([]GetInactivePostsByUsernameRow, error) {
-	rows, err := q.db.QueryContext(ctx, getInactivePostsByUsername, username)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []GetInactivePostsByUsernameRow{}
-	for rows.Next() {
-		var i GetInactivePostsByUsernameRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.MoniestID,
-			&i.BaseCurrency,
-			&i.QuoteCurrency,
-			&i.StartPrice,
-			&i.Duration,
-			&i.Target1,
-			&i.Target2,
-			&i.Target3,
-			&i.Stop,
-			&i.Direction,
-			&i.Score,
-			&i.Finished,
-			&i.Deleted,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-			&i.Description,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }

@@ -101,8 +101,7 @@ Table user_subscription as US {
 Table post_crypto as PC {
   id varchar [not null, pk, unique]
   moniest_id varchar [not null]
-  base_currency varchar [not null]
-  quote_currency varchar [not null]
+  currency varchar [not null]
   start_price float [not null]
   duration timestamp [not null]
   target1 float [not null]

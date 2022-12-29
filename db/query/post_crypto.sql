@@ -1,37 +1,35 @@
--- -- name: CreatePost :one
--- INSERT INTO "post_crypto" (
---         id,
---         moniest_id,
---         base_currency,
---         quote_currency,
---         start_price,
---         duration,
---         target1,
---         target2,
---         target3,
---         stop,
---         direction,
---         score,
---         created_at,
---         updated_at
---     )
--- VALUES (
---         $1,
---         $2,
---         $3,
---         $4,
---         $5,
---         $6,
---         $7,
---         $8,
---         $9,
---         $10,
---         $11,
---         $12,
---         now(),
---         now()
---     )
--- RETURNING *;
+-- name: CreatePost :one
+INSERT INTO "post_crypto" (
+        id,
+        moniest_id,
+        currency,
+        start_price,
+        duration,
+        target1,
+        target2,
+        target3,
+        stop,
+        direction,
+        score,
+        created_at,
+        updated_at
+    )
+VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6,
+        $7,
+        $8,
+        $9,
+        $10,
+        $11,
+        now(),
+        now()
+    )
+RETURNING *;
 
 -- -- name: DeletePost :one
 -- UPDATE "post_crypto"
@@ -39,7 +37,6 @@
 --     "updated_at" = now()
 -- WHERE "id" = $1
 -- RETURNING *;
-
 -- -- TODO:
 -- -- Get moniests live posts, ended posts, all posts by username
 -- -- name: GetActivePostsByUsername :many
@@ -52,7 +49,6 @@
 -- WHERE "user"."username" = $1
 --     AND "user"."deleted" = false
 --     AND duration > now();
-
 -- -- name: GetInactivePostsByUsername :many
 -- SELECT "post_crypto".*,
 --     "post_crypto_description"."description"
@@ -63,7 +59,6 @@
 -- WHERE "user"."username" = $1
 --     AND "user"."deleted" = false
 --     AND duration < now();
-
 -- -- name: GetAllPostsByUsername :many
 -- SELECT "post_crypto".*,
 --     "post_crypto_description"."description"

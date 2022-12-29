@@ -61,8 +61,7 @@ CREATE TABLE "user_subscription" (
 CREATE TABLE "post_crypto" (
   "id" varchar UNIQUE PRIMARY KEY NOT NULL,
   "moniest_id" varchar NOT NULL,
-  "base_currency" varchar NOT NULL,
-  "quote_currency" varchar NOT NULL,
+  "currency" varchar NOT NULL,
   "start_price" float NOT NULL,
   "duration" timestamp NOT NULL,
   "target1" float NOT NULL,
