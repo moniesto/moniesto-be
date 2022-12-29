@@ -10,8 +10,6 @@ import (
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-
-	"github.com/gin-contrib/cors"
 )
 
 // Server serves HTTP requests
@@ -42,8 +40,7 @@ func NewServer(config config.Config, service *service.Service) (*Server, error) 
 func (server *Server) setupRouter() {
 	router := gin.Default()
 
-	// initialize CORS
-	router = initializeCORS(router)
+	router.Use(CORSMiddleware())
 
 	// Account routes
 	accountRouters := router.Group("/account")
@@ -86,12 +83,21 @@ func (server *Server) Start(address string) error {
 	return server.router.Run(address)
 }
 
-// initializeCORS, allow all origins for the initial state
+// CORSMiddleware, allow all origins for the initial state
 // FUTURE TODO: make origin specific
-func initializeCORS(router *gin.Engine) *gin.Engine {
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	router.Use(cors.Default())
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Credentials", "true")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH, OPTIONS, GET, PUT")
 
-	return router
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
 
+		c.Next()
+	}
 }
