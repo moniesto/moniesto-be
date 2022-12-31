@@ -10,6 +10,5 @@ type CreatePostRequest struct {
 	Target3     float64   `json:"target3" binding:"required"`
 	Stop        float64   `json:"stop" binding:"required"`
 	Direction   string    `json:"direction" binding:"required"`
-	Score       float64   `json:"score" binding:"required"`
 	Description string    `json:"description"`
 }
