@@ -72,6 +72,12 @@ func (server *Server) setupRouter() {
 		usersRouters.GET("/:username", server.GetUserByUsername)
 	}
 
+	// Crypto routes
+	cryptoRouters := router.Group("/crypto").Use(authMiddleware(server.tokenMaker))
+	{
+		cryptoRouters.GET("/currencies", server.GetCurrencies)
+	}
+
 	// Swagger docs
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

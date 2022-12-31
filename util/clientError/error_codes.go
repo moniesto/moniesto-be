@@ -72,6 +72,9 @@ const (
 	User_GetUser_ServerErrorGetUser = "User_GetUser_ServerErrorGetUser"
 
 	Post_CreatePost_InvalidBody = "Post_CreatePost_InvalidBody"
+
+	Crypto_GetCurrencies_InvalidParam       = "Crypto_GetCurrencies_InvalidParam"
+	Crypto_GetCurrenciesFromAPI_ServerError = "Crypto_GetCurrenciesFromAPI_ServerError"
 )
 
 var errorMessages errorMessagesType = errorMessagesType{
@@ -144,4 +147,7 @@ var errorMessages errorMessagesType = errorMessagesType{
 	User_GetUser_ServerErrorGetUser: "Server error on getting user",
 
 	Post_CreatePost_InvalidBody: "Create post request body is invalid",
+
+	Crypto_GetCurrencies_InvalidParam:       "Get Currencies request params is invalid",
+	Crypto_GetCurrenciesFromAPI_ServerError: "Server error on getting currencies from API",
 }
