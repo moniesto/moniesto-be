@@ -278,6 +278,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/crypto/currencies": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Search crypto currencies by name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Crypto"
+                ],
+                "summary": "Crypto Currency Search",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Currency"
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "invalid name",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error \u0026 crypto api error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/moniests": {
             "post": {
                 "security": [
@@ -359,10 +411,10 @@ const docTemplate = `{
                 "tags": [
                     "Account"
                 ],
-                "summary": "Check username",
+                "summary": "Check Username",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "username",
                         "name": "username",
                         "in": "path",
@@ -408,7 +460,7 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "Get user by username",
+                "summary": "Get User by Username",
                 "parameters": [
                     {
                         "type": "integer",
@@ -505,6 +557,17 @@ const docTemplate = `{
                 },
                 "message": {
                     "description": "optional",
+                    "type": "string"
+                }
+            }
+        },
+        "model.Currency": {
+            "type": "object",
+            "properties": {
+                "currency": {
+                    "type": "string"
+                },
+                "price": {
                     "type": "string"
                 }
             }

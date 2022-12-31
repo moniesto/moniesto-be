@@ -40,6 +40,13 @@ definitions:
     - card_id
     - fee
     type: object
+  model.Currency:
+    properties:
+      currency:
+        type: string
+      price:
+        type: string
+    type: object
   model.LoginRequest:
     properties:
       identifier:
@@ -359,6 +366,39 @@ paths:
       summary: Register
       tags:
       - Auth
+  /crypto/currencies:
+    get:
+      consumes:
+      - application/json
+      description: Search crypto currencies by name
+      parameters:
+      - description: name
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Currency'
+            type: array
+        "406":
+          description: invalid name
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error & crypto api error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Crypto Currency Search
+      tags:
+      - Crypto
   /moniests:
     post:
       consumes:
@@ -413,7 +453,7 @@ paths:
         in: path
         name: username
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -429,7 +469,7 @@ paths:
           description: server error
           schema:
             $ref: '#/definitions/clientError.ErrorResponse'
-      summary: Check username
+      summary: Check Username
       tags:
       - Account
   /users/:username:
@@ -464,7 +504,7 @@ paths:
             $ref: '#/definitions/clientError.ErrorResponse'
       security:
       - bearerAuth: []
-      summary: Get user by username
+      summary: Get User by Username
       tags:
       - User
 securityDefinitions:

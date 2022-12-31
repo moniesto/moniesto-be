@@ -177,6 +177,6 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] POST /moniests/:username/subscriptions
 
-- [ ] GET /currencies?name=BTC
+:heavy_check_mark: [need test] GET /currencies?name=BTC
 
 - [ ] ...

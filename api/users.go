@@ -11,7 +11,7 @@ import (
 
 // GetUserByUsername gets user data
 // PRIMARY TODO: update user db requests with moniest db requests (dont have idea why)
-// @Summary Get user by username
+// @Summary Get User by Username
 // @Description get user info with username
 // @Security bearerAuth
 // @Tags User

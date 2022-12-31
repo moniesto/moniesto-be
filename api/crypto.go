@@ -8,6 +8,17 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
+// @Summary Crypto Currency Search
+// @Description Search crypto currencies by name
+// @Security bearerAuth
+// @Tags Crypto
+// @Accept json
+// @Produce json
+// @Param name query string true "name"
+// @Success 200 {object} []model.Currency
+// @Failure 406 {object} clientError.ErrorResponse "invalid name"
+// @Failure 500 {object} clientError.ErrorResponse "server error & crypto api error"
+// @Router /crypto/currencies [get]
 func (server *Server) GetCurrencies(ctx *gin.Context) {
 	var req model.GetCurrenciesRequest
 

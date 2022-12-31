@@ -102,12 +102,12 @@ func (server *Server) registerUser(ctx *gin.Context) {
 	server.loginUser(ctx)
 }
 
-// @Summary Check username
+// @Summary Check Username
 // @Description Check username is valid of not
 // @Tags Account
 // @Accept json
 // @Produce json
-// @Param username path int true "username"
+// @Param username path string true "username"
 // @Success 200 {object} model.CheckUsernameResponse
 // @Failure 406 {object} clientError.ErrorResponse "invalid username"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
