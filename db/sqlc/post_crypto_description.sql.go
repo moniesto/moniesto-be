@@ -11,15 +11,13 @@ import (
 
 const addPostDescription = `-- name: AddPostDescription :one
 INSERT INTO "post_crypto_description" (
-    id,
-    post_id,
-    description,
-    created_at,
-    updated_at
-)
-VALUES (
-    $1, $2, $3, now(), now()
-)
+        id,
+        post_id,
+        description,
+        created_at,
+        updated_at
+    )
+VALUES ($1, $2, $3, now(), now())
 RETURNING id, post_id, description, created_at, updated_at
 `
 
@@ -31,32 +29,6 @@ type AddPostDescriptionParams struct {
 
 func (q *Queries) AddPostDescription(ctx context.Context, arg AddPostDescriptionParams) (PostCryptoDescription, error) {
 	row := q.db.QueryRowContext(ctx, addPostDescription, arg.ID, arg.PostID, arg.Description)
-	var i PostCryptoDescription
-	err := row.Scan(
-		&i.ID,
-		&i.PostID,
-		&i.Description,
-		&i.CreatedAt,
-		&i.UpdatedAt,
-	)
-	return i, err
-}
-
-const updateDescription = `-- name: UpdateDescription :one
-UPDATE "post_crypto_description" 
-SET "description" = $2,
-    "updated_at" = now()
-WHERE post_id = $1
-RETURNING id, post_id, description, created_at, updated_at
-`
-
-type UpdateDescriptionParams struct {
-	PostID      string `json:"post_id"`
-	Description string `json:"description"`
-}
-
-func (q *Queries) UpdateDescription(ctx context.Context, arg UpdateDescriptionParams) (PostCryptoDescription, error) {
-	row := q.db.QueryRowContext(ctx, updateDescription, arg.PostID, arg.Description)
 	var i PostCryptoDescription
 	err := row.Scan(
 		&i.ID,

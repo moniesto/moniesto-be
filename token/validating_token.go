@@ -2,7 +2,6 @@ package token
 
 import (
 	"github.com/moniesto/moniesto-be/core"
-	"github.com/moniesto/moniesto-be/util"
 )
 
 func CreateValidatingToken() string {
@@ -12,13 +11,13 @@ func CreateValidatingToken() string {
 }
 
 func EncodeValidatingToken(token string) string {
-	encodedToken := util.Encode(token)
+	encodedToken := core.Encode(token)
 
 	return encodedToken
 }
 
 func GetValidatingToken(encoded_string string) (string, error) {
-	decodedToken, err := util.Decode(encoded_string)
+	decodedToken, err := core.Decode(encoded_string)
 	if err != nil {
 		return "", err
 	}

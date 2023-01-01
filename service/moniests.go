@@ -12,7 +12,7 @@ import (
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
-func (service *Service) UserIsMoniest(ctx *gin.Context, user_id string) (bool, error) {
+func (service *Service) UserIsMoniest(ctx *gin.Context, user_id string) (bool, db.GetMoniestByUserIdRow, error) {
 
 	// STEP: get moniest by user id
 	moniest, err := service.Store.GetMoniestByUserId(ctx, user_id)
@@ -20,19 +20,19 @@ func (service *Service) UserIsMoniest(ctx *gin.Context, user_id string) (bool, e
 
 		// STEP: no moniest with this user id
 		if err == sql.ErrNoRows {
-			return false, nil
+			return false, db.GetMoniestByUserIdRow{}, nil
 		}
 
 		// TODO: add server error
-		return false, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_CreateMoniest_ServerErrorUserIsMoniest)
+		return false, db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_CreateMoniest_ServerErrorUserIsMoniest)
 	}
 
 	// STEP: double check for moniest id is empty or not
 	if moniest.MoniestID == "" && moniest.ID == "" {
-		return false, nil
+		return false, db.GetMoniestByUserIdRow{}, nil
 	}
 
-	return true, nil
+	return true, moniest, nil
 }
 
 func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req model.CreateMoniestRequest) (db.Moniest, error) {

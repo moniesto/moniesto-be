@@ -1,4 +1,4 @@
-package util
+package core
 
 import (
 	b64 "encoding/base64"

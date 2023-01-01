@@ -410,7 +410,7 @@ func getVerifyTokenChangePasswordCases() ChangePasswordCases {
 			},
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
 			body: model.VerifyPasswordResetRequest{
-				Token:       util.Encode(passwordResetTokens[0]),
+				Token:       core.Encode(passwordResetTokens[0]),
 				NewPassword: util.RandomPassword(),
 			},
 			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
@@ -435,7 +435,7 @@ func getVerifyTokenChangePasswordCases() ChangePasswordCases {
 			},
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
 			body: model.VerifyPasswordResetRequest{
-				Token:       util.Encode(passwordResetTokens[1]),
+				Token:       core.Encode(passwordResetTokens[1]),
 				NewPassword: "",
 			},
 			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {
@@ -460,7 +460,7 @@ func getVerifyTokenChangePasswordCases() ChangePasswordCases {
 			},
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {},
 			body: model.VerifyPasswordResetRequest{
-				Token:       util.Encode(passwordResetTokens[2]),
+				Token:       core.Encode(passwordResetTokens[2]),
 				NewPassword: "newpassword",
 			},
 			check: func(t *testing.T, ctx *gin.Context, service *service.Service, recorder *httptest.ResponseRecorder) {

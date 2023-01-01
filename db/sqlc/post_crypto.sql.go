@@ -41,7 +41,19 @@ VALUES (
         now(),
         now()
     )
-RETURNING id, moniest_id, currency, start_price, duration, target1, target2, target3, stop, direction, score, finished, deleted, created_at, updated_at
+RETURNING id,
+    moniest_id,
+    currency,
+    start_price,
+    duration,
+    target1,
+    target2,
+    target3,
+    stop,
+    direction,
+    score,
+    created_at,
+    updated_at
 `
 
 type CreatePostParams struct {
@@ -58,7 +70,23 @@ type CreatePostParams struct {
 	Score      float64       `json:"score"`
 }
 
-func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (PostCrypto, error) {
+type CreatePostRow struct {
+	ID         string        `json:"id"`
+	MoniestID  string        `json:"moniest_id"`
+	Currency   string        `json:"currency"`
+	StartPrice float64       `json:"start_price"`
+	Duration   time.Time     `json:"duration"`
+	Target1    float64       `json:"target1"`
+	Target2    float64       `json:"target2"`
+	Target3    float64       `json:"target3"`
+	Stop       float64       `json:"stop"`
+	Direction  EntryPosition `json:"direction"`
+	Score      float64       `json:"score"`
+	CreatedAt  time.Time     `json:"created_at"`
+	UpdatedAt  time.Time     `json:"updated_at"`
+}
+
+func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (CreatePostRow, error) {
 	row := q.db.QueryRowContext(ctx, createPost,
 		arg.ID,
 		arg.MoniestID,
@@ -72,7 +100,7 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (PostCry
 		arg.Direction,
 		arg.Score,
 	)
-	var i PostCrypto
+	var i CreatePostRow
 	err := row.Scan(
 		&i.ID,
 		&i.MoniestID,
@@ -85,8 +113,6 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (PostCry
 		&i.Stop,
 		&i.Direction,
 		&i.Score,
-		&i.Finished,
-		&i.Deleted,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

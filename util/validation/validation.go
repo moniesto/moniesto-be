@@ -7,6 +7,7 @@ import (
 	"net/mail"
 
 	"github.com/moniesto/moniesto-be/config"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util"
 )
 
@@ -70,6 +71,46 @@ func Description(description string, config config.Config) error {
 func SubscriptionMessage(message string, config config.Config) error {
 	if len(message) > config.MaxSubscriptionMessageLength {
 		return fmt.Errorf("message is not valid %s", message)
+	}
+
+	return nil
+}
+
+// Target checks targets are valid [price < target1 < target2 < target3]
+func Target(price, target1, target2, target3 float64, direction db.EntryPosition) error {
+	target_error_message := "targets are not valid"
+	direction_error_message := "direction is not valid"
+
+	if direction == db.EntryPositionLong {
+		if !(price < target1) || !(target1 < target2) || !(target2 < target3) {
+			return fmt.Errorf(target_error_message)
+		}
+	} else if direction == db.EntryPositionShort {
+		if !(target3 < target2) || !(target2 < target1) || !(target1 < price) {
+			return fmt.Errorf(target_error_message)
+		}
+	} else {
+		return fmt.Errorf(direction_error_message)
+	}
+
+	return nil
+}
+
+// Stop checks stop is valid [stop < price]
+func Stop(price, stop float64, direction db.EntryPosition) error {
+	error_message := "stop is not valid"
+	direction_error_message := "direction is not valid"
+
+	if direction == db.EntryPositionLong {
+		if !(stop < price) {
+			return fmt.Errorf(error_message)
+		}
+	} else if direction == db.EntryPositionShort {
+		if !(stop > price) {
+			return fmt.Errorf(error_message)
+		}
+	} else {
+		return fmt.Errorf(direction_error_message)
 	}
 
 	return nil

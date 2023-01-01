@@ -37,7 +37,7 @@ func (server *Server) CreateMoniest(ctx *gin.Context) {
 	user_id := authPayload.User.ID
 
 	// STEP: check user is already moniest or not
-	userIsMoniest, err := server.service.UserIsMoniest(ctx, user_id)
+	userIsMoniest, _, err := server.service.UserIsMoniest(ctx, user_id)
 	if err != nil {
 		ctx.JSON(clientError.ParseError(err))
 		return

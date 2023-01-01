@@ -29,7 +29,19 @@ VALUES (
         now(),
         now()
     )
-RETURNING *;
+RETURNING id,
+    moniest_id,
+    currency,
+    start_price,
+    duration,
+    target1,
+    target2,
+    target3,
+    stop,
+    direction,
+    score,
+    created_at,
+    updated_at;
 
 -- -- name: DeletePost :one
 -- UPDATE "post_crypto"

@@ -3,6 +3,8 @@ package clientError
 type errorMessagesType map[string]string
 
 const (
+	UserNotMoniest = "UserNotMoniest"
+
 	Account_Authorization_NotProvidedHeader = "Account_Authorization_NotProvidedHeader"
 	Account_Authorization_InvalidHeader     = "Account_Authorization_InvalidHeader"
 	Account_Authorization_UnsupportedType   = "Account_Authorization_UnsupportedType"
@@ -71,14 +73,22 @@ const (
 	User_GetUser_NotFoundUser       = "User_GetUser_NotFoundUser"
 	User_GetUser_ServerErrorGetUser = "User_GetUser_ServerErrorGetUser"
 
-	Post_CreatePost_InvalidBody     = "Post_CreatePost_InvalidBody"
-	Post_CreatePost_InvalidCurrency = "Post_CreatePost_InvalidCurrency"
+	Post_CreatePost_InvalidBody                  = "Post_CreatePost_InvalidBody"
+	Post_CreatePost_InvalidCurrency              = "Post_CreatePost_InvalidCurrency"
+	Post_CreatePost_InvalidDuration              = "Post_CreatePost_InvalidDuration"
+	Post_CreatePost_InvalidCurrencyPrice         = "Post_CreatePost_InvalidCurrencyPrice"
+	Post_CreatePost_InvalidTargets               = "Post_CreatePost_InvalidTargets"
+	Post_CreatePost_InvalidStop                  = "Post_CreatePost_InvalidStop"
+	Post_CreatePost_ServerErrorCreatePost        = "Post_CreatePost_ServerErrorCreatePost"
+	Post_CreatePost_ServerErrorCreateDescription = "Post_CreatePost_ServerErrorCreateDescription"
 
 	Crypto_GetCurrencies_InvalidParam       = "Crypto_GetCurrencies_InvalidParam"
 	Crypto_GetCurrenciesFromAPI_ServerError = "Crypto_GetCurrenciesFromAPI_ServerError"
 )
 
 var errorMessages errorMessagesType = errorMessagesType{
+	UserNotMoniest: "User is not moniest",
+
 	Account_Authorization_NotProvidedHeader: "Authorization Header is not provided",
 	Account_Authorization_InvalidHeader:     "Authorization Header is invalid",
 	Account_Authorization_UnsupportedType:   "Authorization Type is not supported",
@@ -147,8 +157,14 @@ var errorMessages errorMessagesType = errorMessagesType{
 	User_GetUser_NotFoundUser:       "User not found",
 	User_GetUser_ServerErrorGetUser: "Server error on getting user",
 
-	Post_CreatePost_InvalidBody:     "Create post request body is invalid",
-	Post_CreatePost_InvalidCurrency: "Currency is invalid",
+	Post_CreatePost_InvalidBody:                  "Create post request body is invalid",
+	Post_CreatePost_InvalidCurrency:              "Currency is invalid",
+	Post_CreatePost_InvalidDuration:              "Duration is invalid",
+	Post_CreatePost_InvalidCurrencyPrice:         "Currency price is invalid",
+	Post_CreatePost_InvalidTargets:               "Targets are invalid",
+	Post_CreatePost_InvalidStop:                  "Stop is invalid",
+	Post_CreatePost_ServerErrorCreatePost:        "Server error on creating post",
+	Post_CreatePost_ServerErrorCreateDescription: "Server error on creating description",
 
 	Crypto_GetCurrencies_InvalidParam:       "Get Currencies request params is invalid",
 	Crypto_GetCurrenciesFromAPI_ServerError: "Server error on getting currencies from API",
