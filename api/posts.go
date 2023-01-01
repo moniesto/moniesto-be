@@ -10,6 +10,18 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
+// @Summary Create Post
+// @Description Create Crypto Post
+// @Security bearerAuth
+// @Tags Post
+// @Accept json
+// @Produce json
+// @Param CreatePostBody body model.CreatePostRequest true "`description` is optional"
+// @Success 200 {object} model.CreatePostResponse
+// @Failure 400 {object} clientError.ErrorResponse "user is not moniest"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/posts [post]
 func (server *Server) CreatePost(ctx *gin.Context) {
 	var req model.CreatePostRequest
 

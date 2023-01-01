@@ -68,7 +68,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 // @Tags Auth
 // @Accept json
 // @Produce json
-// @Param "Register body" body model.RegisterRequest true " "
+// @Param RegisterBody body model.RegisterRequest true " "
 // @Success 200 {object} model.RegisterResponse
 // @Failure 403 {object} clientError.ErrorResponse "wrong password"
 // @Failure 406 {object} clientError.ErrorResponse "invalid body & data"

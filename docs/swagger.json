@@ -230,7 +230,7 @@
                 "parameters": [
                     {
                         "description": " ",
-                        "name": "body\"",
+                        "name": "RegisterBody",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -339,7 +339,7 @@
                 "parameters": [
                     {
                         "description": " ",
-                        "name": "CreateMoniest",
+                        "name": "CreateMoniestBody",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -368,6 +368,63 @@
                     },
                     "404": {
                         "description": "not found user",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/moniests/posts": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Create Crypto Post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Create Post",
+                "parameters": [
+                    {
+                        "description": "`description` is optional",
+                        "name": "CreatePostBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreatePostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.CreatePostResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "user is not moniest",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorResponse"
                         }
@@ -499,6 +556,17 @@
                 }
             }
         },
+        "db.EntryPosition": {
+            "type": "string",
+            "enum": [
+                "long",
+                "short"
+            ],
+            "x-enum-varnames": [
+                "EntryPositionLong",
+                "EntryPositionShort"
+            ]
+        },
         "model.ChangePasswordRequest": {
             "type": "object",
             "required": [
@@ -545,6 +613,91 @@
                 },
                 "message": {
                     "description": "optional",
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreatePostRequest": {
+            "type": "object",
+            "required": [
+                "currency",
+                "direction",
+                "duration",
+                "stop",
+                "target1",
+                "target2",
+                "target3"
+            ],
+            "properties": {
+                "currency": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "direction": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "stop": {
+                    "type": "number"
+                },
+                "target1": {
+                    "type": "number"
+                },
+                "target2": {
+                    "type": "number"
+                },
+                "target3": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.CreatePostResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "direction": {
+                    "$ref": "#/definitions/db.EntryPosition"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "moniest_id": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "number"
+                },
+                "start_price": {
+                    "type": "number"
+                },
+                "stop": {
+                    "type": "number"
+                },
+                "target1": {
+                    "type": "number"
+                },
+                "target2": {
+                    "type": "number"
+                },
+                "target3": {
+                    "type": "number"
+                },
+                "updated_at": {
                     "type": "string"
                 }
             }

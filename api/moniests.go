@@ -16,7 +16,7 @@ import (
 // @Tags Moniest
 // @Accept json
 // @Produce json
-// @Param CreateMoniest body model.CreateMoniestRequest true " "
+// @Param CreateMoniestBody body model.CreateMoniestRequest true " "
 // @Success 200 {object} model.OwnUser
 // @Failure 400 {object} clientError.ErrorResponse "user is already moniest"
 // @Failure 403 {object} clientError.ErrorResponse "forbidden operation: email is not verified"

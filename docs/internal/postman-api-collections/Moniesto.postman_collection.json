@@ -45,7 +45,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"name\": \"Test\",\r\n \"surname\": \"Test 1\",\r\n \"username\": \"testtest\",\r\n \"email\": \"test@gmail.com\",\r\n \"password\": \"testtest\"\r\n}",
+							"raw": "{\r\n \"name\": \"test\",\r\n \"surname\": \"test\",\r\n \"username\": \"test\",\r\n \"email\": \"test@gmail.com\",\r\n \"password\": \"testtest\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -90,9 +90,33 @@
 					"response": []
 				},
 				{
-					"name": "[local] Change Password  [send email]",
+					"name": "[local] Update Profile",
 					"request": {
-						"method": "PUT",
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Password: Send Password Reset Token",
+					"request": {
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -104,7 +128,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/account/password",
+							"raw": "http://localhost:8080/account/password/send_email",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -112,20 +136,21 @@
 							"port": "8080",
 							"path": [
 								"account",
-								"password"
+								"password",
+								"send_email"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "[local] Change Password [Unauth]",
+					"name": "[local] Password: Verify Token & Change Password",
 					"request": {
-						"method": "PUT",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"token\": \"string\",\r\n \"new\": \"string\"\r\n}",
+							"raw": "{\r\n \"token\": \"WVRjME9UUTRPR010WlRJMFpTMDBOalZsTFRnd05qY3RaVFJrTkdVd1lXWmpORGhqTFdRMVptTm1OelJsTFRJME1HTXROR1U1TnkxaFl6azVMV05rTUdNeE56aGtPRE01TkE9PQ==\",\r\n \"new\": \"testtest1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -133,7 +158,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/account/password",
+							"raw": "http://localhost:8080/account/password/verify_token",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -141,14 +166,15 @@
 							"port": "8080",
 							"path": [
 								"account",
-								"password"
+								"password",
+								"verify_token"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "[local] Change Password [Auth]",
+					"name": "[local] Password: Change Password [Auth]",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -188,13 +214,13 @@
 			"name": "Moniests",
 			"item": [
 				{
-					"name": "[local] Create Moniest",
+					"name": "[local] Be Moniest",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhODc3MTQ5LWNkMmMtNDRlZC1iYTUyLTBkY2IzZTgzNGI1OSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjIyMWQyZjg2LWZmZmItNDEzNC05NGZhLTMyOTI1ZTI1ZTBkZCJ9LCJpc3N1ZWRfYXQiOiIyMDIyLTEyLTAxVDAyOjQzOjEzLjUyNzYzMDQrMDM6MDAiLCJleHBpcmVkX2F0IjoiMjAyMi0xMi0wMVQwMjo1ODoxMy41Mjc2MzA0KzAzOjAwIn0.45MXICIX5aRvie7luDAe9ihEljDZWY1aJWn3Hkyr558",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJiMzM4NzVmLTNhZmEtNGVhMS04YjAyLWE1MWM2NWYxYzQ0OSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImE4YmVjNzE4LTI5MDEtNDc4Yi05ZTFmLTRiYzVmNGYxOTZjNiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAxLTAxVDE5OjMyOjE1LjQyODE4NTgrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMS0wMVQxOTo0NzoxNS40MjgxODU4KzA0OjAwIn0.WZR6lfojHKJtaWXjn5XJmHBWjlmRwIkgAgGVYpTEN-E",
 								"type": "text"
 							}
 						],
@@ -216,6 +242,137 @@
 							"port": "8080",
 							"path": [
 								"moniests"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "[local] Get by Username",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyY2FhOTI1LWU0OTMtNDJjNC1iNTY5LTgyZmI4YzViYTJiMiIsInVzZXIiOnsidXNlcm5hbWUiOiJ0ZXN0dGVzdCIsImlkIjoiZWY3ZjNmMTMtODIwNi00MWVjLWE2YjctYzI2MTczMWZlNzdhIn0sImlzc3VlZF9hdCI6IjIwMjItMTItMDNUMDA6NTg6NDAuNDA3Nzg0KzAzOjAwIiwiZXhwaXJlZF9hdCI6IjIwMjItMTItMDNUMDE6MTM6NDAuNDA3Nzg0KzAzOjAwIn0.tuXOStESUKeDqxNfLpzZ9rmfwkAx4zMCyXo25LLHHU8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/testtest1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"testtest1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Posts",
+			"item": [
+				{
+					"name": "Create Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjllZjQ3YWViLWJkM2UtNGFhOC05OWFhLWIyZjA1ODYyYTQyMiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImE4YmVjNzE4LTI5MDEtNDc4Yi05ZTFmLTRiYzVmNGYxOTZjNiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAxLTAxVDIwOjE3OjE0Ljk4MjI1NDQrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMS0wMVQyMDozMjoxNC45ODIyNTQ0KzA0OjAwIn0.Eh6BZhKKhfmPmQrsyWTR5HoBa1qk6f5cCy8Nddio8Ek",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"currency\": \"btcusdt\",\r\n \"duration\": \"2023-12-31T23:33:47.479Z\",\r\n \"target1\": 17000,\r\n \"target2\": 17001,\r\n \"target3\": 17002,\r\n \"stop\": 15000,\r\n \"direction\": \"long\",\r\n \"description\": \"description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/moniests/posts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"moniests",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Crypto",
+			"item": [
+				{
+					"name": "[binance] Binance ticker prices",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api2.binance.com/api/v3/ticker/price",
+							"protocol": "https",
+							"host": [
+								"api2",
+								"binance",
+								"com"
+							],
+							"path": [
+								"api",
+								"v3",
+								"ticker",
+								"price"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Get Currencies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ2YjcxMzU5LTcxYWQtNGNjNC05MjkwLWQ2OTUyMGQwZDg0YiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImE4YmVjNzE4LTI5MDEtNDc4Yi05ZTFmLTRiYzVmNGYxOTZjNiJ9LCJpc3N1ZWRfYXQiOiIyMDIyLTEyLTMxVDIxOjU5OjQyLjU4MTk0NTMrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMi0xMi0zMVQyMjoxNDo0Mi41ODE5NDUzKzA0OjAwIn0.CwBuBbu_fwj96QOl4b90VfT04yuoY5GmRtbtnByJjyA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crypto/currencies?name=btcusdt",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crypto",
+								"currencies"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "btcusdt"
+								}
 							]
 						}
 					},
