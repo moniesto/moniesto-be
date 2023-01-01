@@ -169,7 +169,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [need test + latest check + update after payment] POST /moniests
 
-- [ ] POST /moniests/posts
+:heavy_check_mark: [need test] POST /moniests/posts
 
 - [ ] PATCH /account/profile
 
