@@ -20,3 +20,8 @@ WHERE "token" = $1
 UPDATE "password_reset_token"
 SET deleted = true
 WHERE "token" = $1;
+
+-- name: DeletePasswordResetTokenByUserID :exec
+UPDATE "password_reset_token"
+SET deleted = true
+WHERE "user_id" = $1;

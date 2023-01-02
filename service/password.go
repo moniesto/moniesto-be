@@ -77,7 +77,6 @@ func (service *Service) CheckEmailExistidy(ctx *gin.Context, email string) (vali
 	return validEmail, nil
 }
 
-// TODO: update function
 func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string, expiryAt time.Duration) (string, db.PasswordResetToken, error) {
 	// STEP: get user by email (need ID)
 	user, err := service.Store.GetUserByEmail(ctx, email)
@@ -97,6 +96,12 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 		UserID:      user.ID,
 		Token:       plain_token,
 		TokenExpiry: time.Now().Add(expiryAt),
+	}
+
+	// STEP: delete older password reset tokens
+	err = service.Store.DeletePasswordResetTokenByUserID(ctx, user.ID)
+	if err != nil {
+		// TODO: add system error [only system error]
 	}
 
 	// STEP: insert DB
