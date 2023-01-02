@@ -3,7 +3,8 @@ package clientError
 type errorMessagesType map[string]string
 
 const (
-	UserNotMoniest = "UserNotMoniest"
+	UserNotMoniest   = "UserNotMoniest"
+	UserNotFoundByID = "UserNotFoundByID"
 
 	Account_Authorization_NotProvidedHeader = "Account_Authorization_NotProvidedHeader"
 	Account_Authorization_InvalidHeader     = "Account_Authorization_InvalidHeader"
@@ -55,6 +56,11 @@ const (
 	Account_ChangePassword_ExpiredToken              = "Account_ChangePassword_ExpiredToken"
 	Account_ChangePassword_ServerErrorDeleteToken    = "Account_ChangePassword_ServerErrorDeleteToken"
 
+	Account_EmailVerification_ServerErrorGetUser     = "Account_EmailVerification_ServerErrorGetUser"
+	Account_EmailVerification_AlreadyVerified        = "Account_EmailVerification_AlreadyVerified"
+	Account_EmailVerification_ServerErrorCreateToken = "Account_EmailVerification_ServerErrorCreateToken"
+	Account_EmailVerification_SendEmail              = "Account_EmailVerification_SendEmail"
+
 	Moniest_CreateMoniest_InvalidBody              = "Moniest_CreateMoniest_InvalidBody"
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest = "Moniest_CreateMoniest_ServerErrorUserIsMoniest"
 	Moniest_CreateMoniest_UserIsAlreadyMoniest     = "Moniest_CreateMoniest_UserIsAlreadyMoniest"
@@ -87,7 +93,8 @@ const (
 )
 
 var errorMessages errorMessagesType = errorMessagesType{
-	UserNotMoniest: "User is not moniest",
+	UserNotMoniest:   "User is not moniest",
+	UserNotFoundByID: "User not found with this user ID",
 
 	Account_Authorization_NotProvidedHeader: "Authorization Header is not provided",
 	Account_Authorization_InvalidHeader:     "Authorization Header is invalid",
@@ -138,6 +145,11 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_ChangePassword_ServerErrorGetToken:       "Server error on getting Password Reset Token from system",
 	Account_ChangePassword_ExpiredToken:              "Password Reset Token is expired",
 	Account_ChangePassword_ServerErrorDeleteToken:    "Server error on deleting Password Reset Token",
+
+	Account_EmailVerification_ServerErrorGetUser:     "Server error on getting user",
+	Account_EmailVerification_AlreadyVerified:        "The email is already verified",
+	Account_EmailVerification_ServerErrorCreateToken: "Server error on creating token",
+	Account_EmailVerification_SendEmail:              "Server error on sending email",
 
 	Moniest_CreateMoniest_InvalidBody:              "Create moniest request body is invalid",
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest: "Server error on user is moniest check",

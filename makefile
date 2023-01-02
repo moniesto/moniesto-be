@@ -41,8 +41,8 @@ create_migration:
 	migrate create -ext sql -dir db/migration -seq $(name)
 
 resetdb:
-	make dropdb
-	make dropdb-test
+	make dropdb || true
+	make dropdb-test || true
 	make createdb
 	make createdb-test
 	make migrateup

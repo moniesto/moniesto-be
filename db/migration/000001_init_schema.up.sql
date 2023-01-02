@@ -111,7 +111,7 @@ CREATE TABLE "password_reset_token" (
     "created_at" timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "email_verification" (
+CREATE TABLE "email_verification_token" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "user_id" varchar NOT NULL,
     "token" varchar UNIQUE NOT NULL,
@@ -142,7 +142,7 @@ CREATE UNIQUE INDEX ON "moniest_card" ("moniest_id", "card_id");
 
 CREATE UNIQUE INDEX ON "password_reset_token" ("user_id", "token");
 
-CREATE UNIQUE INDEX ON "email_verification" ("user_id", "token");
+CREATE UNIQUE INDEX ON "email_verification_token" ("user_id", "token");
 
 COMMENT ON TABLE "user" IS 'Stores user data';
 
@@ -166,7 +166,7 @@ COMMENT ON TABLE "moniest_card" IS 'Stores relation between moniest and card';
 
 COMMENT ON TABLE "password_reset_token" IS 'Stores reset token for forget password operations';
 
-COMMENT ON TABLE "email_verification" IS 'Stores email verification token for verifying account';
+COMMENT ON TABLE "email_verification_token" IS 'Stores email verification token for verifying account';
 
 ALTER TABLE "image"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
@@ -201,7 +201,7 @@ ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 ALTER TABLE "password_reset_token"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
-ALTER TABLE "email_verification"
+ALTER TABLE "email_verification_token"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "post_crypto_description"

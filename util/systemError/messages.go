@@ -56,4 +56,7 @@ var InternalMessages = internalErrorMessageType{
 	"SendPasswordResetEmail": internalReport(InternalErrorMessage{
 		message: "Server error on sending password reset email",
 	}),
+	"SendEmailVerificationEmail": internalReport(InternalErrorMessage{
+		message: "Server error on sending email verification email",
+	}),
 }

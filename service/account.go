@@ -3,11 +3,13 @@ package service
 import (
 	"database/sql"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
+	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/systemError"
@@ -182,4 +184,37 @@ func (service *Service) CheckUsername(ctx *gin.Context, username string) (bool, 
 	}
 
 	return true, nil
+}
+
+// CreateEmailVerificationToken creates email verification token on DB and delete older ones of user
+func (service *Service) CreateEmailVerificationToken(ctx *gin.Context, userID string, expiryAt time.Duration) (db.EmailVerificationToken, error) {
+
+	// STEP: delete older email verification tokens
+	err := service.Store.DeleteEmailVerificationTokenByUserID(ctx, userID)
+	if err != nil {
+		// TODO: add system error [only system error]
+	}
+
+	// STEP: create email verification token object
+	plain_token := token.CreateValidatingToken()
+
+	params := db.CreateEmailVerificationTokenParams{
+		ID:          core.CreateID(),
+		UserID:      userID,
+		Token:       plain_token,
+		TokenExpiry: time.Now().Add(expiryAt),
+	}
+
+	// STEP: insert DB
+	email_verification_token, err := service.Store.CreateEmailVerificationToken(ctx, params)
+	if err != nil {
+		// TODO: add system error
+		return db.EmailVerificationToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorCreateToken)
+	}
+
+	// STEP: replace with encoded token (send encoded token)
+	encoded_token := token.EncodeValidatingToken(plain_token)
+	email_verification_token.Token = encoded_token
+
+	return email_verification_token, nil
 }

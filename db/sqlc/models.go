@@ -105,7 +105,7 @@ type Card struct {
 }
 
 // Stores email verification token for verifying account
-type EmailVerification struct {
+type EmailVerificationToken struct {
 	ID          string    `json:"id"`
 	UserID      string    `json:"user_id"`
 	Token       string    `json:"token"`

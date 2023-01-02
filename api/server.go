@@ -57,6 +57,7 @@ func (server *Server) setupRouter() {
 		accountRoutersAuth := accountRouters.Group("/").Use(authMiddleware(server.tokenMaker))
 		accountRoutersAuth.PUT("/password", server.changePassword)
 		accountRoutersAuth.PATCH("/profile", server.updateProfile)
+		accountRoutersAuth.POST("/email/send_verification_email", server.sendVerificationEmail)
 	}
 
 	// Moniests routes - [need Auth]

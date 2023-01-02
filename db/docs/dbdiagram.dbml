@@ -189,7 +189,7 @@ Table password_reset_token as PRT{
   Note: 'Stores reset token for forget password operations'
 }
 
-Table email_verification as EV {
+Table email_verification_token as EV {
   id varchar [not null, pk, unique]
   user_id varchar [not null]
   token varchar [not null, unique]

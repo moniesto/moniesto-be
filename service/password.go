@@ -88,6 +88,12 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 		return "", db.PasswordResetToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckEmail)
 	}
 
+	// STEP: delete older password reset tokens
+	err = service.Store.DeletePasswordResetTokenByUserID(ctx, user.ID)
+	if err != nil {
+		// TODO: add system error [only system error]
+	}
+
 	// STEP: create password reset token object
 	plain_token := token.CreateValidatingToken()
 
@@ -96,12 +102,6 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 		UserID:      user.ID,
 		Token:       plain_token,
 		TokenExpiry: time.Now().Add(expiryAt),
-	}
-
-	// STEP: delete older password reset tokens
-	err = service.Store.DeletePasswordResetTokenByUserID(ctx, user.ID)
-	if err != nil {
-		// TODO: add system error [only system error]
 	}
 
 	// STEP: insert DB

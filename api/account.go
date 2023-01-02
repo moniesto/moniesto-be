@@ -11,6 +11,7 @@ import (
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/mailing"
 )
 
 // @Summary Login
@@ -127,6 +128,41 @@ func (server *Server) checkUsername(ctx *gin.Context) {
 	rsp := model.NewCheckUsernameResponse(validity)
 
 	ctx.JSON(http.StatusOK, rsp)
+}
+
+// PRIMARY TODO: add redirect logic
+func (server *Server) sendVerificationEmail(ctx *gin.Context) {
+
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: get user
+	user, err := server.service.GetOwnUserByID(ctx, user_id)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: check user email is already verified
+	if user.EmailVerified {
+		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.Account_EmailVerification_AlreadyVerified))
+		return
+	}
+
+	// STEP: create email verification
+	email_verification_token, err := server.service.CreateEmailVerificationToken(ctx, user_id, server.config.EmailVerificationTokenDuration)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	err = mailing.SendEmailVerificationEmail(user.Email, server.config, user.Name, email_verification_token.Token)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_EmailVerification_SendEmail))
+	}
+
+	ctx.Status(http.StatusAccepted)
 }
 
 func (server *Server) updateProfile(ctx *gin.Context) {

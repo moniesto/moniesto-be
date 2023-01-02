@@ -42,3 +42,17 @@ func (service *Service) GetUserByUsername(ctx *gin.Context, username string) (db
 
 	return user, nil
 }
+
+func (service *Service) GetOwnUserByID(ctx *gin.Context, userID string) (db.GetOwnUserByIDRow, error) {
+
+	user, err := service.Store.GetOwnUserByID(ctx, userID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return db.GetOwnUserByIDRow{}, clientError.CreateError(http.StatusNotFound, clientError.UserNotFoundByID)
+		}
+
+		return db.GetOwnUserByIDRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorGetUser)
+	}
+
+	return user, nil
+}

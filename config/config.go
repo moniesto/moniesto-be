@@ -18,15 +18,17 @@ type Config struct {
 	SmtpPort      string `mapstructure:"SMTP_PORT"`
 
 	// APP LOGIC CONFIG
-	AccessTokenDuration            time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
-	AccessTokenDurationTest        time.Duration `mapstructure:"ACCESS_TOKEN_DURATION_TEST"`
-	ClientURL                      string        `mapstructure:"CLIENT_URL"`
-	PasswordResetTokenDuration     time.Duration `mapstructure:"PASSWORD_RESET_TOKEN_DURATION"`
-	PasswordResetTokenDurationTest time.Duration `mapstructure:"PASSWORD_RESET_TOKEN_DURATION_TEST"`
-	MinFee                         float64       `mapstructure:"MIN_FEE"`
-	MaxBioLenght                   int           `mapstructure:"MAX_BIO_LENGTH"`
-	MaxDescriptionLength           int           `mapstructure:"MAX_DESCRIPTION_LENGTH"`
-	MaxSubscriptionMessageLength   int           `mapstructure:"MAX_SUBSCRIPTION_MESSAGE_LENGTH"`
+	AccessTokenDuration                time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
+	AccessTokenDurationTest            time.Duration `mapstructure:"ACCESS_TOKEN_DURATION_TEST"`
+	ClientURL                          string        `mapstructure:"CLIENT_URL"`
+	PasswordResetTokenDuration         time.Duration `mapstructure:"PASSWORD_RESET_TOKEN_DURATION"`
+	PasswordResetTokenDurationTest     time.Duration `mapstructure:"PASSWORD_RESET_TOKEN_DURATION_TEST"`
+	EmailVerificationTokenDuration     time.Duration `mapstructure:"EMAIL_VERIFICATION_TOKEN_DURATION"`
+	EmailVerificationTokenDurationTest time.Duration `mapstructure:"EMAIL_VERIFICATION_TOKEN_DURATION_TEST"`
+	MinFee                             float64       `mapstructure:"MIN_FEE"`
+	MaxBioLenght                       int           `mapstructure:"MAX_BIO_LENGTH"`
+	MaxDescriptionLength               int           `mapstructure:"MAX_DESCRIPTION_LENGTH"`
+	MaxSubscriptionMessageLength       int           `mapstructure:"MAX_SUBSCRIPTION_MESSAGE_LENGTH"`
 
 	// CREDENTIALS
 	TokenKey        string `mapstructure:"TOKEN_KEY"`
