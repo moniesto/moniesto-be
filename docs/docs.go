@@ -16,6 +16,66 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/account/email/send_verification_email": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Email verification email sender",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Send Verification Email",
+                "parameters": [
+                    {
+                        "description": "redirect_url is required",
+                        "name": "SendVerificationEmailBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SendVerificationEmailResponse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted"
+                    },
+                    "400": {
+                        "description": "email already verified",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "user not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/account/login": {
             "post": {
                 "description": "Login with [email \u0026 password] OR [username \u0026 password]",
@@ -333,6 +393,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/account/usernames/:username/check": {
+            "get": {
+                "description": "Check username is valid of not",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Check Username",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.CheckUsernameResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid username",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/crypto/currencies": {
             "get": {
                 "security": [
@@ -498,50 +602,6 @@ const docTemplate = `{
                     },
                     "406": {
                         "description": "invalid body",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "server error",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/usernames/:username/check": {
-            "get": {
-                "description": "Check username is valid of not",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Check Username",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "username",
-                        "name": "username",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.CheckUsernameResponse"
-                        }
-                    },
-                    "406": {
-                        "description": "invalid username",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorResponse"
                         }
@@ -922,6 +982,17 @@ const docTemplate = `{
             ],
             "properties": {
                 "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SendVerificationEmailResponse": {
+            "type": "object",
+            "required": [
+                "redirect_url"
+            ],
+            "properties": {
+                "redirect_url": {
                     "type": "string"
                 }
             }

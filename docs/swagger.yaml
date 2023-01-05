@@ -211,6 +211,13 @@ definitions:
     required:
     - email
     type: object
+  model.SendVerificationEmailResponse:
+    properties:
+      redirect_url:
+        type: string
+    required:
+    - redirect_url
+    type: object
   model.SubscriptionInfo:
     properties:
       fee:
@@ -269,6 +276,44 @@ definitions:
 info:
   contact: {}
 paths:
+  /account/email/send_verification_email:
+    get:
+      consumes:
+      - application/json
+      description: Email verification email sender
+      parameters:
+      - description: redirect_url is required
+        in: body
+        name: SendVerificationEmailBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.SendVerificationEmailResponse'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+        "400":
+          description: email already verified
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: user not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Send Verification Email
+      tags:
+      - Account
   /account/login:
     post:
       consumes:
@@ -475,6 +520,35 @@ paths:
       summary: Register
       tags:
       - Auth
+  /account/usernames/:username/check:
+    get:
+      consumes:
+      - application/json
+      description: Check username is valid of not
+      parameters:
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CheckUsernameResponse'
+        "406":
+          description: invalid username
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      summary: Check Username
+      tags:
+      - Account
   /crypto/currencies:
     get:
       consumes:
@@ -588,35 +662,6 @@ paths:
       summary: Create Post
       tags:
       - Post
-  /usernames/:username/check:
-    get:
-      consumes:
-      - application/json
-      description: Check username is valid of not
-      parameters:
-      - description: username
-        in: path
-        name: username
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.CheckUsernameResponse'
-        "406":
-          description: invalid username
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-        "500":
-          description: server error
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-      summary: Check Username
-      tags:
-      - Account
   /users/:username:
     get:
       consumes:

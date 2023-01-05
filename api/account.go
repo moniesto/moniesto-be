@@ -112,7 +112,7 @@ func (server *Server) registerUser(ctx *gin.Context) {
 // @Success 200 {object} model.CheckUsernameResponse
 // @Failure 406 {object} clientError.ErrorResponse "invalid username"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
-// @Router /usernames/:username/check [get]
+// @Router /account/usernames/:username/check [get]
 func (server *Server) checkUsername(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")
@@ -142,6 +142,7 @@ func (server *Server) checkUsername(ctx *gin.Context) {
 // @Failure 404 {object} clientError.ErrorResponse "user not found"
 // @Failure 406 {object} clientError.ErrorResponse "invalid body"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /account/email/send_verification_email [get]
 func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 	var req model.SendVerificationEmailResponse
 
