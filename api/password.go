@@ -122,7 +122,7 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
 // @Failure 404 {object} clientError.ErrorResponse "reset token not found"
 // @Failure 406 {object} clientError.ErrorResponse "invalid body & data"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
-// @Router /account/password/verify_token [post]
+// @Router /account/password/change_password [post]
 func (server *Server) verifyTokenChangePassword(ctx *gin.Context) {
 	var req model.VerifyPasswordResetRequest
 
@@ -154,6 +154,37 @@ func (server *Server) verifyTokenChangePassword(ctx *gin.Context) {
 	}
 
 	err = server.service.DeletePasswordResetToken(ctx, password_reset_token.Token)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.Status(http.StatusOK)
+}
+
+// @Summary Verify Token
+// @Description Unauthenticated verify token
+// @Tags Password
+// @Accept json
+// @Produce json
+// @Param VerifyTokenBody body model.VerifyTokenRequest true "token is required"
+// @Success 200
+// @Failure 403 {object} clientError.ErrorResponse "token is expired"
+// @Failure 404 {object} clientError.ErrorResponse "reset token not found"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /account/password/verify_token [post]
+func (server *Server) verifyToken(ctx *gin.Context) {
+	var req model.VerifyTokenRequest
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
+		return
+	}
+
+	// STEP: validating password reset token [decode + expiry check]
+	_, err := server.service.GetPasswordResetToken(ctx, req.Token)
 	if err != nil {
 		ctx.JSON(clientError.ParseError(err))
 		return

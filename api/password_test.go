@@ -30,7 +30,7 @@ var passwordResetTokens []string
 
 const (
 	SendPasswordResetEmailEndpoint    = "/account/password/send_email"
-	VerifyTokenChangePasswordEndpoint = "/account/password/verify_token"
+	VerifyTokenChangePasswordEndpoint = "/account/password/change_password"
 	ChangePasswordEndpoint            = "/account/password"
 )
 

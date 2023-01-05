@@ -128,6 +128,61 @@ const docTemplate = `{
                 }
             }
         },
+        "/account/password/change_password": {
+            "post": {
+                "description": "Unauthenticated verify token \u0026 change password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Password"
+                ],
+                "summary": "Verify Token \u0026 Change Password",
+                "parameters": [
+                    {
+                        "description": "token \u0026 new fiels are required",
+                        "name": "VerifyTokenBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.VerifyPasswordResetRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "token is expired",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "reset token not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body \u0026 data",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/account/password/send_email": {
             "post": {
                 "description": "Unauthenticated user send reset password email",
@@ -173,7 +228,7 @@ const docTemplate = `{
         },
         "/account/password/verify_token": {
             "post": {
-                "description": "Unauthenticated verify token \u0026 change password",
+                "description": "Unauthenticated verify token",
                 "consumes": [
                     "application/json"
                 ],
@@ -183,15 +238,15 @@ const docTemplate = `{
                 "tags": [
                     "Password"
                 ],
-                "summary": "Verify Token \u0026 Change Password",
+                "summary": "Verify Token",
                 "parameters": [
                     {
-                        "description": "token \u0026 new fiels are required",
+                        "description": "token is required",
                         "name": "VerifyTokenBody",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.VerifyPasswordResetRequest"
+                            "$ref": "#/definitions/model.VerifyTokenRequest"
                         }
                     }
                 ],
@@ -212,7 +267,7 @@ const docTemplate = `{
                         }
                     },
                     "406": {
-                        "description": "invalid body \u0026 data",
+                        "description": "invalid body",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorResponse"
                         }
@@ -939,6 +994,17 @@ const docTemplate = `{
                 "new": {
                     "type": "string"
                 },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.VerifyTokenRequest": {
+            "type": "object",
+            "required": [
+                "token"
+            ],
+            "properties": {
                 "token": {
                     "type": "string"
                 }

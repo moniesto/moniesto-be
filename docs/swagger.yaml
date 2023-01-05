@@ -259,6 +259,13 @@ definitions:
     - new
     - token
     type: object
+  model.VerifyTokenRequest:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
 info:
   contact: {}
 paths:
@@ -334,35 +341,7 @@ paths:
       summary: Change Password
       tags:
       - Password
-  /account/password/send_email:
-    post:
-      consumes:
-      - application/json
-      description: Unauthenticated user send reset password email
-      parameters:
-      - description: ' '
-        in: body
-        name: SendEmailBody
-        required: true
-        schema:
-          $ref: '#/definitions/model.SendResetPasswordEmailRequest'
-      produces:
-      - application/json
-      responses:
-        "202":
-          description: Accepted
-        "406":
-          description: invalid body & data
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-        "500":
-          description: server error
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-      summary: Send Reset Password Email
-      tags:
-      - Password
-  /account/password/verify_token:
+  /account/password/change_password:
     post:
       consumes:
       - application/json
@@ -396,6 +375,70 @@ paths:
           schema:
             $ref: '#/definitions/clientError.ErrorResponse'
       summary: Verify Token & Change Password
+      tags:
+      - Password
+  /account/password/send_email:
+    post:
+      consumes:
+      - application/json
+      description: Unauthenticated user send reset password email
+      parameters:
+      - description: ' '
+        in: body
+        name: SendEmailBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.SendResetPasswordEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+        "406":
+          description: invalid body & data
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      summary: Send Reset Password Email
+      tags:
+      - Password
+  /account/password/verify_token:
+    post:
+      consumes:
+      - application/json
+      description: Unauthenticated verify token
+      parameters:
+      - description: token is required
+        in: body
+        name: VerifyTokenBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.VerifyTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: token is expired
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: reset token not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      summary: Verify Token
       tags:
       - Password
   /account/register:

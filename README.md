@@ -149,7 +149,9 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: POST /account/password/send_email -> send password reset email
 
-:heavy_check_mark: POST /account/password/verify_token -> verify token & change password
+:heavy_check_mark: POST /account/password/change_password -> verify token & change password
+
+:heavy_check_mark: [need test] POST /account/password/verify_token -> verify token
 
 :heavy_check_mark: PUT /account/password -> change password
 

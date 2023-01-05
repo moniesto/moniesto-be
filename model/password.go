@@ -13,3 +13,7 @@ type VerifyPasswordResetRequest struct {
 	Token       string `json:"token" binding:"required"`
 	NewPassword string `json:"new" binding:"required"`
 }
+
+type VerifyTokenRequest struct {
+	Token string `json:"token" binding:"required"`
+}
