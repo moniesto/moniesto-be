@@ -5,6 +5,9 @@ import (
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
+var resetPasswordURL string = "change-password"
+var verifyEmailURL string = "verify-email"
+
 func SendPasswordResetEmail(to string, config config.Config, name, token string) error {
 	templatePath := "util/mailing/templates/password_reset.html"
 	subject := "Moniesto: Reset password"
@@ -48,9 +51,9 @@ func SendEmailVerificationEmail(to string, config config.Config, name, token str
 }
 
 func createResetPasswordURL(url, token string) string {
-	return url + "?token=" + token
+	return url + "/" + resetPasswordURL + "?token=" + token
 }
 
 func createEmailVerificationURL(url, token string) string {
-	return url + "?token=" + token
+	return url + "/" + verifyEmailURL + "?token=" + token
 }
