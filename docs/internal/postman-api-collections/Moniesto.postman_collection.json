@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"identifier\": \"test@gmail.com\",\r\n \"password\": \"testtest\"\r\n}",
+							"raw": "{\r\n \"identifier\": \"parvvazov@gmail.com\",\r\n \"password\": \"testtest1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -45,7 +45,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"name\": \"test\",\r\n \"surname\": \"test\",\r\n \"username\": \"test\",\r\n \"email\": \"test@gmail.com\",\r\n \"password\": \"testtest\"\r\n}",
+							"raw": "{\r\n \"name\": \"test\",\r\n \"surname\": \"test\",\r\n \"username\": \"test\",\r\n \"email\": \"parvvazov@gmail.com\",\r\n \"password\": \"testtest\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -120,7 +120,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"email\": \"test@gmail.com\"\r\n}",
+							"raw": "{\r\n \"email\": \"parvvazov@gmail.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -144,13 +144,13 @@
 					"response": []
 				},
 				{
-					"name": "[local] Password: Verify Token & Change Password",
+					"name": "[local] Password: Verify Token",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"token\": \"WVRjME9UUTRPR010WlRJMFpTMDBOalZsTFRnd05qY3RaVFJrTkdVd1lXWmpORGhqTFdRMVptTm1OelJsTFRJME1HTXROR1U1TnkxaFl6azVMV05rTUdNeE56aGtPRE01TkE9PQ==\",\r\n \"new\": \"testtest1\"\r\n}",
+							"raw": "{\r\n \"token\": \"WTJFeE5EVXdOVGd0T0RoalpTMDBORE5tTFRnNFptTXROek01TVdNMk5tWmhNemc1TFdRd05ERmhOak0yTFdGbE1ERXROR0kwTlMwNU1HSmlMV1kyTmpOallXVTRZek0yWVE9PQ==\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -168,6 +168,36 @@
 								"account",
 								"password",
 								"verify_token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Password: Verify Token & Change Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"token\": \"WTJFeE5EVXdOVGd0T0RoalpTMDBORE5tTFRnNFptTXROek01TVdNMk5tWmhNemc1TFdRd05ERmhOak0yTFdGbE1ERXROR0kwTlMwNU1HSmlMV1kyTmpOallXVTRZek0yWVE9PQ==\",\r\n \"new\": \"testtest1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/password/change_password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"password",
+								"change_password"
 							]
 						}
 					},
@@ -203,6 +233,33 @@
 							"path": [
 								"account",
 								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Send Email Verification email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMwNmFhMjg1LTYwZWQtNGM0Ny05MGQ3LWQyYWRjODcwNjdlZCIsInVzZXIiOnsidXNlcm5hbWUiOiJ0ZXN0IiwiaWQiOiI0N2Y4MjZkNi1hYTM5LTQyNDctYWI0My0yY2UwYTExMmY2NDEifSwiaXNzdWVkX2F0IjoiMjAyMy0wMS0wM1QwMzowNDowOC45NDIyNDE4KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDEtMDNUMDM6MTk6MDguOTQyMjQxOCswNDowMCJ9.ypmGWhiALa5pd-jmgyzD8Fw5yh23gy8Za3fUU6DAB5k",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/account/email/send_verification_email",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"email",
+								"send_verification_email"
 							]
 						}
 					},
@@ -341,6 +398,50 @@
 								"v3",
 								"ticker",
 								"price"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[binance] Get History Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api2.binance.com/api/v3/klines?startTime=1638144000000&endTime=1672531200000&limit=1000000&interval=1h&symbol=BTCUSDT",
+							"protocol": "https",
+							"host": [
+								"api2",
+								"binance",
+								"com"
+							],
+							"path": [
+								"api",
+								"v3",
+								"klines"
+							],
+							"query": [
+								{
+									"key": "startTime",
+									"value": "1638144000000"
+								},
+								{
+									"key": "endTime",
+									"value": "1672531200000"
+								},
+								{
+									"key": "limit",
+									"value": "1000000"
+								},
+								{
+									"key": "interval",
+									"value": "1h"
+								},
+								{
+									"key": "symbol",
+									"value": "BTCUSDT"
+								}
 							]
 						}
 					},
