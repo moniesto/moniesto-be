@@ -130,8 +130,26 @@ func (server *Server) checkUsername(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, rsp)
 }
 
-// PRIMARY TODO: add redirect logic
+// @Summary Send Verification Email
+// @Description Email verification email sender
+// @Security bearerAuth
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param SendVerificationEmailBody body model.SendVerificationEmailResponse true "redirect_url is required"
+// @Success 202
+// @Failure 400 {object} clientError.ErrorResponse "email already verified"
+// @Failure 404 {object} clientError.ErrorResponse "user not found"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
 func (server *Server) sendVerificationEmail(ctx *gin.Context) {
+	var req model.SendVerificationEmailResponse
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_EmailVerification_InvalidBody))
+		return
+	}
 
 	// STEP: get user id from token
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
@@ -151,12 +169,13 @@ func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 	}
 
 	// STEP: create email verification
-	email_verification_token, err := server.service.CreateEmailVerificationToken(ctx, user_id, server.config.EmailVerificationTokenDuration)
+	email_verification_token, err := server.service.CreateEmailVerificationToken(ctx, user_id, req.RedirectURL, server.config.EmailVerificationTokenDuration)
 	if err != nil {
 		ctx.JSON(clientError.ParseError(err))
 		return
 	}
 
+	// STEP: send verification email
 	err = mailing.SendEmailVerificationEmail(user.Email, server.config, user.Name, email_verification_token.Token)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_EmailVerification_SendEmail))

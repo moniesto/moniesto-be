@@ -155,7 +155,9 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: PUT /account/password -> change password
 
-:heavy_check_mark: [need test + need redirectURL update] POST /account/email/send_verification_email -> send email verification email
+:heavy_check_mark: [need test] POST /account/email/send_verification_email -> send email verification email
+
+- [ ] POST /account/email/verify_email -> verify email
 
 - [ ] GET /content/posts?subscribed=<subscribed>&limit=<limit>&offset=<offset>
 

@@ -28,6 +28,10 @@ type CheckUsernameResponse struct {
 	Validity bool `json:"validity"`
 }
 
+type SendVerificationEmailResponse struct {
+	RedirectURL string `json:"redirect_url" binding:"required"`
+}
+
 // MAKER
 // NewLoginResponse creates/return LoginResponse object
 func NewLoginResponse(token string, user db.LoginUserByEmailRow) (response LoginResponse) {

@@ -56,6 +56,7 @@ const (
 	Account_ChangePassword_ExpiredToken              = "Account_ChangePassword_ExpiredToken"
 	Account_ChangePassword_ServerErrorDeleteToken    = "Account_ChangePassword_ServerErrorDeleteToken"
 
+	Account_EmailVerification_InvalidBody            = "Account_EmailVerification_InvalidBody"
 	Account_EmailVerification_ServerErrorGetUser     = "Account_EmailVerification_ServerErrorGetUser"
 	Account_EmailVerification_AlreadyVerified        = "Account_EmailVerification_AlreadyVerified"
 	Account_EmailVerification_ServerErrorCreateToken = "Account_EmailVerification_ServerErrorCreateToken"
@@ -146,6 +147,7 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_ChangePassword_ExpiredToken:              "Password Reset Token is expired",
 	Account_ChangePassword_ServerErrorDeleteToken:    "Server error on deleting Password Reset Token",
 
+	Account_EmailVerification_InvalidBody:            "Email verification request body is invalid",
 	Account_EmailVerification_ServerErrorGetUser:     "Server error on getting user",
 	Account_EmailVerification_AlreadyVerified:        "The email is already verified",
 	Account_EmailVerification_ServerErrorCreateToken: "Server error on creating token",

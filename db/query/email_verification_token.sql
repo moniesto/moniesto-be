@@ -4,10 +4,11 @@ INSERT INTO "email_verification_token" (
         user_id,
         token,
         token_expiry,
+        redirect_url,
         deleted,
         created_at
     )
-VALUEs ($1, $2, $3, $4, false, now())
+VALUEs ($1, $2, $3, $4, $5, false, now())
 RETURNING *;
 
 -- name: GetEmailVerificationTokenByToken :one

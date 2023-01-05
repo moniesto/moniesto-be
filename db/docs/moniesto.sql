@@ -116,6 +116,7 @@ CREATE TABLE "email_verification_token" (
   "user_id" varchar NOT NULL,
   "token" varchar UNIQUE NOT NULL,
   "token_expiry" timestamp NOT NULL,
+  "redirect_url" varchar NOT NULL,
   "deleted" boolean NOT NULL DEFAULT false,
   "created_at" timestamp NOT NULL DEFAULT (now())
 );

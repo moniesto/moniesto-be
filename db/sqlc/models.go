@@ -110,6 +110,7 @@ type EmailVerificationToken struct {
 	UserID      string    `json:"user_id"`
 	Token       string    `json:"token"`
 	TokenExpiry time.Time `json:"token_expiry"`
+	RedirectUrl string    `json:"redirect_url"`
 	Deleted     bool      `json:"deleted"`
 	CreatedAt   time.Time `json:"created_at"`
 }

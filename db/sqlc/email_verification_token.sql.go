@@ -16,11 +16,12 @@ INSERT INTO "email_verification_token" (
         user_id,
         token,
         token_expiry,
+        redirect_url,
         deleted,
         created_at
     )
-VALUEs ($1, $2, $3, $4, false, now())
-RETURNING id, user_id, token, token_expiry, deleted, created_at
+VALUEs ($1, $2, $3, $4, $5, false, now())
+RETURNING id, user_id, token, token_expiry, redirect_url, deleted, created_at
 `
 
 type CreateEmailVerificationTokenParams struct {
@@ -28,6 +29,7 @@ type CreateEmailVerificationTokenParams struct {
 	UserID      string    `json:"user_id"`
 	Token       string    `json:"token"`
 	TokenExpiry time.Time `json:"token_expiry"`
+	RedirectUrl string    `json:"redirect_url"`
 }
 
 func (q *Queries) CreateEmailVerificationToken(ctx context.Context, arg CreateEmailVerificationTokenParams) (EmailVerificationToken, error) {
@@ -36,6 +38,7 @@ func (q *Queries) CreateEmailVerificationToken(ctx context.Context, arg CreateEm
 		arg.UserID,
 		arg.Token,
 		arg.TokenExpiry,
+		arg.RedirectUrl,
 	)
 	var i EmailVerificationToken
 	err := row.Scan(
@@ -43,6 +46,7 @@ func (q *Queries) CreateEmailVerificationToken(ctx context.Context, arg CreateEm
 		&i.UserID,
 		&i.Token,
 		&i.TokenExpiry,
+		&i.RedirectUrl,
 		&i.Deleted,
 		&i.CreatedAt,
 	)
@@ -72,7 +76,7 @@ func (q *Queries) DeleteEmailVerificationTokenByUserID(ctx context.Context, user
 }
 
 const getEmailVerificationTokenByToken = `-- name: GetEmailVerificationTokenByToken :one
-SELECT id, user_id, token, token_expiry, deleted, created_at
+SELECT id, user_id, token, token_expiry, redirect_url, deleted, created_at
 FROM "email_verification_token"
 WHERE "token" = $1
     AND "deleted" = false
@@ -86,6 +90,7 @@ func (q *Queries) GetEmailVerificationTokenByToken(ctx context.Context, token st
 		&i.UserID,
 		&i.Token,
 		&i.TokenExpiry,
+		&i.RedirectUrl,
 		&i.Deleted,
 		&i.CreatedAt,
 	)

@@ -194,6 +194,7 @@ Table email_verification_token as EV {
   user_id varchar [not null]
   token varchar [not null, unique]
   token_expiry timestamp [not null]
+  redirect_url varchar [not null]
   
   deleted boolean [not null, default: false]
   

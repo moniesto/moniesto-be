@@ -187,7 +187,7 @@ func (service *Service) CheckUsername(ctx *gin.Context, username string) (bool, 
 }
 
 // CreateEmailVerificationToken creates email verification token on DB and delete older ones of user
-func (service *Service) CreateEmailVerificationToken(ctx *gin.Context, userID string, expiryAt time.Duration) (db.EmailVerificationToken, error) {
+func (service *Service) CreateEmailVerificationToken(ctx *gin.Context, userID, redirectURL string, expiryAt time.Duration) (db.EmailVerificationToken, error) {
 
 	// STEP: delete older email verification tokens
 	err := service.Store.DeleteEmailVerificationTokenByUserID(ctx, userID)
@@ -203,6 +203,7 @@ func (service *Service) CreateEmailVerificationToken(ctx *gin.Context, userID st
 		UserID:      userID,
 		Token:       plain_token,
 		TokenExpiry: time.Now().Add(expiryAt),
+		RedirectUrl: redirectURL,
 	}
 
 	// STEP: insert DB
