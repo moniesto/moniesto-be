@@ -1,6 +1,6 @@
 package clientError
 
-type errorMessagesType map[string]string
+type ErrorMessagesType map[string]string
 
 const (
 	UserNotMoniest   = "UserNotMoniest"
@@ -99,7 +99,7 @@ const (
 	Crypto_GetCurrenciesFromAPI_ServerError = "Crypto_GetCurrenciesFromAPI_ServerError"
 )
 
-var errorMessages errorMessagesType = errorMessagesType{
+var errorMessages ErrorMessagesType = ErrorMessagesType{
 	UserNotMoniest:   "User is not moniest",
 	UserNotFoundByID: "User not found with this user ID",
 

@@ -501,6 +501,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/assets/error-codes": {
+            "get": {
+                "description": "Get All Error Codes in the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get Error Codes",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorMessagesType"
+                        }
+                    }
+                }
+            }
+        },
         "/crypto/currencies": {
             "get": {
                 "security": [
@@ -736,6 +759,12 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "clientError.ErrorMessagesType": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
         "clientError.ErrorResponse": {
             "type": "object",
             "properties": {

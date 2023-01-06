@@ -36,3 +36,7 @@ func GetError(error_code string) ErrorResponse {
 		Error:     errorMessages[error_code],
 	}
 }
+
+func GetErrorCodes() ErrorMessagesType {
+	return errorMessages
+}

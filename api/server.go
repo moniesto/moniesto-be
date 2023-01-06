@@ -82,6 +82,12 @@ func (server *Server) setupRouter() {
 		cryptoRouters.GET("/currencies", server.GetCurrencies)
 	}
 
+	// Assets routes
+	assetRouters := router.Group("/assets")
+	{
+		assetRouters.GET("/error-codes", server.getErrorCodes)
+	}
+
 	// Swagger docs
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
