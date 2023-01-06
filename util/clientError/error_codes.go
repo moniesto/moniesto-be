@@ -66,6 +66,7 @@ const (
 	Account_EmailVerification_ServerErrorGetToken    = "Account_EmailVerification_ServerErrorGetToken"
 	Account_EmailVerification_ExpiredToken           = "Account_EmailVerification_ExpiredToken"
 	Account_EmailVerification_ServerErrorVerifyEmail = "Account_EmailVerification_ServerErrorVerifyEmail"
+	Account_EmailVerification_ServerErrorDeleteToken = "Account_EmailVerification_ServerErrorDeleteToken"
 
 	Moniest_CreateMoniest_InvalidBody              = "Moniest_CreateMoniest_InvalidBody"
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest = "Moniest_CreateMoniest_ServerErrorUserIsMoniest"
@@ -162,6 +163,7 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_EmailVerification_ServerErrorGetToken:    "Server error on getting Email Verification Token from system",
 	Account_EmailVerification_ExpiredToken:           "Email Verification Token is expired",
 	Account_EmailVerification_ServerErrorVerifyEmail: "Server error on verifying email",
+	Account_EmailVerification_ServerErrorDeleteToken: "Server error on deleting Email Verification Token",
 
 	Moniest_CreateMoniest_InvalidBody:              "Create moniest request body is invalid",
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest: "Server error on user is moniest check",

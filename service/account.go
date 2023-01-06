@@ -259,3 +259,16 @@ func (service *Service) VerifyEmail(ctx *gin.Context, user_id string) error {
 
 	return nil
 }
+
+// DeleteEmailVerificationToken deletes the token from DB by token
+func (service *Service) DeleteEmailVerificationToken(ctx *gin.Context, token string) error {
+
+	err := service.Store.DeleteEmailVerificationTokenByToken(ctx, token)
+
+	if err != nil {
+		// TODO: add server error
+		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorDeleteToken)
+	}
+
+	return nil
+}

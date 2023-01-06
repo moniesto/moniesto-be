@@ -224,6 +224,13 @@ func (server *Server) verifyEmail(ctx *gin.Context) {
 		return
 	}
 
+	// STEP: delete email verification token
+	err = server.service.DeleteEmailVerificationToken(ctx, email_verification_token.Token)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
 	response := model.VerifyEmailResponse{
 		RedirectURL: email_verification_token.RedirectUrl,
 	}
