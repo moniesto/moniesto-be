@@ -179,12 +179,14 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] PATCH /account/profile
 
+- [ ] PATCH /account/username -> update username
+
 - [ ] PATCH /moniests/subscription-info
 
 - [ ] POST /moniests/:username/subscriptions
 
 :heavy_check_mark: [need test] GET /crypto/currencies?name=BTC
 
-- [ ] GET /assets/error_codes -> get error codes
+:heavy_check_mark: GET /assets/error-codes -> get error codes
 
 - [ ] ...

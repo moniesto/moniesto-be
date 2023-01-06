@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"identifier\": \"parvvazov@gmail.com\",\r\n \"password\": \"testtest1\"\r\n}",
+							"raw": "{\r\n \"identifier\": \"parvvazov@gmail.com\",\r\n \"password\": \"testtest\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -245,10 +245,19 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMwNmFhMjg1LTYwZWQtNGM0Ny05MGQ3LWQyYWRjODcwNjdlZCIsInVzZXIiOnsidXNlcm5hbWUiOiJ0ZXN0IiwiaWQiOiI0N2Y4MjZkNi1hYTM5LTQyNDctYWI0My0yY2UwYTExMmY2NDEifSwiaXNzdWVkX2F0IjoiMjAyMy0wMS0wM1QwMzowNDowOC45NDIyNDE4KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDEtMDNUMDM6MTk6MDguOTQyMjQxOCswNDowMCJ9.ypmGWhiALa5pd-jmgyzD8Fw5yh23gy8Za3fUU6DAB5k",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5ZjRjMDM0LTRhZmUtNGNlYy05ZTliLWFiYzk0MjZhOTcwOCIsInVzZXIiOnsidXNlcm5hbWUiOiJ0ZXN0IiwiaWQiOiJjZTMxOWQyZC05MjBlLTRiNzUtYWI3Ni0zZWFkZTgzMGVmYTgifSwiaXNzdWVkX2F0IjoiMjAyMy0wMS0wNlQyMjowNDo1MC4xODEyNDQ5KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDEtMDZUMjI6MTk6NTAuMTgxMjQ0OSswNDowMCJ9.-tpDN8dSJQBrwFdupjIP4XOB4klclDHse7GWsR5zlMM",
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"redirect_url\": \"https://www.moniesto.com/bemoniest\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8080/account/email/send_verification_email",
 							"protocol": "http",
@@ -260,6 +269,36 @@
 								"account",
 								"email",
 								"send_verification_email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Verify Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"token\": \"T0Raa1pUUTFaalF0TWprM05TMDBOR0UyTFdJMFptSXRPREkwTkRZNVpXUXlOemN4TFRrek9EUm1Zalk1TFRVMVpHTXROR000WlMwNE1HRmpMV0pqWW1JeFpqSTBaVGs0WXc9PQ==\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/email/verify_email",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"email",
+								"verify_email"
 							]
 						}
 					},
@@ -341,7 +380,7 @@
 			"name": "Posts",
 			"item": [
 				{
-					"name": "Create Post",
+					"name": "[local] Create Post",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -474,6 +513,31 @@
 									"key": "name",
 									"value": "btcusdt"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Assets",
+			"item": [
+				{
+					"name": "[local] Error Codes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/assets/error-codes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"assets",
+								"error-codes"
 							]
 						}
 					},
