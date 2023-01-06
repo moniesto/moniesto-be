@@ -17,7 +17,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/account/email/send_verification_email": {
-            "get": {
+            "post": {
                 "security": [
                     {
                         "bearerAuth": []
@@ -41,7 +41,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.SendVerificationEmailResponse"
+                            "$ref": "#/definitions/model.SendVerificationEmailRequest"
                         }
                     }
                 ],
@@ -63,6 +63,70 @@ const docTemplate = `{
                     },
                     "406": {
                         "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/email/verify_email": {
+            "post": {
+                "description": "Verify email by token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Verify Email",
+                "parameters": [
+                    {
+                        "description": "token is required",
+                        "name": "VerifyEmailBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.VerifyEmailRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.VerifyEmailResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "already verified email",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "expired token",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "token not found | user not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body \u0026 token",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorResponse"
                         }
@@ -986,7 +1050,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.SendVerificationEmailResponse": {
+        "model.SendVerificationEmailRequest": {
             "type": "object",
             "required": [
                 "redirect_url"
@@ -1051,6 +1115,25 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.VerifyEmailRequest": {
+            "type": "object",
+            "required": [
+                "token"
+            ],
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.VerifyEmailResponse": {
+            "type": "object",
+            "properties": {
+                "redirect_url": {
                     "type": "string"
                 }
             }

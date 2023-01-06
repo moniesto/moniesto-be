@@ -211,7 +211,7 @@ definitions:
     required:
     - email
     type: object
-  model.SendVerificationEmailResponse:
+  model.SendVerificationEmailRequest:
     properties:
       redirect_url:
         type: string
@@ -256,6 +256,18 @@ definitions:
       username:
         type: string
     type: object
+  model.VerifyEmailRequest:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  model.VerifyEmailResponse:
+    properties:
+      redirect_url:
+        type: string
+    type: object
   model.VerifyPasswordResetRequest:
     properties:
       new:
@@ -277,7 +289,7 @@ info:
   contact: {}
 paths:
   /account/email/send_verification_email:
-    get:
+    post:
       consumes:
       - application/json
       description: Email verification email sender
@@ -287,7 +299,7 @@ paths:
         name: SendVerificationEmailBody
         required: true
         schema:
-          $ref: '#/definitions/model.SendVerificationEmailResponse'
+          $ref: '#/definitions/model.SendVerificationEmailRequest'
       produces:
       - application/json
       responses:
@@ -312,6 +324,48 @@ paths:
       security:
       - bearerAuth: []
       summary: Send Verification Email
+      tags:
+      - Account
+  /account/email/verify_email:
+    post:
+      consumes:
+      - application/json
+      description: Verify email by token
+      parameters:
+      - description: token is required
+        in: body
+        name: VerifyEmailBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.VerifyEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.VerifyEmailResponse'
+        "400":
+          description: already verified email
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "403":
+          description: expired token
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: token not found | user not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body & token
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      summary: Verify Email
       tags:
       - Account
   /account/login:

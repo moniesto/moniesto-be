@@ -142,7 +142,7 @@ func (server *Server) checkUsername(ctx *gin.Context) {
 // @Failure 404 {object} clientError.ErrorResponse "user not found"
 // @Failure 406 {object} clientError.ErrorResponse "invalid body"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
-// @Router /account/email/send_verification_email [get]
+// @Router /account/email/send_verification_email [post]
 func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 	var req model.SendVerificationEmailRequest
 
@@ -185,6 +185,19 @@ func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
+// @Summary Verify Email
+// @Description Verify email by token
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param VerifyEmailBody body model.VerifyEmailRequest true "token is required"
+// @Success 200 {object} model.VerifyEmailResponse
+// @Failure 400 {object} clientError.ErrorResponse "already verified email"
+// @Failure 403 {object} clientError.ErrorResponse "expired token"
+// @Failure 404 {object} clientError.ErrorResponse "token not found | user not found"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body & token"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /account/email/verify_email [post]
 func (server *Server) verifyEmail(ctx *gin.Context) {
 	var req model.VerifyEmailRequest
 
