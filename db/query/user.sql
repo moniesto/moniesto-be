@@ -289,6 +289,11 @@ FROM "user"
 WHERE "user"."email" = $1
     AND "user"."deleted" = false;
 
+-- name: VerifyEmail :exec
+UPDATE "user"
+SET email_verified = true
+WHERE id = $1;
+
 -- name: GetActiveUsersVerifiedEmails :many
 SELECT email
 FROM "user"

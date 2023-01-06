@@ -28,8 +28,16 @@ type CheckUsernameResponse struct {
 	Validity bool `json:"validity"`
 }
 
-type SendVerificationEmailResponse struct {
+type SendVerificationEmailRequest struct {
 	RedirectURL string `json:"redirect_url" binding:"required"`
+}
+
+type VerifyEmailRequest struct {
+	Token string `json:"token" binding:"required"`
+}
+
+type VerifyEmailResponse struct {
+	RedirectURL string `json:"redirect_url"`
 }
 
 // MAKER

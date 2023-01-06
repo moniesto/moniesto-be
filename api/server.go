@@ -54,6 +54,8 @@ func (server *Server) setupRouter() {
 		accountRouters.POST("/password/verify_token", server.verifyToken)
 		accountRouters.POST("/password/change_password", server.verifyTokenChangePassword)
 
+		accountRouters.POST("/email/verify_email", server.verifyEmail)
+
 		// Need auth
 		accountRoutersAuth := accountRouters.Group("/").Use(authMiddleware(server.tokenMaker))
 		accountRoutersAuth.PUT("/password", server.changePassword)

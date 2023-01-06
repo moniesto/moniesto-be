@@ -157,7 +157,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [need test] POST /account/email/send_verification_email -> send email verification email
 
-- [ ] POST /account/email/verify_email -> verify email
+:heavy_check_mark: POST [need test] /account/email/verify_email -> verify email
 
 - [ ] GET /content/posts?subscribed=<subscribed>&limit=<limit>&offset=<offset>
 
@@ -184,5 +184,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 - [ ] POST /moniests/:username/subscriptions
 
 :heavy_check_mark: [need test] GET /crypto/currencies?name=BTC
+
+- [ ] GET /assets/error_codes -> get error codes
 
 - [ ] ...

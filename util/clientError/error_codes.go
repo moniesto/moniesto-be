@@ -61,6 +61,11 @@ const (
 	Account_EmailVerification_AlreadyVerified        = "Account_EmailVerification_AlreadyVerified"
 	Account_EmailVerification_ServerErrorCreateToken = "Account_EmailVerification_ServerErrorCreateToken"
 	Account_EmailVerification_SendEmail              = "Account_EmailVerification_SendEmail"
+	Account_EmailVerification_InvalidToken           = "Account_EmailVerification_InvalidToken"
+	Account_EmailVerification_NotFoundToken          = "Account_EmailVerification_NotFoundToken"
+	Account_EmailVerification_ServerErrorGetToken    = "Account_EmailVerification_ServerErrorGetToken"
+	Account_EmailVerification_ExpiredToken           = "Account_EmailVerification_ExpiredToken"
+	Account_EmailVerification_ServerErrorVerifyEmail = "Account_EmailVerification_ServerErrorVerifyEmail"
 
 	Moniest_CreateMoniest_InvalidBody              = "Moniest_CreateMoniest_InvalidBody"
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest = "Moniest_CreateMoniest_ServerErrorUserIsMoniest"
@@ -152,6 +157,11 @@ var errorMessages errorMessagesType = errorMessagesType{
 	Account_EmailVerification_AlreadyVerified:        "The email is already verified",
 	Account_EmailVerification_ServerErrorCreateToken: "Server error on creating token",
 	Account_EmailVerification_SendEmail:              "Server error on sending email",
+	Account_EmailVerification_InvalidToken:           "Email Verification Token is invalid",
+	Account_EmailVerification_NotFoundToken:          "Email Verification Token is not in the system",
+	Account_EmailVerification_ServerErrorGetToken:    "Server error on getting Email Verification Token from system",
+	Account_EmailVerification_ExpiredToken:           "Email Verification Token is expired",
+	Account_EmailVerification_ServerErrorVerifyEmail: "Server error on verifying email",
 
 	Moniest_CreateMoniest_InvalidBody:              "Create moniest request body is invalid",
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest: "Server error on user is moniest check",

@@ -153,6 +153,7 @@ func (server *Server) verifyTokenChangePassword(ctx *gin.Context) {
 		return
 	}
 
+	// STEP: delete the token that used
 	err = server.service.DeletePasswordResetToken(ctx, password_reset_token.Token)
 	if err != nil {
 		ctx.JSON(clientError.ParseError(err))

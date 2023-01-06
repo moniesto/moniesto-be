@@ -136,7 +136,7 @@ func (server *Server) checkUsername(ctx *gin.Context) {
 // @Tags Account
 // @Accept json
 // @Produce json
-// @Param SendVerificationEmailBody body model.SendVerificationEmailResponse true "redirect_url is required"
+// @Param SendVerificationEmailBody body model.SendVerificationEmailRequest true "redirect_url is required"
 // @Success 202
 // @Failure 400 {object} clientError.ErrorResponse "email already verified"
 // @Failure 404 {object} clientError.ErrorResponse "user not found"
@@ -144,7 +144,7 @@ func (server *Server) checkUsername(ctx *gin.Context) {
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /account/email/send_verification_email [get]
 func (server *Server) sendVerificationEmail(ctx *gin.Context) {
-	var req model.SendVerificationEmailResponse
+	var req model.SendVerificationEmailRequest
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -183,6 +183,52 @@ func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 	}
 
 	ctx.Status(http.StatusAccepted)
+}
+
+func (server *Server) verifyEmail(ctx *gin.Context) {
+	var req model.VerifyEmailRequest
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_EmailVerification_InvalidBody))
+		return
+	}
+
+	// STEP: validating email verification token [decode + expiry check]
+	email_verification_token, err := server.service.GetEmailVerificationToken(ctx, req.Token)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: get user id from email verification record
+	user_id := email_verification_token.UserID
+
+	// STEP: get user
+	user, err := server.service.GetOwnUserByID(ctx, user_id)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: check user email is already verified
+	if user.EmailVerified {
+		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.Account_EmailVerification_AlreadyVerified))
+		return
+	}
+
+	// STEP: verify user email
+	err = server.service.VerifyEmail(ctx, user_id)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	response := model.VerifyEmailResponse{
+		RedirectURL: email_verification_token.RedirectUrl,
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }
 
 func (server *Server) updateProfile(ctx *gin.Context) {

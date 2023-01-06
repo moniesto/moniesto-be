@@ -219,3 +219,43 @@ func (service *Service) CreateEmailVerificationToken(ctx *gin.Context, userID, r
 
 	return email_verification_token, nil
 }
+
+// GetEmailVerificationToken gets email verification token from the DB [check expiry + token validity]
+func (service *Service) GetEmailVerificationToken(ctx *gin.Context, encoded_token string) (db.EmailVerificationToken, error) {
+
+	// STEP: get decoded token
+	decoded_token, err := token.GetValidatingToken(encoded_token)
+	if err != nil {
+		return db.EmailVerificationToken{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_EmailVerification_InvalidToken)
+	}
+
+	// STEP: get email verification token record
+	email_verification_token, err := service.Store.GetEmailVerificationTokenByToken(ctx, decoded_token)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return db.EmailVerificationToken{}, clientError.CreateError(http.StatusNotFound, clientError.Account_EmailVerification_NotFoundToken)
+		}
+
+		// TODO: add server error
+		return db.EmailVerificationToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorGetToken)
+	}
+
+	// STEP: token is not expired
+	if time.Now().After(email_verification_token.TokenExpiry) {
+		return db.EmailVerificationToken{}, clientError.CreateError(http.StatusForbidden, clientError.Account_EmailVerification_ExpiredToken)
+	}
+
+	return email_verification_token, nil
+}
+
+// VerifyEmail is verifying email
+func (service *Service) VerifyEmail(ctx *gin.Context, user_id string) error {
+
+	// STEP: verify email
+	err := service.Store.VerifyEmail(ctx, user_id)
+	if err != nil {
+		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorVerifyEmail)
+	}
+
+	return nil
+}
