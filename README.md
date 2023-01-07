@@ -173,20 +173,26 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] GET /users/:username/subscribers?limit=<limit>&offset=<offset>
 
-:heavy_check_mark: [need test + latest check + update after payment] POST /moniests
+:heavy_check_mark: [need test + latest check + update after payment] POST /moniests -> be moniest
 
-:heavy_check_mark: [need test] POST /moniests/posts
+:heavy_check_mark: [need test] POST /moniests/posts -> create post
 
-- [ ] PATCH /account/profile
+- [ ] PATCH /account/profile -> update profile info
 
 - [ ] PATCH /account/username -> update username
 
-- [ ] PATCH /moniests/subscription-info
+- [ ] PATCH /moniests/subscription-info -> update subscription info
 
-- [ ] POST /moniests/:username/subscriptions
+- [ ] POST /moniests/:username/subscribe -> subscribe to a moniest
+
+- [ ] POST /moniests/:username/unsubscribe -> unsubscribe from a moniest
 
 :heavy_check_mark: [need test] GET /crypto/currencies?name=BTC
 
 :heavy_check_mark: GET /assets/error-codes -> get error codes
+
+- [ ] POST /account/card -> Add new card
+
+- [ ] DELETE /account/card/:id -> Delete specific card
 
 - [ ] ...
