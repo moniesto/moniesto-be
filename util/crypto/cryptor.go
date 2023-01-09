@@ -5,12 +5,17 @@ import (
 	"github.com/moniesto/moniesto-be/model"
 )
 
+// "https://api3.binance.com/api/v3/ticker/price",
+
 var APIlinks []string = []string{
-	"https://api3.binance.com/api/v3/ticker/price",
-	"https://api2.binance.com/api/v3/ticker/price",
-	"https://api1.binance.com/api/v3/ticker/price",
-	"https://api.binance.com/api/v3/ticker/price",
+	"https://api3.binance.com/api/v3",
+	"https://api2.binance.com/api/v3",
+	"https://api1.binance.com/api/v3",
+	"https://api.binance.com/api/v3",
 }
+
+var tickerURI = "/ticker/price"
+var historyDataURI = "/klines"
 
 // GetCurrencies get all currencies from the crypto API
 func GetCurrencies() (model.GetCurrenciesAPIResponse, error) {
@@ -22,9 +27,11 @@ func GetCurrencies() (model.GetCurrenciesAPIResponse, error) {
 
 	// check all APIs from the list
 	for {
+		api_link := APIlinks[link_number] + tickerURI
+
 		resp, err := client.R().
 			SetResult(&currencies).
-			Get(APIlinks[link_number])
+			Get(api_link)
 
 		// if fails, then check another API
 		if err != nil || resp.StatusCode() >= 400 {
@@ -38,4 +45,9 @@ func GetCurrencies() (model.GetCurrenciesAPIResponse, error) {
 
 		return currencies, nil
 	}
+}
+
+func GetHistoryData(symbol, interval string, limit int, startTime, endTime int64) {
+	
+
 }
