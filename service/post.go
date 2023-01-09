@@ -40,7 +40,7 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 
 	// STEP: get score
 	// TODO: update calculate score
-	score := core.CalculateApproxScore()
+	score := core.CalculateApproxScore(req.Duration.Sub(time.Now()), currency_price, req.Target3)
 
 	// STEP: create post
 	createPost := db.CreatePostParams{
