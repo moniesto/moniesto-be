@@ -524,7 +524,7 @@
 			"name": "Assets",
 			"item": [
 				{
-					"name": "[local] Error Codes",
+					"name": "[local] Get Error Codes",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -538,6 +538,26 @@
 							"path": [
 								"assets",
 								"error-codes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Get Configs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/assets/configs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"assets",
+								"configs"
 							]
 						}
 					},

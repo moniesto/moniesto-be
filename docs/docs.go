@@ -501,6 +501,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/assets/configs": {
+            "get": {
+                "description": "Get All General Configs of system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get General Configs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetConfigsResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/assets/error-codes": {
             "get": {
                 "description": "Get All Error Codes in the system",
@@ -929,6 +952,32 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "price": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.GetConfigsResponse": {
+            "type": "object",
+            "properties": {
+                "email_regex": {
+                    "type": "string"
+                },
+                "max_bio_lenght": {
+                    "type": "integer"
+                },
+                "max_description_length": {
+                    "type": "integer"
+                },
+                "max_subscription_message_length": {
+                    "type": "integer"
+                },
+                "min_fee": {
+                    "type": "number"
+                },
+                "password_length": {
+                    "type": "integer"
+                },
+                "username_regex": {
                     "type": "string"
                 }
             }

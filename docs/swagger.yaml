@@ -117,6 +117,23 @@ definitions:
       price:
         type: string
     type: object
+  model.GetConfigsResponse:
+    properties:
+      email_regex:
+        type: string
+      max_bio_lenght:
+        type: integer
+      max_description_length:
+        type: integer
+      max_subscription_message_length:
+        type: integer
+      min_fee:
+        type: number
+      password_length:
+        type: integer
+      username_regex:
+        type: string
+    type: object
   model.LoginRequest:
     properties:
       identifier:
@@ -607,6 +624,21 @@ paths:
       summary: Check Username
       tags:
       - Account
+  /assets/configs:
+    get:
+      consumes:
+      - application/json
+      description: Get All General Configs of system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetConfigsResponse'
+      summary: Get General Configs
+      tags:
+      - Assets
   /assets/error-codes:
     get:
       consumes:
