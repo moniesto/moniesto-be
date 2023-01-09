@@ -2,19 +2,16 @@ package validation
 
 import (
 	"fmt"
-	"strings"
-
-	"net/mail"
+	"regexp"
 
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
-	"github.com/moniesto/moniesto-be/util"
 )
 
 // Password checks the password is valid
 func Password(password string) error {
-	if len(password) < util.ValidPasswordLength {
-		return fmt.Errorf("length of password is less than %d", util.ValidPasswordLength)
+	if len(password) < ValidPasswordLength {
+		return fmt.Errorf("length of password is less than %d", ValidPasswordLength)
 	}
 
 	return nil
@@ -22,18 +19,39 @@ func Password(password string) error {
 
 // Email checks the email is valid
 func Email(email string) (string, error) {
-	addr, err := mail.ParseAddress(email)
+	// IMPLEMENTATION 1
+	/*
+		addr, err := mail.ParseAddress(email)
 
-	if err != nil {
+		if err != nil {
+			return "", fmt.Errorf("email is not valid %s", email)
+		}
+
+		return addr.Address, nil
+	*/
+
+	// IMPLEMENTATION 2 [updated with regex logic]
+	emailRegex := regexp.MustCompile(EmailRegex)
+	if !emailRegex.MatchString(email) {
 		return "", fmt.Errorf("email is not valid %s", email)
 	}
 
-	return addr.Address, nil
+	return email, nil
 }
 
 // Username checks the username is valid
 func Username(username string) error {
-	if len(username) == 0 || strings.Contains(username, " ") || contains(InvalidUsernames, username) {
+	// IMPLEMENTATION 1
+	/*
+		if len(username) == 0 || strings.Contains(username, " ") || contains(InvalidUsernames, username) {
+			return fmt.Errorf("username is not valid %s", username)
+		}
+
+		return nil
+	*/
+
+	usernameRegex := regexp.MustCompile(UsernameRegex)
+	if !usernameRegex.MatchString(username) {
 		return fmt.Errorf("username is not valid %s", username)
 	}
 

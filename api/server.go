@@ -73,6 +73,7 @@ func (server *Server) setupRouter() {
 	// User routes
 	usersRouters := router.Group("/users").Use(authMiddleware(server.tokenMaker))
 	{
+		// PRIMARY TODO: make this endpoint public instead of auth
 		usersRouters.GET("/:username", server.GetUserByUsername)
 	}
 
@@ -86,6 +87,7 @@ func (server *Server) setupRouter() {
 	assetRouters := router.Group("/assets")
 	{
 		assetRouters.GET("/error-codes", server.getErrorCodes)
+		assetRouters.GET("/configs", server.getConfigs)
 	}
 
 	// Swagger docs

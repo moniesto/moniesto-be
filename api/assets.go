@@ -20,3 +20,17 @@ func (server *Server) getErrorCodes(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, errorCodes)
 }
+
+// @Summary Get General Configs
+// @Description Get All General Configs of system
+// @Tags Assets
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.GetConfigsResponse
+// @Router /assets/configs [get]
+func (server *Server) getConfigs(ctx *gin.Context) {
+
+	configs := server.service.GetConfigs()
+
+	ctx.JSON(http.StatusOK, configs)
+}

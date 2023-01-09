@@ -10,6 +10,7 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
+// PRIMARY TODO: make post will have status field [pending, failed, success]
 // @Summary Create Post
 // @Description Create Crypto Post
 // @Security bearerAuth
