@@ -30,6 +30,7 @@ func (server *Server) GetUserByUsername(ctx *gin.Context) {
 	// STEP: get own username from token
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	own_username := authPayload.User.Username
+	own_user_id := authPayload.User.ID
 
 	// STEP: get user by username [if own user, additional +email field]
 	var response interface{}
@@ -39,6 +40,13 @@ func (server *Server) GetUserByUsername(ctx *gin.Context) {
 
 		if err != nil {
 			ctx.JSON(clientError.ParseError(err))
+			return
+		}
+
+		// TODO: find a better solution for this problem (update token when username changes)
+		// if user changed username, but it is not updated on TOKEN
+		if user.ID != own_user_id {
+			ctx.JSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_InvalidToken))
 			return
 		}
 
