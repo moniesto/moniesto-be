@@ -61,6 +61,7 @@ func (server *Server) setupRouter() {
 		accountRoutersAuth.PUT("/password", server.changePassword)
 		accountRoutersAuth.PATCH("/profile", server.updateProfile)
 		accountRoutersAuth.POST("/email/send_verification_email", server.sendVerificationEmail)
+		accountRoutersAuth.PATCH("/username", server.changeUsername)
 	}
 
 	// Moniests routes - [need Auth]

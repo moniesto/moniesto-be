@@ -251,6 +251,60 @@ func (server *Server) verifyEmail(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+func (server *Server) changeUsername(ctx *gin.Context) {
+	var req model.ChangeUsernameRequest
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangeUsername_InvalidBody))
+		return
+	}
+
+	// STEP: check username validity
+	validity, err := server.service.CheckUsername(ctx, req.NewUsername)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: username is already registered
+	if !validity {
+		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Account_ChangeUsername_RegisteredUsername))
+		return
+	}
+
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: update username of user
+	err = server.service.ChangeUsername(ctx, user_id, req.NewUsername)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: create new token
+	accessToken, err := server.tokenMaker.CreateToken(token.GeneralPaylod{
+		UserPayload: token.UserPayload{
+			Username: req.NewUsername,
+			ID:       user_id,
+		},
+	}, server.config.AccessTokenDuration)
+	if err != nil {
+		// TODO: add server error
+		ctx.JSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_ChangeUsername_ServerErrorToken))
+		return
+	}
+
+	// STEP: send response
+	response := model.ChangeUsernameResponse{
+		Token: accessToken,
+	}
+
+	ctx.JSON(http.StatusOK, response)
+}
+
 func (server *Server) updateProfile(ctx *gin.Context) {
 
 	fmt.Println("updateProfile")

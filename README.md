@@ -179,7 +179,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] PATCH /account/profile -> update profile info
 
-- [ ] PATCH /account/username -> update username
+:heavy_check_mark: [need test] PATCH /account/username -> update username
 
 - [ ] PATCH /moniests/subscription-info -> update subscription info
 

@@ -272,3 +272,26 @@ func (service *Service) DeleteEmailVerificationToken(ctx *gin.Context, token str
 
 	return nil
 }
+
+// ChangeUsername set new username to user [+ check username validity]
+func (service *Service) ChangeUsername(ctx *gin.Context, user_id, new_username string) error {
+
+	// STEP: check username is valid
+	err := validation.Username(new_username)
+	if err != nil {
+		return clientError.CreateError(http.StatusNotAcceptable, clientError.Account_ChangeUsername_InvalidUsername)
+	}
+
+	params := db.SetUsernameParams{
+		ID:       user_id,
+		Username: new_username,
+	}
+
+	// STEP: update/set new username
+	err = service.Store.SetUsername(ctx, params)
+	if err != nil {
+		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangeUsername_ServerErrorChangeUsername)
+	}
+
+	return nil
+}

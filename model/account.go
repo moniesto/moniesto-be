@@ -40,6 +40,14 @@ type VerifyEmailResponse struct {
 	RedirectURL string `json:"redirect_url"`
 }
 
+type ChangeUsernameRequest struct {
+	NewUsername string `json:"new" binding:"required"`
+}
+
+type ChangeUsernameResponse struct {
+	Token string `json:"token"`
+}
+
 // MAKER
 // NewLoginResponse creates/return LoginResponse object
 func NewLoginResponse(token string, user db.LoginUserByEmailRow) (response LoginResponse) {

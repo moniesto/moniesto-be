@@ -317,6 +317,11 @@ UPDATE "user"
 SET password = $2
 WHERE id = $1;
 
+-- name: SetUsername :exec
+UPDATE "user"
+SET username = $2
+WHERE id = $1;
+
 -- name: CheckEmail :one
 SELECT COUNT(*) = 0 AS isEmailValid
 FROM "user"

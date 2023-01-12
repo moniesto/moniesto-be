@@ -68,6 +68,12 @@ const (
 	Account_EmailVerification_ServerErrorVerifyEmail = "Account_EmailVerification_ServerErrorVerifyEmail"
 	Account_EmailVerification_ServerErrorDeleteToken = "Account_EmailVerification_ServerErrorDeleteToken"
 
+	Account_ChangeUsername_InvalidBody               = "Account_ChangeUsername_InvalidBody"
+	Account_ChangeUsername_RegisteredUsername        = "Account_ChangeUsername_RegisteredUsername"
+	Account_ChangeUsername_InvalidUsername           = "Account_ChangeUsername_InvalidUsername"
+	Account_ChangeUsername_ServerErrorChangeUsername = "Account_ChangeUsername_ServerErrorChangeUsername"
+	Account_ChangeUsername_ServerErrorToken          = "Account_ChangeUsername_ServerErrorToken"
+
 	Moniest_CreateMoniest_InvalidBody              = "Moniest_CreateMoniest_InvalidBody"
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest = "Moniest_CreateMoniest_ServerErrorUserIsMoniest"
 	Moniest_CreateMoniest_UserIsAlreadyMoniest     = "Moniest_CreateMoniest_UserIsAlreadyMoniest"
@@ -164,6 +170,12 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Account_EmailVerification_ExpiredToken:           "Email Verification Token is expired",
 	Account_EmailVerification_ServerErrorVerifyEmail: "Server error on verifying email",
 	Account_EmailVerification_ServerErrorDeleteToken: "Server error on deleting Email Verification Token",
+
+	Account_ChangeUsername_InvalidBody:               "Change username request body is invalid",
+	Account_ChangeUsername_RegisteredUsername:        "Username is already registered",
+	Account_ChangeUsername_InvalidUsername:           "Username is invalid",
+	Account_ChangeUsername_ServerErrorChangeUsername: "Server error on changing username",
+	Account_ChangeUsername_ServerErrorToken:          "Server error on token operation",
 
 	Moniest_CreateMoniest_InvalidBody:              "Create moniest request body is invalid",
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest: "Server error on user is moniest check",
