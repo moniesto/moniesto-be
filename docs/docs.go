@@ -457,6 +457,63 @@ const docTemplate = `{
                 }
             }
         },
+        "/account/username": {
+            "patch": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Change username of the user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Change Username",
+                "parameters": [
+                    {
+                        "description": "new is required",
+                        "name": "ChangeUsernameBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ChangeUsernameRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ChangeUsernameResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "username is already taken",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body or username",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/account/usernames/:username/check": {
             "get": {
                 "description": "Check username is valid of not",
@@ -821,6 +878,25 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "old": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ChangeUsernameRequest": {
+            "type": "object",
+            "required": [
+                "new"
+            ],
+            "properties": {
+                "new": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ChangeUsernameResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
                     "type": "string"
                 }
             }

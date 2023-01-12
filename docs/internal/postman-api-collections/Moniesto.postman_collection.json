@@ -40,12 +40,21 @@
 				},
 				{
 					"name": "[local] Register",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/csv",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"name\": \"test\",\r\n \"surname\": \"test\",\r\n \"username\": \"test\",\r\n \"email\": \"parvvazov@gmail.com\",\r\n \"password\": \"testtest\"\r\n}",
+							"raw": "{\r\n \"name\": \"test\",\r\n \"surname\": \"test\",\r\n \"username\": \"test1\",\r\n \"email\": \"parvvazov1@gmail.com\",\r\n \"password\": \"testtest\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -73,7 +82,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/account/usernames/testtest/check",
+							"raw": "http://localhost:8080/account/usernames/test/check",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -82,7 +91,7 @@
 							"path": [
 								"account",
 								"usernames",
-								"testtest",
+								"test",
 								"check"
 							]
 						}
@@ -239,6 +248,41 @@
 					"response": []
 				},
 				{
+					"name": "[local] Change Username",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdhMmRjOTY1LTk4YjEtNGU5NC04MzcwLWM1ZWM5YWQ0Y2E2OCIsInVzZXIiOnsidXNlcm5hbWUiOiJ0ZXN0IiwiaWQiOiJjZTMxOWQyZC05MjBlLTRiNzUtYWI3Ni0zZWFkZTgzMGVmYTgifSwiaXNzdWVkX2F0IjoiMjAyMy0wMS0xM1QwMToyMToyOS41MzI0MzYzKzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDEtMTRUMDE6MjE6MjkuNTMyNDM2MyswNDowMCJ9.sEuzokNE02oINSXQ_tobgewQRKgiqc_nTk9WSgOs47E",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"new\":\"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/account/username",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"account",
+								"username"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "[local] Send Email Verification email",
 					"request": {
 						"method": "POST",
@@ -355,12 +399,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyY2FhOTI1LWU0OTMtNDJjNC1iNTY5LTgyZmI4YzViYTJiMiIsInVzZXIiOnsidXNlcm5hbWUiOiJ0ZXN0dGVzdCIsImlkIjoiZWY3ZjNmMTMtODIwNi00MWVjLWE2YjctYzI2MTczMWZlNzdhIn0sImlzc3VlZF9hdCI6IjIwMjItMTItMDNUMDA6NTg6NDAuNDA3Nzg0KzAzOjAwIiwiZXhwaXJlZF9hdCI6IjIwMjItMTItMDNUMDE6MTM6NDAuNDA3Nzg0KzAzOjAwIn0.tuXOStESUKeDqxNfLpzZ9rmfwkAx4zMCyXo25LLHHU8",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOGQxNDA3LTJhZWYtNGMyNS05NDJlLTc4ODE0OWM1YmQ0NiIsInVzZXIiOnsidXNlcm5hbWUiOiJ0ZXN0IiwiaWQiOiJjZTMxOWQyZC05MjBlLTRiNzUtYWI3Ni0zZWFkZTgzMGVmYTgifSwiaXNzdWVkX2F0IjoiMjAyMy0wMS0xM1QwMTowODoxMi42MjI4MzU0KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDEtMTRUMDE6MDg6MTIuNjIyODM1NCswNDowMCJ9.KBdFhRntuveQJByCiv3rkGB--HN2jRqJc8DVi_ptwYU",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/users/testtest1",
+							"raw": "http://localhost:8080/users/test",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -368,7 +412,7 @@
 							"port": "8080",
 							"path": [
 								"users",
-								"testtest1"
+								"test"
 							]
 						}
 					},
@@ -425,7 +469,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://api2.binance.com/api/v3/ticker/price",
+							"raw": "https://api2.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
 							"protocol": "https",
 							"host": [
 								"api2",
@@ -437,6 +481,38 @@
 								"v3",
 								"ticker",
 								"price"
+							],
+							"query": [
+								{
+									"key": "symbol",
+									"value": "BTCUSDT"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[binance] Binance ticker prices Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://data.binance.vision/data/spot/daily/klines/BTCUSDT/1s/BTCUSDT-1s-2023-01-08.zip",
+							"protocol": "https",
+							"host": [
+								"data",
+								"binance",
+								"vision"
+							],
+							"path": [
+								"data",
+								"spot",
+								"daily",
+								"klines",
+								"BTCUSDT",
+								"1s",
+								"BTCUSDT-1s-2023-01-08.zip"
 							]
 						}
 					},
@@ -448,7 +524,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://api2.binance.com/api/v3/klines?startTime=1638144000000&endTime=1672531200000&limit=1000000&interval=1h&symbol=BTCUSDT",
+							"raw": "https://api2.binance.com/api/v3/klines?startTime=1638144000000&endTime=1672531200000&limit=1000&interval=1s&symbol=BTCUSDT",
 							"protocol": "https",
 							"host": [
 								"api2",
@@ -471,11 +547,11 @@
 								},
 								{
 									"key": "limit",
-									"value": "1000000"
+									"value": "1000"
 								},
 								{
 									"key": "interval",
-									"value": "1h"
+									"value": "1s"
 								},
 								{
 									"key": "symbol",

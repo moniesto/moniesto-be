@@ -28,6 +28,18 @@ definitions:
     - new
     - old
     type: object
+  model.ChangeUsernameRequest:
+    properties:
+      new:
+        type: string
+    required:
+    - new
+    type: object
+  model.ChangeUsernameResponse:
+    properties:
+      token:
+        type: string
+    type: object
   model.CheckUsernameResponse:
     properties:
       validity:
@@ -595,6 +607,42 @@ paths:
       summary: Register
       tags:
       - Auth
+  /account/username:
+    patch:
+      consumes:
+      - application/json
+      description: Change username of the user
+      parameters:
+      - description: new is required
+        in: body
+        name: ChangeUsernameBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.ChangeUsernameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ChangeUsernameResponse'
+        "403":
+          description: username is already taken
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body or username
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Change Username
+      tags:
+      - Account
   /account/usernames/:username/check:
     get:
       consumes:

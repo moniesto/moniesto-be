@@ -251,6 +251,18 @@ func (server *Server) verifyEmail(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary Change Username
+// @Description Change username of the user
+// @Security bearerAuth
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param ChangeUsernameBody body model.ChangeUsernameRequest true "new is required"
+// @Success 200 {object} model.ChangeUsernameResponse
+// @Failure 403 {object} clientError.ErrorResponse "username is already taken"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body or username"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /account/username [patch]
 func (server *Server) changeUsername(ctx *gin.Context) {
 	var req model.ChangeUsernameRequest
 
