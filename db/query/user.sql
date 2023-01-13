@@ -289,6 +289,13 @@ FROM "user"
 WHERE "user"."email" = $1
     AND "user"."deleted" = false;
 
+-- name: UpdateUser :exec
+UPDATE "user"
+SET name = $2,
+    surname = $3,
+    location = $4
+WHERE id = $1;
+
 -- name: VerifyEmail :exec
 UPDATE "user"
 SET email_verified = true

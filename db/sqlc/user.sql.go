@@ -696,6 +696,31 @@ func (q *Queries) SetUsername(ctx context.Context, arg SetUsernameParams) error 
 	return err
 }
 
+const updateUser = `-- name: UpdateUser :exec
+UPDATE "user"
+SET name = $2,
+    surname = $3,
+    location = $4
+WHERE id = $1
+`
+
+type UpdateUserParams struct {
+	ID       string         `json:"id"`
+	Name     string         `json:"name"`
+	Surname  string         `json:"surname"`
+	Location sql.NullString `json:"location"`
+}
+
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
+	_, err := q.db.ExecContext(ctx, updateUser,
+		arg.ID,
+		arg.Name,
+		arg.Surname,
+		arg.Location,
+	)
+	return err
+}
+
 const verifyEmail = `-- name: VerifyEmail :exec
 UPDATE "user"
 SET email_verified = true

@@ -74,6 +74,10 @@ const (
 	Account_ChangeUsername_ServerErrorChangeUsername = "Account_ChangeUsername_ServerErrorChangeUsername"
 	Account_ChangeUsername_ServerErrorToken          = "Account_ChangeUsername_ServerErrorToken"
 
+	Account_UpdateProfile_InvalidBody           = "Account_UpdateProfile_InvalidBody"
+	Account_UpdateProfile_ServerErrorGetUser    = "Account_UpdateProfile_ServerErrorGetUser"
+	Account_UpdateProfile_ServerErrorUpdateUser = "Account_UpdateProfile_ServerErrorUpdateUser"
+
 	Moniest_CreateMoniest_InvalidBody              = "Moniest_CreateMoniest_InvalidBody"
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest = "Moniest_CreateMoniest_ServerErrorUserIsMoniest"
 	Moniest_CreateMoniest_UserIsAlreadyMoniest     = "Moniest_CreateMoniest_UserIsAlreadyMoniest"
@@ -176,6 +180,10 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Account_ChangeUsername_InvalidUsername:           "Username is invalid",
 	Account_ChangeUsername_ServerErrorChangeUsername: "Server error on changing username",
 	Account_ChangeUsername_ServerErrorToken:          "Server error on token operation",
+
+	Account_UpdateProfile_InvalidBody:           "Update profile request body is invalid",
+	Account_UpdateProfile_ServerErrorGetUser:    "Server error on getting user",
+	Account_UpdateProfile_ServerErrorUpdateUser: "Server error updating user",
 
 	Moniest_CreateMoniest_InvalidBody:              "Create moniest request body is invalid",
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest: "Server error on user is moniest check",

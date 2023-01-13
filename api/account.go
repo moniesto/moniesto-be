@@ -3,7 +3,6 @@ package api
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -318,7 +317,18 @@ func (server *Server) changeUsername(ctx *gin.Context) {
 }
 
 func (server *Server) updateProfile(ctx *gin.Context) {
+	var req model.UpdateProfileRequest
 
-	fmt.Println("updateProfile")
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_UpdateProfile_InvalidBody))
+		return
+	}
+
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	server.service.UpdateProfile(ctx, user_id, req)
 
 }

@@ -295,3 +295,48 @@ func (service *Service) ChangeUsername(ctx *gin.Context, user_id, new_username s
 
 	return nil
 }
+
+// UpdateProfile updates profile fields
+func (service *Service) UpdateProfile(ctx *gin.Context, user_id string, req model.UpdateProfileRequest) error {
+
+	// STEP: get user data
+	user, err := service.Store.GetUserByID(ctx, user_id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return clientError.CreateError(http.StatusNotFound, clientError.UserNotFoundByID)
+		} else {
+			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateProfile_ServerErrorGetUser)
+		}
+	}
+
+	// STEP: update the ones that provided on parameters
+	var param db.UpdateUserParams = db.UpdateUserParams{
+		ID:       user_id,
+		Name:     user.Name,
+		Surname:  user.Surname,
+		Location: user.Location,
+	}
+
+	if req.Name != "" {
+		param.Name = req.Name
+	}
+
+	if req.Surname != "" {
+		param.Surname = req.Surname
+	}
+
+	if req.Location != "" {
+		param.Location = sql.NullString{
+			Valid:  true,
+			String: req.Location,
+		}
+	}
+
+	// STEP: update user
+	err = service.Store.UpdateUser(ctx, param)
+	if err != nil {
+		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateProfile_ServerErrorUpdateUser)
+	}
+
+	return nil
+}
