@@ -329,6 +329,12 @@ func (server *Server) updateProfile(ctx *gin.Context) {
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	user_id := authPayload.User.ID
 
-	server.service.UpdateProfile(ctx, user_id, req)
+	err := server.service.UpdateProfile(ctx, user_id, req)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: update photos
 
 }
