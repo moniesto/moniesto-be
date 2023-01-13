@@ -10,6 +10,7 @@ import (
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/service"
+	"github.com/moniesto/moniesto-be/util/storage"
 	"github.com/moniesto/moniesto-be/util/systemError"
 	"github.com/stretchr/testify/require"
 
@@ -29,7 +30,13 @@ func newTestServer(t *testing.T) *Server {
 	}
 	store := db.NewStore(testDB)
 
-	service, err := service.NewService(store, config)
+	// get storage instance
+	storage, err := storage.NewCloudinaryUploader(config.CloudinaryURL)
+	if err != nil {
+		log.Fatal("cannot create storage instance:", err)
+	}
+
+	service, err := service.NewService(store, config, storage)
 	if err != nil {
 		log.Fatal(systemError.InternalMessages["RunService"](err))
 	}

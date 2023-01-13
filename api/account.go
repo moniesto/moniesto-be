@@ -335,6 +335,18 @@ func (server *Server) updateProfile(ctx *gin.Context) {
 		return
 	}
 
-	// STEP: update photos
+	// STEP: update profile photo
+	err = server.service.UpdateProfilePhoto(ctx, user_id, req.ProfilePhoto)
+	if err != nil {
+		// TODO: check
+	}
+
+	// STEP: update background photo
+	err = server.service.UpdateBackgroundPhoto(ctx, user_id, req.BackgroundPhoto)
+	if err != nil {
+		// TODO: check
+	}
+
+	// STEP: get latest form of own user, and send it as response
 
 }

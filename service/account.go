@@ -296,7 +296,7 @@ func (service *Service) ChangeUsername(ctx *gin.Context, user_id, new_username s
 	return nil
 }
 
-// UpdateProfile updates profile fields
+// UpdateProfile updates profile fields [name | surname | location]
 func (service *Service) UpdateProfile(ctx *gin.Context, user_id string, req model.UpdateProfileRequest) error {
 	difference := false
 
@@ -347,4 +347,41 @@ func (service *Service) UpdateProfile(ctx *gin.Context, user_id string, req mode
 	}
 
 	return nil
+}
+
+func (service *Service) UpdateProfilePhoto(ctx *gin.Context, user_id string, image_base64 string) error {
+
+	if image_base64 == "" {
+		return nil
+	}
+
+	/*
+		STEPS:
+			get current one if exists
+			upload to storage, get links
+			insert (if not exist), update if exists
+	*/
+
+	// service.Storage.UploadProfilePhoto(ctx, )
+
+	return nil
+}
+
+func (service *Service) UpdateBackgroundPhoto(ctx *gin.Context, user_id string, image_base64 string) error {
+
+	if image_base64 == "" {
+		return nil
+	}
+
+	/*
+		STEPS:
+			get current one if exists
+			upload to storage, get links
+			insert (if not exist), update if exists
+	*/
+
+	// service.Storage.UploadBackgroundPhoto(ctx, )
+
+	return nil
+
 }

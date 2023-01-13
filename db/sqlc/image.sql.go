@@ -11,12 +11,13 @@ import (
 
 const addImage = `-- name: AddImage :one
 INSERT INTO image (
-    id, 
-    user_id, 
-    link, 
-    thumbnail_link, 
-    type,
-    created_at) 
+        id,
+        user_id,
+        link,
+        thumbnail_link,
+        type,
+        created_at
+    )
 VALUES ($1, $2, $3, $4, $5, now())
 RETURNING id, user_id, link, thumbnail_link, type, created_at, updated_at
 `
@@ -51,9 +52,11 @@ func (q *Queries) AddImage(ctx context.Context, arg AddImageParams) (Image, erro
 }
 
 const getBackgroundPhoto = `-- name: GetBackgroundPhoto :one
-SELECT image.link, image.thumbnail_link
+SELECT image.link,
+    image.thumbnail_link
 FROM image
-WHERE image.user_id = $1 and image.type = 'background_photo'
+WHERE image.user_id = $1
+    and image.type = 'background_photo'
 `
 
 type GetBackgroundPhotoRow struct {
@@ -69,7 +72,9 @@ func (q *Queries) GetBackgroundPhoto(ctx context.Context, userID string) (GetBac
 }
 
 const getImagesByUserId = `-- name: GetImagesByUserId :many
-SELECT image.link, image.thumbnail_link, image.type
+SELECT image.link,
+    image.thumbnail_link,
+    image.type
 FROM image
 WHERE image.user_id = $1
 `
@@ -104,9 +109,11 @@ func (q *Queries) GetImagesByUserId(ctx context.Context, userID string) ([]GetIm
 }
 
 const getProfilePhoto = `-- name: GetProfilePhoto :one
-SELECT link, thumbnail_link
+SELECT link,
+    thumbnail_link
 FROM image
-WHERE user_id = $1 and type = 'profile_photo'
+WHERE user_id = $1
+    and type = 'profile_photo'
 `
 
 type GetProfilePhotoRow struct {
@@ -125,7 +132,8 @@ const updateBackgroundPhoto = `-- name: UpdateBackgroundPhoto :one
 UPDATE image
 SET link = $2,
     thumbnail_link = $3
-WHERE image.user_id = $1 and image.type = 'background_photo'
+WHERE image.user_id = $1
+    and image.type = 'background_photo'
 RETURNING id, user_id, link, thumbnail_link, type, created_at, updated_at
 `
 
@@ -154,7 +162,8 @@ const updateProfilePhoto = `-- name: UpdateProfilePhoto :one
 UPDATE image
 SET link = $2,
     thumbnail_link = $3
-WHERE image.user_id = $1 and image.type = 'profile_photo'
+WHERE image.user_id = $1
+    and image.type = 'profile_photo'
 RETURNING id, user_id, link, thumbnail_link, type, created_at, updated_at
 `
 

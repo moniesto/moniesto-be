@@ -193,6 +193,8 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: GET /assets/configs -> get configurations
 
+- [ ] GET /assets/general -> change name to configs, make configs smth else (like: validation)
+
 - [ ] POST /account/card -> Add new card
 
 - [ ] DELETE /account/card/:id -> Delete specific card

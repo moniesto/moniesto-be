@@ -9,6 +9,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/docs"
 	"github.com/moniesto/moniesto-be/service"
+	"github.com/moniesto/moniesto-be/util/storage"
 
 	_ "github.com/lib/pq"
 )
@@ -34,8 +35,14 @@ func main() {
 	// get store
 	store := db.NewStore(conn)
 
+	// get storage instance
+	storage, err := storage.NewCloudinaryUploader(config.CloudinaryURL)
+	if err != nil {
+		log.Fatal("cannot create storage instance:", err)
+	}
+
 	// get service
-	service, err := service.NewService(store, config)
+	service, err := service.NewService(store, config, storage)
 	if err != nil {
 		log.Fatal("cannot create service", err)
 	}
