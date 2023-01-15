@@ -26,6 +26,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
+    "subscription_info"."id" as "subscription_info_id",
+    "subscription_info"."fee",
+    "subscription_info"."message",
+    "subscription_info"."updated_at" as "subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -68,7 +72,9 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."email" = $1 AND "user"."deleted" = false
+    LEFT JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
+WHERE "user"."email" = $1
+    AND "user"."deleted" = false
 `
 
 type LoginUserByEmailRow struct {
@@ -86,6 +92,10 @@ type LoginUserByEmailRow struct {
 	Bio                          sql.NullString  `json:"bio"`
 	Description                  sql.NullString  `json:"description"`
 	Score                        sql.NullFloat64 `json:"score"`
+	SubscriptionInfoID           sql.NullString  `json:"subscription_info_id"`
+	Fee                          sql.NullFloat64 `json:"fee"`
+	Message                      sql.NullString  `json:"message"`
+	SubscriptionInfoUpdatedAt    sql.NullTime    `json:"subscription_info_updated_at"`
 	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
 	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
 	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
@@ -110,6 +120,10 @@ func (q *Queries) LoginUserByEmail(ctx context.Context, email string) (LoginUser
 		&i.Bio,
 		&i.Description,
 		&i.Score,
+		&i.SubscriptionInfoID,
+		&i.Fee,
+		&i.Message,
+		&i.SubscriptionInfoUpdatedAt,
 		&i.ProfilePhotoLink,
 		&i.ProfilePhotoThumbnailLink,
 		&i.BackgroundPhotoLink,
@@ -133,6 +147,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
+    "subscription_info"."id" as "subscription_info_id",
+    "subscription_info"."fee",
+    "subscription_info"."message",
+    "subscription_info"."updated_at" as "subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -175,7 +193,9 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."username" = $1 AND "user"."deleted" = false
+    LEFT JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false
 `
 
 type LoginUserByUsernameRow struct {
@@ -193,6 +213,10 @@ type LoginUserByUsernameRow struct {
 	Bio                          sql.NullString  `json:"bio"`
 	Description                  sql.NullString  `json:"description"`
 	Score                        sql.NullFloat64 `json:"score"`
+	SubscriptionInfoID           sql.NullString  `json:"subscription_info_id"`
+	Fee                          sql.NullFloat64 `json:"fee"`
+	Message                      sql.NullString  `json:"message"`
+	SubscriptionInfoUpdatedAt    sql.NullTime    `json:"subscription_info_updated_at"`
 	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
 	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
 	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
@@ -217,6 +241,10 @@ func (q *Queries) LoginUserByUsername(ctx context.Context, username string) (Log
 		&i.Bio,
 		&i.Description,
 		&i.Score,
+		&i.SubscriptionInfoID,
+		&i.Fee,
+		&i.Message,
+		&i.SubscriptionInfoUpdatedAt,
 		&i.ProfilePhotoLink,
 		&i.ProfilePhotoThumbnailLink,
 		&i.BackgroundPhotoLink,

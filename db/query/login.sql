@@ -13,6 +13,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
+    "subscription_info"."id" as "subscription_info_id",
+    "subscription_info"."fee",
+    "subscription_info"."message",
+    "subscription_info"."updated_at" as "subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -55,7 +59,9 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."username" = $1 AND "user"."deleted" = false;
+    LEFT JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
+WHERE "user"."username" = $1
+    AND "user"."deleted" = false;
 
 -- name: LoginUserByEmail :one
 SELECT "user"."id",
@@ -72,6 +78,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
+    "subscription_info"."id" as "subscription_info_id",
+    "subscription_info"."fee",
+    "subscription_info"."message",
+    "subscription_info"."updated_at" as "subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -114,7 +124,9 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-WHERE "user"."email" = $1 AND "user"."deleted" = false;
+    LEFT JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
+WHERE "user"."email" = $1
+    AND "user"."deleted" = false;
 
 -- name: UpdateLoginStats :one
 UPDATE "user"

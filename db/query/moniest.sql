@@ -15,21 +15,18 @@ RETURNING *;
 --     updated_at = now()
 -- WHERE moniest.id = $1
 -- RETURNING *;
-
 -- -- name: UpdateMoniestBio :one
 -- UPDATE moniest
 -- SET bio = $2,
 --     updated_at = now()
 -- WHERE moniest.id = $1
 -- RETURNING *;
-
 -- -- name: UpdateMoniestDescription :one
 -- UPDATE moniest
 -- SET description = $2,
 --     updated_at = now()
 -- WHERE moniest.id = $1
 -- RETURNING *;
-
 -- name: GetMoniestByUserId :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
@@ -44,6 +41,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
+    "subscription_info"."id" as "subscription_info_id",
+    "subscription_info"."fee",
+    "subscription_info"."message",
+    "subscription_info"."updated_at" as "subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -82,6 +83,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+    INNER JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
 WHERE "user"."id" = $1
     AND "user"."deleted" = false;
 
@@ -99,6 +101,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
+    "subscription_info"."id" as "subscription_info_id",
+    "subscription_info"."fee",
+    "subscription_info"."message",
+    "subscription_info"."updated_at" as "subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -141,6 +147,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+    INNER JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
 WHERE "moniest"."id" = $1
     AND "user"."deleted" = false;
 
@@ -202,7 +209,6 @@ WHERE "moniest"."id" = $1
 --     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
 -- WHERE "user"."email" = $1
 --     AND "user"."deleted" = false;
-
 -- -- name: GetMoniestByUsername :one
 -- SELECT "user"."id",
 --     "moniest"."id" as "moniest_id",

@@ -58,12 +58,22 @@ func NewGetOwnUserResponse(user db.GetOwnUserByUsernameRow) (response OwnUser) {
 	}
 
 	if user.MoniestID.String != "" {
-		response.Moniest = &Moniest{
+		moniest := &Moniest{
 			ID:          user.MoniestID.String,
 			Bio:         user.Bio.String,
 			Description: user.Description.String,
 			Score:       user.Score.Float64,
 		}
+
+		if user.SubscriptionInfoID.Valid {
+			moniest.SubscriptionInfo = &SubscriptionInfo{
+				Fee:       user.Fee.Float64,
+				Message:   user.Message.String,
+				UpdatedAt: user.SubscriptionInfoUpdatedAt.Time,
+			}
+		}
+
+		response.Moniest = moniest
 	}
 
 	return
@@ -86,12 +96,22 @@ func NewGetUserResponse(user db.GetUserByUsernameRow) (response User) {
 	}
 
 	if user.MoniestID.String != "" {
-		response.Moniest = &Moniest{
+		moniest := &Moniest{
 			ID:          user.MoniestID.String,
 			Bio:         user.Bio.String,
 			Description: user.Description.String,
 			Score:       user.Score.Float64,
 		}
+
+		if user.SubscriptionInfoID.Valid {
+			moniest.SubscriptionInfo = &SubscriptionInfo{
+				Fee:       user.Fee.Float64,
+				Message:   user.Message.String,
+				UpdatedAt: user.SubscriptionInfoUpdatedAt.Time,
+			}
+		}
+
+		response.Moniest = moniest
 	}
 
 	return

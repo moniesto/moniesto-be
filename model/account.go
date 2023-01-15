@@ -98,12 +98,22 @@ func NewRegisterResponse(token string, user db.LoginUserByEmailRow) (response Re
 	}
 
 	if user.MoniestID.String != "" {
-		response.User.Moniest = &Moniest{
+		moniest := &Moniest{
 			ID:          user.MoniestID.String,
 			Bio:         user.Bio.String,
 			Description: user.Description.String,
 			Score:       user.Score.Float64,
 		}
+
+		if user.SubscriptionInfoID.Valid {
+			moniest.SubscriptionInfo = &SubscriptionInfo{
+				Fee:       user.Fee.Float64,
+				Message:   user.Message.String,
+				UpdatedAt: user.SubscriptionInfoUpdatedAt.Time,
+			}
+		}
+
+		response.User.Moniest = moniest
 	}
 
 	return

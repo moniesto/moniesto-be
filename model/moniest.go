@@ -49,6 +49,11 @@ func NewCreateMoniestResponse(moniest db.GetMoniestByMoniestIdRow) OwnUser {
 			Bio:         moniest.Bio.String,
 			Description: moniest.Description.String,
 			Score:       moniest.Score,
+			SubscriptionInfo: &SubscriptionInfo{
+				Fee:       moniest.Fee,
+				Message:   moniest.Message.String,
+				UpdatedAt: moniest.SubscriptionInfoUpdatedAt,
+			},
 		},
 	}
 
