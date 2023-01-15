@@ -1,6 +1,13 @@
 package model
 
+import "github.com/moniesto/moniesto-be/util/clientError"
+
 type GetConfigsResponse struct {
+	ErrorCodes clientError.ErrorMessagesType `json:"error_codes"`
+	Validation GetValidationConfigsResponse  `json:"validation"`
+}
+
+type GetValidationConfigsResponse struct {
 	EmailRegex                   string  `json:"email_regex"`
 	UsernameRegex                string  `json:"username_regex"`
 	MinFee                       float64 `json:"min_fee"`

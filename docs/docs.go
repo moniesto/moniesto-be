@@ -560,7 +560,7 @@ const docTemplate = `{
         },
         "/assets/configs": {
             "get": {
-                "description": "Get All General Configs of system",
+                "description": "Get All Configs of system",
                 "consumes": [
                     "application/json"
                 ],
@@ -570,7 +570,7 @@ const docTemplate = `{
                 "tags": [
                     "Assets"
                 ],
-                "summary": "Get General Configs",
+                "summary": "Get All Configs",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -599,6 +599,29 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorMessagesType"
+                        }
+                    }
+                }
+            }
+        },
+        "/assets/validations": {
+            "get": {
+                "description": "Get Validation Configs of system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get Validation Configs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetValidationConfigsResponse"
                         }
                     }
                 }
@@ -1033,6 +1056,17 @@ const docTemplate = `{
             }
         },
         "model.GetConfigsResponse": {
+            "type": "object",
+            "properties": {
+                "error_codes": {
+                    "$ref": "#/definitions/clientError.ErrorMessagesType"
+                },
+                "validation": {
+                    "$ref": "#/definitions/model.GetValidationConfigsResponse"
+                }
+            }
+        },
+        "model.GetValidationConfigsResponse": {
             "type": "object",
             "properties": {
                 "email_regex": {

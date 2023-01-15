@@ -21,8 +21,22 @@ func (server *Server) getErrorCodes(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, errorCodes)
 }
 
-// @Summary Get General Configs
-// @Description Get All General Configs of system
+// @Summary Get Validation Configs
+// @Description Get Validation Configs of system
+// @Tags Assets
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.GetValidationConfigsResponse
+// @Router /assets/validations [get]
+func (server *Server) getValidationConfigs(ctx *gin.Context) {
+
+	validation_configs := server.service.GetValidationConfigs()
+
+	ctx.JSON(http.StatusOK, validation_configs)
+}
+
+// @Summary Get All Configs
+// @Description Get All Configs of system
 // @Tags Assets
 // @Accept json
 // @Produce json

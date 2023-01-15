@@ -87,8 +87,9 @@ func (server *Server) setupRouter() {
 	// Assets routes
 	assetRouters := router.Group("/assets")
 	{
-		assetRouters.GET("/error-codes", server.getErrorCodes)
 		assetRouters.GET("/configs", server.getConfigs)
+		assetRouters.GET("/error-codes", server.getErrorCodes)
+		assetRouters.GET("/validations", server.getValidationConfigs)
 	}
 
 	// Swagger docs

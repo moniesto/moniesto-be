@@ -131,6 +131,13 @@ definitions:
     type: object
   model.GetConfigsResponse:
     properties:
+      error_codes:
+        $ref: '#/definitions/clientError.ErrorMessagesType'
+      validation:
+        $ref: '#/definitions/model.GetValidationConfigsResponse'
+    type: object
+  model.GetValidationConfigsResponse:
+    properties:
       email_regex:
         type: string
       max_bio_lenght:
@@ -676,7 +683,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get All General Configs of system
+      description: Get All Configs of system
       produces:
       - application/json
       responses:
@@ -684,7 +691,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.GetConfigsResponse'
-      summary: Get General Configs
+      summary: Get All Configs
       tags:
       - Assets
   /assets/error-codes:
@@ -700,6 +707,21 @@ paths:
           schema:
             $ref: '#/definitions/clientError.ErrorMessagesType'
       summary: Get Error Codes
+      tags:
+      - Assets
+  /assets/validations:
+    get:
+      consumes:
+      - application/json
+      description: Get Validation Configs of system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetValidationConfigsResponse'
+      summary: Get Validation Configs
       tags:
       - Assets
   /crypto/currencies:

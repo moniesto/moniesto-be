@@ -191,9 +191,9 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: GET /assets/error-codes -> get error codes
 
-:heavy_check_mark: GET /assets/configs -> get configurations
+:heavy_check_mark: GET /assets/validations -> get validation configs
 
-- [ ] GET /assets/general -> change name to configs, make configs smth else (like: validation)
+:heavy_check_mark: GET /assets/configs -> get all configurations
 
 - [ ] POST /account/card -> Add new card
 
