@@ -208,12 +208,12 @@ func getLoginCases() LoginCases {
 			name:       "Invalid Email",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
 			body: model.LoginRequest{
-				Identifier: "test@.c", // is invalid
+				Identifier: "test@", // is invalid
 				Password:   "testtest",
 			},
 			check: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				// TODO: check there is an error message
-				require.Equal(t, http.StatusNotFound, recorder.Code)
+				require.Equal(t, http.StatusNotAcceptable, recorder.Code)
 			},
 		},
 		{
