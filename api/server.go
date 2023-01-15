@@ -67,7 +67,7 @@ func (server *Server) setupRouter() {
 	// Moniests routes - [need Auth]
 	moniestsRouters := router.Group("/moniests").Use(authMiddleware(server.tokenMaker))
 	{
-		moniestsRouters.POST("/", server.CreateMoniest)
+		moniestsRouters.POST("", server.CreateMoniest)
 		moniestsRouters.POST("/posts", server.CreatePost)
 	}
 
