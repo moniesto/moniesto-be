@@ -180,6 +180,7 @@ func (q *Queries) GetInactiveUsersVerifiedEmails(ctx context.Context) ([]string,
 
 const getOwnUserByID = `-- name: GetOwnUserByID :one
 SELECT "user"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -188,6 +189,13 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "moniest"."score",
+    "subscription_info"."id" as "subscription_info_id",
+    "subscription_info"."fee",
+    "subscription_info"."message",
+    "subscription_info"."updated_at" as "subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -225,24 +233,34 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+    LEFT JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
 WHERE "user"."id" = $1
     AND "user"."deleted" = false
 `
 
 type GetOwnUserByIDRow struct {
-	ID                           string         `json:"id"`
-	Name                         string         `json:"name"`
-	Surname                      string         `json:"surname"`
-	Username                     string         `json:"username"`
-	Email                        string         `json:"email"`
-	EmailVerified                bool           `json:"email_verified"`
-	Location                     sql.NullString `json:"location"`
-	CreatedAt                    time.Time      `json:"created_at"`
-	UpdatedAt                    time.Time      `json:"updated_at"`
-	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
+	ID                           string          `json:"id"`
+	MoniestID                    sql.NullString  `json:"moniest_id"`
+	Name                         string          `json:"name"`
+	Surname                      string          `json:"surname"`
+	Username                     string          `json:"username"`
+	Email                        string          `json:"email"`
+	EmailVerified                bool            `json:"email_verified"`
+	Location                     sql.NullString  `json:"location"`
+	CreatedAt                    time.Time       `json:"created_at"`
+	UpdatedAt                    time.Time       `json:"updated_at"`
+	Bio                          sql.NullString  `json:"bio"`
+	Description                  sql.NullString  `json:"description"`
+	Score                        sql.NullFloat64 `json:"score"`
+	SubscriptionInfoID           sql.NullString  `json:"subscription_info_id"`
+	Fee                          sql.NullFloat64 `json:"fee"`
+	Message                      sql.NullString  `json:"message"`
+	SubscriptionInfoUpdatedAt    sql.NullTime    `json:"subscription_info_updated_at"`
+	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}     `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetOwnUserByID(ctx context.Context, userID string) (GetOwnUserByIDRow, error) {
@@ -250,6 +268,7 @@ func (q *Queries) GetOwnUserByID(ctx context.Context, userID string) (GetOwnUser
 	var i GetOwnUserByIDRow
 	err := row.Scan(
 		&i.ID,
+		&i.MoniestID,
 		&i.Name,
 		&i.Surname,
 		&i.Username,
@@ -258,6 +277,13 @@ func (q *Queries) GetOwnUserByID(ctx context.Context, userID string) (GetOwnUser
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Bio,
+		&i.Description,
+		&i.Score,
+		&i.SubscriptionInfoID,
+		&i.Fee,
+		&i.Message,
+		&i.SubscriptionInfoUpdatedAt,
 		&i.ProfilePhotoLink,
 		&i.ProfilePhotoThumbnailLink,
 		&i.BackgroundPhotoLink,

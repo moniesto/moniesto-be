@@ -50,7 +50,7 @@ func (server *Server) GetUserByUsername(ctx *gin.Context) {
 			return
 		}
 
-		response = model.NewGetOwnUserResponse(user)
+		response = model.NewGetOwnUserResponseByUsername(user)
 	} else {
 		user, err := server.service.GetUserByUsername(ctx, username)
 
@@ -88,15 +88,25 @@ func (server *Server) updateUserProfile(ctx *gin.Context) {
 	// STEP: update profile photo
 	err = server.service.UpdateProfilePhoto(ctx, user_id, req.ProfilePhoto)
 	if err != nil {
-		// TODO: check
+		ctx.JSON(clientError.ParseError(err))
+		return
 	}
 
 	// STEP: update background photo
 	err = server.service.UpdateBackgroundPhoto(ctx, user_id, req.BackgroundPhoto)
 	if err != nil {
-		// TODO: check
+		ctx.JSON(clientError.ParseError(err))
+		return
 	}
 
 	// STEP: get latest form of own user, and send it as response
+	user, err := server.service.GetOwnUserByID(ctx, user_id)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
 
+	response := model.NewGetOwnUserResponseByID(user)
+
+	ctx.JSON(http.StatusOK, response)
 }

@@ -48,7 +48,46 @@ type UpdateUserProfileRequest struct {
 }
 
 // MAKER
-func NewGetOwnUserResponse(user db.GetOwnUserByUsernameRow) (response OwnUser) {
+func NewGetOwnUserResponseByUsername(user db.GetOwnUserByUsernameRow) (response OwnUser) {
+	response = OwnUser{
+		Id:                           user.ID,
+		Name:                         user.Name,
+		Surname:                      user.Surname,
+		Username:                     user.Username,
+		Email:                        user.Email,
+		EmailVerified:                user.EmailVerified,
+		Location:                     user.Location.String,
+		ProfilePhotoLink:             user.ProfilePhotoLink.(string),
+		ProfilePhotoThumbnailLink:    user.ProfilePhotoThumbnailLink.(string),
+		BackgroundPhotoLink:          user.BackgroundPhotoLink.(string),
+		BackgroundPhotoThumbnailLink: user.BackgroundPhotoThumbnailLink.(string),
+		CreatedAt:                    user.CreatedAt,
+		UpdatedAt:                    user.UpdatedAt,
+	}
+
+	if user.MoniestID.String != "" {
+		moniest := &Moniest{
+			ID:          user.MoniestID.String,
+			Bio:         user.Bio.String,
+			Description: user.Description.String,
+			Score:       user.Score.Float64,
+		}
+
+		if user.SubscriptionInfoID.Valid {
+			moniest.SubscriptionInfo = &SubscriptionInfo{
+				Fee:       user.Fee.Float64,
+				Message:   user.Message.String,
+				UpdatedAt: user.SubscriptionInfoUpdatedAt.Time,
+			}
+		}
+
+		response.Moniest = moniest
+	}
+
+	return
+}
+
+func NewGetOwnUserResponseByID(user db.GetOwnUserByIDRow) (response OwnUser) {
 	response = OwnUser{
 		Id:                           user.ID,
 		Name:                         user.Name,

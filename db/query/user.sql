@@ -70,6 +70,7 @@ WHERE "user"."id" = $1
 
 -- name: GetOwnUserByID :one
 SELECT "user"."id",
+    "moniest"."id" as "moniest_id",
     "user"."name",
     "user"."surname",
     "user"."username",
@@ -78,6 +79,13 @@ SELECT "user"."id",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "moniest"."score",
+    "subscription_info"."id" as "subscription_info_id",
+    "subscription_info"."fee",
+    "subscription_info"."message",
+    "subscription_info"."updated_at" as "subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -115,6 +123,8 @@ SELECT "user"."id",
         ''
     ) AS "background_photo_thumbnail_link"
 FROM "user"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+    LEFT JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
 WHERE "user"."id" = $1
     AND "user"."deleted" = false;
 
