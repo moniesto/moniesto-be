@@ -65,6 +65,18 @@ func (server *Server) GetUserByUsername(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary Update User Profile
+// @Description Update user profile [name, surname, location, profile photo, background photo]
+// @Security bearerAuth
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param UpdateUserBody body model.UpdateUserProfileRequest true "all fields are optional"
+// @Success 200 {object} model.OwnUser
+// @Failure 404 {object} clientError.ErrorResponse "user not found"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body & data"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /users/profile [patch]
 func (server *Server) updateUserProfile(ctx *gin.Context) {
 	var req model.UpdateUserProfileRequest
 

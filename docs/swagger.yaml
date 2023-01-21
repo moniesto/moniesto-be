@@ -267,6 +267,19 @@ definitions:
       updated_at:
         type: string
     type: object
+  model.UpdateUserProfileRequest:
+    properties:
+      background_photo:
+        type: string
+      location:
+        type: string
+      name:
+        type: string
+      profile_photo:
+        type: string
+      surname:
+        type: string
+    type: object
   model.User:
     properties:
       background_photo_link:
@@ -870,6 +883,43 @@ paths:
       security:
       - bearerAuth: []
       summary: Get User by Username
+      tags:
+      - User
+  /users/profile:
+    patch:
+      consumes:
+      - application/json
+      description: Update user profile [name, surname, location, profile photo, background
+        photo]
+      parameters:
+      - description: all fields are optional
+        in: body
+        name: UpdateUserBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateUserProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.OwnUser'
+        "404":
+          description: user not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body & data
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Update User Profile
       tags:
       - User
 securityDefinitions:
