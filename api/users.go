@@ -64,3 +64,39 @@ func (server *Server) GetUserByUsername(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (server *Server) updateUserProfile(ctx *gin.Context) {
+	var req model.UpdateUserProfileRequest
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_UpdateUserProfile_InvalidBody))
+		return
+	}
+
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: update profile
+	err := server.service.UpdateUserProfile(ctx, user_id, req)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: update profile photo
+	err = server.service.UpdateProfilePhoto(ctx, user_id, req.ProfilePhoto)
+	if err != nil {
+		// TODO: check
+	}
+
+	// STEP: update background photo
+	err = server.service.UpdateBackgroundPhoto(ctx, user_id, req.BackgroundPhoto)
+	if err != nil {
+		// TODO: check
+	}
+
+	// STEP: get latest form of own user, and send it as response
+
+}

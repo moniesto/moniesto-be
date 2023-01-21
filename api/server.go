@@ -59,7 +59,6 @@ func (server *Server) setupRouter() {
 		// Need auth
 		accountRoutersAuth := accountRouters.Group("/").Use(authMiddleware(server.tokenMaker))
 		accountRoutersAuth.PUT("/password", server.changePassword)
-		accountRoutersAuth.PATCH("/profile", server.updateProfile)
 		accountRoutersAuth.POST("/email/send_verification_email", server.sendVerificationEmail)
 		accountRoutersAuth.PATCH("/username", server.changeUsername)
 	}
@@ -74,6 +73,8 @@ func (server *Server) setupRouter() {
 	// User routes
 	usersRouters := router.Group("/users").Use(authMiddleware(server.tokenMaker))
 	{
+		usersRouters.PATCH("/profile", server.updateUserProfile)
+
 		// PRIMARY TODO: make this endpoint public instead of auth
 		usersRouters.GET("/:username", server.GetUserByUsername)
 	}

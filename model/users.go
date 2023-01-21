@@ -39,6 +39,14 @@ type User struct {
 	Moniest                      *Moniest  `json:"moniest,omitempty"`
 }
 
+type UpdateUserProfileRequest struct {
+	Name            string `json:"name"`
+	Surname         string `json:"surname"`
+	Location        string `json:"location"`
+	ProfilePhoto    string `json:"profile_photo"`
+	BackgroundPhoto string `json:"background_photo"`
+}
+
 // MAKER
 func NewGetOwnUserResponse(user db.GetOwnUserByUsernameRow) (response OwnUser) {
 	response = OwnUser{

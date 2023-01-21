@@ -48,17 +48,17 @@ type ChangeUsernameResponse struct {
 	Token string `json:"token"`
 }
 
-type UpdateProfileRequest struct {
-	Name            string `json:"name"`
-	Surname         string `json:"surname"`
-	Location        string `json:"location"`
-	ProfilePhoto    string `json:"profile_photo"`
-	BackgroundPhoto string `json:"background_photo"`
+// type UpdateProfileRequest struct {
+// 	Name            string `json:"name"`
+// 	Surname         string `json:"surname"`
+// 	Location        string `json:"location"`
+// 	ProfilePhoto    string `json:"profile_photo"`
+// 	BackgroundPhoto string `json:"background_photo"`
 
-	// special for moniest
-	Bio         string `json:"bio"`
-	Description string `json:"description"`
-}
+// 	// special for moniest
+// 	Bio         string `json:"bio"`
+// 	Description string `json:"description"`
+// }
 
 // MAKER
 // NewLoginResponse creates/return LoginResponse object

@@ -74,9 +74,17 @@ const (
 	Account_ChangeUsername_ServerErrorChangeUsername = "Account_ChangeUsername_ServerErrorChangeUsername"
 	Account_ChangeUsername_ServerErrorToken          = "Account_ChangeUsername_ServerErrorToken"
 
-	Account_UpdateProfile_InvalidBody           = "Account_UpdateProfile_InvalidBody"
-	Account_UpdateProfile_ServerErrorGetUser    = "Account_UpdateProfile_ServerErrorGetUser"
-	Account_UpdateProfile_ServerErrorUpdateUser = "Account_UpdateProfile_ServerErrorUpdateUser"
+	Account_UpdateUserProfile_InvalidBody                      = "Account_UpdateUserProfile_InvalidBody"
+	Account_UpdateUserProfile_ServerErrorGetUser               = "Account_UpdateUserProfile_ServerErrorGetUser"
+	Account_UpdateUserProfile_ServerErrorUpdateUser            = "Account_UpdateUserProfile_ServerErrorUpdateUser"
+	Account_UpdateUserProfile_ServerErrorGetProfilePhoto       = "Account_UpdateUserProfile_ServerErrorGetProfilePhoto"
+	Account_UpdateUserProfile_ServerErrorGetBackgroundPhoto    = "Account_UpdateUserProfile_ServerErrorGetBackgroundPhoto"
+	Account_UpdateUserProfile_ServerErrorUploadProfilePhoto    = "Account_UpdateUserProfile_ServerErrorUploadProfilePhoto"
+	Account_UpdateUserProfile_ServerErrorUploadBackgroundPhoto = "Account_UpdateUserProfile_ServerErrorUploadBackgroundPhoto"
+	Account_UpdateUserProfile_ServerErrorUpdateProfilePhoto    = "Account_UpdateUserProfile_ServerErrorUpdateProfilePhoto"
+	Account_UpdateUserProfile_ServerErrorUpdateBackgroundPhoto = "Account_UpdateUserProfile_ServerErrorUpdateBackgroundPhoto"
+	Account_UpdateUserProfile_ServerErrorInsertProfilePhoto    = "Account_UpdateUserProfile_ServerErrorInsertProfilePhoto"
+	Account_UpdateUserProfile_ServerErrorInsertBackgroundPhoto = "Account_UpdateUserProfile_ServerErrorInsertBackgroundPhoto"
 
 	Moniest_CreateMoniest_InvalidBody              = "Moniest_CreateMoniest_InvalidBody"
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest = "Moniest_CreateMoniest_ServerErrorUserIsMoniest"
@@ -181,9 +189,17 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Account_ChangeUsername_ServerErrorChangeUsername: "Server error on changing username",
 	Account_ChangeUsername_ServerErrorToken:          "Server error on token operation",
 
-	Account_UpdateProfile_InvalidBody:           "Update profile request body is invalid",
-	Account_UpdateProfile_ServerErrorGetUser:    "Server error on getting user",
-	Account_UpdateProfile_ServerErrorUpdateUser: "Server error updating user",
+	Account_UpdateUserProfile_InvalidBody:                      "Update profile request body is invalid",
+	Account_UpdateUserProfile_ServerErrorGetUser:               "Server error on getting user",
+	Account_UpdateUserProfile_ServerErrorUpdateUser:            "Server error updating user",
+	Account_UpdateUserProfile_ServerErrorGetProfilePhoto:       "Server error on getting profile photo",
+	Account_UpdateUserProfile_ServerErrorGetBackgroundPhoto:    "Server error on getting background photo",
+	Account_UpdateUserProfile_ServerErrorUploadProfilePhoto:    "Server error on uploading profile photo",
+	Account_UpdateUserProfile_ServerErrorUploadBackgroundPhoto: "Server error on uploading background photo",
+	Account_UpdateUserProfile_ServerErrorUpdateProfilePhoto:    "Server error on updating profile photo",
+	Account_UpdateUserProfile_ServerErrorUpdateBackgroundPhoto: "Server error on updating background photo",
+	Account_UpdateUserProfile_ServerErrorInsertProfilePhoto:    "Server error on inserting profile photo",
+	Account_UpdateUserProfile_ServerErrorInsertBackgroundPhoto: "Server error on inserting background photo",
 
 	Moniest_CreateMoniest_InvalidBody:              "Create moniest request body is invalid",
 	Moniest_CreateMoniest_ServerErrorUserIsMoniest: "Server error on user is moniest check",

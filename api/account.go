@@ -315,38 +315,3 @@ func (server *Server) changeUsername(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, response)
 }
-
-func (server *Server) updateProfile(ctx *gin.Context) {
-	var req model.UpdateProfileRequest
-
-	// STEP: bind/validation
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_UpdateProfile_InvalidBody))
-		return
-	}
-
-	// STEP: get user id from token
-	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	user_id := authPayload.User.ID
-
-	err := server.service.UpdateProfile(ctx, user_id, req)
-	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
-		return
-	}
-
-	// STEP: update profile photo
-	err = server.service.UpdateProfilePhoto(ctx, user_id, req.ProfilePhoto)
-	if err != nil {
-		// TODO: check
-	}
-
-	// STEP: update background photo
-	err = server.service.UpdateBackgroundPhoto(ctx, user_id, req.BackgroundPhoto)
-	if err != nil {
-		// TODO: check
-	}
-
-	// STEP: get latest form of own user, and send it as response
-
-}
