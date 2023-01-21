@@ -177,11 +177,11 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [need test] POST /moniests/posts -> create post
 
-- [ ] PATCH /account/profile -> update profile info
+:heavy_check_mark: PATCH /users/profile -> update user profile info
 
 :heavy_check_mark: [need test] PATCH /account/username -> update username
 
-- [ ] PATCH /moniests/subscription-info -> update subscription info
+- [ ] PATCH /moniests/profile -> update moniest profile info
 
 - [ ] POST /moniests/:username/subscribe -> subscribe to a moniest
 
