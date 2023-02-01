@@ -9,3 +9,7 @@ type BackgroundPhoto struct {
 	URL          string
 	ThumbnailURL string
 }
+
+type PostPhoto struct {
+	URL string
+}

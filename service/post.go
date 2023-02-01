@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"time"
@@ -68,10 +69,16 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 // CreatePostDescription creates description for the post
 func (service *Service) CreatePostDescription(postID, description string, ctx *gin.Context) (db.PostCryptoDescription, error) {
 
+	// STEP: convert image base64's to URL (upload to storage)
+	descriptionWithPhoto, err := service.postDescriptionImageReplacer(ctx, description)
+	if err != nil {
+		return db.PostCryptoDescription{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_ServerErrorPostPhotoUpload)
+	}
+
 	createDescription := db.AddPostDescriptionParams{
 		ID:          core.CreateID(),
 		PostID:      postID,
-		Description: description,
+		Description: descriptionWithPhoto,
 	}
 
 	// STEP: create description
@@ -81,4 +88,44 @@ func (service *Service) CreatePostDescription(postID, description string, ctx *g
 	}
 
 	return createdDescription, nil
+}
+
+// postDescriptionImageReplacer replace images base64's with URL that upladed to storage
+func (service *Service) postDescriptionImageReplacer(ctx *gin.Context, description string) (string, error) {
+	var post model.PostDescriptionType
+
+	err := json.Unmarshal([]byte(description), &post)
+	if err != nil {
+		return "", err
+	}
+
+	for i := range post.Blocks {
+		if post.Blocks[i].Type == "image" {
+
+			file := post.Blocks[i].Data["file"]
+
+			_, ok := file.(map[string]interface{})
+			if !ok {
+				return "", nil
+			}
+
+			base64Image := file.(map[string]interface{})["url"]
+
+			uploadedPostPhoto, err := service.Storage.UploadPostDescriptionPhoto(ctx, base64Image.(string))
+			if err != nil {
+				return "", err
+			}
+
+			file.(map[string]interface{})["url"] = uploadedPostPhoto.URL
+
+			post.Blocks[i].Data["file"] = file
+		}
+	}
+
+	descriptionByte, err := json.Marshal(post)
+	if err != nil {
+		return "", err
+	}
+
+	return string(descriptionByte), nil
 }

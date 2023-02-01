@@ -95,3 +95,22 @@ func (cloudinaryUploader *CloudinaryUploader) UploadBackgroundPhoto(ctx *gin.Con
 
 	return backgroundPhotoResult, nil
 }
+
+// UploadPostDescriptionPhoto upload post description photo and return url
+func (cloudinaryUploader *CloudinaryUploader) UploadPostDescriptionPhoto(ctx *gin.Context, base64 string) (model.PostPhoto, error) {
+	publicID := core.CreateID()
+
+	params := uploader.UploadParams{
+		PublicID: publicID,
+		Folder:   postDescriptionPhotoFolderName,
+	}
+
+	result, err := cloudinaryUploader.cloudinary.Upload.Upload(ctx, base64, params)
+	if err != nil {
+		return model.PostPhoto{}, fmt.Errorf("upload post description photo: %s", err.Error())
+	}
+
+	return model.PostPhoto{
+		URL: result.SecureURL,
+	}, nil
+}

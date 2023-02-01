@@ -112,6 +112,7 @@ const (
 	Post_CreatePost_InvalidStop                  = "Post_CreatePost_InvalidStop"
 	Post_CreatePost_ServerErrorCreatePost        = "Post_CreatePost_ServerErrorCreatePost"
 	Post_CreatePost_ServerErrorCreateDescription = "Post_CreatePost_ServerErrorCreateDescription"
+	Post_CreatePost_ServerErrorPostPhotoUpload   = "Post_CreatePost_ServerErrorPostPhotoUpload"
 
 	Crypto_GetCurrencies_InvalidParam       = "Crypto_GetCurrencies_InvalidParam"
 	Crypto_GetCurrenciesFromAPI_ServerError = "Crypto_GetCurrenciesFromAPI_ServerError"
@@ -227,6 +228,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Post_CreatePost_InvalidStop:                  "Stop is invalid",
 	Post_CreatePost_ServerErrorCreatePost:        "Server error on creating post",
 	Post_CreatePost_ServerErrorCreateDescription: "Server error on creating description",
+	Post_CreatePost_ServerErrorPostPhotoUpload:   "Server error on uploading post photos (maybe invalid format)",
 
 	Crypto_GetCurrencies_InvalidParam:       "Get Currencies request params is invalid",
 	Crypto_GetCurrenciesFromAPI_ServerError: "Server error on getting currencies from API",

@@ -35,23 +35,16 @@ type CreatePostResponse struct {
 	Description string `json:"description,omitempty"`
 }
 
-/*
-{
- "id": "7ad33645-fbe5-49e0-9284-e72cd5b7e312",
- "moniest_id": "3a770db0-f737-406c-ba57-406dc13879c5",
- "currency": "BTCUSDT",
- "start_price": 16556.68,
- "duration": "2023-12-31T23:33:47.479Z",
- "target1": 17000,
- "target2": 17001,
- "target3": 17002,
- "stop": 15000,
- "direction": "long",
- "score": 0,
- "created_at": "2023-01-01T15:57:10.466862Z",
- "updated_at": "2023-01-01T15:57:10.466862Z"
+type PostDescriptionType struct {
+	Time   int64              `json:"time"`
+	Blocks []DescriptionBlock `json:"blocks"`
 }
-*/
+
+type DescriptionBlock struct {
+	ID   string                 `json:"id"`
+	Type string                 `json:"type"`
+	Data map[string]interface{} `json:"data"`
+}
 
 func NewCreatePostResponse(post db.CreatePostRow, description db.PostCryptoDescription) CreatePostResponse {
 	return CreatePostResponse{
