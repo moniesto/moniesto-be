@@ -43,3 +43,7 @@ func (service *Service) CreateSubsriptionInfo(ctx *gin.Context, moniest_id strin
 
 	return subscriptionInfo, nil
 }
+
+func (service *Service) UpdateSubsriptionInfo(ctx *gin.Context, moniest_id string) {
+	
+}

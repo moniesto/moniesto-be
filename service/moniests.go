@@ -100,3 +100,59 @@ func (service *Service) GetMoniestByMoniestID(ctx *gin.Context, moniest_id strin
 
 	return moniest, nil
 }
+
+func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, req model.UpdateMoniestProfileRequest) (db.GetMoniestByUserIdRow, error) {
+	difference := false
+
+	// STEP: get moniest by user id
+	moniest, err := service.Store.GetMoniestByUserId(ctx, user_id)
+	if err != nil {
+		// STEP: no moniest with this user id
+		if err == sql.ErrNoRows {
+			return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusForbidden, clientError.UserNotMoniest)
+		}
+
+		// TODO: add server error
+		return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdateMoniest_ServerErrorGetUser)
+	}
+
+	// STEP: update the ones that provided on parameters
+	var param db.UpdateMoniestParams = db.UpdateMoniestParams{
+		ID:          moniest.MoniestID,
+		Bio:         moniest.Bio,
+		Description: moniest.Description,
+	}
+
+	if req.Bio != "" || req.Description != "" {
+		difference = true
+
+		if req.Bio != "" {
+			param.Bio = sql.NullString{
+				Valid:  true,
+				String: req.Bio,
+			}
+
+			moniest.Bio = param.Bio
+		}
+
+		if req.Description != "" {
+			param.Description = sql.NullString{
+				Valid:  true,
+				String: req.Description,
+			}
+
+			moniest.Description = param.Description
+		}
+	}
+
+	// STEP: check if there are new values or not
+	if difference {
+		// STEP: update moniest
+		_, err = service.Store.UpdateMoniest(ctx, param)
+		if err != nil {
+			return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdateMoniest_ServerErrorUpdateMoniest)
+		}
+	}
+
+	return moniest, nil
+}

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -96,14 +97,24 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 		return
 	}
 
+	// STEP: get user if from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: update moniest
+	moniest, err := server.service.UpdateMoniestProfile(ctx, user_id, req)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	fmt.Println("moniest", moniest)
+
+	// STEP: update subscription info
 	/*
 		STEPS:
-			get user id from token
-			update moniest profile
-				check user is moniest (by getting moniest info)
-				check which values changed
+			update subscribtion info
 				if Fee changed, send additional request to payment
 				update in db
 	*/
-
 }

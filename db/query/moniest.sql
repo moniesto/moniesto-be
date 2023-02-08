@@ -15,18 +15,14 @@ RETURNING *;
 --     updated_at = now()
 -- WHERE moniest.id = $1
 -- RETURNING *;
--- -- name: UpdateMoniestBio :one
--- UPDATE moniest
--- SET bio = $2,
---     updated_at = now()
--- WHERE moniest.id = $1
--- RETURNING *;
--- -- name: UpdateMoniestDescription :one
--- UPDATE moniest
--- SET description = $2,
---     updated_at = now()
--- WHERE moniest.id = $1
--- RETURNING *;
+-- name: UpdateMoniest :one
+UPDATE moniest
+SET bio = $2,
+    description = $3,
+    updated_at = now()
+WHERE moniest.id = $1
+RETURNING *;
+
 -- name: GetMoniestByUserId :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",

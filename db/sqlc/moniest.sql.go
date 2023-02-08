@@ -254,30 +254,6 @@ type GetMoniestByUserIdRow struct {
 	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
 }
 
-// -- name: DeleteMoniest :one
-// UPDATE moniest
-// SET deleted = true,
-//
-//	updated_at = now()
-//
-// WHERE moniest.id = $1
-// RETURNING *;
-// -- name: UpdateMoniestBio :one
-// UPDATE moniest
-// SET bio = $2,
-//
-//	updated_at = now()
-//
-// WHERE moniest.id = $1
-// RETURNING *;
-// -- name: UpdateMoniestDescription :one
-// UPDATE moniest
-// SET description = $2,
-//
-//	updated_at = now()
-//
-// WHERE moniest.id = $1
-// RETURNING *;
 func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMoniestByUserIdRow, error) {
 	row := q.db.QueryRowContext(ctx, getMoniestByUserId, userID)
 	var i GetMoniestByUserIdRow
@@ -303,6 +279,45 @@ func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMon
 		&i.ProfilePhotoThumbnailLink,
 		&i.BackgroundPhotoLink,
 		&i.BackgroundPhotoThumbnailLink,
+	)
+	return i, err
+}
+
+const updateMoniest = `-- name: UpdateMoniest :one
+UPDATE moniest
+SET bio = $2,
+    description = $3,
+    updated_at = now()
+WHERE moniest.id = $1
+RETURNING id, user_id, bio, description, score, deleted, created_at, updated_at
+`
+
+type UpdateMoniestParams struct {
+	ID          string         `json:"id"`
+	Bio         sql.NullString `json:"bio"`
+	Description sql.NullString `json:"description"`
+}
+
+// -- name: DeleteMoniest :one
+// UPDATE moniest
+// SET deleted = true,
+//
+//	updated_at = now()
+//
+// WHERE moniest.id = $1
+// RETURNING *;
+func (q *Queries) UpdateMoniest(ctx context.Context, arg UpdateMoniestParams) (Moniest, error) {
+	row := q.db.QueryRowContext(ctx, updateMoniest, arg.ID, arg.Bio, arg.Description)
+	var i Moniest
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Bio,
+		&i.Description,
+		&i.Score,
+		&i.Deleted,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 	)
 	return i, err
 }

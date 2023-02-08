@@ -94,7 +94,9 @@ const (
 	Moniest_CreateMoniest_ServerErrorCreateMoniest = "Moniest_CreateMoniest_ServerErrorCreateMoniest"
 	Moniest_CreateMoniest_UnverifiedEmail          = "Moniest_CreateMoniest_UnverifiedEmail"
 
-	Moniest_UpdateMoniest_InvalidBody = "Moniest_UpdateMoniest_InvalidBody"
+	Moniest_UpdateMoniest_InvalidBody              = "Moniest_UpdateMoniest_InvalidBody"
+	Moniest_UpdateMoniest_ServerErrorGetUser       = "Moniest_UpdateMoniest_ServerErrorGetUser"
+	Moniest_UpdateMoniest_ServerErrorUpdateMoniest = "Moniest_UpdateMoniest_ServerErrorUpdateMoniest"
 
 	Moniest_GetMoniest_NoMoniest             = "Moniest_GetMoniest_NoMoniest"
 	Moniest_GetMoniest_ServerErrorGetMoniest = "Moniest_GetMoniest_ServerErrorGetMoniest"
@@ -212,7 +214,9 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_CreateMoniest_ServerErrorCreateMoniest: "Server error on create moniest",
 	Moniest_CreateMoniest_UnverifiedEmail:          "Email is not verified yet",
 
-	Moniest_UpdateMoniest_InvalidBody: "Update moniest profile request body is invalid",
+	Moniest_UpdateMoniest_InvalidBody:              "Update moniest profile request body is invalid",
+	Moniest_UpdateMoniest_ServerErrorGetUser:       "Server error on getting user",
+	Moniest_UpdateMoniest_ServerErrorUpdateMoniest: "Server error on updating moniest",
 
 	Moniest_GetMoniest_NoMoniest:             "Not any moniest exist",
 	Moniest_GetMoniest_ServerErrorGetMoniest: "Server error on getting moniest",
