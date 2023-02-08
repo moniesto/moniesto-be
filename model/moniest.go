@@ -28,6 +28,12 @@ type SubscriptionInfo struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
+type UpdateMoniestProfileRequest struct {
+	Bio              string            `json:"bio"`
+	Description      string            `json:"description"`
+	SubscriptionInfo *SubscriptionInfo `json:"subscription_info"`
+}
+
 // MAKER
 func NewCreateMoniestResponse(moniest db.GetMoniestByMoniestIdRow) OwnUser {
 	response := OwnUser{

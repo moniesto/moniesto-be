@@ -9,7 +9,6 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
-// CreateMoniest creates moniest if do
 // @Summary Be Moniest
 // @Description Turn into moniest
 // @Security bearerAuth
@@ -24,7 +23,7 @@ import (
 // @Failure 406 {object} clientError.ErrorResponse "invalid body"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /moniests [post]
-func (server *Server) CreateMoniest(ctx *gin.Context) {
+func (server *Server) createMoniest(ctx *gin.Context) {
 	var req model.CreateMoniestRequest
 
 	// STEP: bind/validation
@@ -85,4 +84,26 @@ func (server *Server) CreateMoniest(ctx *gin.Context) {
 	response := model.NewCreateMoniestResponse(createdMoniest)
 
 	ctx.JSON(http.StatusOK, response)
+}
+
+// TODO: complete endpoint
+func (server *Server) updateMoniestProfile(ctx *gin.Context) {
+	var req model.UpdateMoniestProfileRequest
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_UpdateMoniest_InvalidBody))
+		return
+	}
+
+	/*
+		STEPS:
+			get user id from token
+			update moniest profile
+				check user is moniest (by getting moniest info)
+				check which values changed
+				if Fee changed, send additional request to payment
+				update in db
+	*/
+
 }

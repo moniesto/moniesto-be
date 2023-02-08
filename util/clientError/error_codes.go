@@ -94,6 +94,8 @@ const (
 	Moniest_CreateMoniest_ServerErrorCreateMoniest = "Moniest_CreateMoniest_ServerErrorCreateMoniest"
 	Moniest_CreateMoniest_UnverifiedEmail          = "Moniest_CreateMoniest_UnverifiedEmail"
 
+	Moniest_UpdateMoniest_InvalidBody = "Moniest_UpdateMoniest_InvalidBody"
+
 	Moniest_GetMoniest_NoMoniest             = "Moniest_GetMoniest_NoMoniest"
 	Moniest_GetMoniest_ServerErrorGetMoniest = "Moniest_GetMoniest_ServerErrorGetMoniest"
 
@@ -190,7 +192,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Account_ChangeUsername_ServerErrorChangeUsername: "Server error on changing username",
 	Account_ChangeUsername_ServerErrorToken:          "Server error on token operation",
 
-	Account_UpdateUserProfile_InvalidBody:                      "Update profile request body is invalid",
+	Account_UpdateUserProfile_InvalidBody:                      "Update user profile request body is invalid",
 	Account_UpdateUserProfile_ServerErrorGetUser:               "Server error on getting user",
 	Account_UpdateUserProfile_ServerErrorUpdateUser:            "Server error updating user",
 	Account_UpdateUserProfile_ServerErrorGetProfilePhoto:       "Server error on getting profile photo",
@@ -209,6 +211,8 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_CreateMoniest_InvalidDescription:       "Description is invalid",
 	Moniest_CreateMoniest_ServerErrorCreateMoniest: "Server error on create moniest",
 	Moniest_CreateMoniest_UnverifiedEmail:          "Email is not verified yet",
+
+	Moniest_UpdateMoniest_InvalidBody: "Update moniest profile request body is invalid",
 
 	Moniest_GetMoniest_NoMoniest:             "Not any moniest exist",
 	Moniest_GetMoniest_ServerErrorGetMoniest: "Server error on getting moniest",

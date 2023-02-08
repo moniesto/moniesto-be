@@ -9,7 +9,6 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
-// GetUserByUsername gets user data
 // PRIMARY TODO: update user db requests with moniest db requests (dont have idea why)
 // @Summary Get User by Username
 // @Description get user info with username
@@ -23,7 +22,7 @@ import (
 // @Failure 406 {object} clientError.ErrorResponse "invalid username"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /users/:username [get]
-func (server *Server) GetUserByUsername(ctx *gin.Context) {
+func (server *Server) getUserByUsername(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")
 

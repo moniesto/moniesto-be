@@ -23,7 +23,7 @@ import (
 // @Failure 406 {object} clientError.ErrorResponse "invalid body"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /moniests/posts [post]
-func (server *Server) CreatePost(ctx *gin.Context) {
+func (server *Server) createPost(ctx *gin.Context) {
 	var req model.CreatePostRequest
 
 	// STEP: bind/validation

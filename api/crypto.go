@@ -19,7 +19,7 @@ import (
 // @Failure 406 {object} clientError.ErrorResponse "invalid name"
 // @Failure 500 {object} clientError.ErrorResponse "server error & crypto api error"
 // @Router /crypto/currencies [get]
-func (server *Server) GetCurrencies(ctx *gin.Context) {
+func (server *Server) getCurrencies(ctx *gin.Context) {
 	var req model.GetCurrenciesRequest
 
 	// STEP: bind/validation

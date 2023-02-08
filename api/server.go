@@ -66,8 +66,9 @@ func (server *Server) setupRouter() {
 	// Moniests routes - [need Auth]
 	moniestsRouters := router.Group("/moniests").Use(authMiddleware(server.tokenMaker))
 	{
-		moniestsRouters.POST("", server.CreateMoniest)
-		moniestsRouters.POST("/posts", server.CreatePost)
+		moniestsRouters.POST("", server.createMoniest)
+		moniestsRouters.POST("/posts", server.createPost)
+		moniestsRouters.PATCH("/profile", server.updateMoniestProfile)
 	}
 
 	// User routes
@@ -76,13 +77,13 @@ func (server *Server) setupRouter() {
 		usersRouters.PATCH("/profile", server.updateUserProfile)
 
 		// PRIMARY TODO: make this endpoint public instead of auth
-		usersRouters.GET("/:username", server.GetUserByUsername)
+		usersRouters.GET("/:username", server.getUserByUsername)
 	}
 
 	// Crypto routes
 	cryptoRouters := router.Group("/crypto").Use(authMiddleware(server.tokenMaker))
 	{
-		cryptoRouters.GET("/currencies", server.GetCurrencies)
+		cryptoRouters.GET("/currencies", server.getCurrencies)
 	}
 
 	// Assets routes
