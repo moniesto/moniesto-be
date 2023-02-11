@@ -157,7 +157,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [need test] POST /account/email/send_verification_email -> send email verification email
 
-:heavy_check_mark: POST [need test] /account/email/verify_email -> verify email
+:heavy_check_mark: [need test] POST /account/email/verify_email -> verify email
 
 - [ ] GET /content/posts?subscribed=<subscribed>&limit=<limit>&offset=<offset>
 
@@ -173,7 +173,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] GET /users/:username/subscribers?limit=<limit>&offset=<offset>
 
-:heavy_check_mark: [need test + latest check + update after payment] POST /moniests -> be moniest
+:heavy_check_mark: [need test + payment update] POST /moniests -> be moniest
 
 :heavy_check_mark: [need test] POST /moniests/posts -> create post
 
@@ -181,11 +181,11 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [need test] PATCH /account/username -> update username
 
-:heavy_check_mark: [need test] PATCH /moniests/profile -> update moniest profile + subscription info
+:heavy_check_mark: [need test + payment update] PATCH /moniests/profile -> update moniest profile + subscription info
 
-:heavy_check_mark: [need test] POST /moniests/:username/subscribe -> subscribe to a moniest
+:heavy_check_mark: [need test + payment update] POST /moniests/:username/subscribe -> subscribe to a moniest
 
-- [ ] POST /moniests/:username/unsubscribe -> unsubscribe from a moniest
+:heavy_check_mark: [need test + payment update] POST /moniests/:username/unsubscribe -> unsubscribe from a moniest
 
 :heavy_check_mark: [need test] GET /crypto/currencies?name=BTC
 
