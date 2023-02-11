@@ -182,3 +182,47 @@ func (server *Server) subscribeMoniest(ctx *gin.Context) {
 
 	ctx.Status(http.StatusOK)
 }
+
+// @Summary Unsubscribe from Moniest
+// @Description Unsubscribe from Moniest
+// @Security bearerAuth
+// @Tags Moniest
+// @Accept json
+// @Produce json
+// @Param username path string true "moniest username"
+// @Success 200
+// @Failure 400 {object} clientError.ErrorResponse "user not subscribed"
+// @Failure 403 {object} clientError.ErrorResponse "unsubscribe own"
+// @Failure 404 {object} clientError.ErrorResponse "moniest is not found"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/:username/unsubscribe [post]
+func (server *Server) unsubscribeMoniest(ctx *gin.Context) {
+	// STEP: get username from param
+	username := ctx.Param("username")
+
+	// STEP: check "username" is a real moniest
+	moniest, err := server.service.GetMoniestByUsername(ctx, username)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: check user is not subscribing own
+	if moniest.ID == user_id {
+		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_Unsubscribe_UnsubscribeOwn))
+		return
+	}
+
+	// STEP: end subscription
+	err = server.service.UnsubscribeMoniest(ctx, moniest.MoniestID, user_id)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.Status(http.StatusOK)
+}

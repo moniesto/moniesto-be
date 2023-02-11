@@ -2,6 +2,7 @@ package service
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -53,6 +54,41 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 	// STEP: payment
 	// PAYMENT FUTURE TODO: subscribe to moniest
 	// remove from db if payment failed
+
+	return nil
+}
+
+func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, userID string) error {
+	// STEP: get subscription status
+	exist, subscription, err := service.getUserSubscriptionStatus(ctx, moniestID, userID)
+	if err != nil {
+		return err
+	}
+
+	// STEP: check user is not already unsubscribed OR in deactive status
+	if exist {
+		if !subscription.Active {
+			return clientError.CreateError(http.StatusBadRequest, clientError.Moniest_Unsubscribe_NotSubscribed)
+		}
+	} else {
+		return clientError.CreateError(http.StatusBadRequest, clientError.Moniest_Unsubscribe_NotSubscribed)
+	}
+
+	// STEP: deactivate subscription
+	params := db.EndsubscriptionParams{
+		UserID:    userID,
+		MoniestID: moniestID,
+	}
+
+	err = service.Store.Endsubscription(ctx, params)
+	if err != nil {
+		fmt.Println("Endsubscription", err)
+		return clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Unsubscribe_ServerErrorUnsubscribe)
+	}
+
+	// STEP: stop subscription on payment
+	// PAYMENT FUTURE TODO: unsubscribe from moniest
+	// add db if payment failed
 
 	return nil
 }

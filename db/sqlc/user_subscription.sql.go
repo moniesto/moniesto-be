@@ -58,6 +58,24 @@ func (q *Queries) CreateSubscription(ctx context.Context, arg CreateSubscription
 	return i, err
 }
 
+const endsubscription = `-- name: Endsubscription :exec
+UPDATE "user_subscription"
+SET active = false,
+    updated_at = now()
+WHERE user_id = $1
+    AND moniest_id = $2
+`
+
+type EndsubscriptionParams struct {
+	UserID    string `json:"user_id"`
+	MoniestID string `json:"moniest_id"`
+}
+
+func (q *Queries) Endsubscription(ctx context.Context, arg EndsubscriptionParams) error {
+	_, err := q.db.ExecContext(ctx, endsubscription, arg.UserID, arg.MoniestID)
+	return err
+}
+
 const getSubscription = `-- name: GetSubscription :one
 SELECT id, user_id, moniest_id, active, created_at, updated_at
 FROM "user_subscription"

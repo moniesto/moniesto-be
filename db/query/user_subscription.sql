@@ -21,11 +21,9 @@ SET active = true
 WHERE user_id = $1
     AND moniest_id = $2;
 
--- -- name: Endsubscription :one
--- UPDATE "user_subscription" 
--- SET "deleted" = true,
---     "updated_at" = now()
--- WHERE "user_id" = $1 AND "moniest_id" = $2
--- RETURNING *;
--- TODO:
--- delete field'ını update ettiğimiz için resub durumunu handle etmemiz gerek
+-- name: Endsubscription :exec
+UPDATE "user_subscription"
+SET active = false,
+    updated_at = now()
+WHERE user_id = $1
+    AND moniest_id = $2;
