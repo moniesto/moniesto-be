@@ -8,17 +8,18 @@ package db
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 const createSubscriptionInfo = `-- name: CreateSubscriptionInfo :one
-INSERT INTO subscription_info 
-    (id, 
-    moniest_id, 
-    fee, 
-    message, 
-    created_at) 
-VALUES
-    ($1, $2, $3, $4, now())
+INSERT INTO subscription_info (
+        id,
+        moniest_id,
+        fee,
+        message,
+        created_at
+    )
+VALUES ($1, $2, $3, $4, now())
 RETURNING id, moniest_id, fee, message, deleted, created_at, updated_at
 `
 
@@ -36,6 +37,57 @@ func (q *Queries) CreateSubscriptionInfo(ctx context.Context, arg CreateSubscrip
 		arg.Fee,
 		arg.Message,
 	)
+	var i SubscriptionInfo
+	err := row.Scan(
+		&i.ID,
+		&i.MoniestID,
+		&i.Fee,
+		&i.Message,
+		&i.Deleted,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const getSubscriptionInfoByMoniestId = `-- name: GetSubscriptionInfoByMoniestId :one
+SELECT fee,
+    message,
+    updated_at
+FROM "subscription_info"
+WHERE moniest_id = $1
+`
+
+type GetSubscriptionInfoByMoniestIdRow struct {
+	Fee       float64        `json:"fee"`
+	Message   sql.NullString `json:"message"`
+	UpdatedAt time.Time      `json:"updated_at"`
+}
+
+func (q *Queries) GetSubscriptionInfoByMoniestId(ctx context.Context, moniestID string) (GetSubscriptionInfoByMoniestIdRow, error) {
+	row := q.db.QueryRowContext(ctx, getSubscriptionInfoByMoniestId, moniestID)
+	var i GetSubscriptionInfoByMoniestIdRow
+	err := row.Scan(&i.Fee, &i.Message, &i.UpdatedAt)
+	return i, err
+}
+
+const updateSubscriptionInfo = `-- name: UpdateSubscriptionInfo :one
+UPDATE "subscription_info"
+SET fee = $2,
+    message = $3,
+    updated_at = now()
+WHERE moniest_id = $1
+RETURNING id, moniest_id, fee, message, deleted, created_at, updated_at
+`
+
+type UpdateSubscriptionInfoParams struct {
+	MoniestID string         `json:"moniest_id"`
+	Fee       float64        `json:"fee"`
+	Message   sql.NullString `json:"message"`
+}
+
+func (q *Queries) UpdateSubscriptionInfo(ctx context.Context, arg UpdateSubscriptionInfoParams) (SubscriptionInfo, error) {
+	row := q.db.QueryRowContext(ctx, updateSubscriptionInfo, arg.MoniestID, arg.Fee, arg.Message)
 	var i SubscriptionInfo
 	err := row.Scan(
 		&i.ID,

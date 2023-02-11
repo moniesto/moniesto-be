@@ -123,10 +123,15 @@ func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, r
 		Description: moniest.Description,
 	}
 
+	// STEP: check validity and patch param
 	if req.Bio != "" || req.Description != "" {
 		difference = true
 
 		if req.Bio != "" {
+			if err := validation.Bio(req.Bio, service.config); err != nil {
+				return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_UpdateMoniest_InvalidBio)
+			}
+
 			param.Bio = sql.NullString{
 				Valid:  true,
 				String: req.Bio,
@@ -136,6 +141,10 @@ func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, r
 		}
 
 		if req.Description != "" {
+			if err := validation.Description(req.Description, service.config); err != nil {
+				return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_UpdateMoniest_InvalidDescription)
+			}
+
 			param.Description = sql.NullString{
 				Valid:  true,
 				String: req.Description,

@@ -44,6 +44,52 @@ func (service *Service) CreateSubsriptionInfo(ctx *gin.Context, moniest_id strin
 	return subscriptionInfo, nil
 }
 
-func (service *Service) UpdateSubsriptionInfo(ctx *gin.Context, moniest_id string) {
-	
+func (service *Service) UpdateSubsriptionInfo(ctx *gin.Context, moniest_id string, req model.UpdateMoniestProfileRequest) (db.SubscriptionInfo, error) {
+
+	// STEP: subscription info is valid
+	if req.SubscriptionInfo == nil {
+		return db.SubscriptionInfo{}, nil
+	}
+
+	subscription_info, err := service.Store.GetSubscriptionInfoByMoniestId(ctx, moniest_id)
+	if err != nil {
+		// TODO: add server error
+		return db.SubscriptionInfo{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdateMoniest_ServerErrorGetSubscriptionInfo)
+	}
+
+	subscriptionUpdateInfoParams := db.UpdateSubscriptionInfoParams{
+		MoniestID: moniest_id,
+		Fee:       subscription_info.Fee,
+		Message:   subscription_info.Message,
+	}
+
+	// STEP: fee is valid / updated
+	if req.SubscriptionInfo.Fee != 0 && subscriptionUpdateInfoParams.Fee != req.SubscriptionInfo.Fee {
+		if err := validation.Fee(req.SubscriptionInfo.Fee, service.config); err != nil {
+			return db.SubscriptionInfo{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_UpdateMoniest_InvalidFee)
+		} else {
+			subscriptionUpdateInfoParams.Fee = req.SubscriptionInfo.Fee
+			// PAYMENT FUTURE TODO: send payment update request
+		}
+	}
+
+	// STEP: message is valid / updated
+	if req.SubscriptionInfo.Message != "" {
+		if err := validation.SubscriptionMessage(req.SubscriptionInfo.Message, service.config); err != nil {
+			return db.SubscriptionInfo{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_UpdateMoniest_InvalidSubscriptionMessage)
+		} else {
+			subscriptionUpdateInfoParams.Message = sql.NullString{
+				Valid:  true,
+				String: req.SubscriptionInfo.Message,
+			}
+		}
+	}
+
+	// STEP: update subsctription info in DB
+	updated_subscription_info, err := service.Store.UpdateSubscriptionInfo(ctx, subscriptionUpdateInfoParams)
+	if err != nil {
+		return db.SubscriptionInfo{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdateMoniest_ServerErrorUpdateSubscriptionInfo)
+	}
+
+	return updated_subscription_info, nil
 }

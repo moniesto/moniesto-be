@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -79,7 +78,7 @@ func (server *Server) createMoniest(ctx *gin.Context) {
 		return
 	}
 
-	// TODO: add card payment info
+	// PAYMENT FUTURE TODO: add card payment info
 
 	// STEP: update data form
 	response := model.NewCreateMoniestResponse(createdMoniest)
@@ -87,7 +86,19 @@ func (server *Server) createMoniest(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
-// TODO: complete endpoint
+// @Summary Update Moniest Profile
+// @Description Update Moniest Profile details
+// @Security bearerAuth
+// @Tags Moniest
+// @Accept json
+// @Produce json
+// @Param UpdateMoniestBody body model.UpdateMoniestProfileRequest true " "
+// @Success 200 {object} model.OwnUser
+// @Failure 403 {object} clientError.ErrorResponse "user is not moniest"
+// @Failure 404 {object} clientError.ErrorResponse "user is not found"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body | invalid bio | invalid desc | invalid fee | invalid message"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/profile [patch]
 func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 	var req model.UpdateMoniestProfileRequest
 
@@ -97,7 +108,7 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 		return
 	}
 
-	// STEP: get user if from token
+	// STEP: get user from token
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	user_id := authPayload.User.ID
 
@@ -108,13 +119,22 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 		return
 	}
 
-	fmt.Println("moniest", moniest)
+	// STEP: update subscription info [if exist in req body check]
+	_, err = server.service.UpdateSubsriptionInfo(ctx, moniest.MoniestID, req)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
 
-	// STEP: update subscription info
-	/*
-		STEPS:
-			update subscribtion info
-				if Fee changed, send additional request to payment
-				update in db
-	*/
+	// STEP: get updated moniest data [+ user data]
+	updatedMoniest, err := server.service.GetMoniestByMoniestID(ctx, moniest.MoniestID)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: update data form
+	response := model.NewCreateMoniestResponse(updatedMoniest)
+
+	ctx.JSON(http.StatusOK, response)
 }
