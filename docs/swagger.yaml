@@ -267,6 +267,15 @@ definitions:
       updated_at:
         type: string
     type: object
+  model.UpdateMoniestProfileRequest:
+    properties:
+      bio:
+        type: string
+      description:
+        type: string
+      subscription_info:
+        $ref: '#/definitions/model.SubscriptionInfo'
+    type: object
   model.UpdateUserProfileRequest:
     properties:
       background_photo:
@@ -850,6 +859,47 @@ paths:
       summary: Create Post
       tags:
       - Post
+  /moniests/profile:
+    patch:
+      consumes:
+      - application/json
+      description: Update Moniest Profile details
+      parameters:
+      - description: all fields are optional
+        in: body
+        name: UpdateMoniestBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateMoniestProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.OwnUser'
+        "403":
+          description: user is not moniest
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: user is not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body | invalid bio | invalid desc | invalid fee | invalid
+            message
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Update Moniest Profile
+      tags:
+      - Moniest
   /users/:username:
     get:
       consumes:

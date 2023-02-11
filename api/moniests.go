@@ -92,7 +92,7 @@ func (server *Server) createMoniest(ctx *gin.Context) {
 // @Tags Moniest
 // @Accept json
 // @Produce json
-// @Param UpdateMoniestBody body model.UpdateMoniestProfileRequest true " "
+// @Param UpdateMoniestBody body model.UpdateMoniestProfileRequest true "all fields are optional"
 // @Success 200 {object} model.OwnUser
 // @Failure 403 {object} clientError.ErrorResponse "user is not moniest"
 // @Failure 404 {object} clientError.ErrorResponse "user is not found"
