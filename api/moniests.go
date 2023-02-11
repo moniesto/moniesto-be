@@ -108,7 +108,7 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 		return
 	}
 
-	// STEP: get user from token
+	// STEP: get user id from token
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	user_id := authPayload.User.ID
 
@@ -137,4 +137,35 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 	response := model.NewCreateMoniestResponse(updatedMoniest)
 
 	ctx.JSON(http.StatusOK, response)
+}
+
+func (server *Server) subscribeMoniest(ctx *gin.Context) {
+	// STEP: get username from param
+	username := ctx.Param("username")
+
+	// STEP: check "username" is a real moniest
+	moniest, err := server.service.GetMoniestByUsername(ctx, username)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: check user is not subscribing own
+	if moniest.ID == user_id {
+		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_Subscribe_SubscribeOwn))
+		return
+	}
+
+	// STEP: create subscription
+	err = server.service.SubscribeMoniest(ctx, moniest.MoniestID, user_id)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.Status(http.StatusOK)
 }

@@ -9,17 +9,32 @@ import (
 	"context"
 )
 
+const activateSubscription = `-- name: ActivateSubscription :exec
+UPDATE "user_subscription"
+SET active = true
+WHERE user_id = $1
+    AND moniest_id = $2
+`
+
+type ActivateSubscriptionParams struct {
+	UserID    string `json:"user_id"`
+	MoniestID string `json:"moniest_id"`
+}
+
+func (q *Queries) ActivateSubscription(ctx context.Context, arg ActivateSubscriptionParams) error {
+	_, err := q.db.ExecContext(ctx, activateSubscription, arg.UserID, arg.MoniestID)
+	return err
+}
+
 const createSubscription = `-- name: CreateSubscription :one
 INSERT INTO "user_subscription" (
-    id,
-    user_id,
-    moniest_id,
-    created_at,
-    updated_at
-)
-VALUES (
-    $1, $2, $3, now(), now()
-)
+        id,
+        user_id,
+        moniest_id,
+        created_at,
+        updated_at
+    )
+VALUES ($1, $2, $3, now(), now())
 RETURNING id, user_id, moniest_id, active, created_at, updated_at
 `
 
@@ -43,21 +58,20 @@ func (q *Queries) CreateSubscription(ctx context.Context, arg CreateSubscription
 	return i, err
 }
 
-const endsubscription = `-- name: Endsubscription :one
-UPDATE "user_subscription" 
-SET "deleted" = true,
-    "updated_at" = now()
-WHERE "user_id" = $1 AND "moniest_id" = $2
-RETURNING id, user_id, moniest_id, active, created_at, updated_at
+const getSubscription = `-- name: GetSubscription :one
+SELECT id, user_id, moniest_id, active, created_at, updated_at
+FROM "user_subscription"
+WHERE user_id = $1
+    AND moniest_id = $2
 `
 
-type EndsubscriptionParams struct {
+type GetSubscriptionParams struct {
 	UserID    string `json:"user_id"`
 	MoniestID string `json:"moniest_id"`
 }
 
-func (q *Queries) Endsubscription(ctx context.Context, arg EndsubscriptionParams) (UserSubscription, error) {
-	row := q.db.QueryRowContext(ctx, endsubscription, arg.UserID, arg.MoniestID)
+func (q *Queries) GetSubscription(ctx context.Context, arg GetSubscriptionParams) (UserSubscription, error) {
+	row := q.db.QueryRowContext(ctx, getSubscription, arg.UserID, arg.MoniestID)
 	var i UserSubscription
 	err := row.Scan(
 		&i.ID,

@@ -3,8 +3,10 @@ package clientError
 type ErrorMessagesType map[string]string
 
 const (
-	UserNotMoniest   = "UserNotMoniest"
-	UserNotFoundByID = "UserNotFoundByID"
+	UserNotMoniest                          = "UserNotMoniest"
+	UserNotFoundByID                        = "UserNotFoundByID"
+	General_MoniestNotFoundByUsername       = "General_MoniestNotFoundByUsername"
+	General_ServerErrorGetMoniestByUsername = "General_ServerErrorGetMoniestByUsername"
 
 	Account_Authorization_NotProvidedHeader = "Account_Authorization_NotProvidedHeader"
 	Account_Authorization_InvalidHeader     = "Account_Authorization_InvalidHeader"
@@ -107,6 +109,12 @@ const (
 	Moniest_GetMoniest_NoMoniest             = "Moniest_GetMoniest_NoMoniest"
 	Moniest_GetMoniest_ServerErrorGetMoniest = "Moniest_GetMoniest_ServerErrorGetMoniest"
 
+	Moniest_Subscribe_SubscribeOwn                    = "Moniest_Subscribe_SubscribeOwn"
+	Moniest_Subscribe_ServerErrorGetSubscription      = "Moniest_Subscribe_ServerErrorGetSubscription"
+	Moniest_Subscribe_AlreadySubscribed               = "Moniest_Subscribe_AlreadySubscribed"
+	Moniest_Subscribe_ServerErrorActivateSubscription = "Moniest_Subscribe_ServerErrorActivateSubscription"
+	Moniest_Subscribe_ServerErrorCreateSubscriptionDB = "Moniest_Subscribe_ServerErrorCreateSubscriptionDB"
+
 	Moniest_CreateSubscriptionInfo_InvalidFee                 = "Moniest_CreateSubscriptionInfo_InvalidFee"
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage = "Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage"
 	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate        = "Moniest_CreateSubscriptionInfo_ServerErrorOnCreate"
@@ -129,8 +137,10 @@ const (
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
-	UserNotMoniest:   "User is not moniest",
-	UserNotFoundByID: "User not found with this user ID",
+	UserNotMoniest:                          "User is not moniest",
+	UserNotFoundByID:                        "User not found with this user ID",
+	General_MoniestNotFoundByUsername:       "No moniest with this username",
+	General_ServerErrorGetMoniestByUsername: "Server error on getting moniest by username",
 
 	Account_Authorization_NotProvidedHeader: "Authorization Header is not provided",
 	Account_Authorization_InvalidHeader:     "Authorization Header is invalid",
@@ -232,6 +242,12 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 
 	Moniest_GetMoniest_NoMoniest:             "Not any moniest exist",
 	Moniest_GetMoniest_ServerErrorGetMoniest: "Server error on getting moniest",
+
+	Moniest_Subscribe_SubscribeOwn:                    "User can't subscribe to own",
+	Moniest_Subscribe_ServerErrorGetSubscription:      "Server error on getting subscription",
+	Moniest_Subscribe_AlreadySubscribed:               "Already subscribed to moniest",
+	Moniest_Subscribe_ServerErrorActivateSubscription: "Server error on activating subscription",
+	Moniest_Subscribe_ServerErrorCreateSubscriptionDB: "Server error on creating subscription on DB",
 
 	Moniest_CreateSubscriptionInfo_InvalidFee:                 "Fee is invalid",
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage: "Subscription message is invalid",

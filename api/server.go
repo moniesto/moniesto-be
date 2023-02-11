@@ -69,6 +69,7 @@ func (server *Server) setupRouter() {
 		moniestsRouters.POST("", server.createMoniest)
 		moniestsRouters.POST("/posts", server.createPost)
 		moniestsRouters.PATCH("/profile", server.updateMoniestProfile)
+		moniestsRouters.POST("/:username/subscribe", server.subscribeMoniest)
 	}
 
 	// User routes

@@ -101,6 +101,21 @@ func (service *Service) GetMoniestByMoniestID(ctx *gin.Context, moniest_id strin
 	return moniest, nil
 }
 
+func (service *Service) GetMoniestByUsername(ctx *gin.Context, username string) (db.GetMoniestByUsernameRow, error) {
+
+	// STEP: get moniest by username
+	moniest, err := service.Store.GetMoniestByUsername(ctx, username)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return db.GetMoniestByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_MoniestNotFoundByUsername)
+		}
+
+		return db.GetMoniestByUsernameRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorGetMoniestByUsername)
+	}
+
+	return moniest, nil
+}
+
 func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, req model.UpdateMoniestProfileRequest) (db.GetMoniestByUserIdRow, error) {
 	difference := false
 
