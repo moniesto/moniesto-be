@@ -823,6 +823,43 @@ paths:
       summary: Be Moniest
       tags:
       - Moniest
+  /moniests/:username/subscribe:
+    post:
+      consumes:
+      - application/json
+      description: Subscribe to Moniest
+      parameters:
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: already subscribed
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "403":
+          description: subscribe own
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: moniest is not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Subscribe to Moniest
+      tags:
+      - Moniest
   /moniests/posts:
     post:
       consumes:

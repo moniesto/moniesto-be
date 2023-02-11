@@ -139,6 +139,19 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary Subscribe to Moniest
+// @Description Subscribe to Moniest
+// @Security bearerAuth
+// @Tags Moniest
+// @Accept json
+// @Produce json
+// @Param username path string true "moniest username"
+// @Success 200
+// @Failure 400 {object} clientError.ErrorResponse "already subscribed"
+// @Failure 403 {object} clientError.ErrorResponse "subscribe own"
+// @Failure 404 {object} clientError.ErrorResponse "moniest is not found"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/:username/subscribe [post]
 func (server *Server) subscribeMoniest(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")
