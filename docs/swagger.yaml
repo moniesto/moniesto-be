@@ -860,6 +860,43 @@ paths:
       summary: Subscribe to Moniest
       tags:
       - Moniest
+  /moniests/:username/unsubscribe:
+    post:
+      consumes:
+      - application/json
+      description: Unsubscribe from Moniest
+      parameters:
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: user not subscribed
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "403":
+          description: unsubscribe own
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: moniest is not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Unsubscribe from Moniest
+      tags:
+      - Moniest
   /moniests/posts:
     post:
       consumes:

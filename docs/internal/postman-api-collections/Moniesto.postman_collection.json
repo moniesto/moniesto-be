@@ -54,7 +54,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"name\": \"Parvin\",\r\n \"surname\": \"Eyvazov\",\r\n \"username\": \"parvvazov3\",\r\n \"email\": \"parvvazov3@gmail.com\",\r\n \"password\": \"parvvazov3\"\r\n}",
+							"raw": "{\r\n \"name\": \"Parvin1\",\r\n \"surname\": \"Eyvazov1\",\r\n \"username\": \"parvvazov2\",\r\n \"email\": \"parvvazov5@gmail.com\",\r\n \"password\": \"parvvazov2\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -393,6 +393,78 @@
 							"path": [
 								"moniests",
 								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Subscribe",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNjMjAzOWE3LTljNTgtNDMzNS1iNjY4LTg3N2RlNWFhMjJiNSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YyIiwiaWQiOiI1MzA1NmE0ZC00YzI0LTQ2YzgtYjI5NS1jZmI2Y2QwMWQ5OTkifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0xMVQyMDoxNzo1My41NTMxNzQ5KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMTJUMjA6MTc6NTMuNTUzMTc0OSswNDowMCJ9._Ty4KT2dUUxfxSIicQsY083pIHZB1y4joFhg_gJGfd0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/moniests/parvvazov3/subscribe",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"moniests",
+								"parvvazov3",
+								"subscribe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Unsubscribe",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNjMjAzOWE3LTljNTgtNDMzNS1iNjY4LTg3N2RlNWFhMjJiNSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YyIiwiaWQiOiI1MzA1NmE0ZC00YzI0LTQ2YzgtYjI5NS1jZmI2Y2QwMWQ5OTkifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0xMVQyMDoxNzo1My41NTMxNzQ5KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMTJUMjA6MTc6NTMuNTUzMTc0OSswNDowMCJ9._Ty4KT2dUUxfxSIicQsY083pIHZB1y4joFhg_gJGfd0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/moniests/parvvazov3/unsubscribe",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"moniests",
+								"parvvazov3",
+								"unsubscribe"
 							]
 						}
 					},
