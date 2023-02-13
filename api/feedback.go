@@ -15,7 +15,7 @@ import (
 // @Security bearerAuth || ""
 // @Accept json
 // @Produce json
-// @Param CreateFeedbackBody body model.CreateFeedbackRequest true " "
+// @Param CreateFeedbackBody body model.CreateFeedbackRequest true "type is optional"
 // @Success 200
 // @Failure 406 {object} clientError.ErrorResponse "invalid body & data"
 // @Failure 500 {object} clientError.ErrorResponse "server error"

@@ -699,7 +699,7 @@ const docTemplate = `{
                 "summary": "Create Feedback",
                 "parameters": [
                     {
-                        "description": " ",
+                        "description": "type is optional",
                         "name": "CreateFeedbackBody",
                         "in": "body",
                         "required": true,

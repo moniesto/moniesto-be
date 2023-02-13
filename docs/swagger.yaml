@@ -795,7 +795,7 @@ paths:
       - application/json
       description: '[AUTH OPTIONAL] Create Feedback as Authenticated or Anonymous'
       parameters:
-      - description: ' '
+      - description: type is optional
         in: body
         name: CreateFeedbackBody
         required: true
