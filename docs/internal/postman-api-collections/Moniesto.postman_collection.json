@@ -54,7 +54,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"name\": \"Parvin1\",\r\n \"surname\": \"Eyvazov1\",\r\n \"username\": \"parvvazov2\",\r\n \"email\": \"parvvazov5@gmail.com\",\r\n \"password\": \"parvvazov2\"\r\n}",
+							"raw": "{\r\n \"name\": \"Parvin\",\r\n \"surname\": \"Eyvazov\",\r\n \"username\": \"parvvazov\",\r\n \"email\": \"parvvazov@gmail.com\",\r\n \"password\": \"parvvazov\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -766,6 +766,45 @@
 							"path": [
 								"assets",
 								"validations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Feedback",
+			"item": [
+				{
+					"name": "Add Feedback",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzYWUxMDk5LTI2ZjgtNGJiOC05Zjg4LTQ5NWY1MGYxM2M1MSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjFiYTA3ZmJmLWZjN2QtNDM0NC1hOTU1LTA4ZWE2OTk4Y2I5MSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAyLTE0VDAxOjExOjQwLjAyOTc3NzcrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMi0xNVQwMToxMTo0MC4wMjk3Nzc3KzA0OjAwIn0.NOyou7XUzGSxSwbpLUWxxVAzKThHwmyYulCfeZMASy8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"message\": \"hate this app\",\r\n \"type\":\"other\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/feedback",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"feedback"
 							]
 						}
 					},

@@ -9,6 +9,17 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
+// @Summary Create Feedback
+// @Description [AUTH OPTIONAL] Create Feedback as Authenticated or Anonymous
+// @Tags Feedback
+// @Security bearerAuth || ""
+// @Accept json
+// @Produce json
+// @Param CreateFeedbackBody body model.CreateFeedbackRequest true " "
+// @Success 200
+// @Failure 406 {object} clientError.ErrorResponse "invalid body & data"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /feedback [post]
 func (server *Server) createFeedback(ctx *gin.Context) {
 
 	var req model.CreateFeedbackRequest

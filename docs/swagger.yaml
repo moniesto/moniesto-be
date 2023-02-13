@@ -45,6 +45,16 @@ definitions:
       validity:
         type: boolean
     type: object
+  model.CreateFeedbackRequest:
+    properties:
+      message:
+        type: string
+      type:
+        description: optional
+        type: string
+    required:
+    - message
+    type: object
   model.CreateMoniestRequest:
     properties:
       bio:
@@ -779,6 +789,37 @@ paths:
       summary: Crypto Currency Search
       tags:
       - Crypto
+  /feedback:
+    post:
+      consumes:
+      - application/json
+      description: '[AUTH OPTIONAL] Create Feedback as Authenticated or Anonymous'
+      parameters:
+      - description: ' '
+        in: body
+        name: CreateFeedbackBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateFeedbackRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "406":
+          description: invalid body & data
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - '""': []
+        bearerAuth: []
+      summary: Create Feedback
+      tags:
+      - Feedback
   /moniests:
     post:
       consumes:
