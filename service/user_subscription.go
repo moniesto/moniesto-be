@@ -2,7 +2,6 @@ package service
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -82,7 +81,6 @@ func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, u
 
 	err = service.Store.Endsubscription(ctx, params)
 	if err != nil {
-		fmt.Println("Endsubscription", err)
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Unsubscribe_ServerErrorUnsubscribe)
 	}
 

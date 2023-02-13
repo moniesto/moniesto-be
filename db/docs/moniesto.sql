@@ -121,6 +121,16 @@ CREATE TABLE "email_verification_token" (
   "created_at" timestamp NOT NULL DEFAULT (now())
 );
 
+CREATE TABLE "feedback" (
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "user_id" varchar,
+  "type" varchar,
+  "message" varchar NOT NULL,
+  "solved" boolean NOT NULL DEFAULT false,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "solved_at" timestamp
+);
+
 CREATE UNIQUE INDEX ON "user" ("username");
 
 CREATE UNIQUE INDEX ON "user" ("email");
@@ -169,6 +179,8 @@ COMMENT ON TABLE "password_reset_token" IS 'Stores reset token for forget passwo
 
 COMMENT ON TABLE "email_verification_token" IS 'Stores email verification token for verifying account';
 
+COMMENT ON TABLE "feedback" IS 'Stores feedback from users';
+
 ALTER TABLE "image"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
@@ -207,3 +219,6 @@ ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "post_crypto_description"
 ADD FOREIGN KEY ("post_id") REFERENCES "post_crypto" ("id");
+
+ALTER TABLE "feedback"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");

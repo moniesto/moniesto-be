@@ -96,6 +96,12 @@ func (server *Server) setupRouter() {
 		assetRouters.GET("/validations", server.getValidationConfigs)
 	}
 
+	// Feedback routes
+	feedbackRouters := router.Group("/feedback").Use(authMiddlewareOptional(server.tokenMaker))
+	{
+		feedbackRouters.POST("", server.createFeedback)
+	}
+
 	// Swagger docs
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

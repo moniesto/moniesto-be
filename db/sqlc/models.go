@@ -115,6 +115,17 @@ type EmailVerificationToken struct {
 	CreatedAt   time.Time `json:"created_at"`
 }
 
+// Stores feedback from users
+type Feedback struct {
+	ID        string         `json:"id"`
+	UserID    sql.NullString `json:"user_id"`
+	Type      sql.NullString `json:"type"`
+	Message   string         `json:"message"`
+	Solved    bool           `json:"solved"`
+	CreatedAt time.Time      `json:"created_at"`
+	SolvedAt  sql.NullTime   `json:"solved_at"`
+}
+
 // Stores image data
 type Image struct {
 	ID            string    `json:"id"`

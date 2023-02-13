@@ -138,6 +138,9 @@ const (
 
 	Crypto_GetCurrencies_InvalidParam       = "Crypto_GetCurrencies_InvalidParam"
 	Crypto_GetCurrenciesFromAPI_ServerError = "Crypto_GetCurrenciesFromAPI_ServerError"
+
+	Feedback_CreateFeedback_InvalidBody               = "Feedback_CreateFeedback_InvalidBody"
+	Feedback_CreateFeedback_ServerErrorCreateFeedback = "Feedback_CreateFeedback_ServerErrorCreateFeedback"
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
@@ -276,4 +279,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 
 	Crypto_GetCurrencies_InvalidParam:       "Get Currencies request params is invalid",
 	Crypto_GetCurrenciesFromAPI_ServerError: "Server error on getting currencies from API",
+
+	Feedback_CreateFeedback_InvalidBody:               "Create feedback request body is invalid",
+	Feedback_CreateFeedback_ServerErrorCreateFeedback: "Server error on creating feedback",
 }

@@ -207,6 +207,19 @@ Table email_verification_token as EV {
   Note: 'Stores email verification token for verifying account'
 }
 
+Table feedback as F {
+  id varchar [not null, pk, unique]
+  user_id varchar // no relation because it is optional
+  type varchar
+  message varchar [not null]
+  solved boolean [not null, default: false]
+  
+  created_at timestamp [not null, default: `now()`]
+  solved_at timestamp
+
+  Note: 'Stores feedback from users'
+}
+
 
 // > many-to-one; < one-to-many; - one-to-one; <> many-to-many
 // Refs
@@ -223,6 +236,7 @@ Ref: PC.moniest_id > M.id
 Ref: PRT.user_id > U.id
 Ref: EV.user_id > U.id
 Ref: PCD.post_id > PC.id
+Ref: F.user_id > U.id
 
 
 
