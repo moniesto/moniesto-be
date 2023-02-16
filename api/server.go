@@ -102,6 +102,12 @@ func (server *Server) setupRouter() {
 		feedbackRouters.POST("", server.createFeedback)
 	}
 
+	// Content routes
+	contentRouters := router.Group("/content").Use(authMiddleware(server.tokenMaker))
+	{
+		contentRouters.GET("/posts", server.getContentPosts)
+	}
+
 	// Swagger docs
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

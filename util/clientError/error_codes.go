@@ -141,6 +141,8 @@ const (
 
 	Feedback_CreateFeedback_InvalidBody               = "Feedback_CreateFeedback_InvalidBody"
 	Feedback_CreateFeedback_ServerErrorCreateFeedback = "Feedback_CreateFeedback_ServerErrorCreateFeedback"
+
+	Content_GetPosts_InvalidParam = "Content_GetPosts_InvalidParam"
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
@@ -282,4 +284,6 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 
 	Feedback_CreateFeedback_InvalidBody:               "Create feedback request body is invalid",
 	Feedback_CreateFeedback_ServerErrorCreateFeedback: "Server error on creating feedback",
+
+	Content_GetPosts_InvalidParam: "Get Posts request param is invalid",
 }
