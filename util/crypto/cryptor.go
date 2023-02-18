@@ -15,7 +15,6 @@ var APIlinks []string = []string{
 }
 
 var tickerURI = "/ticker/price"
-var historyDataURI = "/klines"
 
 // GetCurrencies get all currencies from the crypto API
 func GetCurrencies() (model.GetCurrenciesAPIResponse, error) {
@@ -48,6 +47,5 @@ func GetCurrencies() (model.GetCurrenciesAPIResponse, error) {
 }
 
 func GetHistoryData(symbol, interval string, limit int, startTime, endTime int64) {
-	
 
 }
