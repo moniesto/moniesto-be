@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"identifier\": \"parvvazov3@gmail.com\",\r\n \"password\": \"parvvazov3\"\r\n}",
+							"raw": "{\r\n \"identifier\": \"parvvazov@gmail.com\",\r\n \"password\": \"parvvazov\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -54,7 +54,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"name\": \"Parvin\",\r\n \"surname\": \"Eyvazov\",\r\n \"username\": \"parvvazov\",\r\n \"email\": \"parvvazov@gmail.com\",\r\n \"password\": \"parvvazov\"\r\n}",
+							"raw": "{\r\n \"name\": \"Parvin\",\r\n \"surname\": \"Eyvazov\",\r\n \"username\": \"parvvazov2\",\r\n \"email\": \"parvvazov2@gmail.com\",\r\n \"password\": \"parvvazov\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -82,7 +82,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/account/usernames/test/check",
+							"raw": "http://localhost:8080/account/usernames/parvvazov/check",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -91,7 +91,7 @@
 							"path": [
 								"account",
 								"usernames",
-								"test",
+								"parvvazov",
 								"check"
 							]
 						}
@@ -336,7 +336,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVlNTI0ODkwLTZjYjctNGE1ZS1iZTYwLWRhYzE0NWI4NmU1YSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YzIiwiaWQiOiJkNzAwMDUzNC1lMzhjLTRlYjItYjZkZS1hZDVmOTgzMWE1MzIifSwiaXNzdWVkX2F0IjoiMjAyMy0wMS0xNVQyMzozODoyNS41MDU4MTY2KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDEtMTZUMjM6Mzg6MjUuNTA1ODE2NiswNDowMCJ9.NQdRxHZU4SMGrrYmyamOCsWTpiC2zHbeUl1KfGvnJQY",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3ZTA3ZjM2LTM1YjEtNGYxNS04NGFkLTEyYzYxZTViMmZiNCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3ZtMSIsImlkIjoiMWY3OTcwYzQtN2JmMC00N2NlLTgzMTMtMTQyYmM1YjVhMWY3In0sImlzc3VlZF9hdCI6IjIwMjMtMDItMTlUMjA6MzA6MDcuNTMzMDI0MyswNDowMCIsImV4cGlyZWRfYXQiOiIyMDIzLTAyLTIwVDIwOjMwOjA3LjUzMzAyNDMrMDQ6MDAifQ.b9NaxCjlgnW8LK5gX2_U_r3AwLSQ1PHaPT3uFDGEVX8",
 								"type": "text"
 							}
 						],
@@ -405,7 +405,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNjMjAzOWE3LTljNTgtNDMzNS1iNjY4LTg3N2RlNWFhMjJiNSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YyIiwiaWQiOiI1MzA1NmE0ZC00YzI0LTQ2YzgtYjI5NS1jZmI2Y2QwMWQ5OTkifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0xMVQyMDoxNzo1My41NTMxNzQ5KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMTJUMjA6MTc6NTMuNTUzMTc0OSswNDowMCJ9._Ty4KT2dUUxfxSIicQsY083pIHZB1y4joFhg_gJGfd0",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU0ZmNmZGU0LWI3NTItNGMxYS04ZWMwLTUwMjM1NTM3MjBlNCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjJjMzgwOTQ1LTk1ZmMtNDc5MC1iZjY5LWRkZWE3ZmEyMDFhZCJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAyLTE5VDIwOjI1OjA1LjA5NDgwNjMrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMi0yMFQyMDoyNTowNS4wOTQ4MDYzKzA0OjAwIn0.cEFHv5GilmyvcErVDf_WMNFt0gIKeVMq_O1Mtzs20rU",
 								"type": "text"
 							}
 						],
@@ -419,7 +419,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/moniests/parvvazov3/subscribe",
+							"raw": "http://localhost:8080/moniests/parvvazovm/subscribe",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -427,7 +427,7 @@
 							"port": "8080",
 							"path": [
 								"moniests",
-								"parvvazov3",
+								"parvvazovm",
 								"subscribe"
 							]
 						}
@@ -548,13 +548,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM0MDI2NTk0LTkwMWYtNGFiOC05YzQ1LTExN2M1OWFhZDJjYiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YzIiwiaWQiOiJkNzAwMDUzNC1lMzhjLTRlYjItYjZkZS1hZDVmOTgzMWE1MzIifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0wMVQyMTo1OToxOS4wNTQyMzM4KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMDJUMjE6NTk6MTkuMDU0MjMzOCswNDowMCJ9.28XCGx8lrP1gOAOVazfbxqd6Y-qqO8l0i63xgO5k3LY",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE3ZTA3ZjM2LTM1YjEtNGYxNS04NGFkLTEyYzYxZTViMmZiNCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3ZtMSIsImlkIjoiMWY3OTcwYzQtN2JmMC00N2NlLTgzMTMtMTQyYmM1YjVhMWY3In0sImlzc3VlZF9hdCI6IjIwMjMtMDItMTlUMjA6MzA6MDcuNTMzMDI0MyswNDowMCIsImV4cGlyZWRfYXQiOiIyMDIzLTAyLTIwVDIwOjMwOjA3LjUzMzAyNDMrMDQ6MDAifQ.b9NaxCjlgnW8LK5gX2_U_r3AwLSQ1PHaPT3uFDGEVX8",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n \"currency\": \"btcusdt\",\r\n \"duration\": \"2023-12-31T23:33:47.479Z\",\r\n \"target1\": 25000,\r\n \"target2\": 25001,\r\n \"target3\": 25002,\r\n \"stop\": 15000,\r\n \"direction\": \"long\",\r\n \"description\": \"{\\\"time\\\":1675272896974,\\\"blocks\\\":[{\\\"id\\\":\\\"mhTl6ghSkV\\\",\\\"type\\\":\\\"paragraph\\\",\\\"data\\\":{\\\"text\\\":\\\"Hey. Meet the new Editor. On this picture you can see it in action. Then, try a demo 🤓\\\"}},{\\\"id\\\":\\\"hZAjSnqYMX\\\",\\\"type\\\":\\\"image\\\",\\\"data\\\":{\\\"file\\\":{\\\"url\\\":\\\"assets/codex2x.png\\\"},\\\"withBorder\\\":false,\\\"withBackground\\\":false,\\\"stretched\\\":true,\\\"caption\\\":\\\"CodeX Code Camp 2019\\\"}}]}\"\r\n}",
+							"raw": "{\r\n \"currency\": \"btcusdt\",\r\n \"duration\": \"2023-12-31T23:33:47.479Z\",\r\n \"target1\": 26000,\r\n \"target2\": 26001,\r\n \"target3\": 26002,\r\n \"stop\": 2000,\r\n \"direction\": \"long\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -681,12 +681,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ2YjcxMzU5LTcxYWQtNGNjNC05MjkwLWQ2OTUyMGQwZDg0YiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImE4YmVjNzE4LTI5MDEtNDc4Yi05ZTFmLTRiYzVmNGYxOTZjNiJ9LCJpc3N1ZWRfYXQiOiIyMDIyLTEyLTMxVDIxOjU5OjQyLjU4MTk0NTMrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMi0xMi0zMVQyMjoxNDo0Mi41ODE5NDUzKzA0OjAwIn0.CwBuBbu_fwj96QOl4b90VfT04yuoY5GmRtbtnByJjyA",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJlMTczYzIwLTI3MDUtNGE4Zi05MjY5LWY0YmMwMzE4MTBiZiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3ZtIiwiaWQiOiJlYzcwZjRiMi1lMDU5LTQ2ZjItYjUxZS1lMjRhZGMwMjBmNjkifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0xOVQyMDoyNTozNC43NTE0MTcyKzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjBUMjA6MjU6MzQuNzUxNDE3MiswNDowMCJ9.ckb-TthSNMOxyAsQ6lepIY2hRAcicQTPemqQ1Mv5BWM",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/crypto/currencies?name=btcusdt",
+							"raw": "http://localhost:8080/crypto/currencies?name=ethusdt",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -699,7 +699,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "btcusdt"
+									"value": "ethusdt"
 								}
 							]
 						}
@@ -777,7 +777,7 @@
 			"name": "Feedback",
 			"item": [
 				{
-					"name": "Add Feedback",
+					"name": "[local] Add Feedback",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -805,6 +805,55 @@
 							"port": "8080",
 							"path": [
 								"feedback"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Content",
+			"item": [
+				{
+					"name": "[local] Subs Post",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlZTk1ZGNlLWNlMzgtNGY3OC1iYWY3LTNiY2Q2YzY5NWU5NCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjJjMzgwOTQ1LTk1ZmMtNDc5MC1iZjY5LWRkZWE3ZmEyMDFhZCJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAyLTE5VDIwOjM1OjE2LjA4OTg5MTErMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMi0yMFQyMDozNToxNi4wODk4OTExKzA0OjAwIn0.5Kx6cBIeSBkdF92WklCYAOdmQzZSSY9SX7XpmFGqef8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/content/posts?subscribed=false&active=true&limit=5&offset=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"content",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "subscribed",
+									"value": "false"
+								},
+								{
+									"key": "active",
+									"value": "true"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
 							]
 						}
 					},
