@@ -12,18 +12,9 @@ import (
 )
 
 func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscribed, active bool, limit, offset int) ([]model.GetContentPostResponse, error) {
-	/*
-		Steps:
-			if subscribed == false:
-				get deactive(old) posts of all moniest
-
-				tutmus
-				en yuksek scorlu postlar
-	*/
-
 	// STEP: get subscribed moniest posts
 	if subscribed {
-		// STEP: subscribed moniest -> active posts
+		// OPTION 1: subscribed moniest -> active posts
 		if active { // active
 			postsFromDB, err := service.Store.GetSubscribedActivePosts(ctx, db.GetSubscribedActivePostsParams{
 				UserID: userID,
@@ -41,7 +32,7 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 			return model.NewGetContentPostResponse(posts), nil
 		}
 
-		// STEP: subscribed moniest -> deactive(old) posts
+		// OPTION 2: subscribed moniest -> deactive(old) posts
 		postsFromDB, err := service.Store.GetSubscribedDeactivePosts(ctx, db.GetSubscribedDeactivePostsParams{
 			UserID: userID,
 			Limit:  int32(limit),
@@ -58,7 +49,17 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 		return model.NewGetContentPostResponse(posts), nil
 	}
 
-	// STEP: all moniests -> deactive(old) posts
-
-	return nil, nil
+	// OPTION 3: all moniests -> deactive(old) high score posts
+	postsFromDB, err := service.Store.GetDeactivePosts(ctx, db.GetDeactivePostsParams{
+		Limit:  int32(limit),
+		Offset: int32(offset),
+	})
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return []model.GetContentPostResponse{}, nil
+		}
+		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
+	}
+	posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
+	return model.NewGetContentPostResponse(posts), nil
 }
