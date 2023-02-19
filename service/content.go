@@ -1,8 +1,14 @@
 package service
 
-import "github.com/gin-gonic/gin"
+import (
+	"database/sql"
+	"unsafe"
 
-func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscribed, active bool, limit, offset int) {
+	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/model"
+)
+
+func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscribed, active bool, limit, offset int) ([]model.GetContentPostResponse, error) {
 	/*
 		Steps:
 			if subscribed == true:
@@ -19,6 +25,16 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 	// STEP: get subscribed moniest posts
 	if subscribed {
 		if active { // active
+			postsFromDB, err := service.Store.GetSubscribedActivePosts(ctx, userID)
+			if err != nil {
+				if err == sql.ErrNoRows {
+					return []model.GetContentPostResponse{}, nil
+				}
+				// TODO: return error
+			}
+			posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
+
+			return model.NewGetContentPostResponse(posts), nil
 
 		} else { // deactive(old)
 
@@ -27,4 +43,5 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 		// get deactive(old) posts of all moniests
 	}
 
+	return nil, nil
 }

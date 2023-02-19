@@ -29,6 +29,11 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 	user_id := authPayload.User.ID
 
 	// STEP: get content posts
-	server.service.GetContentPosts(ctx, user_id, req.Subscribed, req.Active, req.Limit, req.Offset)
+	posts, err := server.service.GetContentPosts(ctx, user_id, req.Subscribed, req.Active, req.Limit, req.Offset)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
 
+	ctx.JSON(http.StatusOK, posts)
 }

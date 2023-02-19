@@ -27,3 +27,5 @@ DROP TABLE IF EXISTS "user";
 DROP TYPE "entry_position";
 
 DROP TYPE "image_type";
+
+DROP TYPE "post_crypto_status";

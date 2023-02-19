@@ -111,6 +111,7 @@ Table post_crypto as PC {
   direction entry_position [not null]
   score float [not null, default: 0]
   finished boolean [not null, default: false]
+  status post_crypto_status [not null, default: "pending"]
   
   deleted boolean [not null, default: false]
   
@@ -239,7 +240,6 @@ Ref: PCD.post_id > PC.id
 Ref: F.user_id > U.id
 
 
-
 // Enums
 Enum image_type {
   profile_photo
@@ -249,4 +249,10 @@ Enum image_type {
 Enum entry_position {
   long
   short
+}
+
+Enum post_crypto_status {
+  pending
+  fail
+  success
 }

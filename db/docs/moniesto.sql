@@ -2,6 +2,8 @@ CREATE TYPE "image_type" AS ENUM ('profile_photo', 'background_photo');
 
 CREATE TYPE "entry_position" AS ENUM ('long', 'short');
 
+CREATE TYPE "post_crypto_status" AS ENUM ('pending', 'fail', 'success');
+
 CREATE TABLE "user" (
   "id" varchar UNIQUE PRIMARY KEY NOT NULL,
   "name" varchar NOT NULL,
@@ -71,6 +73,7 @@ CREATE TABLE "post_crypto" (
   "direction" entry_position NOT NULL,
   "score" float NOT NULL DEFAULT 0,
   "finished" boolean NOT NULL DEFAULT false,
+  "status" post_crypto_status NOT NULL DEFAULT 'pending',
   "deleted" boolean NOT NULL DEFAULT false,
   "created_at" timestamp NOT NULL DEFAULT (now()),
   "updated_at" timestamp NOT NULL DEFAULT (now())

@@ -95,6 +95,49 @@ func (ns NullImageType) Value() (driver.Value, error) {
 	return ns.ImageType, nil
 }
 
+type PostCryptoStatus string
+
+const (
+	PostCryptoStatusPending PostCryptoStatus = "pending"
+	PostCryptoStatusFail    PostCryptoStatus = "fail"
+	PostCryptoStatusSuccess PostCryptoStatus = "success"
+)
+
+func (e *PostCryptoStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = PostCryptoStatus(s)
+	case string:
+		*e = PostCryptoStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for PostCryptoStatus: %T", src)
+	}
+	return nil
+}
+
+type NullPostCryptoStatus struct {
+	PostCryptoStatus PostCryptoStatus
+	Valid            bool // Valid is true if PostCryptoStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullPostCryptoStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.PostCryptoStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.PostCryptoStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullPostCryptoStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return ns.PostCryptoStatus, nil
+}
+
 // Stores single card data
 type Card struct {
 	ID        string         `json:"id"`
@@ -167,21 +210,22 @@ type PasswordResetToken struct {
 
 // Stores crypto posts data
 type PostCrypto struct {
-	ID         string        `json:"id"`
-	MoniestID  string        `json:"moniest_id"`
-	Currency   string        `json:"currency"`
-	StartPrice float64       `json:"start_price"`
-	Duration   time.Time     `json:"duration"`
-	Target1    float64       `json:"target1"`
-	Target2    float64       `json:"target2"`
-	Target3    float64       `json:"target3"`
-	Stop       float64       `json:"stop"`
-	Direction  EntryPosition `json:"direction"`
-	Score      float64       `json:"score"`
-	Finished   bool          `json:"finished"`
-	Deleted    bool          `json:"deleted"`
-	CreatedAt  time.Time     `json:"created_at"`
-	UpdatedAt  time.Time     `json:"updated_at"`
+	ID         string           `json:"id"`
+	MoniestID  string           `json:"moniest_id"`
+	Currency   string           `json:"currency"`
+	StartPrice float64          `json:"start_price"`
+	Duration   time.Time        `json:"duration"`
+	Target1    float64          `json:"target1"`
+	Target2    float64          `json:"target2"`
+	Target3    float64          `json:"target3"`
+	Stop       float64          `json:"stop"`
+	Direction  EntryPosition    `json:"direction"`
+	Score      float64          `json:"score"`
+	Finished   bool             `json:"finished"`
+	Status     PostCryptoStatus `json:"status"`
+	Deleted    bool             `json:"deleted"`
+	CreatedAt  time.Time        `json:"created_at"`
+	UpdatedAt  time.Time        `json:"updated_at"`
 }
 
 // Stores crypto post description data
