@@ -615,6 +615,79 @@
                 }
             }
         },
+        "/content/posts": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get Posts for timeline \u0026 explore",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Content"
+                ],
+                "summary": "Get Content Post",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "default: true",
+                        "name": "subscribed",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "default: true",
+                        "name": "active",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "default: 10 \u0026 max: 50",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "default: 0",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.GetContentPostResponse"
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/crypto/currencies": {
             "get": {
                 "security": [
@@ -1163,6 +1236,19 @@
                 "EntryPositionShort"
             ]
         },
+        "db.PostCryptoStatus": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "fail",
+                "success"
+            ],
+            "x-enum-varnames": [
+                "PostCryptoStatusPending",
+                "PostCryptoStatusFail",
+                "PostCryptoStatusSuccess"
+            ]
+        },
         "model.ChangePasswordRequest": {
             "type": "object",
             "required": [
@@ -1351,6 +1437,53 @@
                 },
                 "validation": {
                     "$ref": "#/definitions/model.GetValidationConfigsResponse"
+                }
+            }
+        },
+        "model.GetContentPostResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "direction": {
+                    "$ref": "#/definitions/db.EntryPosition"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "finished": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "start_price": {
+                    "type": "number"
+                },
+                "status": {
+                    "$ref": "#/definitions/db.PostCryptoStatus"
+                },
+                "stop": {
+                    "type": "number"
+                },
+                "target1": {
+                    "type": "number"
+                },
+                "target2": {
+                    "type": "number"
+                },
+                "target3": {
+                    "type": "number"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/model.User"
                 }
             }
         },
