@@ -170,7 +170,7 @@ func (q *Queries) GetSubscribedActivePosts(ctx context.Context, arg GetSubscribe
 }
 
 const getSubscribedDeactivePosts = `-- name: GetSubscribedDeactivePosts :many
-SELECT pc.id,
+SELECT "pc"."id",
     "pc"."currency",
     "pc"."start_price",
     "pc"."duration",

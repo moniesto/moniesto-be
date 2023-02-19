@@ -28,6 +28,11 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	user_id := authPayload.User.ID
 
+	// STEP: check max limit
+	if req.Limit > util.MAX_POST_LIMIT {
+		req.Limit = util.MAX_POST_LIMIT
+	}
+
 	// STEP: get content posts
 	posts, err := server.service.GetContentPosts(ctx, user_id, req.Subscribed, req.Active, req.Limit, req.Offset)
 	if err != nil {

@@ -69,7 +69,7 @@ ORDER BY "pc"."created_at" DESC
 LIMIT $2 OFFSET $3;
 
 -- name: GetSubscribedDeactivePosts :many
-SELECT pc.id,
+SELECT "pc"."id",
     "pc"."currency",
     "pc"."start_price",
     "pc"."duration",

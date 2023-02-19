@@ -19,8 +19,6 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 
 				tutmus
 				en yuksek scorlu postlar
-
-
 	*/
 
 	// STEP: get subscribed moniest posts
