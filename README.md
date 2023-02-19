@@ -159,7 +159,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [need test] POST /account/email/verify_email -> verify email
 
-- [ ] GET /content/posts?subscribed=<subscribed>&limit=<limit>&offset=<offset>
+- [ ] GET /content/posts?subscribed=<subscribed>&active<active>&limit=<limit>&offset=<offset>
 
 - [ ] GET /content/moniests?subscribed=<subscribed>&limit=<limit>&offset=<offset>
 
@@ -196,6 +196,8 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 :heavy_check_mark: GET /assets/configs -> get all configurations
 
 :heavy_check_mark: [need test] POST /feedback -> give feedback
+
+- [ ] Search Moniest -> only username
 
 - [ ] POST /account/card -> Add new card
 

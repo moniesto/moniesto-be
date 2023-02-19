@@ -31,7 +31,7 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 	// STEP: get content posts
 	posts, err := server.service.GetContentPosts(ctx, user_id, req.Subscribed, req.Active, req.Limit, req.Offset)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, err.Error())
+		ctx.JSON(clientError.ParseError(err))
 		return
 	}
 

@@ -24,19 +24,19 @@ type OwnUser struct {
 }
 
 type User struct {
-	Id                           string    `json:"id,omitempty"`
-	Name                         string    `json:"name,omitempty"`
-	Surname                      string    `json:"surname,omitempty"`
-	Username                     string    `json:"username,omitempty"`
-	EmailVerified                bool      `json:"email_verified"`
-	Location                     string    `json:"location,omitempty"`
-	ProfilePhotoLink             string    `json:"profile_photo_link,omitempty"`
-	ProfilePhotoThumbnailLink    string    `json:"profile_photo_thumbnail_link,omitempty"`
-	BackgroundPhotoLink          string    `json:"background_photo_link,omitempty"`
-	BackgroundPhotoThumbnailLink string    `json:"background_photo_thumbnail_link,omitempty"`
-	CreatedAt                    time.Time `json:"created_at,omitempty"`
-	UpdatedAt                    time.Time `json:"updated_at,omitempty"`
-	Moniest                      *Moniest  `json:"moniest,omitempty"`
+	Id                           string     `json:"id,omitempty"`
+	Name                         string     `json:"name,omitempty"`
+	Surname                      string     `json:"surname,omitempty"`
+	Username                     string     `json:"username,omitempty"`
+	EmailVerified                bool       `json:"email_verified"`
+	Location                     string     `json:"location,omitempty"`
+	ProfilePhotoLink             string     `json:"profile_photo_link,omitempty"`
+	ProfilePhotoThumbnailLink    string     `json:"profile_photo_thumbnail_link,omitempty"`
+	BackgroundPhotoLink          string     `json:"background_photo_link,omitempty"`
+	BackgroundPhotoThumbnailLink string     `json:"background_photo_thumbnail_link,omitempty"`
+	CreatedAt                    *time.Time `json:"created_at,omitempty"`
+	UpdatedAt                    *time.Time `json:"updated_at,omitempty"`
+	Moniest                      *Moniest   `json:"moniest,omitempty"`
 }
 
 type UpdateUserProfileRequest struct {
@@ -138,8 +138,8 @@ func NewGetUserResponse(user db.GetUserByUsernameRow) (response User) {
 		ProfilePhotoThumbnailLink:    user.ProfilePhotoThumbnailLink.(string),
 		BackgroundPhotoLink:          user.BackgroundPhotoLink.(string),
 		BackgroundPhotoThumbnailLink: user.BackgroundPhotoThumbnailLink.(string),
-		CreatedAt:                    user.CreatedAt,
-		UpdatedAt:                    user.UpdatedAt,
+		CreatedAt:                    &user.CreatedAt,
+		UpdatedAt:                    &user.UpdatedAt,
 	}
 
 	if user.MoniestID.String != "" {
