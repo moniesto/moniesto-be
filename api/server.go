@@ -106,6 +106,7 @@ func (server *Server) setupRouter() {
 	contentRouters := router.Group("/content").Use(authMiddleware(server.tokenMaker))
 	{
 		contentRouters.GET("/posts", server.getContentPosts)
+		contentRouters.GET("/moniests", server.getContentMoniests)
 	}
 
 	// Swagger docs

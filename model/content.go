@@ -32,6 +32,12 @@ type GetContentPostResponse struct {
 	User       User                `json:"user"`
 }
 
+type GetContentMoniestRequest struct {
+	Subscribed bool `form:"subscribed" json:"subscribed"`
+	Limit      int  `form:"limit" json:"limit"`
+	Offset     int  `form:"offset" json:"offset"`
+}
+
 func NewGetContentPostResponse(posts PostDBResponse) []GetContentPostResponse {
 	response := make([]GetContentPostResponse, 0, len(posts))
 

@@ -63,3 +63,14 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 	posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
 	return model.NewGetContentPostResponse(posts), nil
 }
+
+func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, subscribed bool, limit, offset int) {
+
+	// OPTION 1: get subscribed moniests -> latest subscribed first
+	if subscribed {
+
+	}
+
+	// OPTION 2: get all moniests -> highest score first
+
+}

@@ -56,3 +56,31 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, posts)
 }
+
+func (server *Server) getContentMoniests(ctx *gin.Context) {
+	var req model.GetContentMoniestRequest = model.GetContentMoniestRequest{
+		Subscribed: true,
+		Limit:      util.DEFAULT_MONIEST_LIMIT,
+		Offset:     0,
+	}
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Content_GetPosts_InvalidParam))
+		return
+	}
+
+	// get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: check max limit
+	if req.Limit > util.MAX_MONIEST_LIMIT {
+		req.Limit = util.MAX_MONIEST_LIMIT
+	}
+
+	// STEP: get content moniests
+	/* moniests, err := */
+	server.service.GetContentMoniests(ctx, user_id, req.Subscribed, req.Limit, req.Offset)
+
+}

@@ -210,3 +210,8 @@ FROM "post_crypto" AS pc
     AND "pc"."status" = 'success'
 ORDER BY "pc"."score" DESC
 LIMIT $1 OFFSET $2;
+
+-- name: GetSubscribedMoniests :many
+
+
+-- name: GetMoniests :many
