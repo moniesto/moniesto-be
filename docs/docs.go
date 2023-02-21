@@ -626,6 +626,72 @@ const docTemplate = `{
                 }
             }
         },
+        "/content/moniests": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get Subscribed OR All moniests",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Content"
+                ],
+                "summary": "Get Content Moniests",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "default: true",
+                        "name": "subscribed",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "default: 10 \u0026 max: 50",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "default: 0",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "subscribed:true -\u003e latest subscribed first, subscribed:false -\u003e highest score moniest first",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.User"
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/content/posts": {
             "get": {
                 "security": [
@@ -643,7 +709,7 @@ const docTemplate = `{
                 "tags": [
                     "Content"
                 ],
-                "summary": "Get Content Post",
+                "summary": "Get Content Posts",
                 "parameters": [
                     {
                         "type": "boolean",

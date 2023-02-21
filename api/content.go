@@ -10,7 +10,7 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
-// @Summary Get Content Post
+// @Summary Get Content Posts
 // @Description Get Posts for timeline & explore
 // @Security bearerAuth
 // @Tags Content
@@ -57,6 +57,19 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, posts)
 }
 
+// @Summary Get Content Moniests
+// @Description Get Subscribed OR All moniests
+// @Security bearerAuth
+// @Tags Content
+// @Accept json
+// @Produce json
+// @Param subscribed query bool true "default: true"
+// @Param limit query int true "default: 10 & max: 50"
+// @Param offset query int true "default: 0"
+// @Success 200 {object} []model.User "subscribed:true -> latest subscribed first, subscribed:false -> highest score moniest first"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /content/moniests [get]
 func (server *Server) getContentMoniests(ctx *gin.Context) {
 	var req model.GetContentMoniestRequest = model.GetContentMoniestRequest{
 		Subscribed: true,

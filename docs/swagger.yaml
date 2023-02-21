@@ -797,6 +797,50 @@ paths:
       summary: Get Validation Configs
       tags:
       - Assets
+  /content/moniests:
+    get:
+      consumes:
+      - application/json
+      description: Get Subscribed OR All moniests
+      parameters:
+      - description: 'default: true'
+        in: query
+        name: subscribed
+        required: true
+        type: boolean
+      - description: 'default: 10 & max: 50'
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: 'default: 0'
+        in: query
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: subscribed:true -> latest subscribed first, subscribed:false
+            -> highest score moniest first
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "406":
+          description: invalid body
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get Content Moniests
+      tags:
+      - Content
   /content/posts:
     get:
       consumes:
@@ -842,7 +886,7 @@ paths:
             $ref: '#/definitions/clientError.ErrorResponse'
       security:
       - bearerAuth: []
-      summary: Get Content Post
+      summary: Get Content Posts
       tags:
       - Content
   /crypto/currencies:

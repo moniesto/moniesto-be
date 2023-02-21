@@ -87,5 +87,20 @@ func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, sub
 	}
 
 	// OPTION 2: get all moniests -> highest score first
-	return []model.User{}, nil
+	params := db.GetMoniestsParams{
+		Limit:  int32(limit),
+		Offset: int32(offset),
+	}
+
+	moniestFromDB, err := service.Store.GetMoniests(ctx, params)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return []model.User{}, nil
+		}
+
+		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetMoniests_ServerErrorGetMoniests)
+	}
+
+	moniests := *(*model.MoniestDBResponse)(unsafe.Pointer(&moniestFromDB))
+	return model.NewGetContentMoniestResponse(moniests), nil
 }
