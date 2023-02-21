@@ -64,13 +64,28 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 	return model.NewGetContentPostResponse(posts), nil
 }
 
-func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, subscribed bool, limit, offset int) {
-
+func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, subscribed bool, limit, offset int) ([]model.User, error) {
 	// OPTION 1: get subscribed moniests -> latest subscribed first
 	if subscribed {
+		params := db.GetSubscribedMoniestsParams{
+			UserID: user_id,
+			Limit:  int32(limit),
+			Offset: int32(offset),
+		}
 
+		moniestFromDB, err := service.Store.GetSubscribedMoniests(ctx, params)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				return []model.User{}, nil
+			}
+
+			return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetMoniests_ServerErrorGetMoniests)
+		}
+
+		moniests := *(*model.MoniestDBResponse)(unsafe.Pointer(&moniestFromDB))
+		return model.NewGetContentMoniestResponse(moniests), nil
 	}
 
 	// OPTION 2: get all moniests -> highest score first
-
+	return []model.User{}, nil
 }

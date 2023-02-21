@@ -144,6 +144,9 @@ const (
 
 	Content_GetPosts_InvalidParam        = "Content_GetPosts_InvalidParam"
 	Content_GetPosts_ServerErrorGetPosts = "Content_GetPosts_ServerErrorGetPosts"
+
+	Content_GetMoniests_InvalidParam           = "Content_GetMoniests_InvalidParam"
+	Content_GetMoniests_ServerErrorGetMoniests = "Content_GetMoniests_ServerErrorGetMoniests"
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
@@ -288,4 +291,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 
 	Content_GetPosts_InvalidParam:        "Get Posts request param is invalid",
 	Content_GetPosts_ServerErrorGetPosts: "Server error on getting posts",
+
+	Content_GetMoniests_InvalidParam:           "Get Moniests request param is invalid",
+	Content_GetMoniests_ServerErrorGetMoniests: "Server error on getting moniests",
 }

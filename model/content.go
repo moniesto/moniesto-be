@@ -14,6 +14,7 @@ type GetContentPostRequest struct {
 }
 
 type PostDBResponse []db.GetSubscribedActivePostsRow
+type MoniestDBResponse []db.GetSubscribedMoniestsRow
 
 type GetContentPostResponse struct {
 	ID         string              `json:"id"`
@@ -71,6 +72,40 @@ func NewGetContentPostResponse(posts PostDBResponse) []GetContentPostResponse {
 					Bio:         post.Bio.String,
 					Description: post.Description.String,
 					Score:       post.MoniestScore,
+				},
+			},
+		})
+	}
+
+	return response
+}
+
+func NewGetContentMoniestResponse(moniests MoniestDBResponse) []User {
+	response := make([]User, 0, len(moniests))
+
+	for _, user := range moniests {
+		response = append(response, User{
+			Id:                           user.ID,
+			Name:                         user.Name,
+			Surname:                      user.Surname,
+			Username:                     user.Username,
+			EmailVerified:                user.EmailVerified,
+			Location:                     user.Location.String,
+			ProfilePhotoLink:             user.ProfilePhotoLink.(string),
+			ProfilePhotoThumbnailLink:    user.ProfilePhotoThumbnailLink.(string),
+			BackgroundPhotoLink:          user.BackgroundPhotoLink.(string),
+			BackgroundPhotoThumbnailLink: user.BackgroundPhotoThumbnailLink.(string),
+			CreatedAt:                    &user.CreatedAt,
+			UpdatedAt:                    &user.UpdatedAt,
+			Moniest: &Moniest{
+				ID:          user.MoniestID,
+				Bio:         user.Bio.String,
+				Description: user.Description.String,
+				Score:       user.Score,
+				SubscriptionInfo: &SubscriptionInfo{
+					Fee:       user.Fee,
+					Message:   user.Message.String,
+					UpdatedAt: user.SubscriptionInfoUpdatedAt,
 				},
 			},
 		})
