@@ -161,7 +161,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [need test] GET /content/posts?subscribed=true&active=true&limit=10&offset=0
 
-- [ ] GET /content/moniests?subscribed=true&limit=10&offset=0
+:heavy_check_mark: [need test] GET /content/moniests?subscribed=true&limit=10&offset=0
 
 :heavy_check_mark: [need test] GET /users/:username
 
