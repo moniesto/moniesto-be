@@ -77,6 +77,7 @@ func (server *Server) setupRouter() {
 	usersRouters := router.Group("/users").Use(authMiddleware(server.tokenMaker))
 	{
 		usersRouters.PATCH("/profile", server.updateUserProfile)
+		usersRouters.GET("/:username/subscriptions", server.getSubscriptions)
 
 		// PRIMARY TODO: make this endpoint public instead of auth
 		usersRouters.GET("/:username", server.getUserByUsername)

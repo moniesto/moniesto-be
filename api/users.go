@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/token"
+	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
@@ -120,4 +121,40 @@ func (server *Server) updateUserProfile(ctx *gin.Context) {
 	response := model.NewGetOwnUserResponseByID(user)
 
 	ctx.JSON(http.StatusOK, response)
+}
+
+func (server *Server) getSubscriptions(ctx *gin.Context) {
+	// STEP: get username from param
+	username := ctx.Param("username")
+
+	var req model.PaginationRequest = model.PaginationRequest{
+		Limit:  util.DEFAULT_LIMIT,
+		Offset: 0,
+	}
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.User_GetSubscriptions_InvalidParam))
+		return
+	}
+
+	// STEP: make limit & offset safe [arrange min-max]
+	req.Limit = util.SafeLimit(req.Limit)
+	req.Offset = util.SafeOffset(req.Offset)
+
+	// STEP: get user data of username [+check if user exists]
+	user, err := server.service.GetUserByUsername(ctx, username)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: get subscriptions
+	users, err := server.service.GetSubscriptions(ctx, user.ID, req.Limit, req.Offset)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, users)
 }

@@ -3,8 +3,9 @@ package clientError
 type ErrorMessagesType map[string]string
 
 const (
-	UserNotMoniest                          = "UserNotMoniest"
-	UserNotFoundByID                        = "UserNotFoundByID"
+	General_UserNotMoniest                  = "General_UserNotMoniest"
+	General_UserNotFoundByID                = "General_UserNotFoundByID"
+	General_UserNotFoundByUsername          = "General_UserNotFoundByUsername"
 	General_MoniestNotFoundByUsername       = "General_MoniestNotFoundByUsername"
 	General_ServerErrorGetMoniestByUsername = "General_ServerErrorGetMoniestByUsername"
 
@@ -123,7 +124,6 @@ const (
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage = "Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage"
 	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate        = "Moniest_CreateSubscriptionInfo_ServerErrorOnCreate"
 
-	User_GetUser_NotFoundUser       = "User_GetUser_NotFoundUser"
 	User_GetUser_ServerErrorGetUser = "User_GetUser_ServerErrorGetUser"
 
 	Post_CreatePost_InvalidBody                  = "Post_CreatePost_InvalidBody"
@@ -147,11 +147,15 @@ const (
 
 	Content_GetMoniests_InvalidParam           = "Content_GetMoniests_InvalidParam"
 	Content_GetMoniests_ServerErrorGetMoniests = "Content_GetMoniests_ServerErrorGetMoniests"
+
+	User_GetSubscriptions_InvalidParam                = "User_GetSubscriptions_InvalidParam"
+	User_GetSubscriptions_ServerErrorGetSubscriptions = "User_GetSubscriptions_ServerErrorGetSubscriptions"
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
-	UserNotMoniest:                          "User is not moniest",
-	UserNotFoundByID:                        "User not found with this user ID",
+	General_UserNotMoniest:                  "User is not moniest",
+	General_UserNotFoundByID:                "User not found with this user ID",
+	General_UserNotFoundByUsername:          "User not found with this username",
 	General_MoniestNotFoundByUsername:       "No moniest with this username",
 	General_ServerErrorGetMoniestByUsername: "Server error on getting moniest by username",
 
@@ -270,7 +274,6 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage: "Subscription message is invalid",
 	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate:        "Server error on create subscription info",
 
-	User_GetUser_NotFoundUser:       "User not found",
 	User_GetUser_ServerErrorGetUser: "Server error on getting user",
 
 	Post_CreatePost_InvalidBody:                  "Create post request body is invalid",
@@ -294,4 +297,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 
 	Content_GetMoniests_InvalidParam:           "Get Moniests request param is invalid",
 	Content_GetMoniests_ServerErrorGetMoniests: "Server error on getting moniests",
+
+	User_GetSubscriptions_InvalidParam:                "Get user subscriptions request param is invalid",
+	User_GetSubscriptions_ServerErrorGetSubscriptions: "Server error on get user subscriptions",
 }

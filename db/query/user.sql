@@ -358,3 +358,64 @@ WHERE email = $1;
 SELECT COUNT(*) = 0 AS isUsernameValid
 FROM "user"
 WHERE username = $1;
+
+-- name: GetSubscriptions :many
+SELECT "u"."id",
+    "m"."id" as "moniest_id",
+    "u"."name",
+    "u"."surname",
+    "u"."username",
+    "u"."email_verified",
+    "u"."location",
+    "u"."created_at",
+    "u"."updated_at",
+    "m"."bio",
+    "m"."description",
+    "m"."score",
+    "si"."fee",
+    "si"."message",
+    "si"."updated_at" as "subscription_info_updated_at",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "moniest" as m
+    INNER JOIN "user_subscription" AS us ON "m"."id" = "us"."moniest_id"
+    INNER JOIN "user" as u ON "u"."id" = "m"."user_id"
+    INNER JOIN "subscription_info" as si ON "si"."moniest_id" = "m"."id"
+    AND "us"."user_id" = $1
+    AND "us"."active" = TRUE
+ORDER BY "us"."created_at" DESC
+LIMIT $2 OFFSET $3;

@@ -42,7 +42,7 @@ func (server *Server) createPost(ctx *gin.Context) {
 		return
 	}
 	if !userIsMoniest {
-		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.UserNotMoniest))
+		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.General_UserNotMoniest))
 		return
 	}
 

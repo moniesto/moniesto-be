@@ -3,6 +3,7 @@ package service
 import (
 	"database/sql"
 	"net/http"
+	"unsafe"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
@@ -17,7 +18,7 @@ func (service *Service) GetOwnUserByUsername(ctx *gin.Context, username string) 
 	if err != nil {
 
 		if err == sql.ErrNoRows {
-			return db.GetOwnUserByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.User_GetUser_NotFoundUser)
+			return db.GetOwnUserByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByUsername)
 		}
 
 		// TODO: log server error
@@ -34,7 +35,7 @@ func (service *Service) GetUserByUsername(ctx *gin.Context, username string) (db
 	if err != nil {
 
 		if err == sql.ErrNoRows {
-			return db.GetUserByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.User_GetUser_NotFoundUser)
+			return db.GetUserByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByUsername)
 		}
 
 		// TODO: log server error
@@ -50,7 +51,7 @@ func (service *Service) GetOwnUserByID(ctx *gin.Context, userID string) (db.GetO
 	user, err := service.Store.GetOwnUserByID(ctx, userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return db.GetOwnUserByIDRow{}, clientError.CreateError(http.StatusNotFound, clientError.UserNotFoundByID)
+			return db.GetOwnUserByIDRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByID)
 		}
 
 		return db.GetOwnUserByIDRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorGetUser)
@@ -67,7 +68,7 @@ func (service *Service) UpdateUserProfile(ctx *gin.Context, user_id string, req 
 	user, err := service.Store.GetUserByID(ctx, user_id)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return clientError.CreateError(http.StatusNotFound, clientError.UserNotFoundByID)
+			return clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByID)
 		} else {
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorGetUser)
 		}
@@ -222,4 +223,24 @@ func (service *Service) UpdateBackgroundPhoto(ctx *gin.Context, user_id string, 
 	}
 
 	return nil
+}
+
+func (service *Service) GetSubscriptions(ctx *gin.Context, user_id string, limit, offset int) ([]model.User, error) {
+	params := db.GetSubscriptionsParams{
+		UserID: user_id,
+		Limit:  int32(limit),
+		Offset: int32(offset),
+	}
+
+	subscriptions, err := service.Store.GetSubscriptions(ctx, params)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return []model.User{}, nil
+		}
+
+		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.User_GetSubscriptions_ServerErrorGetSubscriptions)
+	}
+
+	moniests := *(*model.MoniestDBResponse)(unsafe.Pointer(&subscriptions))
+	return model.NewGetContentMoniestResponse(moniests), nil
 }

@@ -6,6 +6,11 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 )
 
+type PaginationRequest struct {
+	Limit  int `form:"limit" json:"limit"`
+	Offset int `form:"offset" json:"offset"`
+}
+
 type GetContentPostRequest struct {
 	Subscribed bool `form:"subscribed" json:"subscribed"`
 	Active     bool `form:"active" json:"active"`
@@ -14,7 +19,7 @@ type GetContentPostRequest struct {
 }
 
 type PostDBResponse []db.GetSubscribedActivePostsRow
-type MoniestDBResponse []db.GetSubscribedMoniestsRow
+type MoniestDBResponse []db.GetMoniestsRow
 
 type GetContentPostResponse struct {
 	ID         string              `json:"id"`
@@ -34,9 +39,8 @@ type GetContentPostResponse struct {
 }
 
 type GetContentMoniestRequest struct {
-	Subscribed bool `form:"subscribed" json:"subscribed"`
-	Limit      int  `form:"limit" json:"limit"`
-	Offset     int  `form:"offset" json:"offset"`
+	Limit  int `form:"limit" json:"limit"`
+	Offset int `form:"offset" json:"offset"`
 }
 
 func NewGetContentPostResponse(posts PostDBResponse) []GetContentPostResponse {

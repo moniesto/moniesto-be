@@ -124,7 +124,7 @@ func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, r
 	if err != nil {
 		// STEP: no moniest with this user id
 		if err == sql.ErrNoRows {
-			return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusForbidden, clientError.UserNotMoniest)
+			return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusForbidden, clientError.General_UserNotMoniest)
 		}
 
 		// TODO: add server error
