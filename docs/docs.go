@@ -633,7 +633,7 @@ const docTemplate = `{
                         "bearerAuth": []
                     }
                 ],
-                "description": "Get Subscribed OR All moniests",
+                "description": "Get All moniests",
                 "consumes": [
                     "application/json"
                 ],
@@ -645,13 +645,6 @@ const docTemplate = `{
                 ],
                 "summary": "Get Content Moniests",
                 "parameters": [
-                    {
-                        "type": "boolean",
-                        "description": "default: true",
-                        "name": "subscribed",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "description": "default: 10 \u0026 max: 50",
@@ -669,7 +662,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "subscribed:true -\u003e latest subscribed first, subscribed:false -\u003e highest score moniest first",
+                        "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -1191,7 +1184,7 @@ const docTemplate = `{
                 "summary": "Get User by Username",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "username",
                         "name": "username",
                         "in": "path",
@@ -1213,6 +1206,78 @@ const docTemplate = `{
                     },
                     "406": {
                         "description": "invalid username",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/:username/subscriptions": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get subscribed Moniests",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get Subscriptions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "default: 10 \u0026 max: 50",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "default: 0",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.User"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "user not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorResponse"
                         }

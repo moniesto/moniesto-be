@@ -169,7 +169,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] GET /users/:username/posts/:post_id
 
-- [ ] GET /users/:username/subscriptions?limit=<limit>&offset=<offset>
+:heavy_check_mark: [need test] GET /users/:username/subscriptions?limit=<limit>&offset=<offset>
 
 - [ ] GET /users/:username/subscribers?limit=<limit>&offset=<offset>
 

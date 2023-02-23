@@ -801,13 +801,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get Subscribed OR All moniests
+      description: Get All moniests
       parameters:
-      - description: 'default: true'
-        in: query
-        name: subscribed
-        required: true
-        type: boolean
       - description: 'default: 10 & max: 50'
         in: query
         name: limit
@@ -822,8 +817,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: subscribed:true -> latest subscribed first, subscribed:false
-            -> highest score moniest first
+          description: OK
           schema:
             items:
               $ref: '#/definitions/model.User'
@@ -1158,7 +1152,7 @@ paths:
         in: path
         name: username
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -1181,6 +1175,53 @@ paths:
       security:
       - bearerAuth: []
       summary: Get User by Username
+      tags:
+      - User
+  /users/:username/subscriptions:
+    get:
+      consumes:
+      - application/json
+      description: Get subscribed Moniests
+      parameters:
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: 'default: 10 & max: 50'
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: 'default: 0'
+        in: query
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "404":
+          description: user not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get Subscriptions
       tags:
       - User
   /users/profile:

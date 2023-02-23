@@ -17,7 +17,7 @@ import (
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param username path int true "username"
+// @Param username path string true "username"
 // @Success 200 {object} model.User "'email' field will be visible if user request for own account"
 // @Failure 404 {object} clientError.ErrorResponse "not any user with this username"
 // @Failure 406 {object} clientError.ErrorResponse "invalid username"
@@ -123,6 +123,20 @@ func (server *Server) updateUserProfile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary Get Subscriptions
+// @Description Get subscribed Moniests
+// @Security bearerAuth
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param username path string true "username"
+// @Param limit query int true "default: 10 & max: 50"
+// @Param offset query int true "default: 0"
+// @Success 200 {object} []model.User
+// @Failure 404 {object} clientError.ErrorResponse "user not found"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /users/:username/subscriptions [get]
 func (server *Server) getSubscriptions(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")
