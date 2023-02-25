@@ -12,10 +12,11 @@ type PaginationRequest struct {
 }
 
 type GetContentPostRequest struct {
-	Subscribed bool `form:"subscribed" json:"subscribed"`
-	Active     bool `form:"active" json:"active"`
-	Limit      int  `form:"limit" json:"limit"`
-	Offset     int  `form:"offset" json:"offset"`
+	Subscribed bool   `form:"subscribed" json:"subscribed"`
+	Active     bool   `form:"active" json:"active"`
+	SortBy     string `form:"sortBy" json:"sortBy"` // created_at | score
+	Limit      int    `form:"limit" json:"limit"`
+	Offset     int    `form:"offset" json:"offset"`
 }
 
 type PostDBResponse []db.GetSubscribedActivePostsRow

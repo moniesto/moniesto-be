@@ -715,6 +715,12 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "description": "options: [score | created_at] default: score, only affect when subscription \u0026 active = false",
+                        "name": "sortBy",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "default: 10 \u0026 max: 50",
                         "name": "limit",

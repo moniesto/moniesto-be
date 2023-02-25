@@ -18,6 +18,7 @@ import (
 // @Produce json
 // @Param subscribed query bool false "default: true"
 // @Param active query bool false "default: true"
+// @Param sortBy query string false "options: [score | created_at] default: score, only affect when subscription & active = false"
 // @Param limit query int false "default: 10 & max: 50"
 // @Param offset query int false "default: 0"
 // @Success 200 {object} []model.GetContentPostResponse
@@ -28,6 +29,7 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 	var req model.GetContentPostRequest = model.GetContentPostRequest{
 		Subscribed: true,
 		Active:     true,
+		SortBy:     "score",
 		Limit:      util.DEFAULT_LIMIT,
 		Offset:     util.DEFAULT_OFFSET,
 	}
@@ -45,9 +47,10 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 	// STEP: make limit & offset safe [arrange min-max]
 	req.Limit = util.SafeLimit(req.Limit)
 	req.Offset = util.SafeOffset(req.Offset)
+	req.SortBy = util.SafePostSortBy(req.SortBy)
 
 	// STEP: get content posts
-	posts, err := server.service.GetContentPosts(ctx, user_id, req.Subscribed, req.Active, req.Limit, req.Offset)
+	posts, err := server.service.GetContentPosts(ctx, user_id, req.Subscribed, req.Active, req.SortBy, req.Limit, req.Offset)
 	if err != nil {
 		ctx.JSON(clientError.ParseError(err))
 		return

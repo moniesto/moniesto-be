@@ -159,7 +159,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [need test] POST /account/email/verify_email -> verify email
 
-:heavy_check_mark: [need test] GET /content/posts?subscribed=true&active=true&limit=10&offset=0
+:heavy_check_mark: [need test] GET /content/posts?subscribed=true&active=true&sortBy=created_at|score&limit=10&offset=0
 
 :heavy_check_mark: [need test] GET /content/moniests?subscribed=true&limit=10&offset=0
 
