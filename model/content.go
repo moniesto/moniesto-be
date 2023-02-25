@@ -22,20 +22,21 @@ type PostDBResponse []db.GetSubscribedActivePostsRow
 type MoniestDBResponse []db.GetMoniestsRow
 
 type GetContentPostResponse struct {
-	ID         string              `json:"id"`
-	Currency   string              `json:"currency"`
-	StartPrice float64             `json:"start_price"`
-	Duration   time.Time           `json:"duration"`
-	Target1    float64             `json:"target1"`
-	Target2    float64             `json:"target2"`
-	Target3    float64             `json:"target3"`
-	Stop       float64             `json:"stop"`
-	Direction  db.EntryPosition    `json:"direction"`
-	Finished   bool                `json:"finished"`
-	Status     db.PostCryptoStatus `json:"status"`
-	CreatedAt  time.Time           `json:"created_at"`
-	UpdatedAt  time.Time           `json:"updated_at"`
-	User       User                `json:"user"`
+	ID          string              `json:"id"`
+	Currency    string              `json:"currency"`
+	StartPrice  float64             `json:"start_price"`
+	Duration    time.Time           `json:"duration"`
+	Target1     float64             `json:"target1"`
+	Target2     float64             `json:"target2"`
+	Target3     float64             `json:"target3"`
+	Stop        float64             `json:"stop"`
+	Description string              `json:"description"`
+	Direction   db.EntryPosition    `json:"direction"`
+	Finished    bool                `json:"finished"`
+	Status      db.PostCryptoStatus `json:"status"`
+	CreatedAt   time.Time           `json:"created_at"`
+	UpdatedAt   time.Time           `json:"updated_at"`
+	User        User                `json:"user"`
 }
 
 type GetContentMoniestRequest struct {
@@ -48,19 +49,20 @@ func NewGetContentPostResponse(posts PostDBResponse) []GetContentPostResponse {
 
 	for _, post := range posts {
 		response = append(response, GetContentPostResponse{
-			ID:         post.ID,
-			Currency:   post.Currency,
-			StartPrice: post.StartPrice,
-			Duration:   post.Duration,
-			Target1:    post.Target1,
-			Target2:    post.Target2,
-			Target3:    post.Target3,
-			Stop:       post.Stop,
-			Direction:  post.Direction,
-			Finished:   post.Finished,
-			Status:     post.Status,
-			CreatedAt:  post.CreatedAt,
-			UpdatedAt:  post.UpdatedAt,
+			ID:          post.ID,
+			Currency:    post.Currency,
+			StartPrice:  post.StartPrice,
+			Duration:    post.Duration,
+			Target1:     post.Target1,
+			Target2:     post.Target2,
+			Target3:     post.Target3,
+			Stop:        post.Stop,
+			Description: post.PostDescription,
+			Direction:   post.Direction,
+			Finished:    post.Finished,
+			Status:      post.Status,
+			CreatedAt:   post.CreatedAt,
+			UpdatedAt:   post.UpdatedAt,
 			User: User{
 				Id:                           post.UserID,
 				Name:                         post.Name,

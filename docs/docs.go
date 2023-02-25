@@ -1640,6 +1640,9 @@ const docTemplate = `{
                 "currency": {
                     "type": "string"
                 },
+                "description": {
+                    "type": "string"
+                },
                 "direction": {
                     "$ref": "#/definitions/db.EntryPosition"
                 },

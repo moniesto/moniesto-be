@@ -22,6 +22,7 @@ SELECT "pc"."id",
     "u"."username",
     "u"."email_verified",
     "u"."location",
+    "pcd"."description" as "post_description",
     COALESCE (
         (
             SELECT "image"."link"
@@ -65,6 +66,7 @@ FROM "post_crypto" AS pc
     AND "pc"."finished" = FALSE
     INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
     INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
+    INNER JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
 ORDER BY "pc"."created_at" DESC
 LIMIT $2 OFFSET $3;
 
@@ -92,6 +94,7 @@ SELECT "pc"."id",
     "u"."username",
     "u"."email_verified",
     "u"."location",
+    "pcd"."description" as "post_description",
     COALESCE (
         (
             SELECT "image"."link"
@@ -137,6 +140,7 @@ FROM "post_crypto" AS pc
     )
     INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
     INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
+    INNER JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
 ORDER BY "pc"."created_at" DESC
 LIMIT $2 OFFSET $3;
 
@@ -164,6 +168,7 @@ SELECT "pc"."id",
     "u"."username",
     "u"."email_verified",
     "u"."location",
+    "pcd"."description" as "post_description",
     COALESCE (
         (
             SELECT "image"."link"
@@ -208,6 +213,7 @@ FROM "post_crypto" AS pc
         OR "pc"."finished" = TRUE
     )
     AND "pc"."status" = 'success'
+    INNER JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
 ORDER BY "pc"."score" DESC
 LIMIT $1 OFFSET $2;
 
