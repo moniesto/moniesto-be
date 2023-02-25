@@ -27,3 +27,11 @@ SET active = false,
     updated_at = now()
 WHERE user_id = $1
     AND moniest_id = $2;
+
+-- name: CheckSubscriptionByMoniestUsername :one
+SELECT COUNT(*) != 0 AS subscribed
+FROM "user_subscription"
+    INNER JOIN "moniest" ON "moniest"."id" = "user_subscription"."moniest_id"
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
+    AND "user"."username" = $2
+WHERE "user_subscription"."user_id" = $1;

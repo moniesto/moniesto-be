@@ -26,6 +26,27 @@ func (q *Queries) ActivateSubscription(ctx context.Context, arg ActivateSubscrip
 	return err
 }
 
+const checkSubscriptionByMoniestUsername = `-- name: CheckSubscriptionByMoniestUsername :one
+SELECT COUNT(*) != 0 AS subscribed
+FROM "user_subscription"
+    INNER JOIN "moniest" ON "moniest"."id" = "user_subscription"."moniest_id"
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
+    AND "user"."username" = $2
+WHERE "user_subscription"."user_id" = $1
+`
+
+type CheckSubscriptionByMoniestUsernameParams struct {
+	UserID   string `json:"user_id"`
+	Username string `json:"username"`
+}
+
+func (q *Queries) CheckSubscriptionByMoniestUsername(ctx context.Context, arg CheckSubscriptionByMoniestUsernameParams) (bool, error) {
+	row := q.db.QueryRowContext(ctx, checkSubscriptionByMoniestUsername, arg.UserID, arg.Username)
+	var subscribed bool
+	err := row.Scan(&subscribed)
+	return subscribed, err
+}
+
 const createSubscription = `-- name: CreateSubscription :one
 INSERT INTO "user_subscription" (
         id,

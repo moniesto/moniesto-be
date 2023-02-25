@@ -35,14 +35,21 @@ func (server *Server) createPost(ctx *gin.Context) {
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	user_id := authPayload.User.ID
 
-	// STEP: user is moniest
-	userIsMoniest, moniest, err := server.service.UserIsMoniest(ctx, user_id)
+	// STEP: check user is moniest
+	userIsMoniest, err := server.service.CheckUserIsMoniestByUserID(ctx, user_id)
 	if err != nil {
 		ctx.JSON(clientError.ParseError(err))
 		return
 	}
 	if !userIsMoniest {
 		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.General_UserNotMoniest))
+		return
+	}
+
+	// STEP: user is moniest
+	moniest, err := server.service.GetMoniestByUserID(ctx, user_id)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
 		return
 	}
 

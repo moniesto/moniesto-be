@@ -36,7 +36,7 @@ func (server *Server) createMoniest(ctx *gin.Context) {
 	user_id := authPayload.User.ID
 
 	// STEP: check user is already moniest or not
-	userIsMoniest, _, err := server.service.UserIsMoniest(ctx, user_id)
+	userIsMoniest, err := server.service.CheckUserIsMoniestByUserID(ctx, user_id)
 	if err != nil {
 		ctx.JSON(clientError.ParseError(err))
 		return
@@ -227,6 +227,47 @@ func (server *Server) unsubscribeMoniest(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+// @Summary Check Subscribe status
+// @Description Check Subscribe status to Moniest
+// @Security bearerAuth
+// @Tags Moniest
+// @Accept json
+// @Produce json
+// @Param username path string true "moniest username"
+// @Success 200 {object} model.CheckSubscriptionResponse "subscribed: true | false information"
+// @Failure 404 {object} clientError.ErrorResponse "moniest not found with this username"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/:username/subscribe/check [get]
 func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
 
+	// STEP: get username from param
+	username := ctx.Param("username")
+
+	// STEP: check user is moniest
+	userIsMoniest, err := server.service.CheckUserIsMoniestByUsername(ctx, username)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+	if !userIsMoniest {
+		ctx.JSON(http.StatusNotFound, clientError.GetError(clientError.General_MoniestNotFoundByUsername))
+		return
+	}
+
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: check user is subscribed to moniest
+	userIsSubscribed, err := server.service.CheckUserSubscriptionByMoniestUsername(ctx, user_id, username)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	response := model.CheckSubscriptionResponse{
+		Subscribed: userIsSubscribed,
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }

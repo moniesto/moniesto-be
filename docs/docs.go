@@ -649,15 +649,13 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "default: 10 \u0026 max: 50",
                         "name": "limit",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "integer",
                         "description": "default: 0",
                         "name": "offset",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -708,29 +706,25 @@ const docTemplate = `{
                         "type": "boolean",
                         "description": "default: true",
                         "name": "subscribed",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "boolean",
                         "description": "default: true",
                         "name": "active",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "integer",
                         "description": "default: 10 \u0026 max: 50",
                         "name": "limit",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "integer",
                         "description": "default: 0",
                         "name": "offset",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -973,6 +967,55 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "moniest is not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/moniests/:username/subscribe/check": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Check Subscribe status to Moniest",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Moniest"
+                ],
+                "summary": "Check Subscribe status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "moniest username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "subscribed: true | false information",
+                        "schema": {
+                            "$ref": "#/definitions/model.CheckSubscriptionResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "moniest not found with this username",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorResponse"
                         }
@@ -1249,15 +1292,13 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "default: 10 \u0026 max: 50",
                         "name": "limit",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "type": "integer",
                         "description": "default: 0",
                         "name": "offset",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1422,6 +1463,14 @@ const docTemplate = `{
             "properties": {
                 "token": {
                     "type": "string"
+                }
+            }
+        },
+        "model.CheckSubscriptionResponse": {
+            "type": "object",
+            "properties": {
+                "subscribed": {
+                    "type": "boolean"
                 }
             }
         },

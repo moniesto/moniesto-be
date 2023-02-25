@@ -11,6 +11,33 @@ import (
 	"time"
 )
 
+const checkUserIsMoniestByID = `-- name: CheckUserIsMoniestByID :one
+SELECT COUNT(*) != 0 AS userIsMoniest
+FROM "moniest"
+WHERE "moniest"."user_id" = $1
+`
+
+func (q *Queries) CheckUserIsMoniestByID(ctx context.Context, userID string) (bool, error) {
+	row := q.db.QueryRowContext(ctx, checkUserIsMoniestByID, userID)
+	var userismoniest bool
+	err := row.Scan(&userismoniest)
+	return userismoniest, err
+}
+
+const checkUserIsMoniestByUsername = `-- name: CheckUserIsMoniestByUsername :one
+SELECT COUNT(*) != 0 AS userIsMoniest
+FROM "moniest"
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
+    AND "user"."username" = $1
+`
+
+func (q *Queries) CheckUserIsMoniestByUsername(ctx context.Context, username string) (bool, error) {
+	row := q.db.QueryRowContext(ctx, checkUserIsMoniestByUsername, username)
+	var userismoniest bool
+	err := row.Scan(&userismoniest)
+	return userismoniest, err
+}
+
 const createMoniest = `-- name: CreateMoniest :one
 INSERT INTO moniest (
         id,

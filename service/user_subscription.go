@@ -111,3 +111,19 @@ func (service *Service) getUserSubscriptionStatus(ctx *gin.Context, moniestID st
 
 	return true, subscription, nil
 }
+
+func (service *Service) CheckUserSubscriptionByMoniestUsername(ctx *gin.Context, user_id, moniest_username string) (bool, error) {
+
+	// STEP: check user is subscribed to moniest
+	param := db.CheckSubscriptionByMoniestUsernameParams{
+		UserID:   user_id,
+		Username: moniest_username,
+	}
+
+	userIsSubscribed, err := service.Store.CheckSubscriptionByMoniestUsername(ctx, param)
+	if err != nil {
+		return false, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_SubscribeCheck_ServerErrorCheck)
+	}
+
+	return userIsSubscribed, nil
+}

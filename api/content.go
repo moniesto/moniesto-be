@@ -16,10 +16,10 @@ import (
 // @Tags Content
 // @Accept json
 // @Produce json
-// @Param subscribed query bool true "default: true"
-// @Param active query bool true "default: true"
-// @Param limit query int true "default: 10 & max: 50"
-// @Param offset query int true "default: 0"
+// @Param subscribed query bool false "default: true"
+// @Param active query bool false "default: true"
+// @Param limit query int false "default: 10 & max: 50"
+// @Param offset query int false "default: 0"
 // @Success 200 {object} []model.GetContentPostResponse
 // @Failure 406 {object} clientError.ErrorResponse "invalid body"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
@@ -62,8 +62,8 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 // @Tags Content
 // @Accept json
 // @Produce json
-// @Param limit query int true "default: 10 & max: 50"
-// @Param offset query int true "default: 0"
+// @Param limit query int false "default: 10 & max: 50"
+// @Param offset query int false "default: 0"
 // @Success 200 {object} []model.User
 // @Failure 406 {object} clientError.ErrorResponse "invalid body"
 // @Failure 500 {object} clientError.ErrorResponse "server error"

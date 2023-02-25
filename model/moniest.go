@@ -34,6 +34,10 @@ type UpdateMoniestProfileRequest struct {
 	SubscriptionInfo *SubscriptionInfo `json:"subscription_info"`
 }
 
+type CheckSubscriptionResponse struct {
+	Subscribed bool `json:"subscribed"`
+}
+
 // MAKER
 func NewCreateMoniestResponse(moniest db.GetMoniestByMoniestIdRow) OwnUser {
 	response := OwnUser{

@@ -130,8 +130,8 @@ func (server *Server) updateUserProfile(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param username path string true "username"
-// @Param limit query int true "default: 10 & max: 50"
-// @Param offset query int true "default: 0"
+// @Param limit query int false "default: 10 & max: 50"
+// @Param offset query int false "default: 0"
 // @Success 200 {object} []model.User
 // @Failure 404 {object} clientError.ErrorResponse "user not found"
 // @Failure 406 {object} clientError.ErrorResponse "invalid body"

@@ -12,7 +12,7 @@ import (
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
-func (service *Service) UserIsMoniest(ctx *gin.Context, user_id string) (bool, db.GetMoniestByUserIdRow, error) {
+func (service *Service) GetMoniestByUserID(ctx *gin.Context, user_id string) (db.GetMoniestByUserIdRow, error) {
 
 	// STEP: get moniest by user id
 	moniest, err := service.Store.GetMoniestByUserId(ctx, user_id)
@@ -20,19 +20,19 @@ func (service *Service) UserIsMoniest(ctx *gin.Context, user_id string) (bool, d
 
 		// STEP: no moniest with this user id
 		if err == sql.ErrNoRows {
-			return false, db.GetMoniestByUserIdRow{}, nil
+			return db.GetMoniestByUserIdRow{}, nil
 		}
 
 		// TODO: add server error
-		return false, db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_CreateMoniest_ServerErrorUserIsMoniest)
+		return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_CreateMoniest_ServerErrorUserIsMoniest)
 	}
 
 	// STEP: double check for moniest id is empty or not
 	if moniest.MoniestID == "" && moniest.ID == "" {
-		return false, db.GetMoniestByUserIdRow{}, nil
+		return db.GetMoniestByUserIdRow{}, nil
 	}
 
-	return true, moniest, nil
+	return moniest, nil
 }
 
 func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req model.CreateMoniestRequest) (db.Moniest, error) {
@@ -179,4 +179,26 @@ func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, r
 	}
 
 	return moniest, nil
+}
+
+func (service *Service) CheckUserIsMoniestByUsername(ctx *gin.Context, username string) (bool, error) {
+
+	// STEP: check user is moniest
+	userIsMoniest, err := service.Store.CheckUserIsMoniestByUsername(ctx, username)
+	if err != nil {
+		return false, clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorCheckMoniestByUsername)
+	}
+
+	return userIsMoniest, nil
+}
+
+func (service *Service) CheckUserIsMoniestByUserID(ctx *gin.Context, user_id string) (bool, error) {
+
+	// STEP: check user is moniest
+	userIsMoniest, err := service.Store.CheckUserIsMoniestByID(ctx, user_id)
+	if err != nil {
+		return false, clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorCheckMoniestByUserID)
+	}
+
+	return userIsMoniest, nil
 }

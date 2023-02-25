@@ -50,6 +50,11 @@ definitions:
       token:
         type: string
     type: object
+  model.CheckSubscriptionResponse:
+    properties:
+      subscribed:
+        type: boolean
+    type: object
   model.CheckUsernameResponse:
     properties:
       validity:
@@ -806,12 +811,10 @@ paths:
       - description: 'default: 10 & max: 50'
         in: query
         name: limit
-        required: true
         type: integer
       - description: 'default: 0'
         in: query
         name: offset
-        required: true
         type: integer
       produces:
       - application/json
@@ -844,22 +847,18 @@ paths:
       - description: 'default: true'
         in: query
         name: subscribed
-        required: true
         type: boolean
       - description: 'default: true'
         in: query
         name: active
-        required: true
         type: boolean
       - description: 'default: 10 & max: 50'
         in: query
         name: limit
-        required: true
         type: integer
       - description: 'default: 0'
         in: query
         name: offset
-        required: true
         type: integer
       produces:
       - application/json
@@ -1028,6 +1027,37 @@ paths:
       summary: Subscribe to Moniest
       tags:
       - Moniest
+  /moniests/:username/subscribe/check:
+    get:
+      consumes:
+      - application/json
+      description: Check Subscribe status to Moniest
+      parameters:
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'subscribed: true | false information'
+          schema:
+            $ref: '#/definitions/model.CheckSubscriptionResponse'
+        "404":
+          description: moniest not found with this username
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Check Subscribe status
+      tags:
+      - Moniest
   /moniests/:username/unsubscribe:
     post:
       consumes:
@@ -1191,12 +1221,10 @@ paths:
       - description: 'default: 10 & max: 50'
         in: query
         name: limit
-        required: true
         type: integer
       - description: 'default: 0'
         in: query
         name: offset
-        required: true
         type: integer
       produces:
       - application/json

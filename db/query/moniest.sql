@@ -211,6 +211,17 @@ FROM "user"
 WHERE "user"."username" = $1
     AND "user"."deleted" = false;
 
+-- name: CheckUserIsMoniestByUsername :one
+SELECT COUNT(*) != 0 AS userIsMoniest
+FROM "moniest"
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
+    AND "user"."username" = $1;
+
+-- name: CheckUserIsMoniestByID :one
+SELECT COUNT(*) != 0 AS userIsMoniest
+FROM "moniest"
+WHERE "moniest"."user_id" = $1;
+
 -- -- name: GetMoniestByEmail :one
 -- SELECT "user"."id",
 --     "moniest"."id" as "moniest_id",

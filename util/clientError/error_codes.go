@@ -3,11 +3,13 @@ package clientError
 type ErrorMessagesType map[string]string
 
 const (
-	General_UserNotMoniest                  = "General_UserNotMoniest"
-	General_UserNotFoundByID                = "General_UserNotFoundByID"
-	General_UserNotFoundByUsername          = "General_UserNotFoundByUsername"
-	General_MoniestNotFoundByUsername       = "General_MoniestNotFoundByUsername"
-	General_ServerErrorGetMoniestByUsername = "General_ServerErrorGetMoniestByUsername"
+	General_UserNotMoniest                    = "General_UserNotMoniest"
+	General_UserNotFoundByID                  = "General_UserNotFoundByID"
+	General_UserNotFoundByUsername            = "General_UserNotFoundByUsername"
+	General_MoniestNotFoundByUsername         = "General_MoniestNotFoundByUsername"
+	General_ServerErrorGetMoniestByUsername   = "General_ServerErrorGetMoniestByUsername"
+	General_ServerErrorCheckMoniestByUsername = "General_ServerErrorCheckMoniestByUsername"
+	General_ServerErrorCheckMoniestByUserID   = "General_ServerErrorCheckMoniestByUserID"
 
 	Account_Authorization_NotProvidedHeader = "Account_Authorization_NotProvidedHeader"
 	Account_Authorization_InvalidHeader     = "Account_Authorization_InvalidHeader"
@@ -124,6 +126,8 @@ const (
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage = "Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage"
 	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate        = "Moniest_CreateSubscriptionInfo_ServerErrorOnCreate"
 
+	Moniest_SubscribeCheck_ServerErrorCheck = "Moniest_SubscribeCheck_ServerErrorCheck"
+
 	User_GetUser_ServerErrorGetUser = "User_GetUser_ServerErrorGetUser"
 
 	Post_CreatePost_InvalidBody                  = "Post_CreatePost_InvalidBody"
@@ -153,11 +157,13 @@ const (
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
-	General_UserNotMoniest:                  "User is not moniest",
-	General_UserNotFoundByID:                "User not found with this user ID",
-	General_UserNotFoundByUsername:          "User not found with this username",
-	General_MoniestNotFoundByUsername:       "No moniest with this username",
-	General_ServerErrorGetMoniestByUsername: "Server error on getting moniest by username",
+	General_UserNotMoniest:                    "User is not moniest",
+	General_UserNotFoundByID:                  "User not found with this user ID",
+	General_UserNotFoundByUsername:            "User not found with this username",
+	General_MoniestNotFoundByUsername:         "No moniest with this username",
+	General_ServerErrorGetMoniestByUsername:   "Server error on getting moniest by username",
+	General_ServerErrorCheckMoniestByUsername: "Server error on checking user is moniest by username",
+	General_ServerErrorCheckMoniestByUserID:   "Server error on checking user is moniest by user ID",
 
 	Account_Authorization_NotProvidedHeader: "Authorization Header is not provided",
 	Account_Authorization_InvalidHeader:     "Authorization Header is invalid",
@@ -273,6 +279,8 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_CreateSubscriptionInfo_InvalidFee:                 "Fee is invalid",
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage: "Subscription message is invalid",
 	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate:        "Server error on create subscription info",
+
+	Moniest_SubscribeCheck_ServerErrorCheck: "Server error on checking moniest subscribe status",
 
 	User_GetUser_ServerErrorGetUser: "Server error on getting user",
 
