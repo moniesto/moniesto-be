@@ -51,7 +51,7 @@ func Username(username string) error {
 	*/
 
 	usernameRegex := regexp.MustCompile(UsernameRegex)
-	if !usernameRegex.MatchString(username) {
+	if !usernameRegex.MatchString(username) || contains(InvalidUsernames, username) {
 		return fmt.Errorf("username is not valid %s", username)
 	}
 

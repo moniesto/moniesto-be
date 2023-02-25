@@ -1226,7 +1226,7 @@ const docTemplate = `{
                         "bearerAuth": []
                     }
                 ],
-                "description": "Get subscribed Moniests",
+                "description": "Get subscribed Users",
                 "consumes": [
                     "application/json"
                 ],

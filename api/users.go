@@ -124,7 +124,7 @@ func (server *Server) updateUserProfile(ctx *gin.Context) {
 }
 
 // @Summary Get Subscriptions
-// @Description Get subscribed Moniests
+// @Description Get subscribed Users
 // @Security bearerAuth
 // @Tags User
 // @Accept json

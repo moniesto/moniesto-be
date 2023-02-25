@@ -226,3 +226,7 @@ func (server *Server) unsubscribeMoniest(ctx *gin.Context) {
 
 	ctx.Status(http.StatusOK)
 }
+
+func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
+
+}

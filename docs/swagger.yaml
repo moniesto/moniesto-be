@@ -1181,7 +1181,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get subscribed Moniests
+      description: Get subscribed Users
       parameters:
       - description: username
         in: path
