@@ -167,8 +167,6 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 - [ ] GET /users/:username/posts?limit=<limit>&offset=<offset>
 
-- [ ] [can delay] GET /users/:username/posts/:post_id
-
 :heavy_check_mark: [need test] GET /users/:username/subscriptions?limit=<limit>&offset=<offset>
 
 :heavy_check_mark: [need test] GET /moniests/:username/subscribe/check -> check user is subscribed to this moniest or not
