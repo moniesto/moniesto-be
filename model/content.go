@@ -30,7 +30,7 @@ type GetContentPostResponse struct {
 	Target2     float64             `json:"target2"`
 	Target3     float64             `json:"target3"`
 	Stop        float64             `json:"stop"`
-	Description string              `json:"description"`
+	Description string              `json:"description,omitempty"`
 	Direction   db.EntryPosition    `json:"direction"`
 	Finished    bool                `json:"finished"`
 	Status      db.PostCryptoStatus `json:"status"`
@@ -57,7 +57,7 @@ func NewGetContentPostResponse(posts PostDBResponse) []GetContentPostResponse {
 			Target2:     post.Target2,
 			Target3:     post.Target3,
 			Stop:        post.Stop,
-			Description: post.PostDescription,
+			Description: post.PostDescription.String,
 			Direction:   post.Direction,
 			Finished:    post.Finished,
 			Status:      post.Status,

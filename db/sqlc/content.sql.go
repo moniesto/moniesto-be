@@ -80,7 +80,7 @@ FROM "post_crypto" AS pc
         OR "pc"."finished" = TRUE
     )
     AND "pc"."status" = 'success'
-    INNER JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
+    LEFT JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
 ORDER BY "pc"."score" DESC
 LIMIT $1 OFFSET $2
 `
@@ -114,7 +114,7 @@ type GetDeactivePostsRow struct {
 	Username                     string           `json:"username"`
 	EmailVerified                bool             `json:"email_verified"`
 	Location                     sql.NullString   `json:"location"`
-	PostDescription              string           `json:"post_description"`
+	PostDescription              sql.NullString   `json:"post_description"`
 	ProfilePhotoLink             interface{}      `json:"profile_photo_link"`
 	ProfilePhotoThumbnailLink    interface{}      `json:"profile_photo_thumbnail_link"`
 	BackgroundPhotoLink          interface{}      `json:"background_photo_link"`
@@ -370,7 +370,7 @@ FROM "post_crypto" AS pc
     AND "pc"."finished" = FALSE
     INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
     INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
-    INNER JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
+    LEFT JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
 ORDER BY "pc"."created_at" DESC
 LIMIT $2 OFFSET $3
 `
@@ -405,7 +405,7 @@ type GetSubscribedActivePostsRow struct {
 	Username                     string           `json:"username"`
 	EmailVerified                bool             `json:"email_verified"`
 	Location                     sql.NullString   `json:"location"`
-	PostDescription              string           `json:"post_description"`
+	PostDescription              sql.NullString   `json:"post_description"`
 	ProfilePhotoLink             interface{}      `json:"profile_photo_link"`
 	ProfilePhotoThumbnailLink    interface{}      `json:"profile_photo_thumbnail_link"`
 	BackgroundPhotoLink          interface{}      `json:"background_photo_link"`
@@ -534,7 +534,7 @@ FROM "post_crypto" AS pc
     )
     INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
     INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
-    INNER JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
+    LEFT JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
 ORDER BY "pc"."created_at" DESC
 LIMIT $2 OFFSET $3
 `
@@ -569,7 +569,7 @@ type GetSubscribedDeactivePostsRow struct {
 	Username                     string           `json:"username"`
 	EmailVerified                bool             `json:"email_verified"`
 	Location                     sql.NullString   `json:"location"`
-	PostDescription              string           `json:"post_description"`
+	PostDescription              sql.NullString   `json:"post_description"`
 	ProfilePhotoLink             interface{}      `json:"profile_photo_link"`
 	ProfilePhotoThumbnailLink    interface{}      `json:"profile_photo_thumbnail_link"`
 	BackgroundPhotoLink          interface{}      `json:"background_photo_link"`
