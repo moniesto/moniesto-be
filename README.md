@@ -165,13 +165,13 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [need test] GET /users/:username
 
-- [ ] GET /users/:username/posts?limit=<limit>&offset=<offset>
+- [ ] GET /moniests/:username/posts?limit=<limit>&offset=<offset>
 
 :heavy_check_mark: [need test] GET /users/:username/subscriptions?limit=<limit>&offset=<offset>
 
 :heavy_check_mark: [need test] GET /moniests/:username/subscribe/check -> check user is subscribed to this moniest or not
 
-- [ ] GET /users/:username/subscribers?limit=<limit>&offset=<offset>
+- [ ] GET /moniests/:username/subscribers?limit=<limit>&offset=<offset>
 
 :heavy_check_mark: [need test + payment update] POST /moniests -> be moniest
 

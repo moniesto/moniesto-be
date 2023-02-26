@@ -32,7 +32,8 @@ FROM "user_subscription"
     INNER JOIN "moniest" ON "moniest"."id" = "user_subscription"."moniest_id"
     INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
     AND "user"."username" = $2
-WHERE "user_subscription"."user_id" = $1
+WHERE "user_subscription"."active" = TRUE
+    AND "user_subscription"."user_id" = $1
 `
 
 type CheckSubscriptionByMoniestUsernameParams struct {
