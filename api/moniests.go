@@ -284,6 +284,7 @@ func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
 // @Param offset query int false "default: 0"
 // @Success 200 {object} []model.User ""
 // @Failure 404 {object} clientError.ErrorResponse "moniest not found with this username"
+// @Failure 406 {object} clientError.ErrorResponse "invalid query params"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /moniests/:username/subscribers [get]
 func (server *Server) getSubscribers(ctx *gin.Context) {

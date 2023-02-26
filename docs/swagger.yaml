@@ -1065,6 +1065,51 @@ paths:
       summary: Check Subscribe status
       tags:
       - Moniest
+  /moniests/:username/subscribers:
+    get:
+      consumes:
+      - application/json
+      description: Get Subscribers of Moniest
+      parameters:
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: 'default: 10 & max: 50'
+        in: query
+        name: limit
+        type: integer
+      - description: 'default: 0'
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "404":
+          description: moniest not found with this username
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid query params
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get Subscribers
+      tags:
+      - Moniest
   /moniests/:username/unsubscribe:
     post:
       consumes:

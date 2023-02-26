@@ -497,6 +497,43 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "[local] Get Subscribers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM5YTBiN2IwLThiY2ItNGI3Yy1iMzVmLWExMzlkMDQ4ZmEyYSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YzIiwiaWQiOiI3YzhhNTc3Yy1mMjQ4LTQ0ZTEtYWJkNC0wOGI0NTE5MmExNGIifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0yNlQxNDoyNDoyNC43OTA3OTIxKzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjdUMTQ6MjQ6MjQuNzkwNzkyMSswNDowMCJ9.GyIs9b0vlC26RFVRqIHgp9CdSSX0Yqk20lOxYn_RAAg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/moniests/parvvazovm/subscribers?limit=1&offset=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"moniests",
+								"parvvazovm",
+								"subscribers"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
