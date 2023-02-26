@@ -157,43 +157,43 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: PUT `/account/password` -> change password
 
-:heavy_check_mark: [**need test**] POST `/account/email/send_verification_email` -> send email verification email
+:heavy_check_mark: [***need test***] POST `/account/email/send_verification_email` -> send email verification email
 
-:heavy_check_mark: [need test] POST `/account/email/verify_email` -> verify email
+:heavy_check_mark: [**need test**] POST `/account/email/verify_email` -> verify email
 
-:heavy_check_mark: [need test] PATCH `/account/username` -> update username
+:heavy_check_mark: [**need test**] PATCH `/account/username` -> update username
 
 ## Users
 
-:heavy_check_mark: [need test] GET `/users/:username`
+:heavy_check_mark: [**need test**] GET `/users/:username`
 
-:heavy_check_mark: [need test] GET `/users/:username/subscriptions?limit=<limit>&offset=<offset>`
+:heavy_check_mark: [**need test**] GET `/users/:username/subscriptions?limit=<limit>&offset=<offset>`
 
-:heavy_check_mark: [need test] PATCH `/users/profile` -> update user profile info
+:heavy_check_mark: [**need test**] PATCH `/users/profile` -> update user profile info
 
 ## Moniest
 
 - [ ] GET `/moniests/:username/posts?limit=<limit>&offset=<offset>`
 
-:heavy_check_mark: GET `/moniests/:username/subscribers?limit=<limit>&offset=<offset>`
+:heavy_check_mark: [**need test**] GET `/moniests/:username/subscribers?limit=<limit>&offset=<offset>`
 
-:heavy_check_mark: [need test + payment update] POST `/moniests -> be moniest`
+:heavy_check_mark: [***need test + payment update***] POST `/moniests -> be moniest`
 
-:heavy_check_mark: [need test] POST `/moniests/posts` -> create post
+:heavy_check_mark: [**need test**] POST `/moniests/posts` -> create post
 
-:heavy_check_mark: [need test + payment update] PATCH `/moniests/profile` -> update moniest profile + subscription info
+:heavy_check_mark: [***need test + payment update***] PATCH `/moniests/profile` -> update moniest profile + subscription info
 
-:heavy_check_mark: [need test + payment update] POST `/moniests/:username/subscribe` -> subscribe to a moniest
+:heavy_check_mark: [***need test + payment update***] POST `/moniests/:username/subscribe` -> subscribe to a moniest
 
-:heavy_check_mark: [need test + payment update] POST `/moniests/:username/unsubscribe` -> unsubscribe from a moniest
+:heavy_check_mark: [***need test + payment update***] POST `/moniests/:username/unsubscribe` -> unsubscribe from a moniest
 
-:heavy_check_mark: [need test] GET `/moniests/:username/subscribe/check` -> check user is subscribed to this moniest or not
+:heavy_check_mark: [**need test**] GET `/moniests/:username/subscribe/check` -> check user is subscribed to this moniest or not
 
 ## Content
 
-:heavy_check_mark: [need test] GET `/content/posts?subscribed=true&active=true&sortBy=created_at|score&limit=10&offset=0`
+:heavy_check_mark: [**need test**] GET `/content/posts?subscribed=true&active=true&sortBy=created_at|score&limit=10&offset=0`
 
-:heavy_check_mark: [need test] GET `/content/moniests?subscribed=true&limit=10&offset=0`
+:heavy_check_mark: [**need test**] GET `/content/moniests?subscribed=true&limit=10&offset=0`
 
 ## Assets
 
@@ -205,9 +205,9 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 ## Others
 
-:heavy_check_mark: [need test] GET `/crypto/currencies?name=BTC`
+:heavy_check_mark: [**need test**] GET `/crypto/currencies?name=BTC`
 
-:heavy_check_mark: [need test] POST `/feedback` -> give feedback
+:heavy_check_mark: [**need test**] POST `/feedback` -> give feedback
 
 - [ ] Search Moniest -> only username
 
