@@ -195,6 +195,8 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [***need test***] GET `/content/moniests?subscribed=true&limit=10&offset=0`
 
+:heavy_check_mark: [***need test***] GET `/content/moniests/search?searchText=namo` Search Moniest
+
 ## Assets
 
 :heavy_check_mark: GET `/assets/error-codes` -> get error codes
@@ -208,8 +210,6 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 :heavy_check_mark: [***need test***] GET `/crypto/currencies?name=BTC`
 
 :heavy_check_mark: [***need test***] POST `/feedback` -> give feedback
-
-- [ ] Search Moniest -> only username
 
 - [ ] POST `/account/card` -> Add new card
 
