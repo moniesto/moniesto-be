@@ -91,6 +91,21 @@ func (server *Server) createPost(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary Get Moniest Posts
+// @Description Get Posts of Moniest [active or all]
+// @Security bearerAuth
+// @Tags Post
+// @Accept json
+// @Produce json
+// @Param username path string true "moniest username"
+// @Param active query bool false "default: false, true: only live(active), false: all posts"
+// @Param limit query int false "default: 10 & max: 50"
+// @Param offset query int false "default: 0"
+// @Success 200 {object} []model.GetContentPostResponse
+// @Failure 403 {object} clientError.ErrorResponse "forbidden access (when not subscribed, but asks for active posts)"
+// @Failure 406 {object} clientError.ErrorResponse "invalid params"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/:username/posts [get]
 func (server *Server) getMoniestPosts(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")

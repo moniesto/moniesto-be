@@ -336,7 +336,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJiM2RiZjE1LWRjNmItNGZlNS04YjQ4LTZhNmYzZDMxZjZkNyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YzIiwiaWQiOiI3YzhhNTc3Yy1mMjQ4LTQ0ZTEtYWJkNC0wOGI0NTE5MmExNGIifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0yMlQwMDozMTozNy43MDE1NTgxKzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjNUMDA6MzE6MzcuNzAxNTU4MSswNDowMCJ9.fNqhJu-8dAv8V4-wAfK7stoDmlFbAJcRW7kpEQWtUK0",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNmOGZlNWI3LWVkNzAtNDQzNC1iMWFkLTFkYzM5NmQ5ODNmMiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YyIiwiaWQiOiI0YjI5MjFlOS0xY2I1LTQ2YzYtYTM1NS01N2UzZGM2YzhiZDEifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0yNlQyMzowMjoxMi43Nzk2ODEzKzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjdUMjM6MDI6MTIuNzc5NjgxMyswNDowMCJ9.iCz2jOEX7Y8CnA4L5n-i8z0rB2YZTkBdq1JUr5eFWvs",
 								"type": "text"
 							}
 						],
@@ -405,7 +405,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE3OTcyMmQ0LTIwNzgtNDM0NS1hYWFmLTEzMGIzMzQ3ODAxMiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YzIiwiaWQiOiI3YzhhNTc3Yy1mMjQ4LTQ0ZTEtYWJkNC0wOGI0NTE5MmExNGIifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0yMlQwMjoxODoxMy4yMTQ5MDI0KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjNUMDI6MTg6MTMuMjE0OTAyNCswNDowMCJ9.gbdf9Prt_FpfHAH8W95-PXu2TfcqaHOt8w0_pwwzDss",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhiZDU0ODIxLWU1YzktNDc5My04M2FhLTc3YWU0MDQ2NDVkZCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YyIiwiaWQiOiI0YjI5MjFlOS0xY2I1LTQ2YzYtYTM1NS01N2UzZGM2YzhiZDEifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0yNlQyMjo1NjozMS45NTkyNTAyKzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjdUMjI6NTY6MzEuOTU5MjUwMiswNDowMCJ9.kFWiqivqw9LLi9oJJ6Tw3lA1hHWpEpdO_wZdGxh2frU",
 								"type": "text"
 							}
 						],
@@ -419,7 +419,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/moniests/parvvazovm/subscribe",
+							"raw": "http://localhost:8080/moniests/parvvazovm1/subscribe",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -427,7 +427,7 @@
 							"port": "8080",
 							"path": [
 								"moniests",
-								"parvvazovm",
+								"parvvazovm1",
 								"subscribe"
 							]
 						}
@@ -441,7 +441,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNjMjAzOWE3LTljNTgtNDMzNS1iNjY4LTg3N2RlNWFhMjJiNSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YyIiwiaWQiOiI1MzA1NmE0ZC00YzI0LTQ2YzgtYjI5NS1jZmI2Y2QwMWQ5OTkifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0xMVQyMDoxNzo1My41NTMxNzQ5KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMTJUMjA6MTc6NTMuNTUzMTc0OSswNDowMCJ9._Ty4KT2dUUxfxSIicQsY083pIHZB1y4joFhg_gJGfd0",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkYzJlMjg4LWQzZjktNGE2Yy04OGU2LTY4ZmI5YzU2MzNmZiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YzIiwiaWQiOiI3YzhhNTc3Yy1mMjQ4LTQ0ZTEtYWJkNC0wOGI0NTE5MmExNGIifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0yNlQyMjozNjo1NS43NDYwODg4KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjdUMjI6MzY6NTUuNzQ2MDg4OCswNDowMCJ9.SsNibJ89FZun3TLqEQQEjbyXP1FvNl7n3JNFh8Tign8",
 								"type": "text"
 							}
 						],
@@ -455,7 +455,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/moniests/parvvazov3/unsubscribe",
+							"raw": "http://localhost:8080/moniests/parvvazovm1/unsubscribe",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -463,7 +463,7 @@
 							"port": "8080",
 							"path": [
 								"moniests",
-								"parvvazov3",
+								"parvvazovm1",
 								"unsubscribe"
 							]
 						}
@@ -672,6 +672,33 @@
 							"port": "8080",
 							"path": [
 								"moniests",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Get Moniest Posts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJhNWMyNTA2LWJkNTEtNGY2OC1hMjM5LTAwNjViODAyZTQwNiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YzIiwiaWQiOiI3YzhhNTc3Yy1mMjQ4LTQ0ZTEtYWJkNC0wOGI0NTE5MmExNGIifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0yNlQyMzowMzoyNC4wMDczNzc3KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjdUMjM6MDM6MjQuMDA3Mzc3NyswNDowMCJ9.VWHbHCaWJw6yL48CJt9-2zr0go0RPbAnRj7AEdW8ZQA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/moniests/parvvazov3/posts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"moniests",
+								"parvvazov3",
 								"posts"
 							]
 						}

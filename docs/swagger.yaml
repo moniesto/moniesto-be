@@ -997,6 +997,56 @@ paths:
       summary: Be Moniest
       tags:
       - Moniest
+  /moniests/:username/posts:
+    get:
+      consumes:
+      - application/json
+      description: Get Posts of Moniest [active or all]
+      parameters:
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: 'default: false, true: only live(active), false: all posts'
+        in: query
+        name: active
+        type: boolean
+      - description: 'default: 10 & max: 50'
+        in: query
+        name: limit
+        type: integer
+      - description: 'default: 0'
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.GetContentPostResponse'
+            type: array
+        "403":
+          description: forbidden access (when not subscribed, but asks for active
+            posts)
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid params
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get Moniest Posts
+      tags:
+      - Post
   /moniests/:username/subscribe:
     post:
       consumes:
