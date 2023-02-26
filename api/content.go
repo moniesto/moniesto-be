@@ -101,6 +101,19 @@ func (server *Server) getContentMoniests(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, moniests)
 }
 
+// @Summary Search Moniest
+// @Description Search Moniest by their name & surname & username
+// @Security bearerAuth
+// @Tags Content
+// @Accept json
+// @Produce json
+// @Param searchText query string true "length min:1 max:30"
+// @Param limit query int false "default: 10 & max: 50"
+// @Param offset query int false "default: 0"
+// @Success 200 {object} []model.User
+// @Failure 406 {object} clientError.ErrorResponse "invalid body"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /content/moniests/search [get]
 func (server *Server) searchMoniest(ctx *gin.Context) {
 	var req model.SearchMoniestRequest = model.SearchMoniestRequest{
 		Limit:  util.DEFAULT_LIMIT,
