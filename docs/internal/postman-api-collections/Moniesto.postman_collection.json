@@ -1115,6 +1115,47 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "[local] Search Moniest",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJhNWMyNTA2LWJkNTEtNGY2OC1hMjM5LTAwNjViODAyZTQwNiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YzIiwiaWQiOiI3YzhhNTc3Yy1mMjQ4LTQ0ZTEtYWJkNC0wOGI0NTE5MmExNGIifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0yNlQyMzowMzoyNC4wMDczNzc3KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjdUMjM6MDM6MjQuMDA3Mzc3NyswNDowMCJ9.VWHbHCaWJw6yL48CJt9-2zr0go0RPbAnRj7AEdW8ZQA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/content/moniests/search?searchText=a&limit=1&offset=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"content",
+								"moniests",
+								"search"
+							],
+							"query": [
+								{
+									"key": "searchText",
+									"value": "a"
+								},
+								{
+									"key": "limit",
+									"value": "1"
+								},
+								{
+									"key": "offset",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
