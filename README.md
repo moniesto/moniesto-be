@@ -171,7 +171,7 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 :heavy_check_mark: [need test] GET /moniests/:username/subscribe/check -> check user is subscribed to this moniest or not
 
-- [ ] GET /moniests/:username/subscribers?limit=<limit>&offset=<offset>
+:heavy_check_mark: GET /moniests/:username/subscribers?limit=<limit>&offset=<offset>
 
 :heavy_check_mark: [need test + payment update] POST /moniests -> be moniest
 
