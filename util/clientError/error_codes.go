@@ -159,6 +159,9 @@ const (
 	Content_GetMoniests_InvalidParam           = "Content_GetMoniests_InvalidParam"
 	Content_GetMoniests_ServerErrorGetMoniests = "Content_GetMoniests_ServerErrorGetMoniests"
 
+	Content_SearchMoniests_InvalidParam             = "Content_SearchMoniests_InvalidParam"
+	Content_SearchMoniests_ServerErrorSearchMoniest = "Content_SearchMoniests_ServerErrorSearchMoniest"
+
 	User_GetSubscriptions_InvalidParam                = "User_GetSubscriptions_InvalidParam"
 	User_GetSubscriptions_ServerErrorGetSubscriptions = "User_GetSubscriptions_ServerErrorGetSubscriptions"
 )
@@ -319,6 +322,9 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 
 	Content_GetMoniests_InvalidParam:           "Get Moniests request param is invalid",
 	Content_GetMoniests_ServerErrorGetMoniests: "Server error on getting moniests",
+
+	Content_SearchMoniests_InvalidParam:             "Search moniest request param is invalid",
+	Content_SearchMoniests_ServerErrorSearchMoniest: "Server error on searching moniest",
 
 	User_GetSubscriptions_InvalidParam:                "Get user subscriptions request param is invalid",
 	User_GetSubscriptions_ServerErrorGetSubscriptions: "Server error on get user subscriptions",

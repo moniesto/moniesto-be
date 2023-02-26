@@ -4,7 +4,8 @@ const (
 	MAX_LIMIT     = 50
 	DEFAULT_LIMIT = 10
 
-	DEFAULT_OFFSET = 0
+	DEFAULT_OFFSET   = 0
+	MAX_SEARCH_LIMIT = 30
 )
 
 var (
@@ -47,4 +48,13 @@ func SafePostSortBy(sortBy string) string {
 	}
 
 	return defaultSortingType
+}
+
+func SafeSearchText(searchText string) string {
+
+	if len(searchText) > MAX_SEARCH_LIMIT {
+		searchText = searchText[0:MAX_SEARCH_LIMIT]
+	}
+
+	return searchText
 }

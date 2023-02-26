@@ -45,6 +45,12 @@ type GetContentMoniestRequest struct {
 	Offset int `form:"offset" json:"offset"`
 }
 
+type SearchMoniestRequest struct {
+	SearchText string `form:"searchText" json:"searchText" binding:"required,min=1"`
+	Limit      int    `form:"limit" json:"limit"`
+	Offset     int    `form:"offset" json:"offset"`
+}
+
 func NewGetContentPostResponse(posts PostDBResponse) []GetContentPostResponse {
 	response := make([]GetContentPostResponse, 0, len(posts))
 

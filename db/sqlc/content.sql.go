@@ -390,6 +390,7 @@ SELECT "u"."id",
 FROM "moniest" as m
     INNER JOIN "user" as u ON "u"."id" = "m"."user_id"
     INNER JOIN "subscription_info" as si ON "si"."moniest_id" = "m"."id"
+    AND "u"."deleted" = FALSE
 ORDER BY "m"."score" DESC
 LIMIT $1 OFFSET $2
 `
@@ -772,6 +773,143 @@ func (q *Queries) GetSubscribedDeactivePosts(ctx context.Context, arg GetSubscri
 			&i.EmailVerified,
 			&i.Location,
 			&i.PostDescription,
+			&i.ProfilePhotoLink,
+			&i.ProfilePhotoThumbnailLink,
+			&i.BackgroundPhotoLink,
+			&i.BackgroundPhotoThumbnailLink,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const searchMoniests = `-- name: SearchMoniests :many
+SELECT "u"."id",
+    "m"."id" as "moniest_id",
+    "u"."name",
+    "u"."surname",
+    "u"."username",
+    "u"."email_verified",
+    "u"."location",
+    "u"."created_at",
+    "u"."updated_at",
+    "m"."bio",
+    "m"."description",
+    "m"."score",
+    "si"."fee",
+    "si"."message",
+    "si"."updated_at" as "subscription_info_updated_at",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "user" as "u"
+    INNER JOIN "moniest" as "m" ON "m"."user_id" = "u"."id"
+    INNER JOIN "subscription_info" as "si" ON "si"."moniest_id" = "m"."id"
+WHERE (
+        "u"."name" || ' ' || "u"."surname" ILIKE $1
+    )
+    OR (
+        "u"."surname" || ' ' || "u"."name" ILIKE $1
+    )
+    OR ("u"."username" ILIKE $1)
+    AND "u"."deleted" = FALSE
+LIMIT $2 OFFSET $3
+`
+
+type SearchMoniestsParams struct {
+	Name   string `json:"name"`
+	Limit  int32  `json:"limit"`
+	Offset int32  `json:"offset"`
+}
+
+type SearchMoniestsRow struct {
+	ID                           string         `json:"id"`
+	MoniestID                    string         `json:"moniest_id"`
+	Name                         string         `json:"name"`
+	Surname                      string         `json:"surname"`
+	Username                     string         `json:"username"`
+	EmailVerified                bool           `json:"email_verified"`
+	Location                     sql.NullString `json:"location"`
+	CreatedAt                    time.Time      `json:"created_at"`
+	UpdatedAt                    time.Time      `json:"updated_at"`
+	Bio                          sql.NullString `json:"bio"`
+	Description                  sql.NullString `json:"description"`
+	Score                        float64        `json:"score"`
+	Fee                          float64        `json:"fee"`
+	Message                      sql.NullString `json:"message"`
+	SubscriptionInfoUpdatedAt    time.Time      `json:"subscription_info_updated_at"`
+	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) SearchMoniests(ctx context.Context, arg SearchMoniestsParams) ([]SearchMoniestsRow, error) {
+	rows, err := q.db.QueryContext(ctx, searchMoniests, arg.Name, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []SearchMoniestsRow{}
+	for rows.Next() {
+		var i SearchMoniestsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.MoniestID,
+			&i.Name,
+			&i.Surname,
+			&i.Username,
+			&i.EmailVerified,
+			&i.Location,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Bio,
+			&i.Description,
+			&i.Score,
+			&i.Fee,
+			&i.Message,
+			&i.SubscriptionInfoUpdatedAt,
 			&i.ProfilePhotoLink,
 			&i.ProfilePhotoThumbnailLink,
 			&i.BackgroundPhotoLink,

@@ -102,3 +102,22 @@ func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, lim
 	moniests := *(*model.MoniestDBResponse)(unsafe.Pointer(&moniestFromDB))
 	return model.NewGetContentMoniestResponse(moniests), nil
 }
+
+func (service *Service) SearchMoniest(ctx *gin.Context, searchText string, limit, offset int) ([]model.User, error) {
+	querySearchText := "%" + searchText + "%"
+
+	params := db.SearchMoniestsParams{
+		Name:   querySearchText,
+		Limit:  int32(limit),
+		Offset: int32(offset),
+	}
+
+	moniestFromDB, err := service.Store.SearchMoniests(ctx, params)
+	if err != nil {
+		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_SearchMoniests_ServerErrorSearchMoniest)
+	}
+
+	moniests := *(*model.MoniestDBResponse)(unsafe.Pointer(&moniestFromDB))
+
+	return model.NewGetContentMoniestResponse(moniests), nil
+}

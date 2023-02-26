@@ -100,3 +100,30 @@ func (server *Server) getContentMoniests(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, moniests)
 }
+
+func (server *Server) searchMoniest(ctx *gin.Context) {
+	var req model.SearchMoniestRequest = model.SearchMoniestRequest{
+		Limit:  util.DEFAULT_LIMIT,
+		Offset: util.DEFAULT_OFFSET,
+	}
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Content_GetMoniests_InvalidParam))
+		return
+	}
+
+	// STEP: safe limit & offset & searchtext [arrange min - max]
+	req.Limit = util.SafeLimit(req.Limit)
+	req.Offset = util.SafeOffset(req.Offset)
+	req.SearchText = util.SafeSearchText(req.SearchText)
+
+	// STEP: search moniest
+	moniests, err := server.service.SearchMoniest(ctx, req.SearchText, req.Limit, req.Offset)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, moniests)
+}

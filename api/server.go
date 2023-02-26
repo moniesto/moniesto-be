@@ -111,6 +111,7 @@ func (server *Server) setupRouter() {
 	{
 		contentRouters.GET("/posts", server.getContentPosts)
 		contentRouters.GET("/moniests", server.getContentMoniests)
+		contentRouters.GET("/moniests/search", server.searchMoniest)
 	}
 
 	// Swagger docs
