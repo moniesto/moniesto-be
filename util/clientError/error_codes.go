@@ -128,7 +128,12 @@ const (
 
 	Moniest_SubscribeCheck_ServerErrorCheck = "Moniest_SubscribeCheck_ServerErrorCheck"
 
+	Moniest_GetSubscriber_InvalidParam              = "Moniest_GetSubscriber_InvalidParam"
 	Moniest_GetSubscriber_ServerErrorGetSubscribers = "Moniest_GetSubscriber_ServerErrorGetSubscribers"
+
+	Moniest_GetMoniestPosts_InvalidParam        = "Moniest_GetMoniestPosts_InvalidParam"
+	Moniest_GetMoniestPosts_ForbiddenAccess     = "Moniest_GetMoniestPosts_ForbiddenAccess"
+	Moniest_GetMoniestPosts_ServerErrorGetPosts = "Moniest_GetMoniestPosts_ServerErrorGetPosts"
 
 	User_GetUser_ServerErrorGetUser = "User_GetUser_ServerErrorGetUser"
 
@@ -284,7 +289,12 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 
 	Moniest_SubscribeCheck_ServerErrorCheck: "Server error on checking moniest subscribe status",
 
+	Moniest_GetSubscriber_InvalidParam:              "Get subscribers invalid params",
 	Moniest_GetSubscriber_ServerErrorGetSubscribers: "Server error on getting subscribed users",
+
+	Moniest_GetMoniestPosts_InvalidParam:        "Get moniest posts invalid params",
+	Moniest_GetMoniestPosts_ForbiddenAccess:     "User can not access active posts of moniests that are not subscribed",
+	Moniest_GetMoniestPosts_ServerErrorGetPosts: "Server error on getting posts of moniest",
 
 	User_GetUser_ServerErrorGetUser: "Server error on getting user",
 

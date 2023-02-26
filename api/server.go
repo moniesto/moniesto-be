@@ -73,6 +73,7 @@ func (server *Server) setupRouter() {
 		moniestsRouters.GET("/:username/subscribe/check", server.subscribeMoniestCheck)
 		moniestsRouters.POST("/:username/unsubscribe", server.unsubscribeMoniest)
 		moniestsRouters.GET("/:username/subscribers", server.getSubscribers)
+		moniestsRouters.GET("/:username/posts", server.getMoniestPosts)
 	}
 
 	// User routes

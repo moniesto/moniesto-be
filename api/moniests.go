@@ -298,7 +298,7 @@ func (server *Server) getSubscribers(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBind(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.User_GetSubscriptions_InvalidParam))
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_GetSubscriber_InvalidParam))
 		return
 	}
 

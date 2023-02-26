@@ -38,6 +38,12 @@ type CheckSubscriptionResponse struct {
 	Subscribed bool `json:"subscribed"`
 }
 
+type GetMoniestPostsRequest struct {
+	Active bool `form:"active" json:"active"`
+	Limit  int  `form:"limit" json:"limit"`
+	Offset int  `form:"offset" json:"offset"`
+}
+
 // MAKER
 func NewCreateMoniestResponse(moniest db.GetMoniestByMoniestIdRow) OwnUser {
 	response := OwnUser{

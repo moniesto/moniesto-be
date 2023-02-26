@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"unsafe"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
@@ -128,4 +129,64 @@ func (service *Service) postDescriptionImageReplacer(ctx *gin.Context, descripti
 	}
 
 	return string(descriptionByte), nil
+}
+
+func (service *Service) GetMoniestPosts(ctx *gin.Context, user_id, moniest_username string, userIsSubscribed, active bool, limit, offset int) ([]model.GetContentPostResponse, error) {
+
+	// OPTION 0: user is not subscribed, but requesting for `active` posts, causes error
+	if !userIsSubscribed && active {
+		return nil, clientError.CreateError(http.StatusForbidden, clientError.Moniest_GetMoniestPosts_ForbiddenAccess)
+	}
+
+	if userIsSubscribed {
+
+		// OPTION 1: user is subscribed & only `active` posts
+		if active {
+			params := db.GetMoniestActivePostsByUsernameParams{
+				Username: moniest_username,
+				Limit:    int32(limit),
+				Offset:   int32(offset),
+			}
+
+			postsFromDB, err := service.Store.GetMoniestActivePostsByUsername(ctx, params)
+			if err != nil {
+				return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniestPosts_ServerErrorGetPosts)
+			}
+
+			posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
+
+			return model.NewGetContentPostResponse(posts), nil
+
+		} else { // OPTION 2: user is subscribed & all posts of moniest
+			params := db.GetMoniestAllPostsByUsernameParams{
+				Username: moniest_username,
+				Limit:    int32(limit),
+				Offset:   int32(offset),
+			}
+			postsFromDB, err := service.Store.GetMoniestAllPostsByUsername(ctx, params)
+			if err != nil {
+				return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniestPosts_ServerErrorGetPosts)
+			}
+
+			posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
+
+			return model.NewGetContentPostResponse(posts), nil
+		}
+	}
+
+	// OPTION 3: user is not subscribed & all `not active` posts
+	params := db.GetMoniestDeactivePostsByUsernameParams{
+		Username: moniest_username,
+		Limit:    int32(limit),
+		Offset:   int32(offset),
+	}
+
+	postsFromDB, err := service.Store.GetMoniestDeactivePostsByUsername(ctx, params)
+	if err != nil {
+		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniestPosts_ServerErrorGetPosts)
+	}
+
+	posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
+
+	return model.NewGetContentPostResponse(posts), nil
 }
