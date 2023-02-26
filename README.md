@@ -141,66 +141,78 @@ You can donwload from [here.](https://github.com/golang-migrate/migrate/tree/mas
 
 # ENDPOINTS
 
-:heavy_check_mark: POST /account/login
+## Account
 
-:heavy_check_mark: POST /account/register
+:heavy_check_mark: POST `/account/login`
 
-:heavy_check_mark: GET /account/usernames/:username/check
+:heavy_check_mark: POST `/account/register`
 
-:heavy_check_mark: POST /account/password/send_email -> send password reset email
+:heavy_check_mark: GET `/account/usernames/:username/check`
 
-:heavy_check_mark: POST /account/password/change_password -> verify token & change password
+:heavy_check_mark: POST `/account/password/send_email` -> send password reset email
 
-:heavy_check_mark: [need test] POST /account/password/verify_token -> verify token
+:heavy_check_mark: POST `/account/password/change_password` -> verify token & change password
 
-:heavy_check_mark: PUT /account/password -> change password
+:heavy_check_mark: [**need test**] POST `/account/password/verify_token` -> verify token
 
-:heavy_check_mark: [need test] POST /account/email/send_verification_email -> send email verification email
+:heavy_check_mark: PUT `/account/password` -> change password
 
-:heavy_check_mark: [need test] POST /account/email/verify_email -> verify email
+:heavy_check_mark: [**need test**] POST `/account/email/send_verification_email` -> send email verification email
 
-:heavy_check_mark: [need test] GET /content/posts?subscribed=true&active=true&sortBy=created_at|score&limit=10&offset=0
+:heavy_check_mark: [need test] POST `/account/email/verify_email` -> verify email
 
-:heavy_check_mark: [need test] GET /content/moniests?subscribed=true&limit=10&offset=0
+:heavy_check_mark: [need test] PATCH `/account/username` -> update username
 
-:heavy_check_mark: [need test] GET /users/:username
+## Users
 
-- [ ] GET /moniests/:username/posts?limit=<limit>&offset=<offset>
+:heavy_check_mark: [need test] GET `/users/:username`
 
-:heavy_check_mark: [need test] GET /users/:username/subscriptions?limit=<limit>&offset=<offset>
+:heavy_check_mark: [need test] GET `/users/:username/subscriptions?limit=<limit>&offset=<offset>`
 
-:heavy_check_mark: [need test] GET /moniests/:username/subscribe/check -> check user is subscribed to this moniest or not
+:heavy_check_mark: [need test] PATCH `/users/profile` -> update user profile info
 
-:heavy_check_mark: GET /moniests/:username/subscribers?limit=<limit>&offset=<offset>
+## Moniest
 
-:heavy_check_mark: [need test + payment update] POST /moniests -> be moniest
+- [ ] GET `/moniests/:username/posts?limit=<limit>&offset=<offset>`
 
-:heavy_check_mark: [need test] POST /moniests/posts -> create post
+:heavy_check_mark: GET `/moniests/:username/subscribers?limit=<limit>&offset=<offset>`
 
-:heavy_check_mark: [need test] PATCH /users/profile -> update user profile info
+:heavy_check_mark: [need test + payment update] POST `/moniests -> be moniest`
 
-:heavy_check_mark: [need test] PATCH /account/username -> update username
+:heavy_check_mark: [need test] POST `/moniests/posts` -> create post
 
-:heavy_check_mark: [need test + payment update] PATCH /moniests/profile -> update moniest profile + subscription info
+:heavy_check_mark: [need test + payment update] PATCH `/moniests/profile` -> update moniest profile + subscription info
 
-:heavy_check_mark: [need test + payment update] POST /moniests/:username/subscribe -> subscribe to a moniest
+:heavy_check_mark: [need test + payment update] POST `/moniests/:username/subscribe` -> subscribe to a moniest
 
-:heavy_check_mark: [need test + payment update] POST /moniests/:username/unsubscribe -> unsubscribe from a moniest
+:heavy_check_mark: [need test + payment update] POST `/moniests/:username/unsubscribe` -> unsubscribe from a moniest
 
-:heavy_check_mark: [need test] GET /crypto/currencies?name=BTC
+:heavy_check_mark: [need test] GET `/moniests/:username/subscribe/check` -> check user is subscribed to this moniest or not
 
-:heavy_check_mark: GET /assets/error-codes -> get error codes
+## Content
 
-:heavy_check_mark: GET /assets/validations -> get validation configs
+:heavy_check_mark: [need test] GET `/content/posts?subscribed=true&active=true&sortBy=created_at|score&limit=10&offset=0`
 
-:heavy_check_mark: GET /assets/configs -> get all configurations
+:heavy_check_mark: [need test] GET `/content/moniests?subscribed=true&limit=10&offset=0`
 
-:heavy_check_mark: [need test] POST /feedback -> give feedback
+## Assets
+
+:heavy_check_mark: GET `/assets/error-codes` -> get error codes
+
+:heavy_check_mark: GET `/assets/validations` -> get validation configs
+
+:heavy_check_mark: GET `/assets/configs` -> get all configurations
+
+## Others
+
+:heavy_check_mark: [need test] GET `/crypto/currencies?name=BTC`
+
+:heavy_check_mark: [need test] POST `/feedback` -> give feedback
 
 - [ ] Search Moniest -> only username
 
-- [ ] POST /account/card -> Add new card
+- [ ] POST `/account/card` -> Add new card
 
-- [ ] DELETE /account/card/:id -> Delete specific card
+- [ ] DELETE `/account/card/:id` -> Delete specific card
 
 - [ ] ...
