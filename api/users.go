@@ -143,7 +143,7 @@ func (server *Server) getSubscriptions(ctx *gin.Context) {
 
 	var req model.PaginationRequest = model.PaginationRequest{
 		Limit:  util.DEFAULT_LIMIT,
-		Offset: 0,
+		Offset: util.DEFAULT_OFFSET,
 	}
 
 	// STEP: bind/validation

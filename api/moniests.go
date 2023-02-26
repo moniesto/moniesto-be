@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/token"
+	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
@@ -270,4 +271,53 @@ func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, response)
+}
+
+// @Summary Get Subscribers
+// @Description Get Subscribers of Moniest
+// @Security bearerAuth
+// @Tags Moniest
+// @Accept json
+// @Produce json
+// @Param username path string true "moniest username"
+// @Param limit query int false "default: 10 & max: 50"
+// @Param offset query int false "default: 0"
+// @Success 200 {object} []model.User ""
+// @Failure 404 {object} clientError.ErrorResponse "moniest not found with this username"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/:username/subscribers [get]
+func (server *Server) getSubscribers(ctx *gin.Context) {
+	// STEP: get username from param
+	username := ctx.Param("username")
+
+	var req model.PaginationRequest = model.PaginationRequest{
+		Limit:  util.DEFAULT_LIMIT,
+		Offset: util.DEFAULT_OFFSET,
+	}
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBind(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.User_GetSubscriptions_InvalidParam))
+		return
+	}
+
+	// STEP: make limit & offset safe [arrange min-max]
+	req.Limit = util.SafeLimit(req.Limit)
+	req.Offset = util.SafeOffset(req.Offset)
+
+	// STEP: get moniest [+ check there is a moniest w/ this username]
+	moniest, err := server.service.GetMoniestByUsername(ctx, username)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: get subscribers
+	subscribers, err := server.service.GetSubscribers(ctx, moniest.MoniestID, req.Limit, req.Offset)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, subscribers)
 }

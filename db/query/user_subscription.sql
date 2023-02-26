@@ -36,3 +36,64 @@ FROM "user_subscription"
     AND "user"."username" = $2
 WHERE "user_subscription"."active" = TRUE
     AND "user_subscription"."user_id" = $1;
+
+-- name: GetSubscribers :many
+SELECT "u"."id",
+    "m"."id" as "moniest_id",
+    "u"."name",
+    "u"."surname",
+    "u"."username",
+    "u"."email_verified",
+    "u"."location",
+    "u"."created_at",
+    "u"."updated_at",
+    "m"."bio",
+    "m"."description",
+    "m"."score",
+    "si"."id" as "subscription_info_id",
+    "si"."fee",
+    "si"."message",
+    "si"."updated_at" as "subscription_info_updated_at",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "user" as u
+    INNER JOIN "user_subscription" as us ON "us"."user_id" = "u"."id"
+    AND "us"."active" = TRUE
+    LEFT JOIN "moniest" as m ON "m"."user_id" = "u"."id"
+    LEFT JOIN "subscription_info" as si ON "si"."moniest_id" = "m"."id"
+WHERE "us"."moniest_id" = $1
+LIMIT $2 OFFSET $3;

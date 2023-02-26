@@ -7,6 +7,8 @@ package db
 
 import (
 	"context"
+	"database/sql"
+	"time"
 )
 
 const activateSubscription = `-- name: ActivateSubscription :exec
@@ -96,6 +98,141 @@ type EndsubscriptionParams struct {
 func (q *Queries) Endsubscription(ctx context.Context, arg EndsubscriptionParams) error {
 	_, err := q.db.ExecContext(ctx, endsubscription, arg.UserID, arg.MoniestID)
 	return err
+}
+
+const getSubscribers = `-- name: GetSubscribers :many
+SELECT "u"."id",
+    "m"."id" as "moniest_id",
+    "u"."name",
+    "u"."surname",
+    "u"."username",
+    "u"."email_verified",
+    "u"."location",
+    "u"."created_at",
+    "u"."updated_at",
+    "m"."bio",
+    "m"."description",
+    "m"."score",
+    "si"."id" as "subscription_info_id",
+    "si"."fee",
+    "si"."message",
+    "si"."updated_at" as "subscription_info_updated_at",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "user" as u
+    INNER JOIN "user_subscription" as us ON "us"."user_id" = "u"."id"
+    AND "us"."active" = TRUE
+    LEFT JOIN "moniest" as m ON "m"."user_id" = "u"."id"
+    LEFT JOIN "subscription_info" as si ON "si"."moniest_id" = "m"."id"
+WHERE "us"."moniest_id" = $1
+LIMIT $2 OFFSET $3
+`
+
+type GetSubscribersParams struct {
+	MoniestID string `json:"moniest_id"`
+	Limit     int32  `json:"limit"`
+	Offset    int32  `json:"offset"`
+}
+
+type GetSubscribersRow struct {
+	ID                           string          `json:"id"`
+	MoniestID                    sql.NullString  `json:"moniest_id"`
+	Name                         string          `json:"name"`
+	Surname                      string          `json:"surname"`
+	Username                     string          `json:"username"`
+	EmailVerified                bool            `json:"email_verified"`
+	Location                     sql.NullString  `json:"location"`
+	CreatedAt                    time.Time       `json:"created_at"`
+	UpdatedAt                    time.Time       `json:"updated_at"`
+	Bio                          sql.NullString  `json:"bio"`
+	Description                  sql.NullString  `json:"description"`
+	Score                        sql.NullFloat64 `json:"score"`
+	SubscriptionInfoID           sql.NullString  `json:"subscription_info_id"`
+	Fee                          sql.NullFloat64 `json:"fee"`
+	Message                      sql.NullString  `json:"message"`
+	SubscriptionInfoUpdatedAt    sql.NullTime    `json:"subscription_info_updated_at"`
+	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}     `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) GetSubscribers(ctx context.Context, arg GetSubscribersParams) ([]GetSubscribersRow, error) {
+	rows, err := q.db.QueryContext(ctx, getSubscribers, arg.MoniestID, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetSubscribersRow{}
+	for rows.Next() {
+		var i GetSubscribersRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.MoniestID,
+			&i.Name,
+			&i.Surname,
+			&i.Username,
+			&i.EmailVerified,
+			&i.Location,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Bio,
+			&i.Description,
+			&i.Score,
+			&i.SubscriptionInfoID,
+			&i.Fee,
+			&i.Message,
+			&i.SubscriptionInfoUpdatedAt,
+			&i.ProfilePhotoLink,
+			&i.ProfilePhotoThumbnailLink,
+			&i.BackgroundPhotoLink,
+			&i.BackgroundPhotoThumbnailLink,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getSubscription = `-- name: GetSubscription :one

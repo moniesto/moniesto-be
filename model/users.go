@@ -6,6 +6,8 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 )
 
+type UserDBResponse []db.GetUserByUsernameRow
+
 type OwnUser struct {
 	Id                           string    `json:"id,omitempty"`
 	Name                         string    `json:"name,omitempty"`
@@ -162,4 +164,48 @@ func NewGetUserResponse(user db.GetUserByUsernameRow) (response User) {
 	}
 
 	return
+}
+
+func NewGetUsersResponse(users []db.GetUserByUsernameRow) []User {
+	responses := make([]User, 0, len(users))
+
+	for _, user := range users {
+		response := User{
+			Id:                           user.ID,
+			Name:                         user.Name,
+			Surname:                      user.Surname,
+			Username:                     user.Username,
+			EmailVerified:                user.EmailVerified,
+			Location:                     user.Location.String,
+			ProfilePhotoLink:             user.ProfilePhotoLink.(string),
+			ProfilePhotoThumbnailLink:    user.ProfilePhotoThumbnailLink.(string),
+			BackgroundPhotoLink:          user.BackgroundPhotoLink.(string),
+			BackgroundPhotoThumbnailLink: user.BackgroundPhotoThumbnailLink.(string),
+			CreatedAt:                    &user.CreatedAt,
+			UpdatedAt:                    &user.UpdatedAt,
+		}
+
+		if user.MoniestID.String != "" {
+			moniest := &Moniest{
+				ID:          user.MoniestID.String,
+				Bio:         user.Bio.String,
+				Description: user.Description.String,
+				Score:       user.Score.Float64,
+			}
+
+			if user.SubscriptionInfoID.Valid {
+				moniest.SubscriptionInfo = &SubscriptionInfo{
+					Fee:       user.Fee.Float64,
+					Message:   user.Message.String,
+					UpdatedAt: user.SubscriptionInfoUpdatedAt.Time,
+				}
+			}
+
+			response.Moniest = moniest
+		}
+
+		responses = append(responses, response)
+	}
+
+	return responses
 }

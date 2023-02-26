@@ -128,6 +128,8 @@ const (
 
 	Moniest_SubscribeCheck_ServerErrorCheck = "Moniest_SubscribeCheck_ServerErrorCheck"
 
+	Moniest_GetSubscriber_ServerErrorGetSubscribers = "Moniest_GetSubscriber_ServerErrorGetSubscribers"
+
 	User_GetUser_ServerErrorGetUser = "User_GetUser_ServerErrorGetUser"
 
 	Post_CreatePost_InvalidBody                  = "Post_CreatePost_InvalidBody"
@@ -281,6 +283,8 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate:        "Server error on create subscription info",
 
 	Moniest_SubscribeCheck_ServerErrorCheck: "Server error on checking moniest subscribe status",
+
+	Moniest_GetSubscriber_ServerErrorGetSubscribers: "Server error on getting subscribed users",
 
 	User_GetUser_ServerErrorGetUser: "Server error on getting user",
 

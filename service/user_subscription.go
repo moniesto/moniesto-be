@@ -3,10 +3,12 @@ package service
 import (
 	"database/sql"
 	"net/http"
+	"unsafe"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
+	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
@@ -126,4 +128,22 @@ func (service *Service) CheckUserSubscriptionByMoniestUsername(ctx *gin.Context,
 	}
 
 	return userIsSubscribed, nil
+}
+
+func (service *Service) GetSubscribers(ctx *gin.Context, moniestID string, limit, offset int) ([]model.User, error) {
+
+	// STEP: get subscribers
+	param := db.GetSubscribersParams{
+		MoniestID: moniestID,
+		Limit:     int32(limit),
+		Offset:    int32(offset),
+	}
+
+	usersFromDB, err := service.Store.GetSubscribers(ctx, param)
+	if err != nil {
+		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetSubscriber_ServerErrorGetSubscribers)
+	}
+
+	users := *(*model.UserDBResponse)(unsafe.Pointer(&usersFromDB))
+	return model.NewGetUsersResponse(users), nil
 }
