@@ -12,6 +12,7 @@ type Config struct {
 	// APP SERVER CONFIG
 	DBDriver      string `mapstructure:"DB_DRIVER"`
 	DBSource      string `mapstructure:"DB_SOURCE"`
+	MigrationURL  string `mapstructure:"MIGRATION_URL"`
 	DBSourceTest  string `mapstructure:"DB_SOURCE_TEST"`
 	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
 	SmtpHost      string `mapstructure:"SMTP_HOST"`

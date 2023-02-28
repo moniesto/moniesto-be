@@ -4,6 +4,9 @@ import (
 	"database/sql"
 	"log"
 
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/moniesto/moniesto-be/api"
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
@@ -32,6 +35,9 @@ func main() {
 		log.Fatal("cannot connect to db:", err)
 	}
 
+	// run db migration
+	runDBMigration(config.MigrationURL, config.DBSource)
+
 	// get store
 	store := db.NewStore(conn)
 
@@ -59,6 +65,19 @@ func main() {
 		log.Fatal("cannot start server:", err)
 	}
 
+}
+
+func runDBMigration(migrationURL, dbSource string) {
+	migaration, err := migrate.New(migrationURL, dbSource)
+	if err != nil {
+		log.Fatal("cannot create a new migrate instance:", err)
+	}
+
+	if err := migaration.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatal("failed to run migrate up:", err)
+	}
+
+	log.Println("db migrated successfully")
 }
 
 func initializeSwaggerMeta(config *config.Config) {
