@@ -313,12 +313,14 @@ WHERE "user"."email" = $1
 UPDATE "user"
 SET name = $2,
     surname = $3,
-    location = $4
+    location = $4,
+    updated_at = now()
 WHERE id = $1;
 
 -- name: VerifyEmail :exec
 UPDATE "user"
-SET email_verified = true
+SET email_verified = true,
+    updated_at = now()
 WHERE id = $1;
 
 -- name: GetActiveUsersVerifiedEmails :many
@@ -341,12 +343,14 @@ WHERE id = $1
 
 -- name: SetPassword :exec
 UPDATE "user"
-SET password = $2
+SET password = $2,
+    updated_at = now()
 WHERE id = $1;
 
 -- name: SetUsername :exec
 UPDATE "user"
-SET username = $2
+SET username = $2,
+    updated_at = now()
 WHERE id = $1;
 
 -- name: CheckEmail :one

@@ -131,6 +131,7 @@ WHERE "user"."email" = $1
 -- name: UpdateLoginStats :one
 UPDATE "user"
 SET login_count = login_count + 1,
-    last_login = now()
+    last_login = now(),
+    updated_at = now()
 WHERE id = $1
 RETURNING *;

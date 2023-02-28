@@ -34,7 +34,8 @@ WHERE image.user_id = $1
 -- name: UpdateProfilePhoto :one
 UPDATE image
 SET link = $2,
-    thumbnail_link = $3
+    thumbnail_link = $3,
+    updated_at = now()
 WHERE image.user_id = $1
     and image.type = 'profile_photo'
 RETURNING *;
@@ -42,7 +43,8 @@ RETURNING *;
 -- name: UpdateBackgroundPhoto :one
 UPDATE image
 SET link = $2,
-    thumbnail_link = $3
+    thumbnail_link = $3,
+    updated_at = now()
 WHERE image.user_id = $1
     and image.type = 'background_photo'
 RETURNING *;

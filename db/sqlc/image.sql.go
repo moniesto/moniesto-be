@@ -131,7 +131,8 @@ func (q *Queries) GetProfilePhoto(ctx context.Context, userID string) (GetProfil
 const updateBackgroundPhoto = `-- name: UpdateBackgroundPhoto :one
 UPDATE image
 SET link = $2,
-    thumbnail_link = $3
+    thumbnail_link = $3,
+    updated_at = now()
 WHERE image.user_id = $1
     and image.type = 'background_photo'
 RETURNING id, user_id, link, thumbnail_link, type, created_at, updated_at
@@ -161,7 +162,8 @@ func (q *Queries) UpdateBackgroundPhoto(ctx context.Context, arg UpdateBackgroun
 const updateProfilePhoto = `-- name: UpdateProfilePhoto :one
 UPDATE image
 SET link = $2,
-    thumbnail_link = $3
+    thumbnail_link = $3,
+    updated_at = now()
 WHERE image.user_id = $1
     and image.type = 'profile_photo'
 RETURNING id, user_id, link, thumbnail_link, type, created_at, updated_at

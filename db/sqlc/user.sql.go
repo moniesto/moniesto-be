@@ -851,7 +851,8 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUs
 
 const setPassword = `-- name: SetPassword :exec
 UPDATE "user"
-SET password = $2
+SET password = $2,
+    updated_at = now()
 WHERE id = $1
 `
 
@@ -867,7 +868,8 @@ func (q *Queries) SetPassword(ctx context.Context, arg SetPasswordParams) error 
 
 const setUsername = `-- name: SetUsername :exec
 UPDATE "user"
-SET username = $2
+SET username = $2,
+    updated_at = now()
 WHERE id = $1
 `
 
@@ -885,7 +887,8 @@ const updateUser = `-- name: UpdateUser :exec
 UPDATE "user"
 SET name = $2,
     surname = $3,
-    location = $4
+    location = $4,
+    updated_at = now()
 WHERE id = $1
 `
 
@@ -908,7 +911,8 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
 
 const verifyEmail = `-- name: VerifyEmail :exec
 UPDATE "user"
-SET email_verified = true
+SET email_verified = true,
+    updated_at = now()
 WHERE id = $1
 `
 

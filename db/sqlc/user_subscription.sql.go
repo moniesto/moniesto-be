@@ -13,7 +13,8 @@ import (
 
 const activateSubscription = `-- name: ActivateSubscription :exec
 UPDATE "user_subscription"
-SET active = true
+SET active = true,
+    updated_at = now()
 WHERE user_id = $1
     AND moniest_id = $2
 `
