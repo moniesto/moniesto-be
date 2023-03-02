@@ -7,7 +7,9 @@ import (
 	"github.com/moniesto/moniesto-be/config"
 	"github.com/moniesto/moniesto-be/service"
 	"github.com/moniesto/moniesto-be/token"
+	"github.com/moniesto/moniesto-be/util"
 
+	"github.com/robfig/cron"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -120,9 +122,21 @@ func (server *Server) setupRouter() {
 	server.router = router
 }
 
+func (server *Server) setupCRONJobs() {
+	job := cron.New()
+
+	job.AddFunc(util.JOB_TYPE_EVERY_1AM, server.CronTest)
+
+	job.Start()
+}
+
 // Start runs the HTTP server on a specific address.
 func (server *Server) Start(address string) error {
 	return server.router.Run(address)
+}
+
+func (server *Server) StartCRONJobService() {
+	server.setupCRONJobs()
 }
 
 // CORSMiddleware, allow all origins for the initial state

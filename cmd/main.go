@@ -59,12 +59,14 @@ func main() {
 		log.Fatal("cannot create server: ", err)
 	}
 
+	// start CRON service
+	server.StartCRONJobService()
+
 	// start server
 	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("cannot start server:", err)
 	}
-
 }
 
 func runDBMigration(migrationURL, dbSource string) {
