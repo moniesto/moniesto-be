@@ -125,7 +125,8 @@ func (server *Server) setupRouter() {
 func (server *Server) setupCRONJobs() {
 	job := cron.New()
 
-	job.AddFunc(util.JOB_TYPE_EVERY_1AM, server.CronTest)
+	// update post status job
+	job.AddFunc(util.JOB_TYPE_EVERY_1AM, server.UpdatePostStatus)
 
 	job.Start()
 }
