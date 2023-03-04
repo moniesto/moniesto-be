@@ -59,4 +59,7 @@ var InternalMessages = internalErrorMessageType{
 	"SendEmailVerificationEmail": internalReport(InternalErrorMessage{
 		message: "Server error on sending email verification email",
 	}),
+	"SendWelcomingEmail": internalReport(InternalErrorMessage{
+		message: "Server error on sending welcoming email",
+	}),
 }

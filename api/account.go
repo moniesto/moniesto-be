@@ -99,6 +99,9 @@ func (server *Server) registerUser(ctx *gin.Context) {
 	json.NewEncoder(loginRequestBodyBytes).Encode(loginRequestBody)
 	ctx.Request.Body = io.NopCloser(bytes.NewBuffer(loginRequestBodyBytes.Bytes()))
 
+	// STEP: send welcoming email
+	mailing.SendWelcomingEmail(createdUser.Email, server.config, createdUser.Name)
+
 	server.loginUser(ctx)
 }
 

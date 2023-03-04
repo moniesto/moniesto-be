@@ -461,10 +461,6 @@
   </head>
 
   <body>
-    <span class="preheader"
-      >Use this link to verify your email. The link is only valid for 24
-      hours.</span
-    >
     <table
       class="email-wrapper"
       width="100%"
@@ -512,18 +508,17 @@
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                        <h1>Hi {{.Name}},</h1>
+                        <h1>Dear {{.Name}},</h1>
                         <p>
-                          You recently requested to verify your email address
-                          for your
-                          <span class="title-first-letter">m</span
-                          ><span>oniesto</span> account. Use the button below to
-                          verify it.
-                          <strong
-                            >This verification attemp is only valid for the next
-                            24 hours.</strong
-                          >
+                          Welcome to
+                          <span class="title-first-letter">M</span>oniesto, the
+                          platform that connects you with expert crypto
+                          advisors, or "moniest" to help you make informed
+                          investment decisions. We're thrilled to have you
+                          onboard and look forward to helping you navigate the
+                          exciting world of cryptocurrency.
                         </p>
+
                         <!-- Action -->
                         <table
                           class="body-action"
@@ -536,7 +531,7 @@
                           <tr>
                             <td align="center">
                               <!-- Border based button
-           https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
+                                 https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
                               <table
                                 width="100%"
                                 border="0"
@@ -550,7 +545,7 @@
                                       href="{{.ActionUrl}}"
                                       class="f-fallback button button--green"
                                       target="_blank"
-                                      >Verify your email</a
+                                      >Start Exploring</a
                                     >
                                   </td>
                                 </tr>
@@ -558,29 +553,56 @@
                             </td>
                           </tr>
                         </table>
+
                         <p>
-                          If you did not request an email verification, please
-                          ignore this email.
+                          As a <span class="title-first-letter">M</span
+                          ><span>oniesto</span> user, you'll have access to a
+                          network of experienced and knowledgeable moniest, who
+                          can provide you with exclusive insights, analysis, and
+                          predictions about crypto coin prices. You'll be able
+                          to browse and subscribe to the moniest you feel align
+                          with your investment goals, and gain valuable
+                          knowledge that can help you make better-informed
+                          decisions.
                         </p>
+
                         <p>
-                          Thanks, <br />
+                          At <span class="title-first-letter">M</span>oniesto,
+                          we understand that it can be challenging to know which
+                          moniests to trust with your investment decisions.
+                          That's why we've developed a unique scoring algorithm
+                          that evaluates the accuracy of moniests' predictions
+                          and ranks them based on their performance. You can
+                          view the <strong>performance score</strong> of a
+                          moniest, as well as their
+                          <strong>past predictions</strong> and their success or
+                          failure status, without subscribing to them, so you
+                          can make an informed decision about which moniests to
+                          subscribe.
+                        </p>
+
+                        <p>
+                          You also have the opportunity to become a moniest
+                          yourself and make money! By sharing your knowledge and
+                          experience with the Moniesto community, you can help
+                          others make informed investment decisions.
+                        </p>
+
+                        <p>
+                          Thank you for choosing
+                          <span class="title-first-letter">M</span>oniesto as
+                          your go-to source for crypto financial advice. We're
+                          thrilled to have you as a member of our community and
+                          look forward to helping you achieve your investment
+                          goals.
+                        </p>
+
+                        <p>
+                          Best regards, <br />
                           <span class="title-first-letter">M</span
                           ><span>oniesto</span>
                           team
                         </p>
-                        <!-- Sub copy -->
-                        <table class="body-sub" role="presentation">
-                          <tr>
-                            <td>
-                              <p class="f-fallback sub">
-                                If you’re having trouble with the button above,
-                                copy and paste the URL below into your web
-                                browser.
-                              </p>
-                              <p class="f-fallback sub">{{.ActionUrl}}</p>
-                            </td>
-                          </tr>
-                        </table>
                       </div>
                     </td>
                   </tr>
