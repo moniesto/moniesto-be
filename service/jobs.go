@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 )
@@ -16,4 +17,9 @@ func (service *Service) GetAllActivePosts() ([]db.GetAllActivePostsRow, error) {
 	}
 
 	return posts, err
+}
+
+func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) error {
+	fmt.Println("UpdatePostStatus", activePost)
+	return nil
 }

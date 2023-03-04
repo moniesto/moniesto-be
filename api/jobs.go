@@ -1,6 +1,10 @@
 package api
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/moniesto/moniesto-be/util/systemError"
+)
 
 func (server *Server) UpdatePostStatus() {
 
@@ -8,8 +12,11 @@ func (server *Server) UpdatePostStatus() {
 
 	activePosts, err := server.service.GetAllActivePosts()
 	if err != nil {
-		// show error
+		systemError.Log("CRON JOB - Update Post Status: db error while getting active posts")
 	}
 
-	_ = activePosts
+	for _, post := range activePosts {
+		err := server.service.UpdatePostStatus(post)
+		_ = err
+	}
 }
