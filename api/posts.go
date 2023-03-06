@@ -101,7 +101,7 @@ func (server *Server) createPost(ctx *gin.Context) {
 // @Param active query bool false "default: false, true: only live(active), false: all posts"
 // @Param limit query int false "default: 10 & max: 50"
 // @Param offset query int false "default: 0"
-// @Success 200 {object} []model.GetContentPostResponse "+ score field if fetching own posts"
+// @Success 200 {object} []model.GetContentPostResponse " +"score" field if fetching own posts"
 // @Failure 403 {object} clientError.ErrorResponse "forbidden access (when not subscribed, but asks for active posts)"
 // @Failure 404 {object} clientError.ErrorResponse "no moniest with this username"
 // @Failure 406 {object} clientError.ErrorResponse "invalid params"

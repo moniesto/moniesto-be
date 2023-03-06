@@ -1039,7 +1039,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": " +\"score\" field if fetching own posts",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -1049,6 +1049,12 @@ const docTemplate = `{
                     },
                     "403": {
                         "description": "forbidden access (when not subscribed, but asks for active posts)",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "no moniest with this username",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorResponse"
                         }
