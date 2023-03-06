@@ -256,6 +256,148 @@ FROM "post_crypto" AS pc
 ORDER BY "pc"."created_at" DESC
 LIMIT $2 OFFSET $3;
 
+-- name: GetOwnAllPostsByUsername :many
+SELECT "pc"."id",
+    "pc"."currency",
+    "pc"."start_price",
+    "pc"."duration",
+    "pc"."target1",
+    "pc"."target2",
+    "pc"."target3",
+    "pc"."stop",
+    "pc"."direction",
+    "pc"."score",
+    "pc"."finished",
+    "pc"."status",
+    "pc"."created_at",
+    "pc"."updated_at",
+    "m"."id" as "moniest_id",
+    "m"."bio",
+    "m"."description",
+    "m"."score" as "moniest_score",
+    "u"."id" as "user_id",
+    "u"."name",
+    "u"."surname",
+    "u"."username",
+    "u"."email_verified",
+    "u"."location",
+    "pcd"."description" as "post_description",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "post_crypto" AS pc
+    INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
+    AND "u"."username" = $1
+    LEFT JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
+ORDER BY "pc"."created_at" DESC
+LIMIT $2 OFFSET $3;
+
+-- name: GetOwnActivePostsByUsername :many
+SELECT "pc"."id",
+    "pc"."currency",
+    "pc"."start_price",
+    "pc"."duration",
+    "pc"."target1",
+    "pc"."target2",
+    "pc"."target3",
+    "pc"."stop",
+    "pc"."direction",
+    "pc"."score",
+    "pc"."finished",
+    "pc"."status",
+    "pc"."created_at",
+    "pc"."updated_at",
+    "m"."id" as "moniest_id",
+    "m"."bio",
+    "m"."description",
+    "m"."score" as "moniest_score",
+    "u"."id" as "user_id",
+    "u"."name",
+    "u"."surname",
+    "u"."username",
+    "u"."email_verified",
+    "u"."location",
+    "pcd"."description" as "post_description",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "post_crypto" AS pc
+    INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
+    AND "u"."username" = $1
+    AND "pc"."duration" > now()
+    AND "pc"."finished" = FALSE
+    LEFT JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
+ORDER BY "pc"."created_at" DESC
+LIMIT $2 OFFSET $3;
+
 -- -- name: DeletePost :one
 -- UPDATE "post_crypto"
 -- SET "deleted" = true,

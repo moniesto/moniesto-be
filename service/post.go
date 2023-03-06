@@ -131,7 +131,7 @@ func (service *Service) postDescriptionImageReplacer(ctx *gin.Context, descripti
 	return string(descriptionByte), nil
 }
 
-func (service *Service) GetMoniestPosts(ctx *gin.Context, user_id, moniest_username string, userIsSubscribed, active bool, limit, offset int) ([]model.GetContentPostResponse, error) {
+func (service *Service) GetMoniestPosts(ctx *gin.Context, moniest_username string, userIsSubscribed, active bool, limit, offset int) ([]model.GetContentPostResponse, error) {
 
 	// OPTION 0: user is not subscribed, but requesting for `active` posts, causes error
 	if !userIsSubscribed && active {
@@ -189,4 +189,40 @@ func (service *Service) GetMoniestPosts(ctx *gin.Context, user_id, moniest_usern
 	posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
 
 	return model.NewGetContentPostResponse(posts), nil
+}
+
+func (service *Service) GetOwnPosts(ctx *gin.Context, moniest_username string, active bool, limit, offset int) ([]model.GetOwnPostResponse, error) {
+
+	if active {
+		params := db.GetOwnActivePostsByUsernameParams{
+			Username: moniest_username,
+			Limit:    int32(limit),
+			Offset:   int32(offset),
+		}
+
+		postsFromDB, err := service.Store.GetOwnActivePostsByUsername(ctx, params)
+		if err != nil {
+			return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniestPosts_ServerErrorGetPosts)
+		}
+
+		posts := *(*model.OwnPostDBResponse)(unsafe.Pointer(&postsFromDB))
+
+		return model.NewGetOwnPostResponse(posts), nil
+	} else {
+
+		params := db.GetOwnAllPostsByUsernameParams{
+			Username: moniest_username,
+			Limit:    int32(limit),
+			Offset:   int32(offset),
+		}
+
+		postsFromDB, err := service.Store.GetOwnAllPostsByUsername(ctx, params)
+		if err != nil {
+			return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniestPosts_ServerErrorGetPosts)
+		}
+
+		posts := *(*model.OwnPostDBResponse)(unsafe.Pointer(&postsFromDB))
+
+		return model.NewGetOwnPostResponse(posts), nil
+	}
 }

@@ -602,3 +602,329 @@ func (q *Queries) GetMoniestDeactivePostsByUsername(ctx context.Context, arg Get
 	}
 	return items, nil
 }
+
+const getOwnActivePostsByUsername = `-- name: GetOwnActivePostsByUsername :many
+SELECT "pc"."id",
+    "pc"."currency",
+    "pc"."start_price",
+    "pc"."duration",
+    "pc"."target1",
+    "pc"."target2",
+    "pc"."target3",
+    "pc"."stop",
+    "pc"."direction",
+    "pc"."score",
+    "pc"."finished",
+    "pc"."status",
+    "pc"."created_at",
+    "pc"."updated_at",
+    "m"."id" as "moniest_id",
+    "m"."bio",
+    "m"."description",
+    "m"."score" as "moniest_score",
+    "u"."id" as "user_id",
+    "u"."name",
+    "u"."surname",
+    "u"."username",
+    "u"."email_verified",
+    "u"."location",
+    "pcd"."description" as "post_description",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "post_crypto" AS pc
+    INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
+    AND "u"."username" = $1
+    AND "pc"."duration" > now()
+    AND "pc"."finished" = FALSE
+    LEFT JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
+ORDER BY "pc"."created_at" DESC
+LIMIT $2 OFFSET $3
+`
+
+type GetOwnActivePostsByUsernameParams struct {
+	Username string `json:"username"`
+	Limit    int32  `json:"limit"`
+	Offset   int32  `json:"offset"`
+}
+
+type GetOwnActivePostsByUsernameRow struct {
+	ID                           string           `json:"id"`
+	Currency                     string           `json:"currency"`
+	StartPrice                   float64          `json:"start_price"`
+	Duration                     time.Time        `json:"duration"`
+	Target1                      float64          `json:"target1"`
+	Target2                      float64          `json:"target2"`
+	Target3                      float64          `json:"target3"`
+	Stop                         float64          `json:"stop"`
+	Direction                    EntryPosition    `json:"direction"`
+	Score                        float64          `json:"score"`
+	Finished                     bool             `json:"finished"`
+	Status                       PostCryptoStatus `json:"status"`
+	CreatedAt                    time.Time        `json:"created_at"`
+	UpdatedAt                    time.Time        `json:"updated_at"`
+	MoniestID                    string           `json:"moniest_id"`
+	Bio                          sql.NullString   `json:"bio"`
+	Description                  sql.NullString   `json:"description"`
+	MoniestScore                 float64          `json:"moniest_score"`
+	UserID                       string           `json:"user_id"`
+	Name                         string           `json:"name"`
+	Surname                      string           `json:"surname"`
+	Username                     string           `json:"username"`
+	EmailVerified                bool             `json:"email_verified"`
+	Location                     sql.NullString   `json:"location"`
+	PostDescription              sql.NullString   `json:"post_description"`
+	ProfilePhotoLink             interface{}      `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}      `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}      `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}      `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) GetOwnActivePostsByUsername(ctx context.Context, arg GetOwnActivePostsByUsernameParams) ([]GetOwnActivePostsByUsernameRow, error) {
+	rows, err := q.db.QueryContext(ctx, getOwnActivePostsByUsername, arg.Username, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetOwnActivePostsByUsernameRow{}
+	for rows.Next() {
+		var i GetOwnActivePostsByUsernameRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Currency,
+			&i.StartPrice,
+			&i.Duration,
+			&i.Target1,
+			&i.Target2,
+			&i.Target3,
+			&i.Stop,
+			&i.Direction,
+			&i.Score,
+			&i.Finished,
+			&i.Status,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.MoniestID,
+			&i.Bio,
+			&i.Description,
+			&i.MoniestScore,
+			&i.UserID,
+			&i.Name,
+			&i.Surname,
+			&i.Username,
+			&i.EmailVerified,
+			&i.Location,
+			&i.PostDescription,
+			&i.ProfilePhotoLink,
+			&i.ProfilePhotoThumbnailLink,
+			&i.BackgroundPhotoLink,
+			&i.BackgroundPhotoThumbnailLink,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOwnAllPostsByUsername = `-- name: GetOwnAllPostsByUsername :many
+SELECT "pc"."id",
+    "pc"."currency",
+    "pc"."start_price",
+    "pc"."duration",
+    "pc"."target1",
+    "pc"."target2",
+    "pc"."target3",
+    "pc"."stop",
+    "pc"."direction",
+    "pc"."score",
+    "pc"."finished",
+    "pc"."status",
+    "pc"."created_at",
+    "pc"."updated_at",
+    "m"."id" as "moniest_id",
+    "m"."bio",
+    "m"."description",
+    "m"."score" as "moniest_score",
+    "u"."id" as "user_id",
+    "u"."name",
+    "u"."surname",
+    "u"."username",
+    "u"."email_verified",
+    "u"."location",
+    "pcd"."description" as "post_description",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "post_crypto" AS pc
+    INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
+    AND "u"."username" = $1
+    LEFT JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
+ORDER BY "pc"."created_at" DESC
+LIMIT $2 OFFSET $3
+`
+
+type GetOwnAllPostsByUsernameParams struct {
+	Username string `json:"username"`
+	Limit    int32  `json:"limit"`
+	Offset   int32  `json:"offset"`
+}
+
+type GetOwnAllPostsByUsernameRow struct {
+	ID                           string           `json:"id"`
+	Currency                     string           `json:"currency"`
+	StartPrice                   float64          `json:"start_price"`
+	Duration                     time.Time        `json:"duration"`
+	Target1                      float64          `json:"target1"`
+	Target2                      float64          `json:"target2"`
+	Target3                      float64          `json:"target3"`
+	Stop                         float64          `json:"stop"`
+	Direction                    EntryPosition    `json:"direction"`
+	Score                        float64          `json:"score"`
+	Finished                     bool             `json:"finished"`
+	Status                       PostCryptoStatus `json:"status"`
+	CreatedAt                    time.Time        `json:"created_at"`
+	UpdatedAt                    time.Time        `json:"updated_at"`
+	MoniestID                    string           `json:"moniest_id"`
+	Bio                          sql.NullString   `json:"bio"`
+	Description                  sql.NullString   `json:"description"`
+	MoniestScore                 float64          `json:"moniest_score"`
+	UserID                       string           `json:"user_id"`
+	Name                         string           `json:"name"`
+	Surname                      string           `json:"surname"`
+	Username                     string           `json:"username"`
+	EmailVerified                bool             `json:"email_verified"`
+	Location                     sql.NullString   `json:"location"`
+	PostDescription              sql.NullString   `json:"post_description"`
+	ProfilePhotoLink             interface{}      `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}      `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}      `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}      `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) GetOwnAllPostsByUsername(ctx context.Context, arg GetOwnAllPostsByUsernameParams) ([]GetOwnAllPostsByUsernameRow, error) {
+	rows, err := q.db.QueryContext(ctx, getOwnAllPostsByUsername, arg.Username, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetOwnAllPostsByUsernameRow{}
+	for rows.Next() {
+		var i GetOwnAllPostsByUsernameRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Currency,
+			&i.StartPrice,
+			&i.Duration,
+			&i.Target1,
+			&i.Target2,
+			&i.Target3,
+			&i.Stop,
+			&i.Direction,
+			&i.Score,
+			&i.Finished,
+			&i.Status,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.MoniestID,
+			&i.Bio,
+			&i.Description,
+			&i.MoniestScore,
+			&i.UserID,
+			&i.Name,
+			&i.Surname,
+			&i.Username,
+			&i.EmailVerified,
+			&i.Location,
+			&i.PostDescription,
+			&i.ProfilePhotoLink,
+			&i.ProfilePhotoThumbnailLink,
+			&i.BackgroundPhotoLink,
+			&i.BackgroundPhotoThumbnailLink,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

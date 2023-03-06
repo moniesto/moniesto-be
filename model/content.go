@@ -22,6 +22,8 @@ type GetContentPostRequest struct {
 type PostDBResponse []db.GetSubscribedActivePostsRow
 type MoniestDBResponse []db.GetMoniestsRow
 
+type OwnPostDBResponse []db.GetOwnActivePostsByUsernameRow
+
 type GetContentPostResponse struct {
 	ID          string              `json:"id"`
 	Currency    string              `json:"currency"`
@@ -33,6 +35,25 @@ type GetContentPostResponse struct {
 	Stop        float64             `json:"stop"`
 	Description string              `json:"description,omitempty"`
 	Direction   db.EntryPosition    `json:"direction"`
+	Finished    bool                `json:"finished"`
+	Status      db.PostCryptoStatus `json:"status"`
+	CreatedAt   time.Time           `json:"created_at"`
+	UpdatedAt   time.Time           `json:"updated_at"`
+	User        User                `json:"user"`
+}
+
+type GetOwnPostResponse struct {
+	ID          string              `json:"id"`
+	Currency    string              `json:"currency"`
+	StartPrice  float64             `json:"start_price"`
+	Duration    time.Time           `json:"duration"`
+	Target1     float64             `json:"target1"`
+	Target2     float64             `json:"target2"`
+	Target3     float64             `json:"target3"`
+	Stop        float64             `json:"stop"`
+	Description string              `json:"description,omitempty"`
+	Direction   db.EntryPosition    `json:"direction"`
+	Score       float64             `json:"score,omitempty"`
 	Finished    bool                `json:"finished"`
 	Status      db.PostCryptoStatus `json:"status"`
 	CreatedAt   time.Time           `json:"created_at"`
@@ -66,6 +87,49 @@ func NewGetContentPostResponse(posts PostDBResponse) []GetContentPostResponse {
 			Stop:        post.Stop,
 			Description: post.PostDescription.String,
 			Direction:   post.Direction,
+			Finished:    post.Finished,
+			Status:      post.Status,
+			CreatedAt:   post.CreatedAt,
+			UpdatedAt:   post.UpdatedAt,
+			User: User{
+				Id:                           post.UserID,
+				Name:                         post.Name,
+				Surname:                      post.Surname,
+				Username:                     post.Username,
+				EmailVerified:                post.EmailVerified,
+				ProfilePhotoLink:             post.ProfilePhotoLink.(string),
+				ProfilePhotoThumbnailLink:    post.ProfilePhotoThumbnailLink.(string),
+				BackgroundPhotoLink:          post.BackgroundPhotoLink.(string),
+				BackgroundPhotoThumbnailLink: post.BackgroundPhotoThumbnailLink.(string),
+				Moniest: &Moniest{
+					ID:          post.MoniestID,
+					Bio:         post.Bio.String,
+					Description: post.Description.String,
+					Score:       post.MoniestScore,
+				},
+			},
+		})
+	}
+
+	return response
+}
+
+func NewGetOwnPostResponse(posts OwnPostDBResponse) []GetOwnPostResponse {
+	response := make([]GetOwnPostResponse, 0, len(posts))
+
+	for _, post := range posts {
+		response = append(response, GetOwnPostResponse{
+			ID:          post.ID,
+			Currency:    post.Currency,
+			StartPrice:  post.StartPrice,
+			Duration:    post.Duration,
+			Target1:     post.Target1,
+			Target2:     post.Target2,
+			Target3:     post.Target3,
+			Stop:        post.Stop,
+			Description: post.PostDescription.String,
+			Direction:   post.Direction,
+			Score:       post.Score,
 			Finished:    post.Finished,
 			Status:      post.Status,
 			CreatedAt:   post.CreatedAt,

@@ -101,8 +101,9 @@ func (server *Server) createPost(ctx *gin.Context) {
 // @Param active query bool false "default: false, true: only live(active), false: all posts"
 // @Param limit query int false "default: 10 & max: 50"
 // @Param offset query int false "default: 0"
-// @Success 200 {object} []model.GetContentPostResponse
+// @Success 200 {object} []model.GetContentPostResponse "+ score field if fetching own posts"
 // @Failure 403 {object} clientError.ErrorResponse "forbidden access (when not subscribed, but asks for active posts)"
+// @Failure 404 {object} clientError.ErrorResponse "no moniest with this username"
 // @Failure 406 {object} clientError.ErrorResponse "invalid params"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /moniests/:username/posts [get]
@@ -126,23 +127,43 @@ func (server *Server) getMoniestPosts(ctx *gin.Context) {
 	req.Limit = util.SafeLimit(req.Limit)
 	req.Offset = util.SafeOffset(req.Offset)
 
+	// STEP: check "username" is a real moniest
+	moniest, err := server.service.GetMoniestByUsername(ctx, username)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
 	// STEP: get user id from token
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	user_id := authPayload.User.ID
 
-	// STEP: get user subscription status -> subscribed or not
-	userIsSubscribed, err := server.service.CheckUserSubscriptionByMoniestUsername(ctx, user_id, username)
-	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
-		return
-	}
+	// STEP: asks for own posts
+	if moniest.ID == user_id {
 
-	// STEP: get posts
-	posts, err := server.service.GetMoniestPosts(ctx, user_id, username, userIsSubscribed, req.Active, req.Limit, req.Offset)
-	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
-		return
-	}
+		posts, err := server.service.GetOwnPosts(ctx, username, req.Active, req.Limit, req.Offset)
+		if err != nil {
+			ctx.JSON(clientError.ParseError(err))
+			return
+		}
 
-	ctx.JSON(http.StatusOK, posts)
+		ctx.JSON(http.StatusOK, posts)
+
+	} else { // STEP: not own posts
+		// STEP: get user subscription status -> subscribed or not
+		userIsSubscribed, err := server.service.CheckUserSubscriptionByMoniestUsername(ctx, user_id, username)
+		if err != nil {
+			ctx.JSON(clientError.ParseError(err))
+			return
+		}
+
+		// STEP: get posts
+		posts, err := server.service.GetMoniestPosts(ctx, username, userIsSubscribed, req.Active, req.Limit, req.Offset)
+		if err != nil {
+			ctx.JSON(clientError.ParseError(err))
+			return
+		}
+
+		ctx.JSON(http.StatusOK, posts)
+	}
 }
