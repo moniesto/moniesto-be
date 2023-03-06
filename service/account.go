@@ -295,4 +295,3 @@ func (service *Service) ChangeUsername(ctx *gin.Context, user_id, new_username s
 
 	return nil
 }
-
