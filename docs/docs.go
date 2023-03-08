@@ -664,7 +664,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.User"
+                                "$ref": "#/definitions/model.GetContentMoniestResponse"
                             }
                         }
                     },
@@ -1853,6 +1853,50 @@ const docTemplate = `{
                 }
             }
         },
+        "model.GetContentMoniestResponse": {
+            "type": "object",
+            "properties": {
+                "background_photo_link": {
+                    "type": "string"
+                },
+                "background_photo_thumbnail_link": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email_verified": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "moniest": {
+                    "$ref": "#/definitions/model.contentMoniest"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "profile_photo_link": {
+                    "type": "string"
+                },
+                "profile_photo_thumbnail_link": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "model.GetContentPostResponse": {
             "type": "object",
             "properties": {
@@ -2220,6 +2264,29 @@ const docTemplate = `{
             "properties": {
                 "token": {
                     "type": "string"
+                }
+            }
+        },
+        "model.contentMoniest": {
+            "type": "object",
+            "properties": {
+                "bio": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "number"
+                },
+                "subscriber_count": {
+                    "type": "integer"
+                },
+                "subscription_info": {
+                    "$ref": "#/definitions/model.SubscriptionInfo"
                 }
             }
         }

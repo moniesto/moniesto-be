@@ -161,6 +161,35 @@ definitions:
       validation:
         $ref: '#/definitions/model.GetValidationConfigsResponse'
     type: object
+  model.GetContentMoniestResponse:
+    properties:
+      background_photo_link:
+        type: string
+      background_photo_thumbnail_link:
+        type: string
+      created_at:
+        type: string
+      email_verified:
+        type: boolean
+      id:
+        type: string
+      location:
+        type: string
+      moniest:
+        $ref: '#/definitions/model.contentMoniest'
+      name:
+        type: string
+      profile_photo_link:
+        type: string
+      profile_photo_thumbnail_link:
+        type: string
+      surname:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
   model.GetContentPostResponse:
     properties:
       created_at:
@@ -404,6 +433,21 @@ definitions:
         type: string
     required:
     - token
+    type: object
+  model.contentMoniest:
+    properties:
+      bio:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      score:
+        type: number
+      subscriber_count:
+        type: integer
+      subscription_info:
+        $ref: '#/definitions/model.SubscriptionInfo'
     type: object
 info:
   contact: {}
@@ -825,7 +869,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.User'
+              $ref: '#/definitions/model.GetContentMoniestResponse'
             type: array
         "406":
           description: invalid body

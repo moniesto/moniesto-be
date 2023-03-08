@@ -20,7 +20,9 @@ type GetContentPostRequest struct {
 }
 
 type PostDBResponse []db.GetSubscribedActivePostsRow
-type MoniestDBResponse []db.GetMoniestsRow
+type ContentMoniestDBResponse []db.GetMoniestsRow
+
+type MoniestDBResponse []db.SearchMoniestsRow
 
 type OwnPostDBResponse []db.GetOwnActivePostsByUsernameRow
 
@@ -59,6 +61,31 @@ type GetOwnPostResponse struct {
 	CreatedAt   time.Time           `json:"created_at"`
 	UpdatedAt   time.Time           `json:"updated_at"`
 	User        User                `json:"user"`
+}
+
+type GetContentMoniestResponse struct {
+	Id                           string          `json:"id,omitempty"`
+	Name                         string          `json:"name,omitempty"`
+	Surname                      string          `json:"surname,omitempty"`
+	Username                     string          `json:"username,omitempty"`
+	EmailVerified                bool            `json:"email_verified"`
+	Location                     string          `json:"location,omitempty"`
+	ProfilePhotoLink             string          `json:"profile_photo_link,omitempty"`
+	ProfilePhotoThumbnailLink    string          `json:"profile_photo_thumbnail_link,omitempty"`
+	BackgroundPhotoLink          string          `json:"background_photo_link,omitempty"`
+	BackgroundPhotoThumbnailLink string          `json:"background_photo_thumbnail_link,omitempty"`
+	CreatedAt                    *time.Time      `json:"created_at,omitempty"`
+	UpdatedAt                    *time.Time      `json:"updated_at,omitempty"`
+	Moniest                      *contentMoniest `json:"moniest,omitempty"`
+}
+
+type contentMoniest struct {
+	ID               string            `json:"id,omitempty"`
+	Bio              string            `json:"bio,omitempty"`
+	Description      string            `json:"description,omitempty"`
+	SubscriberCount  int64             `json:"subscriber_count"`
+	Score            float64           `json:"score"`
+	SubscriptionInfo *SubscriptionInfo `json:"subscription_info,omitempty"`
 }
 
 type GetContentMoniestRequest struct {
@@ -157,7 +184,7 @@ func NewGetOwnPostResponse(posts OwnPostDBResponse) []GetOwnPostResponse {
 	return response
 }
 
-func NewGetContentMoniestResponse(moniests MoniestDBResponse) []User {
+func NewGetMoniestsResponse(moniests MoniestDBResponse) []User {
 	response := make([]User, 0, len(moniests))
 
 	for _, user := range moniests {
@@ -179,6 +206,41 @@ func NewGetContentMoniestResponse(moniests MoniestDBResponse) []User {
 				Bio:         user.Bio.String,
 				Description: user.Description.String,
 				Score:       user.Score,
+				SubscriptionInfo: &SubscriptionInfo{
+					Fee:       user.Fee,
+					Message:   user.Message.String,
+					UpdatedAt: user.SubscriptionInfoUpdatedAt,
+				},
+			},
+		})
+	}
+
+	return response
+}
+
+func NewGetContentMoniestResponse(moniests ContentMoniestDBResponse) []GetContentMoniestResponse {
+	response := make([]GetContentMoniestResponse, 0, len(moniests))
+
+	for _, user := range moniests {
+		response = append(response, GetContentMoniestResponse{
+			Id:                           user.ID,
+			Name:                         user.Name,
+			Surname:                      user.Surname,
+			Username:                     user.Username,
+			EmailVerified:                user.EmailVerified,
+			Location:                     user.Location.String,
+			ProfilePhotoLink:             user.ProfilePhotoLink.(string),
+			ProfilePhotoThumbnailLink:    user.ProfilePhotoThumbnailLink.(string),
+			BackgroundPhotoLink:          user.BackgroundPhotoLink.(string),
+			BackgroundPhotoThumbnailLink: user.BackgroundPhotoThumbnailLink.(string),
+			CreatedAt:                    &user.CreatedAt,
+			UpdatedAt:                    &user.UpdatedAt,
+			Moniest: &contentMoniest{
+				ID:              user.MoniestID,
+				Bio:             user.Bio.String,
+				Description:     user.Description.String,
+				SubscriberCount: user.UserSubscriptionCount,
+				Score:           user.Score,
 				SubscriptionInfo: &SubscriptionInfo{
 					Fee:       user.Fee,
 					Message:   user.Message.String,

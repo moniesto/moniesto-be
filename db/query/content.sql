@@ -306,6 +306,7 @@ SELECT "u"."id",
     "si"."fee",
     "si"."message",
     "si"."updated_at" as "subscription_info_updated_at",
+    COUNT("us"."id") as "user_subscription_count",
     COALESCE (
         (
             SELECT "image"."link"
@@ -345,7 +346,12 @@ SELECT "u"."id",
 FROM "moniest" as m
     INNER JOIN "user" as u ON "u"."id" = "m"."user_id"
     INNER JOIN "subscription_info" as si ON "si"."moniest_id" = "m"."id"
+    LEFT JOIN "user_subscription" as us on "us"."moniest_id" = "m"."id"
+    AND "us"."active" = TRUE
     AND "u"."deleted" = FALSE
+GROUP BY "u"."id",
+    "m"."id",
+    "si"."id"
 ORDER BY "m"."score" DESC
 LIMIT $1 OFFSET $2;
 

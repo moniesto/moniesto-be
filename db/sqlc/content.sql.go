@@ -351,6 +351,7 @@ SELECT "u"."id",
     "si"."fee",
     "si"."message",
     "si"."updated_at" as "subscription_info_updated_at",
+    COUNT("us"."id") as "user_subscription_count",
     COALESCE (
         (
             SELECT "image"."link"
@@ -390,7 +391,12 @@ SELECT "u"."id",
 FROM "moniest" as m
     INNER JOIN "user" as u ON "u"."id" = "m"."user_id"
     INNER JOIN "subscription_info" as si ON "si"."moniest_id" = "m"."id"
+    LEFT JOIN "user_subscription" as us on "us"."moniest_id" = "m"."id"
+    AND "us"."active" = TRUE
     AND "u"."deleted" = FALSE
+GROUP BY "u"."id",
+    "m"."id",
+    "si"."id"
 ORDER BY "m"."score" DESC
 LIMIT $1 OFFSET $2
 `
@@ -416,6 +422,7 @@ type GetMoniestsRow struct {
 	Fee                          float64        `json:"fee"`
 	Message                      sql.NullString `json:"message"`
 	SubscriptionInfoUpdatedAt    time.Time      `json:"subscription_info_updated_at"`
+	UserSubscriptionCount        int64          `json:"user_subscription_count"`
 	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
 	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
 	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
@@ -447,6 +454,7 @@ func (q *Queries) GetMoniests(ctx context.Context, arg GetMoniestsParams) ([]Get
 			&i.Fee,
 			&i.Message,
 			&i.SubscriptionInfoUpdatedAt,
+			&i.UserSubscriptionCount,
 			&i.ProfilePhotoLink,
 			&i.ProfilePhotoThumbnailLink,
 			&i.BackgroundPhotoLink,

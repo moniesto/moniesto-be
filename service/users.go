@@ -242,5 +242,5 @@ func (service *Service) GetSubscriptions(ctx *gin.Context, user_id string, limit
 	}
 
 	moniests := *(*model.MoniestDBResponse)(unsafe.Pointer(&subscriptions))
-	return model.NewGetContentMoniestResponse(moniests), nil
+	return model.NewGetMoniestsResponse(moniests), nil
 }
