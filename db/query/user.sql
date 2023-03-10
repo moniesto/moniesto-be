@@ -423,3 +423,10 @@ FROM "moniest" as m
     AND "us"."active" = TRUE
 ORDER BY "us"."created_at" DESC
 LIMIT $2 OFFSET $3;
+
+-- name: GetUserStatsByUsername :one
+SELECT COUNT("us"."id") as "user_subscription_count"
+FROM "user"
+    LEFT JOIN "user_subscription" as "us" ON "us"."user_id" = "user"."id"
+    AND "us"."active" = TRUE
+where "user"."username" = $1;

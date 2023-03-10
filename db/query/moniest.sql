@@ -222,6 +222,19 @@ SELECT COUNT(*) != 0 AS userIsMoniest
 FROM "moniest"
 WHERE "moniest"."user_id" = $1;
 
+-- name: GetMoniestStatsByUsername :one
+SELECT COUNT(DISTINCT "us1"."id") as "subscription_count",
+    COUNT(DISTINCT "us2"."id") as "subscriber_count",
+    COUNT(DISTINCT "pc"."id") as "post_count"
+FROM "user"
+    LEFT JOIN "user_subscription" as "us1" ON "us1"."user_id" = "user"."id"
+    AND "us1"."active" = TRUE
+    LEFT JOIN "moniest" as "m" ON "m"."user_id" = "user"."id"
+    LEFT JOIN "user_subscription" as "us2" ON "us2"."moniest_id" = "m"."id"
+    AND "us2"."active" = TRUE
+    LEFT JOIN "post_crypto" as "pc" ON "pc"."moniest_id" = "m"."id"
+where "user"."username" = $1;
+
 -- -- name: GetMoniestByEmail :one
 -- SELECT "user"."id",
 --     "moniest"."id" as "moniest_id",

@@ -44,6 +44,12 @@ type GetMoniestPostsRequest struct {
 	Offset int  `form:"offset" json:"offset"`
 }
 
+type MoniestStatResponse struct {
+	SubscriptionCount int64 `json:"subscription_count"`
+	SubscriberCount   int64 `json:"subscriber_count"`
+	PostCount         int64 `json:"post_count"`
+}
+
 // MAKER
 func NewCreateMoniestResponse(moniest db.GetMoniestByMoniestIdRow) OwnUser {
 	response := OwnUser{

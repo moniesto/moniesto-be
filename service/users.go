@@ -244,3 +244,13 @@ func (service *Service) GetSubscriptions(ctx *gin.Context, user_id string, limit
 	moniests := *(*model.MoniestDBResponse)(unsafe.Pointer(&subscriptions))
 	return model.NewGetMoniestsResponse(moniests), nil
 }
+
+func (service *Service) GetUserStats(ctx *gin.Context, username string) (model.UserStatResponse, error) {
+
+	stats, err := service.Store.GetUserStatsByUsername(ctx, username)
+	if err != nil {
+		return model.UserStatResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.User_GetStats_ServerErrorGetStats)
+	}
+
+	return model.UserStatResponse{SubscriptionCount: stats}, nil
+}

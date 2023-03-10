@@ -8,6 +8,10 @@ import (
 
 type UserDBResponse []db.GetUserByUsernameRow
 
+type UserStatResponse struct {
+	SubscriptionCount int64 `json:"subscription_count"`
+}
+
 type OwnUser struct {
 	Id                           string    `json:"id,omitempty"`
 	Name                         string    `json:"name,omitempty"`

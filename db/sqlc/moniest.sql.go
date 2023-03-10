@@ -428,6 +428,33 @@ func (q *Queries) GetMoniestByUsername(ctx context.Context, username string) (Ge
 	return i, err
 }
 
+const getMoniestStatsByUsername = `-- name: GetMoniestStatsByUsername :one
+SELECT COUNT(DISTINCT "us1"."id") as "subscription_count",
+    COUNT(DISTINCT "us2"."id") as "subscriber_count",
+    COUNT(DISTINCT "pc"."id") as "post_count"
+FROM "user"
+    LEFT JOIN "user_subscription" as "us1" ON "us1"."user_id" = "user"."id"
+    AND "us1"."active" = TRUE
+    LEFT JOIN "moniest" as "m" ON "m"."user_id" = "user"."id"
+    LEFT JOIN "user_subscription" as "us2" ON "us2"."moniest_id" = "m"."id"
+    AND "us2"."active" = TRUE
+    LEFT JOIN "post_crypto" as "pc" ON "pc"."moniest_id" = "m"."id"
+where "user"."username" = $1
+`
+
+type GetMoniestStatsByUsernameRow struct {
+	SubscriptionCount int64 `json:"subscription_count"`
+	SubscriberCount   int64 `json:"subscriber_count"`
+	PostCount         int64 `json:"post_count"`
+}
+
+func (q *Queries) GetMoniestStatsByUsername(ctx context.Context, username string) (GetMoniestStatsByUsernameRow, error) {
+	row := q.db.QueryRowContext(ctx, getMoniestStatsByUsername, username)
+	var i GetMoniestStatsByUsernameRow
+	err := row.Scan(&i.SubscriptionCount, &i.SubscriberCount, &i.PostCount)
+	return i, err
+}
+
 const updateMoniest = `-- name: UpdateMoniest :one
 UPDATE moniest
 SET bio = $2,

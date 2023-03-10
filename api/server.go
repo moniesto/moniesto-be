@@ -83,6 +83,7 @@ func (server *Server) setupRouter() {
 	{
 		usersRouters.PATCH("/profile", server.updateUserProfile)
 		usersRouters.GET("/:username/subscriptions", server.getSubscriptions)
+		usersRouters.GET("/:username/summary-stats", server.getUserStats)
 
 		// PRIMARY TODO: make this endpoint public instead of auth
 		usersRouters.GET("/:username", server.getUserByUsername)

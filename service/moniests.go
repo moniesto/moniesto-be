@@ -202,3 +202,16 @@ func (service *Service) CheckUserIsMoniestByUserID(ctx *gin.Context, user_id str
 
 	return userIsMoniest, nil
 }
+
+func (service *Service) GetMoniestStats(ctx *gin.Context, username string) (model.MoniestStatResponse, error) {
+	stats, err := service.Store.GetMoniestStatsByUsername(ctx, username)
+	if err != nil {
+		return model.MoniestStatResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetStats_ServerErrorGetStats)
+	}
+
+	return model.MoniestStatResponse{
+		SubscriptionCount: stats.SubscriptionCount,
+		SubscriberCount:   stats.SubscriberCount,
+		PostCount:         stats.PostCount,
+	}, nil
+}

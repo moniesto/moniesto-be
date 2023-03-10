@@ -849,6 +849,21 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUs
 	return i, err
 }
 
+const getUserStatsByUsername = `-- name: GetUserStatsByUsername :one
+SELECT COUNT("us"."id") as "user_subscription_count"
+FROM "user"
+    LEFT JOIN "user_subscription" as "us" ON "us"."user_id" = "user"."id"
+    AND "us"."active" = TRUE
+where "user"."username" = $1
+`
+
+func (q *Queries) GetUserStatsByUsername(ctx context.Context, username string) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getUserStatsByUsername, username)
+	var user_subscription_count int64
+	err := row.Scan(&user_subscription_count)
+	return user_subscription_count, err
+}
+
 const setPassword = `-- name: SetPassword :exec
 UPDATE "user"
 SET password = $2,

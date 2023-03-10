@@ -172,3 +172,35 @@ func (server *Server) getSubscriptions(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, users)
 }
+
+func (server *Server) getUserStats(ctx *gin.Context) {
+	// STEP: get username from param
+	username := ctx.Param("username")
+
+	// STEP: check user is moniest
+	userIsMoniest, err := server.service.CheckUserIsMoniestByUsername(ctx, username)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: get moniest stats
+	if userIsMoniest {
+		stats, err := server.service.GetMoniestStats(ctx, username)
+		if err != nil {
+			ctx.JSON(clientError.ParseError(err))
+			return
+		}
+
+		ctx.JSON(http.StatusOK, stats)
+
+	} else { // STEP: get user stats
+		stats, err := server.service.GetUserStats(ctx, username)
+		if err != nil {
+			ctx.JSON(clientError.ParseError(err))
+			return
+		}
+
+		ctx.JSON(http.StatusOK, stats)
+	}
+}

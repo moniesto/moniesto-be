@@ -164,6 +164,9 @@ const (
 
 	User_GetSubscriptions_InvalidParam                = "User_GetSubscriptions_InvalidParam"
 	User_GetSubscriptions_ServerErrorGetSubscriptions = "User_GetSubscriptions_ServerErrorGetSubscriptions"
+
+	User_GetStats_ServerErrorGetStats    = "User_GetStats_ServerErrorGetStats"
+	Moniest_GetStats_ServerErrorGetStats = "Moniest_GetStats_ServerErrorGetStats"
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
@@ -328,4 +331,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 
 	User_GetSubscriptions_InvalidParam:                "Get user subscriptions request param is invalid",
 	User_GetSubscriptions_ServerErrorGetSubscriptions: "Server error on get user subscriptions",
+
+	User_GetStats_ServerErrorGetStats:    "Server error on getting user stats",
+	Moniest_GetStats_ServerErrorGetStats: "Server error on getting moniest stats",
 }
