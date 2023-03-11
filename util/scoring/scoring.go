@@ -1,15 +1,40 @@
-package core
+package scoring
 
 import (
 	"math"
 	"time"
 
+	"github.com/go-resty/resty/v2"
+	"github.com/moniesto/moniesto-be/config"
 	"github.com/moniesto/moniesto-be/model"
 )
 
+var approximateURI = "/calculateApproximateScore"
+
 // CalculateApproxScore calculates the approximately score of the post
-func CalculateApproxScore(duration time.Duration, startPrice float64, endPrice float64) float64 {
-	return CalculatePredictionScore(startPrice, endPrice, duration)
+func CalculateApproxScore(endDate time.Time, startPrice float64, endPrice float64, direction string, config config.Config) float64 {
+	client := resty.New()
+
+	var requestBody model.CalculateApproximateScoreRequest = model.CalculateApproximateScoreRequest{
+		StartDate:  time.Now().Unix(),
+		EndDate:    endDate.Unix(),
+		StartPrice: startPrice,
+		EndPrice:   endPrice,
+		Direction:  direction,
+	}
+
+	var response model.CalculateApproximateScoreResponse
+
+	api_link := config.ScoringServiceURL + approximateURI
+
+	resp, err := client.R().SetResult(&response).SetBody(requestBody).Post(api_link)
+
+	if err != nil || resp.StatusCode() >= 400 {
+		// TODO: add server error
+		return -1
+	}
+
+	return response.Score
 }
 
 // CalculateScore calculates the exact score of the post (runs after post time run out)

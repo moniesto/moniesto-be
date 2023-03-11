@@ -12,6 +12,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/scoring"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -41,8 +42,7 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 	}
 
 	// STEP: get score
-	// TODO: update calculate score
-	score := core.CalculateApproxScore(req.Duration.Sub(time.Now()), currency_price, req.Target3)
+	score := scoring.CalculateApproxScore(req.Duration, currency_price, req.Target3, req.Direction, service.config)
 
 	// STEP: create post
 	createPost := db.CreatePostParams{
