@@ -1554,6 +1554,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/:username/summary-stats": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get User \u0026 Moniest Stats",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get Stats",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "when user is not moniest, it will NOT return ` + "`" + `subscriber_count` + "`" + ` and ` + "`" + `post_count` + "`" + `",
+                        "schema": {
+                            "$ref": "#/definitions/model.MoniestStatResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users/profile": {
             "patch": {
                 "security": [
@@ -2018,6 +2061,20 @@ const docTemplate = `{
                 },
                 "subscription_info": {
                     "$ref": "#/definitions/model.SubscriptionInfo"
+                }
+            }
+        },
+        "model.MoniestStatResponse": {
+            "type": "object",
+            "properties": {
+                "post_count": {
+                    "type": "integer"
+                },
+                "subscriber_count": {
+                    "type": "integer"
+                },
+                "subscription_count": {
+                    "type": "integer"
                 }
             }
         },

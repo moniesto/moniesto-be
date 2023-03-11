@@ -272,6 +272,15 @@ definitions:
       subscription_info:
         $ref: '#/definitions/model.SubscriptionInfo'
     type: object
+  model.MoniestStatResponse:
+    properties:
+      post_count:
+        type: integer
+      subscriber_count:
+        type: integer
+      subscription_count:
+        type: integer
+    type: object
   model.OwnUser:
     properties:
       background_photo_link:
@@ -1441,6 +1450,34 @@ paths:
       security:
       - bearerAuth: []
       summary: Get Subscriptions
+      tags:
+      - User
+  /users/:username/summary-stats:
+    get:
+      consumes:
+      - application/json
+      description: Get User & Moniest Stats
+      parameters:
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: when user is not moniest, it will NOT return `subscriber_count`
+            and `post_count`
+          schema:
+            $ref: '#/definitions/model.MoniestStatResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get Stats
       tags:
       - User
   /users/profile:

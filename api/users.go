@@ -173,6 +173,16 @@ func (server *Server) getSubscriptions(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, users)
 }
 
+// @Summary Get Stats
+// @Description Get User & Moniest Stats
+// @Security bearerAuth
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param username path string true "username"
+// @Success 200 {object} model.MoniestStatResponse "when user is not moniest, it will NOT return `subscriber_count` and `post_count`"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /users/:username/summary-stats [get]
 func (server *Server) getUserStats(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")

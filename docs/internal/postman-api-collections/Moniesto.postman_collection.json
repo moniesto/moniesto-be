@@ -405,7 +405,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhiZDU0ODIxLWU1YzktNDc5My04M2FhLTc3YWU0MDQ2NDVkZCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YyIiwiaWQiOiI0YjI5MjFlOS0xY2I1LTQ2YzYtYTM1NS01N2UzZGM2YzhiZDEifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0yNlQyMjo1NjozMS45NTkyNTAyKzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjdUMjI6NTY6MzEuOTU5MjUwMiswNDowMCJ9.kFWiqivqw9LLi9oJJ6Tw3lA1hHWpEpdO_wZdGxh2frU",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2Nzg1N2YyLWRjNGQtNDEwNC1iNzQ5LTljNDkzYTAxNDc2ZSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjE4YzA3ZjJkLTk0YzUtNGU2OS04NTYyLTY3MDFlNmMwMWE5YyJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAzLTExVDAyOjE1OjE1Ljg2OTEzNjQrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMy0xMlQwMjoxNToxNS44NjkxMzY0KzA0OjAwIn0.k5v1Rv1hTpJOmmUwpkxCu6txZsrVBobPIpP1eFwzw9g",
 								"type": "text"
 							}
 						],
@@ -419,7 +419,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/moniests/parvvazovm1/subscribe",
+							"raw": "http://localhost:8080/moniests/eyvzov/subscribe",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -427,7 +427,7 @@
 							"port": "8080",
 							"path": [
 								"moniests",
-								"parvvazovm1",
+								"eyvzov",
 								"subscribe"
 							]
 						}
@@ -441,7 +441,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFkYzJlMjg4LWQzZjktNGE2Yy04OGU2LTY4ZmI5YzU2MzNmZiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YzIiwiaWQiOiI3YzhhNTc3Yy1mMjQ4LTQ0ZTEtYWJkNC0wOGI0NTE5MmExNGIifSwiaXNzdWVkX2F0IjoiMjAyMy0wMi0yNlQyMjozNjo1NS43NDYwODg4KzA0OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDItMjdUMjI6MzY6NTUuNzQ2MDg4OCswNDowMCJ9.SsNibJ89FZun3TLqEQQEjbyXP1FvNl7n3JNFh8Tign8",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2Nzg1N2YyLWRjNGQtNDEwNC1iNzQ5LTljNDkzYTAxNDc2ZSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjE4YzA3ZjJkLTk0YzUtNGU2OS04NTYyLTY3MDFlNmMwMWE5YyJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAzLTExVDAyOjE1OjE1Ljg2OTEzNjQrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMy0xMlQwMjoxNToxNS44NjkxMzY0KzA0OjAwIn0.k5v1Rv1hTpJOmmUwpkxCu6txZsrVBobPIpP1eFwzw9g",
 								"type": "text"
 							}
 						],
@@ -455,7 +455,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/moniests/parvvazovm1/unsubscribe",
+							"raw": "http://localhost:8080/moniests/eyvzov/unsubscribe",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -463,7 +463,7 @@
 							"port": "8080",
 							"path": [
 								"moniests",
-								"parvvazovm1",
+								"eyvzov",
 								"unsubscribe"
 							]
 						}
@@ -602,7 +602,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Subscriptions",
+					"name": "[local] Get Subscriptions",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -633,6 +633,33 @@
 									"key": "offset",
 									"value": "0"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[local] Get Summary Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI2Nzg1N2YyLWRjNGQtNDEwNC1iNzQ5LTljNDkzYTAxNDc2ZSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjE4YzA3ZjJkLTk0YzUtNGU2OS04NTYyLTY3MDFlNmMwMWE5YyJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAzLTExVDAyOjE1OjE1Ljg2OTEzNjQrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMy0xMlQwMjoxNToxNS44NjkxMzY0KzA0OjAwIn0.k5v1Rv1hTpJOmmUwpkxCu6txZsrVBobPIpP1eFwzw9g",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users/Parvin/summary-stats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"Parvin",
+								"summary-stats"
 							]
 						}
 					},
