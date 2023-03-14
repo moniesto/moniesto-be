@@ -46,17 +46,19 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 
 	// STEP: create post
 	createPost := db.CreatePostParams{
-		ID:         core.CreateID(),
-		MoniestID:  moniestID,
-		Currency:   currency.Currency,
-		StartPrice: currency_price,
-		Duration:   req.Duration,
-		Target1:    req.Target1,
-		Target2:    req.Target2,
-		Target3:    req.Target3,
-		Stop:       req.Stop,
-		Direction:  db.EntryPosition(req.Direction),
-		Score:      score,
+		ID:               core.CreateID(),
+		MoniestID:        moniestID,
+		Currency:         currency.Currency,
+		StartPrice:       currency_price,
+		Duration:         req.Duration,
+		Target1:          req.Target1,
+		Target2:          req.Target2,
+		Target3:          req.Target3,
+		Stop:             req.Stop,
+		Direction:        db.EntryPosition(req.Direction),
+		Score:            score,
+		LastTargetHit:    currency_price,
+		LastJobTimestamp: int64(time.Now().Unix()),
 	}
 
 	post, err := service.Store.CreatePost(ctx, createPost)

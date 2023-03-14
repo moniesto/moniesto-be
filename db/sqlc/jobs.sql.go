@@ -23,6 +23,8 @@ SELECT "pc"."id",
     "pc"."score",
     "pc"."finished",
     "pc"."status",
+    "pc"."last_target_hit",
+    "pc"."last_job_timestamp",
     "pc"."created_at",
     "pc"."updated_at"
 FROM "post_crypto" AS pc
@@ -32,20 +34,22 @@ ORDER BY "pc"."created_at" ASC
 `
 
 type GetAllActivePostsRow struct {
-	ID         string           `json:"id"`
-	Currency   string           `json:"currency"`
-	StartPrice float64          `json:"start_price"`
-	Duration   time.Time        `json:"duration"`
-	Target1    float64          `json:"target1"`
-	Target2    float64          `json:"target2"`
-	Target3    float64          `json:"target3"`
-	Stop       float64          `json:"stop"`
-	Direction  EntryPosition    `json:"direction"`
-	Score      float64          `json:"score"`
-	Finished   bool             `json:"finished"`
-	Status     PostCryptoStatus `json:"status"`
-	CreatedAt  time.Time        `json:"created_at"`
-	UpdatedAt  time.Time        `json:"updated_at"`
+	ID               string           `json:"id"`
+	Currency         string           `json:"currency"`
+	StartPrice       float64          `json:"start_price"`
+	Duration         time.Time        `json:"duration"`
+	Target1          float64          `json:"target1"`
+	Target2          float64          `json:"target2"`
+	Target3          float64          `json:"target3"`
+	Stop             float64          `json:"stop"`
+	Direction        EntryPosition    `json:"direction"`
+	Score            float64          `json:"score"`
+	Finished         bool             `json:"finished"`
+	Status           PostCryptoStatus `json:"status"`
+	LastTargetHit    float64          `json:"last_target_hit"`
+	LastJobTimestamp interface{}      `json:"last_job_timestamp"`
+	CreatedAt        time.Time        `json:"created_at"`
+	UpdatedAt        time.Time        `json:"updated_at"`
 }
 
 func (q *Queries) GetAllActivePosts(ctx context.Context) ([]GetAllActivePostsRow, error) {
@@ -70,6 +74,8 @@ func (q *Queries) GetAllActivePosts(ctx context.Context) ([]GetAllActivePostsRow
 			&i.Score,
 			&i.Finished,
 			&i.Status,
+			&i.LastTargetHit,
+			&i.LastJobTimestamp,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 		); err != nil {

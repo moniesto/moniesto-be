@@ -1,6 +1,6 @@
 # Run Types
 
-<details><summary>RUN [you need local development]</summary>
+<details><summary>RUN locally</summary>
 
 </br>
 
@@ -18,27 +18,15 @@ make postgres
 make createdb
 ```
 
-## 3 - [only once/or when needed] Run Migrations
+## 4 - Run the project
+
+regular run:
 
 ```bash
-make migrateup
+make run
 ```
 
-## 4 - [when needed] Generate Go code from Queries
-
-- win:
-
-```bash
-docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc generate
-```
-
-- bash
-
-```bash
-docker run --rm -v "$(pwd):/src" -w /src kjconroy/sqlc generate
-```
-
-## 5 - Run the project
+OR
 
 run in live reload mode: (need to install nodemon: `npm install -g nodemon`)
 
@@ -46,19 +34,11 @@ run in live reload mode: (need to install nodemon: `npm install -g nodemon`)
 make run-live
 ```
 
-OR
-
-run (without live reload):
-
-```bash
-make run
-```
-
 </details>
 
 </br>
 
-<details><summary>RUN [all on docker, just using endpoints]</summary>
+<details><summary>RUN local [on docker]</summary>
 </br>
 
 Make sure Docker is installed on your machine and `Docker Daemon` is up. (simply run docker).
@@ -77,6 +57,26 @@ docker rmi moniesto-be-api || true
 chmod +x wait-for.sh
 chmod +x start.sh
 docker compose up
+```
+
+</details>
+
+</br>
+
+<details><summary>RUN query Generator</summary>
+
+## Generate Go code from Queries
+
+- win:
+
+```bash
+docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc generate
+```
+
+- bash
+
+```bash
+docker run --rm -v "$(pwd):/src" -w /src kjconroy/sqlc generate
 ```
 
 </details>

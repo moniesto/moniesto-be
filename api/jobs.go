@@ -8,15 +8,17 @@ import (
 
 func (server *Server) UpdatePostStatus() {
 
-	fmt.Println("CRON JOB RUN")
-
 	activePosts, err := server.service.GetAllActivePosts()
 	if err != nil {
+		// TODO: better system error
 		systemError.Log("CRON JOB - Update Post Status: db error while getting active posts")
+		return
 	}
 
 	for _, post := range activePosts {
 		err := server.service.UpdatePostStatus(post)
-		_ = err
+		if err != nil {
+			systemError.Log(fmt.Sprintf("CRON JOB - Update Post Status: %s", err))
+		}
 	}
 }

@@ -24,6 +24,8 @@ INSERT INTO "post_crypto" (
         stop,
         direction,
         score,
+        last_target_hit,
+        last_job_timestamp,
         created_at,
         updated_at
     )
@@ -39,6 +41,8 @@ VALUES (
         $9,
         $10,
         $11,
+        $12,
+        $13,
         now(),
         now()
     )
@@ -58,17 +62,19 @@ RETURNING id,
 `
 
 type CreatePostParams struct {
-	ID         string        `json:"id"`
-	MoniestID  string        `json:"moniest_id"`
-	Currency   string        `json:"currency"`
-	StartPrice float64       `json:"start_price"`
-	Duration   time.Time     `json:"duration"`
-	Target1    float64       `json:"target1"`
-	Target2    float64       `json:"target2"`
-	Target3    float64       `json:"target3"`
-	Stop       float64       `json:"stop"`
-	Direction  EntryPosition `json:"direction"`
-	Score      float64       `json:"score"`
+	ID               string        `json:"id"`
+	MoniestID        string        `json:"moniest_id"`
+	Currency         string        `json:"currency"`
+	StartPrice       float64       `json:"start_price"`
+	Duration         time.Time     `json:"duration"`
+	Target1          float64       `json:"target1"`
+	Target2          float64       `json:"target2"`
+	Target3          float64       `json:"target3"`
+	Stop             float64       `json:"stop"`
+	Direction        EntryPosition `json:"direction"`
+	Score            float64       `json:"score"`
+	LastTargetHit    float64       `json:"last_target_hit"`
+	LastJobTimestamp interface{}   `json:"last_job_timestamp"`
 }
 
 type CreatePostRow struct {
@@ -100,6 +106,8 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (CreateP
 		arg.Stop,
 		arg.Direction,
 		arg.Score,
+		arg.LastTargetHit,
+		arg.LastJobTimestamp,
 	)
 	var i CreatePostRow
 	err := row.Scan(

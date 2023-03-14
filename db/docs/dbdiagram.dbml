@@ -112,6 +112,8 @@ Table post_crypto as PC {
   score float [not null, default: 0]
   finished boolean [not null, default: false]
   status post_crypto_status [not null, default: "pending"]
+  last_target_hit float [not null]
+  last_job_timestamp long [not null]
   
   deleted boolean [not null, default: false]
   

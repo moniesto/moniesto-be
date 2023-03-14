@@ -11,6 +11,8 @@ INSERT INTO "post_crypto" (
         stop,
         direction,
         score,
+        last_target_hit,
+        last_job_timestamp,
         created_at,
         updated_at
     )
@@ -26,6 +28,8 @@ VALUES (
         $9,
         $10,
         $11,
+        $12,
+        $13,
         now(),
         now()
     )
