@@ -29,3 +29,17 @@ func (service *Service) GetCurrenciesWithName(name string) ([]model.Currency, er
 
 	return filteredCurrencies, nil
 }
+
+func (service *Service) GetCurrency(name string) (model.Currency, error) {
+
+	// STEP: get single currency
+	currency, err := crypto.GetCurrency(name)
+	if err != nil {
+		return model.Currency{}, clientError.CreateError(http.StatusInternalServerError, clientError.Crypto_GetCurrencyFromAPI_ServerError)
+	}
+
+	return model.Currency{
+		Currency: currency.Symbol,
+		Price:    currency.Price,
+	}, nil
+}

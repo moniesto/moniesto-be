@@ -55,19 +55,14 @@ func (server *Server) createPost(ctx *gin.Context) {
 	}
 
 	// STEP: get currency
-	currencies, err := server.service.GetCurrenciesWithName(req.Currency)
+	currency, err := server.service.GetCurrency(req.Currency)
 	if err != nil {
 		ctx.JSON(clientError.ParseError(err))
 		return
 	}
 
-	if len(currencies) != 1 { // not found OR found more than 1
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Post_CreatePost_InvalidCurrency))
-		return
-	}
-
 	// STEP: create post
-	post, err := server.service.CreatePost(req, currencies[0], moniest.MoniestID, ctx)
+	post, err := server.service.CreatePost(req, currency, moniest.MoniestID, ctx)
 	if err != nil {
 		ctx.JSON(clientError.ParseError(err))
 		return
