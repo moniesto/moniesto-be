@@ -1,5 +1,6 @@
 -- name: GetAllActivePosts :many
 SELECT "pc"."id",
+    "pc"."moniest_id",
     "pc"."currency",
     "pc"."start_price",
     "pc"."duration",
@@ -19,3 +20,21 @@ FROM "post_crypto" AS pc
 WHERE "pc"."duration" > now()
     AND "pc"."finished" = FALSE
 ORDER BY "pc"."created_at" ASC;
+
+-- name: UpdateUnfinishedPostStatus :exec
+UPDATE "post_crypto"
+SET "last_target_hit" = $1,
+    "last_job_timestamp" = $2
+WHERE "id" = $3;
+
+-- name: UpdateFinishedPostStatus :exec
+UPDATE "post_crypto"
+SET "status" = $1,
+    "score" = $2,
+    "finished" = TRUE
+WHERE "id" = $3;
+
+-- name: UpdateMoniestScore :exec
+UPDATE "moniest"
+SET "score" = GREATEST("score" + $1, 0)
+WHERE "id" = $2;

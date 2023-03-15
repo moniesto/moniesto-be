@@ -21,6 +21,7 @@ func (service *Service) GetAllActivePosts() ([]db.GetAllActivePostsRow, error) {
 }
 
 func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) error {
+	ctx := context.Background()
 
 	req := model.CalculateScoreRequest{
 		Parity:               activePost.Currency,
@@ -43,17 +44,46 @@ func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) err
 
 	// STEP: post is finished case
 	if response.Finished {
-		/*
-			UPDATE
-				success case
-				score
-		*/
+		// STEP: update post status
+		status := ""
+
+		if response.Success {
+			status = string(db.PostCryptoStatusSuccess)
+		} else {
+			status = string(db.PostCryptoStatusFail)
+		}
+
+		params := db.UpdateFinishedPostStatusParams{
+			ID:     activePost.ID,
+			Status: db.PostCryptoStatus(status),
+			Score:  response.Score,
+		}
+		err := service.Store.UpdateFinishedPostStatus(ctx, params)
+		if err != nil {
+			return err
+		}
+
+		// STEP: update moniest score
+		moniestParams := db.UpdateMoniestScoreParams{
+			ID:    activePost.MoniestID,
+			Score: response.Score,
+		}
+
+		err = service.Store.UpdateMoniestScore(ctx, moniestParams)
+		if err != nil {
+			return err
+		}
+
 	} else { // STEP: post is not finished
-		/*
-			UPDATE
-				lastTargetHit
-				lastCronJobTimeStamp
-		*/
+		params := db.UpdateUnfinishedPostStatusParams{
+			ID:               activePost.ID,
+			LastTargetHit:    response.LastTargetHit,
+			LastJobTimestamp: response.LastCronJobTimeStamp,
+		}
+		err := service.Store.UpdateUnfinishedPostStatus(ctx, params)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

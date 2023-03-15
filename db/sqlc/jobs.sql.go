@@ -12,6 +12,7 @@ import (
 
 const getAllActivePosts = `-- name: GetAllActivePosts :many
 SELECT "pc"."id",
+    "pc"."moniest_id",
     "pc"."currency",
     "pc"."start_price",
     "pc"."duration",
@@ -35,6 +36,7 @@ ORDER BY "pc"."created_at" ASC
 
 type GetAllActivePostsRow struct {
 	ID               string           `json:"id"`
+	MoniestID        string           `json:"moniest_id"`
 	Currency         string           `json:"currency"`
 	StartPrice       float64          `json:"start_price"`
 	Duration         time.Time        `json:"duration"`
@@ -63,6 +65,7 @@ func (q *Queries) GetAllActivePosts(ctx context.Context) ([]GetAllActivePostsRow
 		var i GetAllActivePostsRow
 		if err := rows.Scan(
 			&i.ID,
+			&i.MoniestID,
 			&i.Currency,
 			&i.StartPrice,
 			&i.Duration,
@@ -90,4 +93,57 @@ func (q *Queries) GetAllActivePosts(ctx context.Context) ([]GetAllActivePostsRow
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateFinishedPostStatus = `-- name: UpdateFinishedPostStatus :exec
+UPDATE "post_crypto"
+SET "status" = $1,
+    "score" = $2,
+    "finished" = TRUE
+WHERE "id" = $3
+`
+
+type UpdateFinishedPostStatusParams struct {
+	Status PostCryptoStatus `json:"status"`
+	Score  float64          `json:"score"`
+	ID     string           `json:"id"`
+}
+
+func (q *Queries) UpdateFinishedPostStatus(ctx context.Context, arg UpdateFinishedPostStatusParams) error {
+	_, err := q.db.ExecContext(ctx, updateFinishedPostStatus, arg.Status, arg.Score, arg.ID)
+	return err
+}
+
+const updateMoniestScore = `-- name: UpdateMoniestScore :exec
+UPDATE "moniest"
+SET "score" = GREATEST("score" + $1, 0)
+WHERE "id" = $2
+`
+
+type UpdateMoniestScoreParams struct {
+	Score float64 `json:"score"`
+	ID    string  `json:"id"`
+}
+
+func (q *Queries) UpdateMoniestScore(ctx context.Context, arg UpdateMoniestScoreParams) error {
+	_, err := q.db.ExecContext(ctx, updateMoniestScore, arg.Score, arg.ID)
+	return err
+}
+
+const updateUnfinishedPostStatus = `-- name: UpdateUnfinishedPostStatus :exec
+UPDATE "post_crypto"
+SET "last_target_hit" = $1,
+    "last_job_timestamp" = $2
+WHERE "id" = $3
+`
+
+type UpdateUnfinishedPostStatusParams struct {
+	LastTargetHit    float64     `json:"last_target_hit"`
+	LastJobTimestamp interface{} `json:"last_job_timestamp"`
+	ID               string      `json:"id"`
+}
+
+func (q *Queries) UpdateUnfinishedPostStatus(ctx context.Context, arg UpdateUnfinishedPostStatusParams) error {
+	_, err := q.db.ExecContext(ctx, updateUnfinishedPostStatus, arg.LastTargetHit, arg.LastJobTimestamp, arg.ID)
+	return err
 }
