@@ -49,7 +49,7 @@ type GetAllActivePostsRow struct {
 	Finished         bool             `json:"finished"`
 	Status           PostCryptoStatus `json:"status"`
 	LastTargetHit    float64          `json:"last_target_hit"`
-	LastJobTimestamp interface{}      `json:"last_job_timestamp"`
+	LastJobTimestamp int64            `json:"last_job_timestamp"`
 	CreatedAt        time.Time        `json:"created_at"`
 	UpdatedAt        time.Time        `json:"updated_at"`
 }
@@ -138,9 +138,9 @@ WHERE "id" = $3
 `
 
 type UpdateUnfinishedPostStatusParams struct {
-	LastTargetHit    float64     `json:"last_target_hit"`
-	LastJobTimestamp interface{} `json:"last_job_timestamp"`
-	ID               string      `json:"id"`
+	LastTargetHit    float64 `json:"last_target_hit"`
+	LastJobTimestamp int64   `json:"last_job_timestamp"`
+	ID               string  `json:"id"`
 }
 
 func (q *Queries) UpdateUnfinishedPostStatus(ctx context.Context, arg UpdateUnfinishedPostStatusParams) error {

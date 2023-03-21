@@ -74,7 +74,7 @@ type CreatePostParams struct {
 	Direction        EntryPosition `json:"direction"`
 	Score            float64       `json:"score"`
 	LastTargetHit    float64       `json:"last_target_hit"`
-	LastJobTimestamp interface{}   `json:"last_job_timestamp"`
+	LastJobTimestamp int64         `json:"last_job_timestamp"`
 }
 
 type CreatePostRow struct {

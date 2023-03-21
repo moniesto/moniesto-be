@@ -1,5 +1,7 @@
 package util
 
+import "time"
+
 const (
 	MAX_LIMIT     = 50
 	DEFAULT_LIMIT = 10
@@ -57,4 +59,8 @@ func SafeSearchText(searchText string) string {
 	}
 
 	return searchText
+}
+
+func DateToTimestamp(date time.Time) int64 {
+	return date.UnixNano() / int64(time.Millisecond)
 }

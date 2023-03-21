@@ -5,6 +5,7 @@ import (
 
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
+	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/scoring"
 )
 
@@ -26,8 +27,8 @@ func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) err
 	req := model.CalculateScoreRequest{
 		Parity:               activePost.Currency,
 		StartPrice:           activePost.StartPrice,
-		StartDate:            activePost.CreatedAt.Unix(),
-		EndDate:              activePost.Duration.Unix(),
+		StartDate:            util.DateToTimestamp(activePost.CreatedAt),
+		EndDate:              util.DateToTimestamp(activePost.Duration),
 		Target1:              activePost.Target1,
 		Target2:              activePost.Target2,
 		Target3:              activePost.Target3,

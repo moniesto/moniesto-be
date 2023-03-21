@@ -7,6 +7,7 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/moniesto/moniesto-be/config"
 	"github.com/moniesto/moniesto-be/model"
+	"github.com/moniesto/moniesto-be/util"
 )
 
 var calculateApproximateURI = "/calculateApproximateScore"
@@ -17,8 +18,8 @@ func CalculateApproxScore(endDate time.Time, startPrice float64, endPrice float6
 	client := resty.New()
 
 	var requestBody model.CalculateApproximateScoreRequest = model.CalculateApproximateScoreRequest{
-		StartDate:  time.Now().Unix(),
-		EndDate:    endDate.Unix(),
+		StartDate:  util.DateToTimestamp(time.Now().UTC()),
+		EndDate:    util.DateToTimestamp(endDate),
 		StartPrice: startPrice,
 		EndPrice:   endPrice,
 		Direction:  direction,

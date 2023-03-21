@@ -101,7 +101,7 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 		ID:          core.CreateID(),
 		UserID:      user.ID,
 		Token:       plain_token,
-		TokenExpiry: time.Now().Add(expiryAt),
+		TokenExpiry: time.Now().UTC().Add(expiryAt),
 	}
 
 	// STEP: insert DB
@@ -137,7 +137,7 @@ func (service *Service) GetPasswordResetToken(ctx *gin.Context, encoded_token st
 	}
 
 	// STEP: token is not expired
-	if time.Now().After(password_reset_token.TokenExpiry) {
+	if time.Now().UTC().After(password_reset_token.TokenExpiry) {
 		return db.PasswordResetToken{}, clientError.CreateError(http.StatusForbidden, clientError.Account_ChangePassword_ExpiredToken)
 	}
 

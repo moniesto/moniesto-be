@@ -113,7 +113,7 @@ Table post_crypto as PC {
   finished boolean [not null, default: false]
   status post_crypto_status [not null, default: "pending"]
   last_target_hit float [not null]
-  last_job_timestamp long [not null]
+  last_job_timestamp bigint [not null]
   
   deleted boolean [not null, default: false]
   

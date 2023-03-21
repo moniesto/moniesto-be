@@ -44,8 +44,8 @@ func NewPayload(generalPaylod GeneralPaylod, duration time.Duration) (*Payload, 
 			ID:       generalPaylod.UserPayload.ID,
 			Username: generalPaylod.UserPayload.Username,
 		},
-		IssuedAt:  time.Now(),
-		ExpiredAt: time.Now().Add(duration),
+		IssuedAt:  time.Now().UTC(),
+		ExpiredAt: time.Now().UTC().Add(duration),
 	}
 
 	return payload, nil
@@ -53,7 +53,7 @@ func NewPayload(generalPaylod GeneralPaylod, duration time.Duration) (*Payload, 
 
 // Valid checks if the token payload is valid or not
 func (payload *Payload) Valid() error {
-	if time.Now().After(payload.ExpiredAt) {
+	if time.Now().UTC().After(payload.ExpiredAt) {
 		return ErrExpiredToken
 	}
 

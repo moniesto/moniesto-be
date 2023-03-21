@@ -11,6 +11,7 @@ import (
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
+	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/scoring"
 	"github.com/moniesto/moniesto-be/util/validation"
@@ -18,8 +19,11 @@ import (
 
 // CreatePost creates post
 func (service *Service) CreatePost(req model.CreatePostRequest, currency model.Currency, moniestID string, ctx *gin.Context) (db.CreatePostRow, error) {
+	// STEP: set duration to UTC format (GMT+0)
+	req.Duration = req.Duration.UTC()
+
 	// STEP: duration is valid
-	if time.Now().After(req.Duration) {
+	if time.Now().UTC().After(req.Duration) {
 		return db.CreatePostRow{}, clientError.CreateError(http.StatusMethodNotAllowed, clientError.Post_CreatePost_InvalidDuration)
 	}
 
@@ -58,7 +62,7 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 		Direction:        db.EntryPosition(req.Direction),
 		Score:            score,
 		LastTargetHit:    currency_price,
-		LastJobTimestamp: int64(time.Now().Unix()),
+		LastJobTimestamp: util.DateToTimestamp(time.Now().UTC()),
 	}
 
 	post, err := service.Store.CreatePost(ctx, createPost)

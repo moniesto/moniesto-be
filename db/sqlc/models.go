@@ -224,7 +224,7 @@ type PostCrypto struct {
 	Finished         bool             `json:"finished"`
 	Status           PostCryptoStatus `json:"status"`
 	LastTargetHit    float64          `json:"last_target_hit"`
-	LastJobTimestamp interface{}      `json:"last_job_timestamp"`
+	LastJobTimestamp int64            `json:"last_job_timestamp"`
 	Deleted          bool             `json:"deleted"`
 	CreatedAt        time.Time        `json:"created_at"`
 	UpdatedAt        time.Time        `json:"updated_at"`

@@ -75,7 +75,7 @@ CREATE TABLE "post_crypto" (
     "finished" boolean NOT NULL DEFAULT false,
     "status" post_crypto_status NOT NULL DEFAULT 'pending',
     "last_target_hit" float NOT NULL,
-    "last_job_timestamp" long NOT NULL,
+    "last_job_timestamp" bigint NOT NULL,
     "deleted" boolean NOT NULL DEFAULT false,
     "created_at" timestamp NOT NULL DEFAULT (now()),
     "updated_at" timestamp NOT NULL DEFAULT (now())
