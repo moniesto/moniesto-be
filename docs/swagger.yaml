@@ -28,6 +28,11 @@ definitions:
     - PostCryptoStatusPending
     - PostCryptoStatusFail
     - PostCryptoStatusSuccess
+  model.CalculateApproxScoreResponse:
+    properties:
+      score:
+        type: number
+    type: object
   model.ChangePasswordRequest:
     properties:
       new:
@@ -1329,6 +1334,42 @@ paths:
       security:
       - bearerAuth: []
       summary: Create Post
+      tags:
+      - Post
+  /moniests/posts/approximateScore:
+    post:
+      consumes:
+      - application/json
+      description: Calculate Approximate Score for Post
+      parameters:
+      - description: '`description` is optional'
+        in: body
+        name: CalculateApproxScoreBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatePostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CalculateApproxScoreResponse'
+        "400":
+          description: user is not moniest
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Calculate Approximate Score for Post
       tags:
       - Post
   /moniests/profile:

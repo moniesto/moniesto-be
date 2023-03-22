@@ -1355,6 +1355,63 @@
                 }
             }
         },
+        "/moniests/posts/approximateScore": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Calculate Approximate Score for Post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Calculate Approximate Score for Post",
+                "parameters": [
+                    {
+                        "description": "`description` is optional",
+                        "name": "CalculateApproxScoreBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreatePostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.CalculateApproxScoreResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "user is not moniest",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/moniests/profile": {
             "patch": {
                 "security": [
@@ -1685,6 +1742,14 @@
                 "PostCryptoStatusFail",
                 "PostCryptoStatusSuccess"
             ]
+        },
+        "model.CalculateApproxScoreResponse": {
+            "type": "object",
+            "properties": {
+                "score": {
+                    "type": "number"
+                }
+            }
         },
         "model.ChangePasswordRequest": {
             "type": "object",

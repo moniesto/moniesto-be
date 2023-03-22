@@ -11,7 +11,6 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
-// PRIMARY TODO: make post will have status field [pending, failed, success]
 // @Summary Create Post
 // @Description Create Crypto Post
 // @Security bearerAuth
@@ -163,6 +162,18 @@ func (server *Server) getMoniestPosts(ctx *gin.Context) {
 	}
 }
 
+// @Summary Calculate Approximate Score for Post
+// @Description Calculate Approximate Score for Post
+// @Security bearerAuth
+// @Tags Post
+// @Accept json
+// @Produce json
+// @Param CalculateApproxScoreBody body model.CreatePostRequest true "`description` is optional"
+// @Success 200 {object} model.CalculateApproxScoreResponse
+// @Failure 400 {object} clientError.ErrorResponse "user is not moniest"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/posts/approximateScore [post]
 func (server *Server) calculateApproximateScore(ctx *gin.Context) {
 	var req model.CreatePostRequest
 
