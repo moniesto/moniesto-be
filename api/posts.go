@@ -162,3 +162,47 @@ func (server *Server) getMoniestPosts(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, posts)
 	}
 }
+
+func (server *Server) calculateApproximateScore(ctx *gin.Context) {
+	var req model.CreatePostRequest
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Post_CreatePost_InvalidBody))
+		return
+	}
+
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: check user is moniest
+	userIsMoniest, err := server.service.CheckUserIsMoniestByUserID(ctx, user_id)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+	if !userIsMoniest {
+		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.General_UserNotMoniest))
+		return
+	}
+
+	// STEP: get currency
+	currency, err := server.service.GetCurrency(req.Currency)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: calculate score
+	score, err := server.service.CalculateApproxScore(req, currency)
+	if err != nil {
+		ctx.JSON(clientError.ParseError(err))
+		return
+	}
+
+	res := model.CalculateApproxScoreResponse{
+		Score: score,
+	}
+
+	ctx.JSON(http.StatusOK, res)
+}

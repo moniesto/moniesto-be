@@ -17,6 +17,10 @@ type CreatePostRequest struct {
 	Description string    `json:"description"`
 }
 
+type CalculateApproxScoreResponse struct {
+	Score float64 `json:"score"`
+}
+
 type CreatePostResponse struct {
 	ID         string           `json:"id"`
 	MoniestID  string           `json:"moniest_id"`

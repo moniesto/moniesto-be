@@ -19,39 +19,67 @@ import (
 
 // CreatePost creates post
 func (service *Service) CreatePost(req model.CreatePostRequest, currency model.Currency, moniestID string, ctx *gin.Context) (db.CreatePostRow, error) {
+	createPostParams, err := service.getValidPost(req, currency)
+	if err != nil {
+		return db.CreatePostRow{}, err
+	}
+
+	createPostParams.MoniestID = moniestID
+
+	post, err := service.Store.CreatePost(ctx, createPostParams)
+	if err != nil {
+		return db.CreatePostRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_ServerErrorCreatePost)
+	}
+
+	return post, nil
+}
+
+// CalculateApproxScore check post validity and return approx highest score
+func (service *Service) CalculateApproxScore(req model.CreatePostRequest, currency model.Currency) (float64, error) {
+
+	createPostParams, err := service.getValidPost(req, currency)
+	if err != nil {
+		return 0, err
+	}
+
+	return createPostParams.Score, nil
+}
+
+// check post validity and return creating post params
+func (service *Service) getValidPost(req model.CreatePostRequest, currency model.Currency) (db.CreatePostParams, error) {
 	// STEP: set duration to UTC format (GMT+0)
 	req.Duration = req.Duration.UTC()
 
 	// STEP: duration is valid
 	if time.Now().UTC().After(req.Duration) {
-		return db.CreatePostRow{}, clientError.CreateError(http.StatusMethodNotAllowed, clientError.Post_CreatePost_InvalidDuration)
+		return db.CreatePostParams{}, clientError.CreateError(http.StatusMethodNotAllowed, clientError.Post_CreatePost_InvalidDuration)
 	}
 
 	// STEP: currency price is invalid
 	currency_price, err := strconv.ParseFloat(currency.Price, 64)
 	if err != nil {
-		return db.CreatePostRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_InvalidCurrencyPrice)
+		return db.CreatePostParams{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_InvalidCurrencyPrice)
 	}
 
 	// STEP: targets are valid
 	err = validation.Target(currency_price, req.Target1, req.Target2, req.Target3, db.EntryPosition(req.Direction))
 	if err != nil {
-		return db.CreatePostRow{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidTargets)
+		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidTargets)
 	}
 
 	// STEP: stop is valid
 	err = validation.Stop(currency_price, req.Stop, db.EntryPosition(req.Direction))
 	if err != nil {
-		return db.CreatePostRow{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidStop)
+		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidStop)
 	}
 
 	// STEP: get score
 	score := scoring.CalculateApproxScore(req.Duration, currency_price, req.Target3, req.Direction, service.config)
 
 	// STEP: create post
-	createPost := db.CreatePostParams{
-		ID:               core.CreateID(),
-		MoniestID:        moniestID,
+	createPostParam := db.CreatePostParams{
+		ID: core.CreateID(),
+		// MoniestID:        moniestID,
 		Currency:         currency.Currency,
 		StartPrice:       currency_price,
 		Duration:         req.Duration,
@@ -65,12 +93,8 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 		LastJobTimestamp: util.DateToTimestamp(time.Now().UTC()),
 	}
 
-	post, err := service.Store.CreatePost(ctx, createPost)
-	if err != nil {
-		return db.CreatePostRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_ServerErrorCreatePost)
-	}
+	return createPostParam, nil
 
-	return post, nil
 }
 
 // CreatePostDescription creates description for the post

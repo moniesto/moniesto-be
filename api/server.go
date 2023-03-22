@@ -70,6 +70,7 @@ func (server *Server) setupRouter() {
 	{
 		moniestsRouters.POST("", server.createMoniest)
 		moniestsRouters.POST("/posts", server.createPost)
+		moniestsRouters.POST("/posts/approximateScore", server.calculateApproximateScore)
 		moniestsRouters.PATCH("/profile", server.updateMoniestProfile)
 		moniestsRouters.POST("/:username/subscribe", server.subscribeMoniest)
 		moniestsRouters.GET("/:username/subscribe/check", server.subscribeMoniestCheck)
