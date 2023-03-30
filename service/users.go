@@ -139,13 +139,17 @@ func (service *Service) UpdateProfilePhoto(ctx *gin.Context, user_id string, ima
 	profilePhotoExists := true
 
 	// STEP: get current one if exists
-	_, err := service.Store.GetProfilePhoto(ctx, user_id)
+	profilePhotos, err := service.Store.GetProfilePhoto(ctx, user_id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			profilePhotoExists = false
 		} else {
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorGetProfilePhoto)
 		}
+	}
+
+	if profilePhotos.Link == image_base64 { // same url sended from UI
+		return nil
 	}
 
 	// STEP: upload to storage, get links
@@ -195,13 +199,17 @@ func (service *Service) UpdateBackgroundPhoto(ctx *gin.Context, user_id string, 
 	backgroundPhotoExists := true
 
 	// STEP: get current one if exists
-	_, err := service.Store.GetBackgroundPhoto(ctx, user_id)
+	backgroundPhotos, err := service.Store.GetBackgroundPhoto(ctx, user_id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			backgroundPhotoExists = false
 		} else {
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorGetBackgroundPhoto)
 		}
+	}
+
+	if backgroundPhotos.Link == image_base64 { // same url sended from UI
+		return nil
 	}
 
 	// STEP: upload to storage, get links
