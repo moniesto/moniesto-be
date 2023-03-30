@@ -26,9 +26,12 @@ func (service *Service) GetValidationConfigs() model.GetValidationConfigsRespons
 		EmailRegex:                   validation.EmailRegex,
 		UsernameRegex:                validation.UsernameRegex,
 		MinFee:                       service.config.MinFee,
-		MaxBioLenght:                 service.config.MaxBioLenght,
-		MaxDescriptionLength:         service.config.MaxDescriptionLength,
-		MaxSubscriptionMessageLength: service.config.MaxSubscriptionMessageLength,
+		MaxBioLenght:                 validation.MaxBioLength,
+		MaxDescriptionLength:         validation.MaxDescriptionLength,
+		MaxSubscriptionMessageLength: validation.MaxSubscriptionMessageLength,
+		MaxNameLength:                validation.MaxNameLength,
+		MaxSurnameLength:             validation.MaxSurnameLength,
+		MaxLocationLength:            validation.MaxLocationLength,
 		PasswordLength:               validation.ValidPasswordLength,
 	}
 

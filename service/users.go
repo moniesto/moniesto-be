@@ -10,6 +10,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/validation"
 )
 
 func (service *Service) GetOwnUserByUsername(ctx *gin.Context, username string) (db.GetOwnUserByUsernameRow, error) {
@@ -86,14 +87,29 @@ func (service *Service) UpdateUserProfile(ctx *gin.Context, user_id string, req 
 		difference = true
 
 		if req.Name != "" {
+			err := validation.Name(req.Name)
+			if err != nil {
+				return clientError.CreateError(http.StatusNotAcceptable, clientError.Account_UpdateUserProfile_InvalidName)
+			}
+
 			param.Name = req.Name
 		}
 
 		if req.Surname != "" {
+			err := validation.Surname(req.Surname)
+			if err != nil {
+				return clientError.CreateError(http.StatusNotAcceptable, clientError.Account_UpdateUserProfile_InvalidSurname)
+			}
+
 			param.Surname = req.Surname
 		}
 
 		if req.Location != "" {
+			err := validation.Location(req.Location)
+			if err != nil {
+				return clientError.CreateError(http.StatusNotAcceptable, clientError.Account_UpdateUserProfile_InvalidLocation)
+			}
+
 			param.Location = sql.NullString{
 				Valid:  true,
 				String: req.Location,

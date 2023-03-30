@@ -2068,7 +2068,16 @@ const docTemplate = `{
                 "max_description_length": {
                     "type": "integer"
                 },
+                "max_location_length": {
+                    "type": "integer"
+                },
+                "max_name_length": {
+                    "type": "integer"
+                },
                 "max_subscription_message_length": {
+                    "type": "integer"
+                },
+                "max_surname_length": {
                     "type": "integer"
                 },
                 "min_fee": {

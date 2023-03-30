@@ -1,6 +1,13 @@
 package validation
 
 var ValidPasswordLength = 6
+var MaxBioLength = 150
+var MaxDescriptionLength = 5000
+var MaxSubscriptionMessageLength = 150
+var MaxNameLength = 30
+var MaxSurnameLength = 30
+var MaxLocationLength = 30
+
 var UsernameRegex = `^[a-z][a-z0-9_]{0,29}$`
 var EmailRegex = `^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`
 

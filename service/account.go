@@ -33,6 +33,16 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidUsername)
 	}
 
+	err = validation.Name(registerRequest.Name)
+	if err != nil {
+		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidName)
+	}
+
+	err = validation.Surname(registerRequest.Surname)
+	if err != nil {
+		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidSurname)
+	}
+
 	// any user with same email
 	checkEmail, err := service.Store.CheckEmail(ctx, validEmail)
 	if err != nil {

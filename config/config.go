@@ -28,9 +28,6 @@ type Config struct {
 	EmailVerificationTokenDuration     time.Duration `mapstructure:"EMAIL_VERIFICATION_TOKEN_DURATION"`
 	EmailVerificationTokenDurationTest time.Duration `mapstructure:"EMAIL_VERIFICATION_TOKEN_DURATION_TEST"`
 	MinFee                             float64       `mapstructure:"MIN_FEE"`
-	MaxBioLenght                       int           `mapstructure:"MAX_BIO_LENGTH"`
-	MaxDescriptionLength               int           `mapstructure:"MAX_DESCRIPTION_LENGTH"`
-	MaxSubscriptionMessageLength       int           `mapstructure:"MAX_SUBSCRIPTION_MESSAGE_LENGTH"`
 
 	// CREDENTIALS
 	TokenKey        string `mapstructure:"TOKEN_KEY"`

@@ -58,6 +58,30 @@ func Username(username string) error {
 	return nil
 }
 
+func Location(location string) error {
+	if len(location) > MaxLocationLength {
+		return fmt.Errorf("location length is more than %d", MaxLocationLength)
+	}
+
+	return nil
+}
+
+func Name(name string) error {
+	if len(name) > MaxNameLength {
+		return fmt.Errorf("name length is more than %d", MaxNameLength)
+	}
+
+	return nil
+}
+
+func Surname(surname string) error {
+	if len(surname) > MaxSurnameLength {
+		return fmt.Errorf("surname length is more than %d", MaxSurnameLength)
+	}
+
+	return nil
+}
+
 // Fee checks the fee is valid
 func Fee(fee float64, config config.Config) error {
 	if fee < config.MinFee {
@@ -69,7 +93,7 @@ func Fee(fee float64, config config.Config) error {
 
 // Bio checks the bio is valid
 func Bio(bio string, config config.Config) error {
-	if len(bio) > config.MaxBioLenght {
+	if len(bio) > MaxBioLength {
 		return fmt.Errorf("bio is not valid %s", bio)
 	}
 
@@ -78,7 +102,7 @@ func Bio(bio string, config config.Config) error {
 
 // Description checks the description is valid
 func Description(description string, config config.Config) error {
-	if len(description) > config.MaxDescriptionLength {
+	if len(description) > MaxDescriptionLength {
 		return fmt.Errorf("description is not valid %s", description)
 	}
 
@@ -87,7 +111,7 @@ func Description(description string, config config.Config) error {
 
 // SubscriptionMessage checks the message is valid
 func SubscriptionMessage(message string, config config.Config) error {
-	if len(message) > config.MaxSubscriptionMessageLength {
+	if len(message) > MaxSubscriptionMessageLength {
 		return fmt.Errorf("message is not valid %s", message)
 	}
 
