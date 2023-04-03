@@ -123,6 +123,10 @@ func Target(price, target1, target2, target3 float64, direction db.EntryPosition
 	target_error_message := "targets are not valid"
 	direction_error_message := "direction is not valid"
 
+	if target1 <= 0 || target2 <= 0 || target3 <= 0 {
+		return fmt.Errorf(target_error_message)
+	}
+
 	if direction == db.EntryPositionLong {
 		if !(price < target1) || !(target1 < target2) || !(target2 < target3) {
 			return fmt.Errorf(target_error_message)
@@ -142,6 +146,10 @@ func Target(price, target1, target2, target3 float64, direction db.EntryPosition
 func Stop(price, stop float64, direction db.EntryPosition) error {
 	error_message := "stop is not valid"
 	direction_error_message := "direction is not valid"
+
+	if stop <= 0 {
+		return fmt.Errorf(error_message)
+	}
 
 	if direction == db.EntryPositionLong {
 		if !(stop < price) {
