@@ -18,5 +18,8 @@ var backgroundPhotoThumbnailFolderName string = "Photo/BackgroundPhotosThumbnail
 
 var postDescriptionPhotoFolderName string = "Photo/PostPhotos"
 
+var profilePhotoHeight = "500"
+var backgroundPhotoHeight = "800"
+
 var profilePhotothumnbnailHeight = "100"
 var backgroundPhotothumnbnailHeight = "100"

@@ -35,8 +35,9 @@ func (cloudinaryUploader *CloudinaryUploader) UploadProfilePhoto(ctx *gin.Contex
 
 	// STEP: upload profile photo
 	params := uploader.UploadParams{
-		PublicID: publicID,
-		Folder:   profilePhotoFolderName,
+		PublicID:       publicID,
+		Folder:         profilePhotoFolderName,
+		Transformation: "h_" + profilePhotoHeight,
 	}
 
 	result, err := cloudinaryUploader.cloudinary.Upload.Upload(ctx, base64, params)
@@ -70,8 +71,9 @@ func (cloudinaryUploader *CloudinaryUploader) UploadBackgroundPhoto(ctx *gin.Con
 
 	// STEP: upload background photo
 	params := uploader.UploadParams{
-		PublicID: publicID,
-		Folder:   backgroundPhotoFolderName,
+		PublicID:       publicID,
+		Folder:         backgroundPhotoFolderName,
+		Transformation: "h_" + backgroundPhotoHeight,
 	}
 
 	result, err := cloudinaryUploader.cloudinary.Upload.Upload(ctx, base64, params)

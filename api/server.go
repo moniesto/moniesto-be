@@ -128,7 +128,7 @@ func (server *Server) setupCRONJobs() {
 	job := cron.New()
 
 	// update post status job
-	job.AddFunc(util.JOB_TYPE_EVERY_MINUTE, server.UpdatePostStatus)
+	job.AddFunc(util.JOB_TYPE_EVERY_1AM, server.UpdatePostStatus)
 
 	job.Start()
 }
