@@ -24,14 +24,14 @@ func (server *Server) getCurrencies(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBind(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Crypto_GetCurrencies_InvalidParam))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Crypto_GetCurrencies_InvalidParam))
 		return
 	}
 
 	// STEP: get currencies with name
 	currencies, err := server.service.GetCurrenciesWithName(req.Name)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 

@@ -29,7 +29,7 @@ func (server *Server) createMoniest(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_CreateMoniest_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_CreateMoniest_InvalidBody))
 		return
 	}
 
@@ -39,43 +39,43 @@ func (server *Server) createMoniest(ctx *gin.Context) {
 	// STEP: check user is already moniest or not
 	userIsMoniest, err := server.service.CheckUserIsMoniestByUserID(ctx, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 	if userIsMoniest {
-		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.Moniest_CreateMoniest_UserIsAlreadyMoniest))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, clientError.GetError(clientError.Moniest_CreateMoniest_UserIsAlreadyMoniest))
 		return
 	}
 
 	// STEP: check the email of user is verified
 	user, err := server.service.GetUserByID(ctx, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 	if !user.EmailVerified {
-		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_CreateMoniest_UnverifiedEmail))
+		ctx.AbortWithStatusJSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_CreateMoniest_UnverifiedEmail))
 		return
 	}
 
 	// STEP: create moniest
 	moniest, err := server.service.CreateMoniest(ctx, user_id, req)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: create subscription info
 	_, err = server.service.CreateSubsriptionInfo(ctx, moniest.ID, req)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: get created moniest data [+ user data]
 	createdMoniest, err := server.service.GetMoniestByMoniestID(ctx, moniest.ID)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -105,7 +105,7 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_UpdateMoniest_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_UpdateMoniest_InvalidBody))
 		return
 	}
 
@@ -116,21 +116,21 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 	// STEP: update moniest
 	moniest, err := server.service.UpdateMoniestProfile(ctx, user_id, req)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: update subscription info [if exist in req body check]
 	_, err = server.service.UpdateSubsriptionInfo(ctx, moniest.MoniestID, req)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: get updated moniest data [+ user data]
 	updatedMoniest, err := server.service.GetMoniestByMoniestID(ctx, moniest.MoniestID)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -160,7 +160,7 @@ func (server *Server) subscribeMoniest(ctx *gin.Context) {
 	// STEP: check "username" is a real moniest
 	moniest, err := server.service.GetMoniestByUsername(ctx, username)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -170,14 +170,14 @@ func (server *Server) subscribeMoniest(ctx *gin.Context) {
 
 	// STEP: check user is not subscribing own
 	if moniest.ID == user_id {
-		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_Subscribe_SubscribeOwn))
+		ctx.AbortWithStatusJSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_Subscribe_SubscribeOwn))
 		return
 	}
 
 	// STEP: create subscription
 	err = server.service.SubscribeMoniest(ctx, moniest.MoniestID, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -204,7 +204,7 @@ func (server *Server) unsubscribeMoniest(ctx *gin.Context) {
 	// STEP: check "username" is a real moniest
 	moniest, err := server.service.GetMoniestByUsername(ctx, username)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -214,14 +214,14 @@ func (server *Server) unsubscribeMoniest(ctx *gin.Context) {
 
 	// STEP: check user is not subscribing own
 	if moniest.ID == user_id {
-		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_Unsubscribe_UnsubscribeOwn))
+		ctx.AbortWithStatusJSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_Unsubscribe_UnsubscribeOwn))
 		return
 	}
 
 	// STEP: end subscription
 	err = server.service.UnsubscribeMoniest(ctx, moniest.MoniestID, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -247,11 +247,11 @@ func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
 	// STEP: check user is moniest
 	userIsMoniest, err := server.service.CheckUserIsMoniestByUsername(ctx, username)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 	if !userIsMoniest {
-		ctx.JSON(http.StatusNotFound, clientError.GetError(clientError.General_MoniestNotFoundByUsername))
+		ctx.AbortWithStatusJSON(http.StatusNotFound, clientError.GetError(clientError.General_MoniestNotFoundByUsername))
 		return
 	}
 
@@ -262,7 +262,7 @@ func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
 	// STEP: check user is subscribed to moniest
 	userIsSubscribed, err := server.service.CheckUserSubscriptionByMoniestUsername(ctx, user_id, username)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -298,7 +298,7 @@ func (server *Server) getSubscribers(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBind(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_GetSubscriber_InvalidParam))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_GetSubscriber_InvalidParam))
 		return
 	}
 
@@ -309,14 +309,14 @@ func (server *Server) getSubscribers(ctx *gin.Context) {
 	// STEP: get moniest [+ check there is a moniest w/ this username]
 	moniest, err := server.service.GetMoniestByUsername(ctx, username)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: get subscribers
 	subscribers, err := server.service.GetSubscribers(ctx, moniest.MoniestID, req.Limit, req.Offset)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 

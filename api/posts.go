@@ -28,7 +28,7 @@ func (server *Server) createPost(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Post_CreatePost_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Post_CreatePost_InvalidBody))
 		return
 	}
 
@@ -38,32 +38,32 @@ func (server *Server) createPost(ctx *gin.Context) {
 	// STEP: check user is moniest
 	userIsMoniest, err := server.service.CheckUserIsMoniestByUserID(ctx, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 	if !userIsMoniest {
-		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.General_UserNotMoniest))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, clientError.GetError(clientError.General_UserNotMoniest))
 		return
 	}
 
 	// STEP: user is moniest
 	moniest, err := server.service.GetMoniestByUserID(ctx, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: get currency
 	currency, err := server.service.GetCurrency(req.Currency)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: create post
 	post, err := server.service.CreatePost(req, currency, moniest.MoniestID, ctx)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -73,7 +73,7 @@ func (server *Server) createPost(ctx *gin.Context) {
 		// STEP: create post description
 		description, err := server.service.CreatePostDescription(post.ID, req.Description, ctx)
 		if err != nil {
-			ctx.JSON(clientError.ParseError(err))
+			ctx.AbortWithStatusJSON(clientError.ParseError(err))
 			return
 		}
 
@@ -113,7 +113,7 @@ func (server *Server) getMoniestPosts(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBind(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_GetMoniestPosts_InvalidParam))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_GetMoniestPosts_InvalidParam))
 		return
 	}
 
@@ -124,7 +124,7 @@ func (server *Server) getMoniestPosts(ctx *gin.Context) {
 	// STEP: check "username" is a real moniest
 	moniest, err := server.service.GetMoniestByUsername(ctx, username)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -137,7 +137,7 @@ func (server *Server) getMoniestPosts(ctx *gin.Context) {
 
 		posts, err := server.service.GetOwnPosts(ctx, username, req.Active, req.Limit, req.Offset)
 		if err != nil {
-			ctx.JSON(clientError.ParseError(err))
+			ctx.AbortWithStatusJSON(clientError.ParseError(err))
 			return
 		}
 
@@ -147,14 +147,14 @@ func (server *Server) getMoniestPosts(ctx *gin.Context) {
 		// STEP: get user subscription status -> subscribed or not
 		userIsSubscribed, err := server.service.CheckUserSubscriptionByMoniestUsername(ctx, user_id, username)
 		if err != nil {
-			ctx.JSON(clientError.ParseError(err))
+			ctx.AbortWithStatusJSON(clientError.ParseError(err))
 			return
 		}
 
 		// STEP: get posts
 		posts, err := server.service.GetMoniestPosts(ctx, username, userIsSubscribed, req.Active, req.Limit, req.Offset)
 		if err != nil {
-			ctx.JSON(clientError.ParseError(err))
+			ctx.AbortWithStatusJSON(clientError.ParseError(err))
 			return
 		}
 
@@ -179,7 +179,7 @@ func (server *Server) calculateApproximateScore(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Post_CreatePost_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Post_CreatePost_InvalidBody))
 		return
 	}
 
@@ -189,25 +189,25 @@ func (server *Server) calculateApproximateScore(ctx *gin.Context) {
 	// STEP: check user is moniest
 	userIsMoniest, err := server.service.CheckUserIsMoniestByUserID(ctx, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 	if !userIsMoniest {
-		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.General_UserNotMoniest))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, clientError.GetError(clientError.General_UserNotMoniest))
 		return
 	}
 
 	// STEP: get currency
 	currency, err := server.service.GetCurrency(req.Currency)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: calculate score
 	score, err := server.service.CalculateApproxScore(req, currency)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 

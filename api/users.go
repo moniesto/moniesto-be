@@ -39,14 +39,14 @@ func (server *Server) getUserByUsername(ctx *gin.Context) {
 		user, err := server.service.GetOwnUserByUsername(ctx, username)
 
 		if err != nil {
-			ctx.JSON(clientError.ParseError(err))
+			ctx.AbortWithStatusJSON(clientError.ParseError(err))
 			return
 		}
 
 		// TODO: find a better solution for this problem (update token when username changes)
 		// if user changed username, but it is not updated on TOKEN
 		if user.ID != own_user_id {
-			ctx.JSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_InvalidToken))
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_InvalidToken))
 			return
 		}
 
@@ -55,7 +55,7 @@ func (server *Server) getUserByUsername(ctx *gin.Context) {
 		user, err := server.service.GetUserByUsername(ctx, username)
 
 		if err != nil {
-			ctx.JSON(clientError.ParseError(err))
+			ctx.AbortWithStatusJSON(clientError.ParseError(err))
 			return
 		}
 
@@ -82,7 +82,7 @@ func (server *Server) updateUserProfile(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_UpdateUserProfile_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_UpdateUserProfile_InvalidBody))
 		return
 	}
 
@@ -93,28 +93,28 @@ func (server *Server) updateUserProfile(ctx *gin.Context) {
 	// STEP: update profile
 	err := server.service.UpdateUserProfile(ctx, user_id, req)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: update profile photo
 	err = server.service.UpdateProfilePhoto(ctx, user_id, req.ProfilePhoto)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: update background photo
 	err = server.service.UpdateBackgroundPhoto(ctx, user_id, req.BackgroundPhoto)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: get latest form of own user, and send it as response
 	user, err := server.service.GetOwnUserByID(ctx, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -148,7 +148,7 @@ func (server *Server) getSubscriptions(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBind(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.User_GetSubscriptions_InvalidParam))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.User_GetSubscriptions_InvalidParam))
 		return
 	}
 
@@ -159,14 +159,14 @@ func (server *Server) getSubscriptions(ctx *gin.Context) {
 	// STEP: get user data of username [+check if user exists]
 	user, err := server.service.GetUserByUsername(ctx, username)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: get subscriptions
 	users, err := server.service.GetSubscriptions(ctx, user.ID, req.Limit, req.Offset)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -190,7 +190,7 @@ func (server *Server) getUserStats(ctx *gin.Context) {
 	// STEP: check user is moniest
 	userIsMoniest, err := server.service.CheckUserIsMoniestByUsername(ctx, username)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -198,7 +198,7 @@ func (server *Server) getUserStats(ctx *gin.Context) {
 	if userIsMoniest {
 		stats, err := server.service.GetMoniestStats(ctx, username)
 		if err != nil {
-			ctx.JSON(clientError.ParseError(err))
+			ctx.AbortWithStatusJSON(clientError.ParseError(err))
 			return
 		}
 
@@ -207,7 +207,7 @@ func (server *Server) getUserStats(ctx *gin.Context) {
 	} else { // STEP: get user stats
 		stats, err := server.service.GetUserStats(ctx, username)
 		if err != nil {
-			ctx.JSON(clientError.ParseError(err))
+			ctx.AbortWithStatusJSON(clientError.ParseError(err))
 			return
 		}
 

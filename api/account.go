@@ -30,14 +30,14 @@ func (server *Server) loginUser(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_Login_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_Login_InvalidBody))
 		return
 	}
 
 	// STEP: get own user [+ checking password]
 	user, err := server.service.GetOwnUser(ctx, req.Identifier, req.Password)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -50,7 +50,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 	}, server.config.AccessTokenDuration)
 	if err != nil {
 		// TODO: add server error
-		ctx.JSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_Login_ServerErrorToken))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_Login_ServerErrorToken))
 		return
 	}
 
@@ -79,14 +79,14 @@ func (server *Server) registerUser(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_Register_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_Register_InvalidBody))
 		return
 	}
 
 	// STEP: create user
 	createdUser, err := server.service.CreateUser(ctx, req)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -103,6 +103,8 @@ func (server *Server) registerUser(ctx *gin.Context) {
 	mailing.SendWelcomingEmail(createdUser.Email, server.config, createdUser.Name)
 
 	server.loginUser(ctx)
+
+	// https://github.com/gin-gonic/gin/issues/2499
 }
 
 // @Summary Check Username
@@ -122,7 +124,7 @@ func (server *Server) checkUsername(ctx *gin.Context) {
 	// STEP: check username validity
 	validity, err := server.service.CheckUsername(ctx, username)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -150,7 +152,7 @@ func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_EmailVerification_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_EmailVerification_InvalidBody))
 		return
 	}
 
@@ -161,27 +163,27 @@ func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 	// STEP: get user
 	user, err := server.service.GetOwnUserByID(ctx, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: check user email is already verified
 	if user.EmailVerified {
-		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.Account_EmailVerification_AlreadyVerified))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, clientError.GetError(clientError.Account_EmailVerification_AlreadyVerified))
 		return
 	}
 
 	// STEP: create email verification
 	email_verification_token, err := server.service.CreateEmailVerificationToken(ctx, user_id, req.RedirectURL, server.config.EmailVerificationTokenDuration)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: send verification email
 	err = mailing.SendEmailVerificationEmail(user.Email, server.config, user.Name, email_verification_token.Token)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_EmailVerification_SendEmail))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_EmailVerification_SendEmail))
 	}
 
 	ctx.Status(http.StatusAccepted)
@@ -205,14 +207,14 @@ func (server *Server) verifyEmail(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_EmailVerification_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_EmailVerification_InvalidBody))
 		return
 	}
 
 	// STEP: validating email verification token [decode + expiry check]
 	email_verification_token, err := server.service.GetEmailVerificationToken(ctx, req.Token)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -222,27 +224,27 @@ func (server *Server) verifyEmail(ctx *gin.Context) {
 	// STEP: get user
 	user, err := server.service.GetOwnUserByID(ctx, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: check user email is already verified
 	if user.EmailVerified {
-		ctx.JSON(http.StatusBadRequest, clientError.GetError(clientError.Account_EmailVerification_AlreadyVerified))
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, clientError.GetError(clientError.Account_EmailVerification_AlreadyVerified))
 		return
 	}
 
 	// STEP: verify user email
 	err = server.service.VerifyEmail(ctx, user_id)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: delete email verification token
 	err = server.service.DeleteEmailVerificationToken(ctx, email_verification_token.Token)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -270,20 +272,20 @@ func (server *Server) changeUsername(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangeUsername_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangeUsername_InvalidBody))
 		return
 	}
 
 	// STEP: check username validity
 	validity, err := server.service.CheckUsername(ctx, req.NewUsername)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: username is already registered
 	if !validity {
-		ctx.JSON(http.StatusForbidden, clientError.GetError(clientError.Account_ChangeUsername_RegisteredUsername))
+		ctx.AbortWithStatusJSON(http.StatusForbidden, clientError.GetError(clientError.Account_ChangeUsername_RegisteredUsername))
 		return
 	}
 
@@ -294,7 +296,7 @@ func (server *Server) changeUsername(ctx *gin.Context) {
 	// STEP: update username of user
 	err = server.service.ChangeUsername(ctx, user_id, req.NewUsername)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -307,7 +309,7 @@ func (server *Server) changeUsername(ctx *gin.Context) {
 	}, server.config.AccessTokenDuration)
 	if err != nil {
 		// TODO: add server error
-		ctx.JSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_ChangeUsername_ServerErrorToken))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_ChangeUsername_ServerErrorToken))
 		return
 	}
 

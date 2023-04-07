@@ -28,21 +28,21 @@ func (server *Server) changePassword(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
 		return
 	}
 
 	// STEP: check old password is in valid form
 	err := validation.Password(req.OldPassword)
 	if err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidOldPassword))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidOldPassword))
 		return
 	}
 
 	// STEP: check new password is in valid form
 	err = validation.Password(req.NewPassword)
 	if err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidNewPassword))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidNewPassword))
 		return
 	}
 
@@ -53,14 +53,14 @@ func (server *Server) changePassword(ctx *gin.Context) {
 	// STEP: check old password is correct
 	err = server.service.CheckPassword(ctx, user_id, req.OldPassword)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: update password with new one
 	err = server.service.UpdatePassword(ctx, user_id, req.NewPassword)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -82,7 +82,7 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
 		return
 	}
 
@@ -97,14 +97,14 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
 	// STEP: create password_reset_token in DB
 	name, password_reset_token, err := server.service.CreatePasswordResetToken(ctx, validEmail, server.config.PasswordResetTokenDuration)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: send password reset email
 	err = mailing.SendPasswordResetEmail(validEmail, server.config, name, password_reset_token.Token)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_ChangePassowrd_SendEmail))
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_ChangePassowrd_SendEmail))
 		return
 	}
 
@@ -128,35 +128,35 @@ func (server *Server) verifyTokenChangePassword(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
 		return
 	}
 
 	// STEP: validating password reset token [decode + expiry check]
 	password_reset_token, err := server.service.GetPasswordResetToken(ctx, req.Token)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: check new password is in valid form
 	err = validation.Password(req.NewPassword)
 	if err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidNewPassword))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidNewPassword))
 		return
 	}
 
 	// STEP: update password with new one
 	err = server.service.UpdatePassword(ctx, password_reset_token.UserID, req.NewPassword)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
 	// STEP: delete the token that used
 	err = server.service.DeletePasswordResetToken(ctx, password_reset_token.Token)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
@@ -180,14 +180,14 @@ func (server *Server) verifyToken(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Account_ChangePassword_InvalidBody))
 		return
 	}
 
 	// STEP: validating password reset token [decode + expiry check]
 	_, err := server.service.GetPasswordResetToken(ctx, req.Token)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 

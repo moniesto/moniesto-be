@@ -26,7 +26,7 @@ func (server *Server) createFeedback(ctx *gin.Context) {
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusNotAcceptable, clientError.GetError(clientError.Feedback_CreateFeedback_InvalidBody))
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Feedback_CreateFeedback_InvalidBody))
 		return
 	}
 
@@ -43,7 +43,7 @@ func (server *Server) createFeedback(ctx *gin.Context) {
 	// STEP: create feedback
 	err := server.service.CreateFeedback(ctx, user_id, req)
 	if err != nil {
-		ctx.JSON(clientError.ParseError(err))
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
