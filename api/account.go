@@ -99,12 +99,10 @@ func (server *Server) registerUser(ctx *gin.Context) {
 	json.NewEncoder(loginRequestBodyBytes).Encode(loginRequestBody)
 	ctx.Request.Body = io.NopCloser(bytes.NewBuffer(loginRequestBodyBytes.Bytes()))
 
-	// STEP: send welcoming email
-	mailing.SendWelcomingEmail(createdUser.Email, server.config, createdUser.Name)
-
 	server.loginUser(ctx)
 
-	// https://github.com/gin-gonic/gin/issues/2499
+	// STEP: send welcoming email
+	go mailing.SendWelcomingEmail(createdUser.Email, server.config, createdUser.Name)
 }
 
 // @Summary Check Username
@@ -180,13 +178,16 @@ func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 		return
 	}
 
-	// STEP: send verification email
-	err = mailing.SendEmailVerificationEmail(user.Email, server.config, user.Name, email_verification_token.Token)
-	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_EmailVerification_SendEmail))
-	}
-
 	ctx.Status(http.StatusAccepted)
+
+	// STEP: send verification email -> dont wait for the response
+	go mailing.SendEmailVerificationEmail(user.Email, server.config, user.Name, email_verification_token.Token)
+
+	// // STEP: send verification email -> wait for the response
+	// err = mailing.SendEmailVerificationEmail(user.Email, server.config, user.Name, email_verification_token.Token)
+	// if err != nil {
+	// 	ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_EmailVerification_SendEmail))
+	// }
 }
 
 // @Summary Verify Email

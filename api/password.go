@@ -101,14 +101,17 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
 		return
 	}
 
-	// STEP: send password reset email
-	err = mailing.SendPasswordResetEmail(validEmail, server.config, name, password_reset_token.Token)
-	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_ChangePassowrd_SendEmail))
-		return
-	}
-
 	ctx.Status(http.StatusAccepted)
+
+	// STEP: send password reset email -> dont wait for the response
+	go mailing.SendPasswordResetEmail(validEmail, server.config, name, password_reset_token.Token)
+
+	// // STEP: send password reset email -> wait for the response
+	// err = mailing.SendPasswordResetEmail(validEmail, server.config, name, password_reset_token.Token)
+	// if err != nil {
+	// 	ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_ChangePassowrd_SendEmail))
+	// 	return
+	// }
 }
 
 // @Summary Verify Token & Change Password
