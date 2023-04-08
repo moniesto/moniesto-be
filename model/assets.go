@@ -18,4 +18,8 @@ type GetValidationConfigsResponse struct {
 	MaxSurnameLength             int     `json:"max_surname_length"`
 	MaxLocationLength            int     `json:"max_location_length"`
 	PasswordLength               int     `json:"password_length"`
+
+	MaxDurationDay          int `json:"max_duration_day"`
+	LongMaxTargetMultiplier int `json:"long_max_target_multiplier"`
+	ShortMaxStopMultiplier  int `json:"short_max_stop_multiplier"`
 }

@@ -51,25 +51,23 @@ func (service *Service) getValidPost(req model.CreatePostRequest, currency model
 	req.Duration = req.Duration.UTC()
 
 	// STEP: duration is valid
-	if time.Now().UTC().After(req.Duration) {
+	if err := validation.Duration(req.Duration); err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusMethodNotAllowed, clientError.Post_CreatePost_InvalidDuration)
 	}
 
-	// STEP: currency price is invalid
+	// STEP: currency price is valid
 	currency_price, err := strconv.ParseFloat(currency.Price, 64)
 	if err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_InvalidCurrencyPrice)
 	}
 
 	// STEP: targets are valid
-	err = validation.Target(currency_price, req.Target1, req.Target2, req.Target3, db.EntryPosition(req.Direction))
-	if err != nil {
+	if err := validation.Target(currency_price, req.Target1, req.Target2, req.Target3, db.EntryPosition(req.Direction)); err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidTargets)
 	}
 
 	// STEP: stop is valid
-	err = validation.Stop(currency_price, req.Stop, db.EntryPosition(req.Direction))
-	if err != nil {
+	if err := validation.Stop(currency_price, req.Stop, db.EntryPosition(req.Direction)); err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidStop)
 	}
 
@@ -94,7 +92,6 @@ func (service *Service) getValidPost(req model.CreatePostRequest, currency model
 	}
 
 	return createPostParam, nil
-
 }
 
 // CreatePostDescription creates description for the post

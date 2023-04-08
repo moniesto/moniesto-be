@@ -3,6 +3,7 @@ package validation
 import (
 	"fmt"
 	"regexp"
+	"time"
 
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
@@ -118,6 +119,18 @@ func SubscriptionMessage(message string, config config.Config) error {
 	return nil
 }
 
+// Duration checks if is valid -> after now & less than 90 days
+func Duration(duration time.Time) error {
+
+	maxDayDate := time.Now().UTC().Add(time.Hour * 24 * time.Duration(MaxDurationDay))
+
+	if time.Now().UTC().After(duration) || duration.After(maxDayDate) {
+		return fmt.Errorf("invalid duration: more than %d day or assigned for past", MaxDurationDay)
+	}
+
+	return nil
+}
+
 // Target checks targets are valid [price < target1 < target2 < target3]
 func Target(price, target1, target2, target3 float64, direction db.EntryPosition) error {
 	target_error_message := "targets are not valid"
@@ -131,6 +144,12 @@ func Target(price, target1, target2, target3 float64, direction db.EntryPosition
 		if !(price < target1) || !(target1 < target2) || !(target2 < target3) {
 			return fmt.Errorf(target_error_message)
 		}
+
+		// max target can only be MaxTargetMultiplierLong times more than price
+		if target3 > price*float64(MaxTargetMultiplierLong) {
+			return fmt.Errorf(target_error_message)
+		}
+
 	} else if direction == db.EntryPositionShort {
 		if !(target3 < target2) || !(target2 < target1) || !(target1 < price) {
 			return fmt.Errorf(target_error_message)
@@ -156,7 +175,8 @@ func Stop(price, stop float64, direction db.EntryPosition) error {
 			return fmt.Errorf(error_message)
 		}
 	} else if direction == db.EntryPositionShort {
-		if !(stop > price) {
+		// stop can not be smaller than price & MaxStopMultiplierShort times more than price
+		if stop < price || stop > price*float64(MaxStopMultiplierShort) {
 			return fmt.Errorf(error_message)
 		}
 	} else {

@@ -33,6 +33,9 @@ func (service *Service) GetValidationConfigs() model.GetValidationConfigsRespons
 		MaxSurnameLength:             validation.MaxSurnameLength,
 		MaxLocationLength:            validation.MaxLocationLength,
 		PasswordLength:               validation.ValidPasswordLength,
+		MaxDurationDay:               validation.MaxDurationDay,
+		LongMaxTargetMultiplier:      validation.MaxTargetMultiplierLong,
+		ShortMaxStopMultiplier:       validation.MaxStopMultiplierShort,
 	}
 
 	return validation_configs
