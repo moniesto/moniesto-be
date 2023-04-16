@@ -15,39 +15,69 @@ import (
 func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscribed, active bool, sortBy string, limit, offset int) ([]model.GetContentPostResponse, error) {
 	// STEP: get subscribed moniest posts
 	if subscribed {
+		// STEP: get user's is moniest or not status
+		userIsMoniest, err := service.CheckUserIsMoniestByUserID(ctx, userID)
+		if err != nil {
+			return nil, err
+		}
+
 		// OPTION 1: subscribed moniest -> active posts
 		if active { // active
-			postsFromDB, err := service.Store.GetSubscribedActivePosts(ctx, db.GetSubscribedActivePostsParams{
+			params := db.GetSubscribedActivePostsParams{
 				UserID: userID,
 				Limit:  int32(limit),
 				Offset: int32(offset),
-			})
-			if err != nil {
-				if err == sql.ErrNoRows {
-					return []model.GetContentPostResponse{}, nil
-				}
-				return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
 			}
-			posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
 
-			return model.NewGetContentPostResponse(posts), nil
+			// STEP: if user is moniest, append own posts to the response
+			if userIsMoniest {
+				postsFromDB, err := service.Store.GetSubscribedActivePostsWithOwn(ctx, db.GetSubscribedActivePostsWithOwnParams(params))
+				if err != nil {
+					return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
+				}
+
+				posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
+
+				return model.NewGetContentPostResponse(posts), nil
+			} else {
+				postsFromDB, err := service.Store.GetSubscribedActivePosts(ctx, params)
+				if err != nil {
+					return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
+				}
+
+				posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
+
+				return model.NewGetContentPostResponse(posts), nil
+			}
 		}
 
 		// OPTION 2: subscribed moniest -> deactive(old) posts
-		postsFromDB, err := service.Store.GetSubscribedDeactivePosts(ctx, db.GetSubscribedDeactivePostsParams{
+		params := db.GetSubscribedDeactivePostsParams{
 			UserID: userID,
 			Limit:  int32(limit),
 			Offset: int32(offset),
-		})
-		if err != nil {
-			if err == sql.ErrNoRows {
-				return []model.GetContentPostResponse{}, nil
-			}
-			return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
 		}
 
-		posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
-		return model.NewGetContentPostResponse(posts), nil
+		// STEP: if user is moniest, append own posts to the response
+		if userIsMoniest {
+			postsFromDB, err := service.Store.GetSubscribedDeactivePostsWithOwn(ctx, db.GetSubscribedDeactivePostsWithOwnParams(params))
+			if err != nil {
+				return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
+			}
+
+			posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
+			return model.NewGetContentPostResponse(posts), nil
+
+		} else {
+			postsFromDB, err := service.Store.GetSubscribedDeactivePosts(ctx, params)
+
+			if err != nil {
+				return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
+			}
+
+			posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
+			return model.NewGetContentPostResponse(posts), nil
+		}
 	}
 
 	// all moniests -> deactive(old) high score posts
@@ -74,9 +104,6 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 		Offset: int32(offset),
 	})
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return []model.GetContentPostResponse{}, nil
-		}
 		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
 	}
 	posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
@@ -92,10 +119,6 @@ func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, lim
 
 	moniestFromDB, err := service.Store.GetMoniests(ctx, params)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return []model.GetContentMoniestResponse{}, nil
-		}
-
 		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetMoniests_ServerErrorGetMoniests)
 	}
 
