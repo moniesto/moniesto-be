@@ -29,8 +29,7 @@ SELECT "pc"."id",
     "pc"."created_at",
     "pc"."updated_at"
 FROM "post_crypto" AS pc
-WHERE "pc"."duration" > now()
-    AND "pc"."finished" = FALSE
+WHERE "pc"."finished" = FALSE
 ORDER BY "pc"."created_at" ASC
 `
 

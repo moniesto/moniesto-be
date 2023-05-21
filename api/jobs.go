@@ -15,7 +15,10 @@ func (server *Server) UpdatePostStatus() {
 		return
 	}
 
-	for _, post := range activePosts {
+	fmt.Println("# Active posts", len(activePosts))
+
+	for i, post := range activePosts {
+		fmt.Printf("post start: %d id: %s\n", i, post.ID)
 		err := server.service.UpdatePostStatus(post)
 		if err != nil {
 			systemError.Log(fmt.Sprintf("CRON JOB - Update Post Status: %s", err))

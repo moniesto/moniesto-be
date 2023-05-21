@@ -118,6 +118,12 @@ func (server *Server) setupRouter() {
 		contentRouters.GET("/moniests/search", server.searchMoniest)
 	}
 
+	// Admin routes
+	adminRouters := router.Group("/admin").Use(authMiddleware(server.tokenMaker))
+	{
+		adminRouters.POST("/update_posts_status", server.UpdatePostsStatusManual)
+	}
+
 	// Swagger docs
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

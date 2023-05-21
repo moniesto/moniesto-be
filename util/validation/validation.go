@@ -3,6 +3,7 @@ package validation
 import (
 	"fmt"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/moniesto/moniesto-be/config"
@@ -184,6 +185,10 @@ func Stop(price, stop float64, direction db.EntryPosition) error {
 	}
 
 	return nil
+}
+
+func UserIsAdmin(email string) bool {
+	return contains(adminEmails, strings.ToLower(email))
 }
 
 func contains(s []string, str string) bool {

@@ -951,7 +951,7 @@ type GetSubscribedDeactivePostsParams struct {
 }
 
 type GetSubscribedDeactivePostsRow struct {
-    ID                           string           `json:"id"`
+	ID                           string           `json:"id"`
 	Currency                     string           `json:"currency"`
 	StartPrice                   float64          `json:"start_price"`
 	Duration                     time.Time        `json:"duration"`

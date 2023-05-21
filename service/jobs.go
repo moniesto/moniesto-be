@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
@@ -42,6 +44,13 @@ func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) err
 	if err != nil {
 		return err
 	}
+
+	b, err := json.Marshal(response)
+	if err != nil {
+		fmt.Println("ERROR while marshall", err)
+		return err
+	}
+	fmt.Println("RESPONSE", string(b))
 
 	// STEP: post is finished case
 	if response.Finished {
