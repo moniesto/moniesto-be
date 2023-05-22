@@ -558,6 +558,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/update_posts_status": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Can update the status of the posts manually",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Update Posts status",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/assets/configs": {
             "get": {
                 "description": "Get All Configs of system",
@@ -666,70 +694,6 @@ const docTemplate = `{
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/model.GetContentMoniestResponse"
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "invalid body",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "server error",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/content/moniests/search": {
-            "get": {
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
-                "description": "Search Moniest by their name \u0026 surname \u0026 username",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Content"
-                ],
-                "summary": "Search Moniest",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "length min:1 max:30",
-                        "name": "searchText",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "default: 10 \u0026 max: 50",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "default: 0",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.User"
                             }
                         }
                     },
@@ -2062,10 +2026,16 @@ const docTemplate = `{
                 "email_regex": {
                     "type": "string"
                 },
+                "long_max_target_multiplier": {
+                    "type": "integer"
+                },
                 "max_bio_lenght": {
                     "type": "integer"
                 },
                 "max_description_length": {
+                    "type": "integer"
+                },
+                "max_duration_day": {
                     "type": "integer"
                 },
                 "max_location_length": {
@@ -2084,6 +2054,9 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "password_length": {
+                    "type": "integer"
+                },
+                "short_max_stop_multiplier": {
                     "type": "integer"
                 },
                 "username_regex": {

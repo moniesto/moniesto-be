@@ -232,9 +232,13 @@ definitions:
     properties:
       email_regex:
         type: string
+      long_max_target_multiplier:
+        type: integer
       max_bio_lenght:
         type: integer
       max_description_length:
+        type: integer
+      max_duration_day:
         type: integer
       max_location_length:
         type: integer
@@ -247,6 +251,8 @@ definitions:
       min_fee:
         type: number
       password_length:
+        type: integer
+      short_max_stop_multiplier:
         type: integer
       username_regex:
         type: string
@@ -823,6 +829,23 @@ paths:
       summary: Check Username
       tags:
       - Account
+  /admin/update_posts_status:
+    post:
+      description: Can update the status of the posts manually
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: Forbidden
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Update Posts status
+      tags:
+      - Admin
   /assets/configs:
     get:
       consumes:
@@ -902,47 +925,6 @@ paths:
       security:
       - bearerAuth: []
       summary: Get Content Moniests
-      tags:
-      - Content
-  /content/moniests/search:
-    get:
-      consumes:
-      - application/json
-      description: Search Moniest by their name & surname & username
-      parameters:
-      - description: length min:1 max:30
-        in: query
-        name: searchText
-        required: true
-        type: string
-      - description: 'default: 10 & max: 50'
-        in: query
-        name: limit
-        type: integer
-      - description: 'default: 0'
-        in: query
-        name: offset
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/model.User'
-            type: array
-        "406":
-          description: invalid body
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-        "500":
-          description: server error
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-      security:
-      - bearerAuth: []
-      summary: Search Moniest
       tags:
       - Content
   /content/posts:

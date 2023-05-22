@@ -9,6 +9,14 @@ import (
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
+// @Summary Update Posts status
+// @Description Can update the status of the posts manually
+// @Security bearerAuth
+// @Tags Admin
+// @Success 200
+// @Failure 403
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /admin/update_posts_status [post]
 func (server *Server) UpdatePostsStatusManual(ctx *gin.Context) {
 
 	// STEP: get user id from token
