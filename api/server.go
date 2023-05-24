@@ -44,6 +44,10 @@ func (server *Server) setupRouter() {
 
 	router.Use(CORSMiddleware())
 
+	router.POST("/payment/create_account", server.addConnectedAccount)
+	router.POST("/payment/create_account_link", server.createAccountLink)
+	router.DELETE("/payment/test/:acc_id", server.deleteConnectedAccount)
+
 	// Account routes
 	accountRouters := router.Group("/account")
 	{

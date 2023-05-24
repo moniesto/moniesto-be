@@ -35,6 +35,8 @@ type Config struct {
 	NoReplyEmail    string `mapstructure:"NO_REPLY_EMAIL"`
 	NoReplyPassword string `mapstructure:"NO_REPLY_PASSWORD"`
 	CloudinaryURL   string `mapstructure:"CLOUDINARY_URL"`
+	StripePublicKey string `mapstructure:"STRIPE_PUBLIC_KEY"`
+	StripeSecretKey string `mapstructure:"STRIPE_SECRET_KEY"`
 }
 
 // LoadConfig reads configuration from file

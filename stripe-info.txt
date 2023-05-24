@@ -1,0 +1,10 @@
+-- gereken
+
+    name
+    surname
+    email
+    industry
+    card
+    website => moniesto.com/username
+        date_of_birth -> future
+        ssn_last_four -> future
