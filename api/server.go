@@ -48,6 +48,9 @@ func (server *Server) setupRouter() {
 	router.POST("/payment/create_account_link", server.createAccountLink)
 	router.DELETE("/payment/test/:acc_id", server.deleteConnectedAccount)
 
+	router.POST("/payment/binance/create-order", server.createOrder)
+	router.POST("/payment/binance/webhook", server.webhook)
+
 	// Account routes
 	accountRouters := router.Group("/account")
 	{

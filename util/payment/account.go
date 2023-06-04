@@ -1,9 +1,21 @@
 package payment
 
 import (
+	"crypto/hmac"
+	"crypto/rand"
+	"crypto/sha512"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
+	"time"
 
+	"github.com/go-resty/resty/v2"
+	"github.com/moniesto/moniesto-be/config"
+	"github.com/moniesto/moniesto-be/core"
+	"github.com/moniesto/moniesto-be/util"
+	"github.com/moniesto/moniesto-be/util/payment/binance"
 	"github.com/stripe/stripe-go/v74"
 	"github.com/stripe/stripe-go/v74/account"
 	"github.com/stripe/stripe-go/v74/accountlink"
@@ -73,7 +85,10 @@ func createAccount(secret_key string) string {
 		Type: stripe.String(string(stripe.AccountTypeCustom)),
 		Capabilities: &stripe.AccountCapabilitiesParams{
 			// CardPayments: &stripe.AccountCapabilitiesCardPaymentsParams{
-			// Requested: stripe.Bool(true),
+			// 	Requested: stripe.Bool(true),
+			// },
+			// BACSDebitPayments: &stripe.AccountCapabilitiesBACSDebitPaymentsParams{
+			// 	Requested: stripe.Bool(true),
 			// },
 			Transfers: &stripe.AccountCapabilitiesTransfersParams{Requested: stripe.Bool(true)},
 		},
@@ -88,7 +103,9 @@ func createAccount(secret_key string) string {
 	result, err := account.New(params)
 
 	if err != nil {
+		fmt.Printf("\n\n\n\n")
 		fmt.Println("ERROR", err.Error())
+		fmt.Printf("\n\n\n\n")
 	} else {
 
 		b, err := json.Marshal(result)
@@ -136,4 +153,126 @@ func DeleteConnectedAccount(secret_key, acc_id string) {
 	stripe.Key = secret_key
 
 	account.Del(acc_id, nil)
+}
+
+// ---------------- BINANCE
+func CreateOrder(config config.Config) {
+	base_url := "https://bpay.binanceapi.com"
+	uri := "/binancepay/openapi/v2/order"
+
+	full_url := base_url + uri
+
+	// send request
+
+	client := resty.New()
+
+	body := binance.CreateOrderRequest{
+		Env: binance.Env{
+			TerminalType: "WEB",
+		},
+		MerchantTradeNo: core.CreateID(),
+		OrderAmount:     25,
+		Currency:        "USDT",
+		Goods: binance.Goods{
+			GoodsType:        "02",
+			GoodsCategory:    "0000",
+			ReferenceGoodsId: "7876763A3B",
+			GoodsName:        "Moniest 1 - A",
+		},
+	}
+
+	headers := createHeader(body, config)
+
+	fmt.Println("headers.BinancepaySignature", headers.BinancepaySignature)
+	fmt.Println("headers.BinancepayNonce", headers.BinancepayNonce)
+
+	resp, err := client.R().
+		SetHeaders(map[string]string{
+			"content-type":              headers.ContentType,
+			"binancepay-timestamp":      strconv.Itoa(int(headers.BinancepayTimestamp)),
+			"binancepay-nonce":          headers.BinancepayNonce,
+			"binancepay-certificate-sn": headers.BinancepayCertificateSN,
+			"binancepay-signature":      headers.BinancepaySignature, // BinancePay-Signature
+		}).SetBody(body).Post(full_url)
+
+	if err != nil {
+		fmt.Println("Error Send Request: ", err.Error())
+	}
+
+	// b, err := json.Marshal(resp)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+
+	fmt.Println("Response:", resp)
+}
+
+func createHeader(body binance.CreateOrderRequest, config config.Config) binance.RequestHeader {
+	ts := util.DateToTimestamp(time.Now())
+	// nonce, _ :=  generateRandomStringURLSafe(20)
+
+	nonce := "5RhaTrZPhknNv0kDSA2UQ67cPMVNS4sA"
+
+	fmt.Println("nonce", nonce)
+
+	b, err := json.Marshal(body)
+	if err != nil {
+		fmt.Println(err)
+		return binance.RequestHeader{}
+	}
+	bodyInStr := string(b)
+
+	fmt.Println("bodyInStr", bodyInStr)
+
+	secretKey := config.BinanceSecretKey
+
+	payload := strconv.Itoa(int(ts)) + "\n" + nonce + "\n" + bodyInStr + "\n"
+
+	fmt.Println("payload", payload)
+
+	// secretKey, _ = hex.DecodeString(secretKey)
+
+	// hmac := cryptoHmac.New(sha256.New, []byte(secretKey))
+	// hmac.Write([]byte(payload)) // TODO: maybe Write()
+
+	// signature := hmac.Sum(nil)
+
+	// signatureStr := strings.ToUpper(string(signature[:]))
+
+	signature := signature(payload, secretKey)
+
+	fmt.Println("signature", signature)
+
+	return binance.RequestHeader{
+		ContentType:             "application/json",
+		BinancepayTimestamp:     ts,
+		BinancepayNonce:         nonce,
+		BinancepayCertificateSN: config.BinanceApiKey,
+		BinancepaySignature:     signature,
+	}
+}
+
+func signature(message, secret string) string {
+	mac := hmac.New(sha512.New, []byte(secret))
+	mac.Write([]byte(message))
+	signingKey := fmt.Sprintf("%x", mac.Sum(nil))
+	return strings.ToUpper(signingKey)
+}
+
+func generateRandomStringURLSafe(n int) (string, error) {
+	b, err := generateRandomBytes(n)
+	return base64.URLEncoding.EncodeToString(b), err
+}
+
+func generateRandomBytes(n int) ([]byte, error) {
+	b := make([]byte, n)
+	_, err := rand.Read(b)
+
+	// Note that err == nil only if we read len(b) bytes.
+	if err != nil {
+		return nil, err
+	}
+
+	return b, nil
 }

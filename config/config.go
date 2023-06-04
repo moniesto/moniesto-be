@@ -37,6 +37,9 @@ type Config struct {
 	CloudinaryURL   string `mapstructure:"CLOUDINARY_URL"`
 	StripePublicKey string `mapstructure:"STRIPE_PUBLIC_KEY"`
 	StripeSecretKey string `mapstructure:"STRIPE_SECRET_KEY"`
+
+	BinanceApiKey    string `mapstructure:"BINANCE_API_KEY"`
+	BinanceSecretKey string `mapstructure:"BINANCE_SECRET_KEY"`
 }
 
 // LoadConfig reads configuration from file
