@@ -170,8 +170,8 @@ func CreateOrder(config config.Config) {
 		Env: binance.Env{
 			TerminalType: "WEB",
 		},
-		MerchantTradeNo: core.CreateID(),
-		OrderAmount:     25,
+		MerchantTradeNo: core.CreatePlainID(),
+		OrderAmount:     5,
 		Currency:        "USDT",
 		Goods: binance.Goods{
 			GoodsType:        "02",
