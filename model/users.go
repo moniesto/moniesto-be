@@ -79,11 +79,11 @@ func NewGetOwnUserResponseByUsername(user db.GetOwnUserByUsernameRow) (response 
 			Score:       user.Score.Float64,
 		}
 
-		if user.SubscriptionInfoID.Valid {
-			moniest.SubscriptionInfo = &SubscriptionInfo{
+		if user.MoniestSubscriptionInfoID.Valid {
+			moniest.MoniestSubscriptionInfo = &MoniestSubscriptionInfo{
 				Fee:       user.Fee.Float64,
 				Message:   user.Message.String,
-				UpdatedAt: user.SubscriptionInfoUpdatedAt.Time,
+				UpdatedAt: user.MoniestSubscriptionInfoUpdatedAt.Time,
 			}
 		}
 
@@ -118,11 +118,11 @@ func NewGetOwnUserResponseByID(user db.GetOwnUserByIDRow) (response OwnUser) {
 			Score:       user.Score.Float64,
 		}
 
-		if user.SubscriptionInfoID.Valid {
-			moniest.SubscriptionInfo = &SubscriptionInfo{
+		if user.MoniestSubscriptionInfoID.Valid {
+			moniest.MoniestSubscriptionInfo = &MoniestSubscriptionInfo{
 				Fee:       user.Fee.Float64,
 				Message:   user.Message.String,
-				UpdatedAt: user.SubscriptionInfoUpdatedAt.Time,
+				UpdatedAt: user.MoniestSubscriptionInfoUpdatedAt.Time,
 			}
 		}
 
@@ -156,11 +156,11 @@ func NewGetUserResponse(user db.GetUserByUsernameRow) (response User) {
 			Score:       user.Score.Float64,
 		}
 
-		if user.SubscriptionInfoID.Valid {
-			moniest.SubscriptionInfo = &SubscriptionInfo{
+		if user.MoniestSubscriptionInfoID.Valid {
+			moniest.MoniestSubscriptionInfo = &MoniestSubscriptionInfo{
 				Fee:       user.Fee.Float64,
 				Message:   user.Message.String,
-				UpdatedAt: user.SubscriptionInfoUpdatedAt.Time,
+				UpdatedAt: user.MoniestSubscriptionInfoUpdatedAt.Time,
 			}
 		}
 
@@ -197,11 +197,11 @@ func NewGetUsersResponse(users []db.GetUserByUsernameRow) []User {
 				Score:       user.Score.Float64,
 			}
 
-			if user.SubscriptionInfoID.Valid {
-				moniest.SubscriptionInfo = &SubscriptionInfo{
+			if user.MoniestSubscriptionInfoID.Valid {
+				moniest.MoniestSubscriptionInfo = &MoniestSubscriptionInfo{
 					Fee:       user.Fee.Float64,
 					Message:   user.Message.String,
-					UpdatedAt: user.SubscriptionInfoUpdatedAt.Time,
+					UpdatedAt: user.MoniestSubscriptionInfoUpdatedAt.Time,
 				}
 			}
 

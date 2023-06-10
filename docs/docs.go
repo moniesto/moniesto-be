@@ -1795,15 +1795,15 @@ const docTemplate = `{
         "model.CreateMoniestRequest": {
             "type": "object",
             "required": [
-                "card_id",
+                "binance_id",
                 "fee"
             ],
             "properties": {
-                "bio": {
-                    "description": "optional",
+                "binance_id": {
                     "type": "string"
                 },
-                "card_id": {
+                "bio": {
+                    "description": "optional",
                     "type": "string"
                 },
                 "description": {
@@ -2108,7 +2108,7 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "subscription_info": {
-                    "$ref": "#/definitions/model.SubscriptionInfo"
+                    "$ref": "#/definitions/model.MoniestSubscriptionInfo"
                 }
             }
         },
@@ -2123,6 +2123,20 @@ const docTemplate = `{
                 },
                 "subscription_count": {
                     "type": "integer"
+                }
+            }
+        },
+        "model.MoniestSubscriptionInfo": {
+            "type": "object",
+            "properties": {
+                "fee": {
+                    "type": "number"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },
@@ -2235,20 +2249,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.SubscriptionInfo": {
-            "type": "object",
-            "properties": {
-                "fee": {
-                    "type": "number"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                }
-            }
-        },
         "model.UpdateMoniestProfileRequest": {
             "type": "object",
             "properties": {
@@ -2259,7 +2259,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "subscription_info": {
-                    "$ref": "#/definitions/model.SubscriptionInfo"
+                    "$ref": "#/definitions/model.MoniestSubscriptionInfo"
                 }
             }
         },
@@ -2391,7 +2391,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "subscription_info": {
-                    "$ref": "#/definitions/model.SubscriptionInfo"
+                    "$ref": "#/definitions/model.MoniestSubscriptionInfo"
                 }
             }
         }

@@ -595,9 +595,9 @@ SELECT "u"."id",
     "m"."bio",
     "m"."description",
     "m"."score",
-    "si"."fee",
-    "si"."message",
-    "si"."updated_at" as "subscription_info_updated_at",
+    "msi"."fee",
+    "msi"."message",
+    "msi"."updated_at" as "moniest_subscription_info_updated_at",
     COUNT("us"."id") as "user_subscription_count",
     COALESCE (
         (
@@ -637,13 +637,13 @@ SELECT "u"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "moniest" as m
     INNER JOIN "user" as u ON "u"."id" = "m"."user_id"
-    INNER JOIN "subscription_info" as si ON "si"."moniest_id" = "m"."id"
+    INNER JOIN "moniest_subscription_info" as msi ON "msi"."moniest_id" = "m"."id"
     LEFT JOIN "user_subscription" as us on "us"."moniest_id" = "m"."id"
     AND "us"."active" = TRUE
     AND "u"."deleted" = FALSE
 GROUP BY "u"."id",
     "m"."id",
-    "si"."id"
+    "msi"."id"
 ORDER BY "m"."score" DESC
 LIMIT $1 OFFSET $2;
 
@@ -660,9 +660,9 @@ SELECT "u"."id",
     "m"."bio",
     "m"."description",
     "m"."score",
-    "si"."fee",
-    "si"."message",
-    "si"."updated_at" as "subscription_info_updated_at",
+    "msi"."fee",
+    "msi"."message",
+    "msi"."updated_at" as "moniest_subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -701,7 +701,7 @@ SELECT "u"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user" as "u"
     INNER JOIN "moniest" as "m" ON "m"."user_id" = "u"."id"
-    INNER JOIN "subscription_info" as "si" ON "si"."moniest_id" = "m"."id"
+    INNER JOIN "moniest_subscription_info" as "msi" ON "msi"."moniest_id" = "m"."id"
 WHERE (
         "u"."name" || ' ' || "u"."surname" ILIKE $1
     )

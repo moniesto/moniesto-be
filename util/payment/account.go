@@ -171,7 +171,7 @@ func CreateOrder(config config.Config) {
 			TerminalType: "WEB",
 		},
 		MerchantTradeNo: core.CreatePlainID(),
-		OrderAmount:     5,
+		OrderAmount:     0.1,
 		Currency:        "USDT",
 		Goods: binance.Goods{
 			GoodsType:        "02",
@@ -181,7 +181,7 @@ func CreateOrder(config config.Config) {
 		},
 	}
 
-	headers := createHeader(body, config)
+	headers := createHeader(body, "", config)
 
 	fmt.Println("headers.BinancepaySignature", headers.BinancepaySignature)
 	fmt.Println("headers.BinancepayNonce", headers.BinancepayNonce)
@@ -208,7 +208,7 @@ func CreateOrder(config config.Config) {
 	fmt.Println("Response:", resp)
 }
 
-func createHeader(body binance.CreateOrderRequest, config config.Config) binance.RequestHeader {
+func createHeader(body binance.CreateOrderRequest, body2 string, config config.Config) binance.RequestHeader {
 	ts := util.DateToTimestamp(time.Now())
 	// nonce, _ :=  generateRandomStringURLSafe(20)
 
@@ -216,12 +216,18 @@ func createHeader(body binance.CreateOrderRequest, config config.Config) binance
 
 	fmt.Println("nonce", nonce)
 
-	b, err := json.Marshal(body)
-	if err != nil {
-		fmt.Println(err)
-		return binance.RequestHeader{}
+	bodyInStr := ""
+
+	if body.MerchantTradeNo != "" {
+		b, err := json.Marshal(body)
+		if err != nil {
+			fmt.Println(err)
+			return binance.RequestHeader{}
+		}
+		bodyInStr = string(b)
+	} else {
+		bodyInStr = body2
 	}
-	bodyInStr := string(b)
 
 	fmt.Println("bodyInStr", bodyInStr)
 
@@ -275,4 +281,62 @@ func generateRandomBytes(n int) ([]byte, error) {
 	}
 
 	return b, nil
+}
+
+// -------------------- PAYOUT
+func CreatePayout(config config.Config) {
+	base_url := "https://bpay.binanceapi.com"
+	uri := "/binancepay/openapi/payout/transfer"
+
+	full_url := base_url + uri
+
+	body := `
+	{
+		"requestId": "samplerequest123457",
+		"batchName": "sample batch",
+		"currency": "USDT",
+		"totalAmount": 0.001,
+		"totalNumber": 2,
+		"bizScene": "MERCHANT_PAYMENT",
+		"transferDetailList": [
+		  {
+			"merchantSendId": "212313131317",
+			"transferAmount": 0.0006,
+			"receiveType": "BINANCE_ID",
+			"transferMethod": "FUNDING_WALLET",
+			"receiver": "743013682",
+			"remark": "test1"
+		  },
+		  {
+			"merchantSendId": "212313131318",
+			"transferAmount": 0.0004,
+			"receiveType": "BINANCE_ID",
+			"transferMethod": "FUNDING_WALLET",
+			"receiver": "155462262",
+			"remark": "test1"
+		  }
+		]
+	  }
+	`
+
+	fmt.Println("API KEY:", config.BinanceApiKey)
+	fmt.Println("SECRET KEY:", config.BinanceSecretKey)
+
+	headers := createHeader(binance.CreateOrderRequest{}, body, config)
+
+	client := resty.New()
+
+	resp, err := client.R().SetHeaders(map[string]string{
+		"content-type":              headers.ContentType,
+		"binancepay-timestamp":      strconv.Itoa(int(headers.BinancepayTimestamp)),
+		"binancepay-nonce":          headers.BinancepayNonce,
+		"binancepay-certificate-sn": headers.BinancepayCertificateSN,
+		"binancepay-signature":      headers.BinancepaySignature, // BinancePay-Signature
+	}).SetBody(body).Post(full_url)
+
+	if err != nil {
+		fmt.Println("Error Send Request: ", err.Error())
+	}
+
+	fmt.Println("Response:", resp)
 }

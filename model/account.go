@@ -105,11 +105,11 @@ func NewRegisterResponse(token string, user db.LoginUserByEmailRow) (response Re
 			Score:       user.Score.Float64,
 		}
 
-		if user.SubscriptionInfoID.Valid {
-			moniest.SubscriptionInfo = &SubscriptionInfo{
+		if user.MoniestSubscriptionInfoID.Valid {
+			moniest.MoniestSubscriptionInfo = &MoniestSubscriptionInfo{
 				Fee:       user.Fee.Float64,
 				Message:   user.Message.String,
-				UpdatedAt: user.SubscriptionInfoUpdatedAt.Time,
+				UpdatedAt: user.MoniestSubscriptionInfoUpdatedAt.Time,
 			}
 		}
 

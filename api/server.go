@@ -47,6 +47,7 @@ func (server *Server) setupRouter() {
 	router.POST("/payment/create_account", server.addConnectedAccount)
 	router.POST("/payment/create_account_link", server.createAccountLink)
 	router.DELETE("/payment/test/:acc_id", server.deleteConnectedAccount)
+	router.POST("/payment/create_payout", server.createPayout)
 
 	router.POST("/payment/binance/create-order", server.createOrder)
 	router.POST("/payment/binance/webhook", server.webhook)

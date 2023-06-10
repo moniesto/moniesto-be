@@ -51,10 +51,10 @@ SELECT "u"."id",
     "m"."bio",
     "m"."description",
     "m"."score",
-    "si"."id" as "subscription_info_id",
-    "si"."fee",
-    "si"."message",
-    "si"."updated_at" as "subscription_info_updated_at",
+    "msi"."id" as "moniest_subscription_info_id",
+    "msi"."fee",
+    "msi"."message",
+    "msi"."updated_at" as "moniest_subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -95,6 +95,6 @@ FROM "user" as u
     INNER JOIN "user_subscription" as us ON "us"."user_id" = "u"."id"
     AND "us"."active" = TRUE
     LEFT JOIN "moniest" as m ON "m"."user_id" = "u"."id"
-    LEFT JOIN "subscription_info" as si ON "si"."moniest_id" = "m"."id"
+    LEFT JOIN "moniest_subscription_info" as msi ON "msi"."moniest_id" = "m"."id"
 WHERE "us"."moniest_id" = $1
 LIMIT $2 OFFSET $3;

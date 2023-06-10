@@ -37,10 +37,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
-    "subscription_info"."id" as "subscription_info_id",
-    "subscription_info"."fee",
-    "subscription_info"."message",
-    "subscription_info"."updated_at" as "subscription_info_updated_at",
+    "moniest_subscription_info"."id" as "moniest_subscription_info_id",
+    "moniest_subscription_info"."fee",
+    "moniest_subscription_info"."message",
+    "moniest_subscription_info"."updated_at" as "moniest_subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -79,7 +79,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-    INNER JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
+    INNER JOIN "moniest_subscription_info" ON "moniest_subscription_info"."moniest_id" = "moniest"."id"
 WHERE "user"."id" = $1
     AND "user"."deleted" = false;
 
@@ -97,10 +97,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
-    "subscription_info"."id" as "subscription_info_id",
-    "subscription_info"."fee",
-    "subscription_info"."message",
-    "subscription_info"."updated_at" as "subscription_info_updated_at",
+    "moniest_subscription_info"."id" as "moniest_subscription_info_id",
+    "moniest_subscription_info"."fee",
+    "moniest_subscription_info"."message",
+    "moniest_subscription_info"."updated_at" as "moniest_subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -143,7 +143,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-    INNER JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
+    INNER JOIN "moniest_subscription_info" ON "moniest_subscription_info"."moniest_id" = "moniest"."id"
 WHERE "moniest"."id" = $1
     AND "user"."deleted" = false;
 
@@ -161,10 +161,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
-    "subscription_info"."id" as "subscription_info_id",
-    "subscription_info"."fee",
-    "subscription_info"."message",
-    "subscription_info"."updated_at" as "subscription_info_updated_at",
+    "moniest_subscription_info"."id" as "moniest_subscription_info_id",
+    "moniest_subscription_info"."fee",
+    "moniest_subscription_info"."message",
+    "moniest_subscription_info"."updated_at" as "moniest_subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -207,7 +207,7 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     INNER JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-    INNER JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
+    INNER JOIN "moniest_subscription_info" ON "moniest_subscription_info"."moniest_id" = "moniest"."id"
 WHERE "user"."username" = $1
     AND "user"."deleted" = false;
 

@@ -80,12 +80,12 @@ type GetContentMoniestResponse struct {
 }
 
 type contentMoniest struct {
-	ID               string            `json:"id,omitempty"`
-	Bio              string            `json:"bio,omitempty"`
-	Description      string            `json:"description,omitempty"`
-	SubscriberCount  int64             `json:"subscriber_count"`
-	Score            float64           `json:"score"`
-	SubscriptionInfo *SubscriptionInfo `json:"subscription_info,omitempty"`
+	ID                      string                   `json:"id,omitempty"`
+	Bio                     string                   `json:"bio,omitempty"`
+	Description             string                   `json:"description,omitempty"`
+	SubscriberCount         int64                    `json:"subscriber_count"`
+	Score                   float64                  `json:"score"`
+	MoniestSubscriptionInfo *MoniestSubscriptionInfo `json:"subscription_info,omitempty"`
 }
 
 type GetContentMoniestRequest struct {
@@ -206,10 +206,10 @@ func NewGetMoniestsResponse(moniests MoniestDBResponse) []User {
 				Bio:         user.Bio.String,
 				Description: user.Description.String,
 				Score:       user.Score,
-				SubscriptionInfo: &SubscriptionInfo{
+				MoniestSubscriptionInfo: &MoniestSubscriptionInfo{
 					Fee:       user.Fee,
 					Message:   user.Message.String,
-					UpdatedAt: user.SubscriptionInfoUpdatedAt,
+					UpdatedAt: user.MoniestSubscriptionInfoUpdatedAt,
 				},
 			},
 		})
@@ -241,10 +241,10 @@ func NewGetContentMoniestResponse(moniests ContentMoniestDBResponse) []GetConten
 				Description:     user.Description.String,
 				SubscriberCount: user.UserSubscriptionCount,
 				Score:           user.Score,
-				SubscriptionInfo: &SubscriptionInfo{
+				MoniestSubscriptionInfo: &MoniestSubscriptionInfo{
 					Fee:       user.Fee,
 					Message:   user.Message.String,
-					UpdatedAt: user.SubscriptionInfoUpdatedAt,
+					UpdatedAt: user.MoniestSubscriptionInfoUpdatedAt,
 				},
 			},
 		})

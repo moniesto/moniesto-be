@@ -31,6 +31,12 @@ func (server *Server) createOrder(ctx *gin.Context) {
 
 }
 
+func (server *Server) createPayout(ctx *gin.Context) {
+
+	payment.CreatePayout(server.config)
+
+}
+
 func (server *Server) webhook(ctx *gin.Context) {
 
 	jsonData, err := ctx.GetRawData()

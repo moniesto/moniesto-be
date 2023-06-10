@@ -95,6 +95,88 @@ func (ns NullImageType) Value() (driver.Value, error) {
 	return ns.ImageType, nil
 }
 
+type PayoutSource string
+
+const (
+	PayoutSourceBINANCE PayoutSource = "BINANCE"
+)
+
+func (e *PayoutSource) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = PayoutSource(s)
+	case string:
+		*e = PayoutSource(s)
+	default:
+		return fmt.Errorf("unsupported scan type for PayoutSource: %T", src)
+	}
+	return nil
+}
+
+type NullPayoutSource struct {
+	PayoutSource PayoutSource
+	Valid        bool // Valid is true if PayoutSource is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullPayoutSource) Scan(value interface{}) error {
+	if value == nil {
+		ns.PayoutSource, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.PayoutSource.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullPayoutSource) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return ns.PayoutSource, nil
+}
+
+type PayoutTypes string
+
+const (
+	PayoutTypesBINANCEID PayoutTypes = "BINANCE_ID"
+)
+
+func (e *PayoutTypes) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = PayoutTypes(s)
+	case string:
+		*e = PayoutTypes(s)
+	default:
+		return fmt.Errorf("unsupported scan type for PayoutTypes: %T", src)
+	}
+	return nil
+}
+
+type NullPayoutTypes struct {
+	PayoutTypes PayoutTypes
+	Valid       bool // Valid is true if PayoutTypes is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullPayoutTypes) Scan(value interface{}) error {
+	if value == nil {
+		ns.PayoutTypes, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.PayoutTypes.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullPayoutTypes) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return ns.PayoutTypes, nil
+}
+
 type PostCryptoStatus string
 
 const (
@@ -192,10 +274,26 @@ type Moniest struct {
 	UpdatedAt   time.Time      `json:"updated_at"`
 }
 
-// Stores relation between moniest and card
-type MoniestCard struct {
-	MoniestID string `json:"moniest_id"`
-	CardID    string `json:"card_id"`
+// Stores moniest payout info
+type MoniestPayoutInfo struct {
+	ID        string       `json:"id"`
+	MoniestID string       `json:"moniest_id"`
+	Source    PayoutSource `json:"source"`
+	Type      PayoutTypes  `json:"type"`
+	Value     string       `json:"value"`
+	CreatedAt time.Time    `json:"created_at"`
+	UpdatedAt time.Time    `json:"updated_at"`
+}
+
+// Stores subscription data of a moniest
+type MoniestSubscriptionInfo struct {
+	ID        string         `json:"id"`
+	MoniestID string         `json:"moniest_id"`
+	Fee       float64        `json:"fee"`
+	Message   sql.NullString `json:"message"`
+	Deleted   bool           `json:"deleted"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
 }
 
 // Stores reset token for forget password operations
@@ -237,17 +335,6 @@ type PostCryptoDescription struct {
 	Description string    `json:"description"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
-}
-
-// Stores subscription data of a moniest
-type SubscriptionInfo struct {
-	ID        string         `json:"id"`
-	MoniestID string         `json:"moniest_id"`
-	Fee       float64        `json:"fee"`
-	Message   sql.NullString `json:"message"`
-	Deleted   bool           `json:"deleted"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
 }
 
 // Stores user data

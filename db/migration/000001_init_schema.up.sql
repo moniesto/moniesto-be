@@ -4,6 +4,10 @@ CREATE TYPE "entry_position" AS ENUM ('long', 'short');
 
 CREATE TYPE "post_crypto_status" AS ENUM ('pending', 'fail', 'success');
 
+CREATE TYPE "payout_source" AS ENUM ('BINANCE');
+
+CREATE TYPE "payout_type" AS ENUM ('BINANCE_ID');
+
 CREATE TABLE "user" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "name" varchar NOT NULL,
@@ -41,7 +45,17 @@ CREATE TABLE "moniest" (
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "subscription_info" (
+CREATE TABLE "moniest_payout_info" (
+    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+    "moniest_id" varchar NOT NULL,
+    "source" payout_source NOT NULL DEFAULT 'BINANCE',
+    "type" payout_type NOT NULL DEFAULT 'BINANCE_ID',
+    "value" varchar NOT NULL,
+    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "updated_at" timestamp NOT NULL DEFAULT (now())
+);
+
+CREATE TABLE "moniest_subscription_info" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "moniest_id" varchar UNIQUE NOT NULL,
     "fee" float NOT NULL DEFAULT 5,
@@ -102,11 +116,6 @@ CREATE TABLE "user_card" (
     "card_id" varchar UNIQUE NOT NULL
 );
 
-CREATE TABLE "moniest_card" (
-    "moniest_id" varchar NOT NULL,
-    "card_id" varchar UNIQUE NOT NULL
-);
-
 CREATE TABLE "password_reset_token" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "user_id" varchar NOT NULL,
@@ -144,7 +153,9 @@ CREATE UNIQUE INDEX ON "image" ("user_id", "type");
 
 CREATE UNIQUE INDEX ON "moniest" ("user_id");
 
-CREATE INDEX ON "subscription_info" ("moniest_id");
+CREATE UNIQUE INDEX ON "moniest_payout_info" ("moniest_id", "source");
+
+CREATE INDEX ON "moniest_subscription_info" ("moniest_id");
 
 CREATE UNIQUE INDEX ON "user_subscription" ("user_id", "moniest_id");
 
@@ -153,8 +164,6 @@ CREATE INDEX ON "post_crypto" ("moniest_id");
 CREATE INDEX ON "post_crypto_description" ("post_id");
 
 CREATE UNIQUE INDEX ON "user_card" ("user_id", "card_id");
-
-CREATE UNIQUE INDEX ON "moniest_card" ("moniest_id", "card_id");
 
 CREATE UNIQUE INDEX ON "password_reset_token" ("user_id", "token");
 
@@ -166,7 +175,9 @@ COMMENT ON TABLE "image" IS 'Stores image data';
 
 COMMENT ON TABLE "moniest" IS 'Stores moniest data';
 
-COMMENT ON TABLE "subscription_info" IS 'Stores subscription data of a moniest';
+COMMENT ON TABLE "moniest_payout_info" IS 'Stores moniest payout info';
+
+COMMENT ON TABLE "moniest_subscription_info" IS 'Stores subscription data of a moniest';
 
 COMMENT ON TABLE "user_subscription" IS 'Stores user subscription info';
 
@@ -177,8 +188,6 @@ COMMENT ON TABLE "post_crypto_description" IS 'Stores crypto post description da
 COMMENT ON TABLE "card" IS 'Stores single card data';
 
 COMMENT ON TABLE "user_card" IS 'Stores relation between user and card';
-
-COMMENT ON TABLE "moniest_card" IS 'Stores relation between moniest and card';
 
 COMMENT ON TABLE "password_reset_token" IS 'Stores reset token for forget password operations';
 
@@ -198,13 +207,10 @@ ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 ALTER TABLE "user_card"
 ADD FOREIGN KEY ("card_id") REFERENCES "card" ("id");
 
-ALTER TABLE "moniest_card"
+ALTER TABLE "moniest_subscription_info"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
-ALTER TABLE "moniest_card"
-ADD FOREIGN KEY ("card_id") REFERENCES "card" ("id");
-
-ALTER TABLE "subscription_info"
+ALTER TABLE "moniest_payout_info"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
 ALTER TABLE "user_subscription"

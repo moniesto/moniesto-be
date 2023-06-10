@@ -114,10 +114,10 @@ SELECT "u"."id",
     "m"."bio",
     "m"."description",
     "m"."score",
-    "si"."id" as "subscription_info_id",
-    "si"."fee",
-    "si"."message",
-    "si"."updated_at" as "subscription_info_updated_at",
+    "msi"."id" as "moniest_subscription_info_id",
+    "msi"."fee",
+    "msi"."message",
+    "msi"."updated_at" as "moniest_subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -158,7 +158,7 @@ FROM "user" as u
     INNER JOIN "user_subscription" as us ON "us"."user_id" = "u"."id"
     AND "us"."active" = TRUE
     LEFT JOIN "moniest" as m ON "m"."user_id" = "u"."id"
-    LEFT JOIN "subscription_info" as si ON "si"."moniest_id" = "m"."id"
+    LEFT JOIN "moniest_subscription_info" as msi ON "msi"."moniest_id" = "m"."id"
 WHERE "us"."moniest_id" = $1
 LIMIT $2 OFFSET $3
 `
@@ -170,26 +170,26 @@ type GetSubscribersParams struct {
 }
 
 type GetSubscribersRow struct {
-	ID                           string          `json:"id"`
-	MoniestID                    sql.NullString  `json:"moniest_id"`
-	Name                         string          `json:"name"`
-	Surname                      string          `json:"surname"`
-	Username                     string          `json:"username"`
-	EmailVerified                bool            `json:"email_verified"`
-	Location                     sql.NullString  `json:"location"`
-	CreatedAt                    time.Time       `json:"created_at"`
-	UpdatedAt                    time.Time       `json:"updated_at"`
-	Bio                          sql.NullString  `json:"bio"`
-	Description                  sql.NullString  `json:"description"`
-	Score                        sql.NullFloat64 `json:"score"`
-	SubscriptionInfoID           sql.NullString  `json:"subscription_info_id"`
-	Fee                          sql.NullFloat64 `json:"fee"`
-	Message                      sql.NullString  `json:"message"`
-	SubscriptionInfoUpdatedAt    sql.NullTime    `json:"subscription_info_updated_at"`
-	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}     `json:"background_photo_thumbnail_link"`
+	ID                               string          `json:"id"`
+	MoniestID                        sql.NullString  `json:"moniest_id"`
+	Name                             string          `json:"name"`
+	Surname                          string          `json:"surname"`
+	Username                         string          `json:"username"`
+	EmailVerified                    bool            `json:"email_verified"`
+	Location                         sql.NullString  `json:"location"`
+	CreatedAt                        time.Time       `json:"created_at"`
+	UpdatedAt                        time.Time       `json:"updated_at"`
+	Bio                              sql.NullString  `json:"bio"`
+	Description                      sql.NullString  `json:"description"`
+	Score                            sql.NullFloat64 `json:"score"`
+	MoniestSubscriptionInfoID        sql.NullString  `json:"moniest_subscription_info_id"`
+	Fee                              sql.NullFloat64 `json:"fee"`
+	Message                          sql.NullString  `json:"message"`
+	MoniestSubscriptionInfoUpdatedAt sql.NullTime    `json:"moniest_subscription_info_updated_at"`
+	ProfilePhotoLink                 interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink        interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink              interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink     interface{}     `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetSubscribers(ctx context.Context, arg GetSubscribersParams) ([]GetSubscribersRow, error) {
@@ -214,10 +214,10 @@ func (q *Queries) GetSubscribers(ctx context.Context, arg GetSubscribersParams) 
 			&i.Bio,
 			&i.Description,
 			&i.Score,
-			&i.SubscriptionInfoID,
+			&i.MoniestSubscriptionInfoID,
 			&i.Fee,
 			&i.Message,
-			&i.SubscriptionInfoUpdatedAt,
+			&i.MoniestSubscriptionInfoUpdatedAt,
 			&i.ProfilePhotoLink,
 			&i.ProfilePhotoThumbnailLink,
 			&i.BackgroundPhotoLink,

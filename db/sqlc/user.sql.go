@@ -192,10 +192,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
-    "subscription_info"."id" as "subscription_info_id",
-    "subscription_info"."fee",
-    "subscription_info"."message",
-    "subscription_info"."updated_at" as "subscription_info_updated_at",
+    "moniest_subscription_info"."id" as "moniest_subscription_info_id",
+    "moniest_subscription_info"."fee",
+    "moniest_subscription_info"."message",
+    "moniest_subscription_info"."updated_at" as "moniest_subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -234,33 +234,33 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-    LEFT JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
+    LEFT JOIN "moniest_subscription_info" ON "moniest_subscription_info"."moniest_id" = "moniest"."id"
 WHERE "user"."id" = $1
     AND "user"."deleted" = false
 `
 
 type GetOwnUserByIDRow struct {
-	ID                           string          `json:"id"`
-	MoniestID                    sql.NullString  `json:"moniest_id"`
-	Name                         string          `json:"name"`
-	Surname                      string          `json:"surname"`
-	Username                     string          `json:"username"`
-	Email                        string          `json:"email"`
-	EmailVerified                bool            `json:"email_verified"`
-	Location                     sql.NullString  `json:"location"`
-	CreatedAt                    time.Time       `json:"created_at"`
-	UpdatedAt                    time.Time       `json:"updated_at"`
-	Bio                          sql.NullString  `json:"bio"`
-	Description                  sql.NullString  `json:"description"`
-	Score                        sql.NullFloat64 `json:"score"`
-	SubscriptionInfoID           sql.NullString  `json:"subscription_info_id"`
-	Fee                          sql.NullFloat64 `json:"fee"`
-	Message                      sql.NullString  `json:"message"`
-	SubscriptionInfoUpdatedAt    sql.NullTime    `json:"subscription_info_updated_at"`
-	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}     `json:"background_photo_thumbnail_link"`
+	ID                               string          `json:"id"`
+	MoniestID                        sql.NullString  `json:"moniest_id"`
+	Name                             string          `json:"name"`
+	Surname                          string          `json:"surname"`
+	Username                         string          `json:"username"`
+	Email                            string          `json:"email"`
+	EmailVerified                    bool            `json:"email_verified"`
+	Location                         sql.NullString  `json:"location"`
+	CreatedAt                        time.Time       `json:"created_at"`
+	UpdatedAt                        time.Time       `json:"updated_at"`
+	Bio                              sql.NullString  `json:"bio"`
+	Description                      sql.NullString  `json:"description"`
+	Score                            sql.NullFloat64 `json:"score"`
+	MoniestSubscriptionInfoID        sql.NullString  `json:"moniest_subscription_info_id"`
+	Fee                              sql.NullFloat64 `json:"fee"`
+	Message                          sql.NullString  `json:"message"`
+	MoniestSubscriptionInfoUpdatedAt sql.NullTime    `json:"moniest_subscription_info_updated_at"`
+	ProfilePhotoLink                 interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink        interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink              interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink     interface{}     `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetOwnUserByID(ctx context.Context, userID string) (GetOwnUserByIDRow, error) {
@@ -280,10 +280,10 @@ func (q *Queries) GetOwnUserByID(ctx context.Context, userID string) (GetOwnUser
 		&i.Bio,
 		&i.Description,
 		&i.Score,
-		&i.SubscriptionInfoID,
+		&i.MoniestSubscriptionInfoID,
 		&i.Fee,
 		&i.Message,
-		&i.SubscriptionInfoUpdatedAt,
+		&i.MoniestSubscriptionInfoUpdatedAt,
 		&i.ProfilePhotoLink,
 		&i.ProfilePhotoThumbnailLink,
 		&i.BackgroundPhotoLink,
@@ -306,10 +306,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
-    "subscription_info"."id" as "subscription_info_id",
-    "subscription_info"."fee",
-    "subscription_info"."message",
-    "subscription_info"."updated_at" as "subscription_info_updated_at",
+    "moniest_subscription_info"."id" as "moniest_subscription_info_id",
+    "moniest_subscription_info"."fee",
+    "moniest_subscription_info"."message",
+    "moniest_subscription_info"."updated_at" as "moniest_subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -352,33 +352,33 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-    LEFT JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
+    LEFT JOIN "moniest_subscription_info" ON "moniest_subscription_info"."moniest_id" = "moniest"."id"
 WHERE "user"."username" = $1
     AND "user"."deleted" = false
 `
 
 type GetOwnUserByUsernameRow struct {
-	ID                           string          `json:"id"`
-	MoniestID                    sql.NullString  `json:"moniest_id"`
-	Name                         string          `json:"name"`
-	Surname                      string          `json:"surname"`
-	Username                     string          `json:"username"`
-	Email                        string          `json:"email"`
-	EmailVerified                bool            `json:"email_verified"`
-	Location                     sql.NullString  `json:"location"`
-	CreatedAt                    time.Time       `json:"created_at"`
-	UpdatedAt                    time.Time       `json:"updated_at"`
-	Bio                          sql.NullString  `json:"bio"`
-	Description                  sql.NullString  `json:"description"`
-	Score                        sql.NullFloat64 `json:"score"`
-	SubscriptionInfoID           sql.NullString  `json:"subscription_info_id"`
-	Fee                          sql.NullFloat64 `json:"fee"`
-	Message                      sql.NullString  `json:"message"`
-	SubscriptionInfoUpdatedAt    sql.NullTime    `json:"subscription_info_updated_at"`
-	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}     `json:"background_photo_thumbnail_link"`
+	ID                               string          `json:"id"`
+	MoniestID                        sql.NullString  `json:"moniest_id"`
+	Name                             string          `json:"name"`
+	Surname                          string          `json:"surname"`
+	Username                         string          `json:"username"`
+	Email                            string          `json:"email"`
+	EmailVerified                    bool            `json:"email_verified"`
+	Location                         sql.NullString  `json:"location"`
+	CreatedAt                        time.Time       `json:"created_at"`
+	UpdatedAt                        time.Time       `json:"updated_at"`
+	Bio                              sql.NullString  `json:"bio"`
+	Description                      sql.NullString  `json:"description"`
+	Score                            sql.NullFloat64 `json:"score"`
+	MoniestSubscriptionInfoID        sql.NullString  `json:"moniest_subscription_info_id"`
+	Fee                              sql.NullFloat64 `json:"fee"`
+	Message                          sql.NullString  `json:"message"`
+	MoniestSubscriptionInfoUpdatedAt sql.NullTime    `json:"moniest_subscription_info_updated_at"`
+	ProfilePhotoLink                 interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink        interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink              interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink     interface{}     `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetOwnUserByUsername(ctx context.Context, username string) (GetOwnUserByUsernameRow, error) {
@@ -398,10 +398,10 @@ func (q *Queries) GetOwnUserByUsername(ctx context.Context, username string) (Ge
 		&i.Bio,
 		&i.Description,
 		&i.Score,
-		&i.SubscriptionInfoID,
+		&i.MoniestSubscriptionInfoID,
 		&i.Fee,
 		&i.Message,
-		&i.SubscriptionInfoUpdatedAt,
+		&i.MoniestSubscriptionInfoUpdatedAt,
 		&i.ProfilePhotoLink,
 		&i.ProfilePhotoThumbnailLink,
 		&i.BackgroundPhotoLink,
@@ -437,9 +437,9 @@ SELECT "u"."id",
     "m"."bio",
     "m"."description",
     "m"."score",
-    "si"."fee",
-    "si"."message",
-    "si"."updated_at" as "subscription_info_updated_at",
+    "msi"."fee",
+    "msi"."message",
+    "msi"."updated_at" as "moniest_subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -479,7 +479,7 @@ SELECT "u"."id",
 FROM "moniest" as m
     INNER JOIN "user_subscription" AS us ON "m"."id" = "us"."moniest_id"
     INNER JOIN "user" as u ON "u"."id" = "m"."user_id"
-    INNER JOIN "subscription_info" as si ON "si"."moniest_id" = "m"."id"
+    INNER JOIN "moniest_subscription_info" as msi ON "msi"."moniest_id" = "m"."id"
     AND "us"."user_id" = $1
     AND "us"."active" = TRUE
 ORDER BY "us"."created_at" DESC
@@ -493,25 +493,25 @@ type GetSubscriptionsParams struct {
 }
 
 type GetSubscriptionsRow struct {
-	ID                           string         `json:"id"`
-	MoniestID                    string         `json:"moniest_id"`
-	Name                         string         `json:"name"`
-	Surname                      string         `json:"surname"`
-	Username                     string         `json:"username"`
-	EmailVerified                bool           `json:"email_verified"`
-	Location                     sql.NullString `json:"location"`
-	CreatedAt                    time.Time      `json:"created_at"`
-	UpdatedAt                    time.Time      `json:"updated_at"`
-	Bio                          sql.NullString `json:"bio"`
-	Description                  sql.NullString `json:"description"`
-	Score                        float64        `json:"score"`
-	Fee                          float64        `json:"fee"`
-	Message                      sql.NullString `json:"message"`
-	SubscriptionInfoUpdatedAt    time.Time      `json:"subscription_info_updated_at"`
-	ProfilePhotoLink             interface{}    `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}    `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}    `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}    `json:"background_photo_thumbnail_link"`
+	ID                               string         `json:"id"`
+	MoniestID                        string         `json:"moniest_id"`
+	Name                             string         `json:"name"`
+	Surname                          string         `json:"surname"`
+	Username                         string         `json:"username"`
+	EmailVerified                    bool           `json:"email_verified"`
+	Location                         sql.NullString `json:"location"`
+	CreatedAt                        time.Time      `json:"created_at"`
+	UpdatedAt                        time.Time      `json:"updated_at"`
+	Bio                              sql.NullString `json:"bio"`
+	Description                      sql.NullString `json:"description"`
+	Score                            float64        `json:"score"`
+	Fee                              float64        `json:"fee"`
+	Message                          sql.NullString `json:"message"`
+	MoniestSubscriptionInfoUpdatedAt time.Time      `json:"moniest_subscription_info_updated_at"`
+	ProfilePhotoLink                 interface{}    `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink        interface{}    `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink              interface{}    `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink     interface{}    `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetSubscriptions(ctx context.Context, arg GetSubscriptionsParams) ([]GetSubscriptionsRow, error) {
@@ -538,7 +538,7 @@ func (q *Queries) GetSubscriptions(ctx context.Context, arg GetSubscriptionsPara
 			&i.Score,
 			&i.Fee,
 			&i.Message,
-			&i.SubscriptionInfoUpdatedAt,
+			&i.MoniestSubscriptionInfoUpdatedAt,
 			&i.ProfilePhotoLink,
 			&i.ProfilePhotoThumbnailLink,
 			&i.BackgroundPhotoLink,
@@ -747,10 +747,10 @@ SELECT "user"."id",
     "moniest"."bio",
     "moniest"."description",
     "moniest"."score",
-    "subscription_info"."id" as "subscription_info_id",
-    "subscription_info"."fee",
-    "subscription_info"."message",
-    "subscription_info"."updated_at" as "subscription_info_updated_at",
+    "moniest_subscription_info"."id" as "moniest_subscription_info_id",
+    "moniest_subscription_info"."fee",
+    "moniest_subscription_info"."message",
+    "moniest_subscription_info"."updated_at" as "moniest_subscription_info_updated_at",
     COALESCE (
         (
             SELECT "image"."link"
@@ -793,32 +793,32 @@ SELECT "user"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
-    LEFT JOIN "subscription_info" ON "subscription_info"."moniest_id" = "moniest"."id"
+    LEFT JOIN "moniest_subscription_info" ON "moniest_subscription_info"."moniest_id" = "moniest"."id"
 WHERE "user"."username" = $1
     AND "user"."deleted" = false
 `
 
 type GetUserByUsernameRow struct {
-	ID                           string          `json:"id"`
-	MoniestID                    sql.NullString  `json:"moniest_id"`
-	Name                         string          `json:"name"`
-	Surname                      string          `json:"surname"`
-	Username                     string          `json:"username"`
-	EmailVerified                bool            `json:"email_verified"`
-	Location                     sql.NullString  `json:"location"`
-	CreatedAt                    time.Time       `json:"created_at"`
-	UpdatedAt                    time.Time       `json:"updated_at"`
-	Bio                          sql.NullString  `json:"bio"`
-	Description                  sql.NullString  `json:"description"`
-	Score                        sql.NullFloat64 `json:"score"`
-	SubscriptionInfoID           sql.NullString  `json:"subscription_info_id"`
-	Fee                          sql.NullFloat64 `json:"fee"`
-	Message                      sql.NullString  `json:"message"`
-	SubscriptionInfoUpdatedAt    sql.NullTime    `json:"subscription_info_updated_at"`
-	ProfilePhotoLink             interface{}     `json:"profile_photo_link"`
-	ProfilePhotoThumbnailLink    interface{}     `json:"profile_photo_thumbnail_link"`
-	BackgroundPhotoLink          interface{}     `json:"background_photo_link"`
-	BackgroundPhotoThumbnailLink interface{}     `json:"background_photo_thumbnail_link"`
+	ID                               string          `json:"id"`
+	MoniestID                        sql.NullString  `json:"moniest_id"`
+	Name                             string          `json:"name"`
+	Surname                          string          `json:"surname"`
+	Username                         string          `json:"username"`
+	EmailVerified                    bool            `json:"email_verified"`
+	Location                         sql.NullString  `json:"location"`
+	CreatedAt                        time.Time       `json:"created_at"`
+	UpdatedAt                        time.Time       `json:"updated_at"`
+	Bio                              sql.NullString  `json:"bio"`
+	Description                      sql.NullString  `json:"description"`
+	Score                            sql.NullFloat64 `json:"score"`
+	MoniestSubscriptionInfoID        sql.NullString  `json:"moniest_subscription_info_id"`
+	Fee                              sql.NullFloat64 `json:"fee"`
+	Message                          sql.NullString  `json:"message"`
+	MoniestSubscriptionInfoUpdatedAt sql.NullTime    `json:"moniest_subscription_info_updated_at"`
+	ProfilePhotoLink                 interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink        interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink              interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink     interface{}     `json:"background_photo_thumbnail_link"`
 }
 
 func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error) {
@@ -837,10 +837,10 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUs
 		&i.Bio,
 		&i.Description,
 		&i.Score,
-		&i.SubscriptionInfoID,
+		&i.MoniestSubscriptionInfoID,
 		&i.Fee,
 		&i.Message,
-		&i.SubscriptionInfoUpdatedAt,
+		&i.MoniestSubscriptionInfoUpdatedAt,
 		&i.ProfilePhotoLink,
 		&i.ProfilePhotoThumbnailLink,
 		&i.BackgroundPhotoLink,
