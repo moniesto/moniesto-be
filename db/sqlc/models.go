@@ -136,45 +136,45 @@ func (ns NullPayoutSource) Value() (driver.Value, error) {
 	return ns.PayoutSource, nil
 }
 
-type PayoutTypes string
+type PayoutType string
 
 const (
-	PayoutTypesBINANCEID PayoutTypes = "BINANCE_ID"
+	PayoutTypeBINANCEID PayoutType = "BINANCE_ID"
 )
 
-func (e *PayoutTypes) Scan(src interface{}) error {
+func (e *PayoutType) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = PayoutTypes(s)
+		*e = PayoutType(s)
 	case string:
-		*e = PayoutTypes(s)
+		*e = PayoutType(s)
 	default:
-		return fmt.Errorf("unsupported scan type for PayoutTypes: %T", src)
+		return fmt.Errorf("unsupported scan type for PayoutType: %T", src)
 	}
 	return nil
 }
 
-type NullPayoutTypes struct {
-	PayoutTypes PayoutTypes
-	Valid       bool // Valid is true if PayoutTypes is not NULL
+type NullPayoutType struct {
+	PayoutType PayoutType
+	Valid      bool // Valid is true if PayoutType is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullPayoutTypes) Scan(value interface{}) error {
+func (ns *NullPayoutType) Scan(value interface{}) error {
 	if value == nil {
-		ns.PayoutTypes, ns.Valid = "", false
+		ns.PayoutType, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.PayoutTypes.Scan(value)
+	return ns.PayoutType.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullPayoutTypes) Value() (driver.Value, error) {
+func (ns NullPayoutType) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return ns.PayoutTypes, nil
+	return ns.PayoutType, nil
 }
 
 type PostCryptoStatus string
@@ -279,7 +279,7 @@ type MoniestPayoutInfo struct {
 	ID        string       `json:"id"`
 	MoniestID string       `json:"moniest_id"`
 	Source    PayoutSource `json:"source"`
-	Type      PayoutTypes  `json:"type"`
+	Type      PayoutType   `json:"type"`
 	Value     string       `json:"value"`
 	CreatedAt time.Time    `json:"created_at"`
 	UpdatedAt time.Time    `json:"updated_at"`

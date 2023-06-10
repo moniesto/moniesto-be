@@ -187,6 +187,16 @@ func Stop(price, stop float64, direction db.EntryPosition) error {
 	return nil
 }
 
+func BinanceID(binance_id string) error {
+
+	if len(binance_id) > 0 {
+		return nil
+	}
+
+	return fmt.Errorf("binance_id is not valid")
+
+}
+
 func UserIsAdmin(email string) bool {
 	return contains(adminEmails, strings.ToLower(email))
 }

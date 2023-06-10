@@ -72,6 +72,13 @@ func (server *Server) createMoniest(ctx *gin.Context) {
 		return
 	}
 
+	// STEP: create payout info
+	_, err = server.service.CreatePayoutInfo(ctx, moniest.ID, req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
 	// STEP: get created moniest data [+ user data]
 	createdMoniest, err := server.service.GetMoniestByMoniestID(ctx, moniest.ID)
 	if err != nil {

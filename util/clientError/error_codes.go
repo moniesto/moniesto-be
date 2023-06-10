@@ -131,6 +131,9 @@ const (
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage = "Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage"
 	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate        = "Moniest_CreateSubscriptionInfo_ServerErrorOnCreate"
 
+	Moniest_CreatePayoutInfo_InvalidBinanceID    = "Moniest_CreatePayoutInfo_InvalidBinanceID"
+	Moniest_CreatePayoutInfo_ServerErrorOnCreate = "Moniest_CreatePayoutInfo_ServerErrorOnCreate"
+
 	Moniest_SubscribeCheck_ServerErrorCheck = "Moniest_SubscribeCheck_ServerErrorCheck"
 
 	Moniest_GetSubscriber_InvalidParam              = "Moniest_GetSubscriber_InvalidParam"
@@ -303,6 +306,9 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_CreateSubscriptionInfo_InvalidFee:                 "Fee is invalid",
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage: "Subscription message is invalid",
 	Moniest_CreateSubscriptionInfo_ServerErrorOnCreate:        "Server error on create subscription info",
+
+	Moniest_CreatePayoutInfo_InvalidBinanceID:    "Binance ID is not valid",
+	Moniest_CreatePayoutInfo_ServerErrorOnCreate: "Server error on create payout info",
 
 	Moniest_SubscribeCheck_ServerErrorCheck: "Server error on checking moniest subscribe status",
 
