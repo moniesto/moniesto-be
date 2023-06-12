@@ -11,6 +11,90 @@ import (
 	"time"
 )
 
+type BinancePaymentDateType string
+
+const (
+	BinancePaymentDateTypeMONTH BinancePaymentDateType = "MONTH"
+)
+
+func (e *BinancePaymentDateType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BinancePaymentDateType(s)
+	case string:
+		*e = BinancePaymentDateType(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BinancePaymentDateType: %T", src)
+	}
+	return nil
+}
+
+type NullBinancePaymentDateType struct {
+	BinancePaymentDateType BinancePaymentDateType
+	Valid                  bool // Valid is true if BinancePaymentDateType is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullBinancePaymentDateType) Scan(value interface{}) error {
+	if value == nil {
+		ns.BinancePaymentDateType, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.BinancePaymentDateType.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullBinancePaymentDateType) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return ns.BinancePaymentDateType, nil
+}
+
+type BinancePaymentStatus string
+
+const (
+	BinancePaymentStatusPending BinancePaymentStatus = "pending"
+	BinancePaymentStatusFail    BinancePaymentStatus = "fail"
+	BinancePaymentStatusSuccess BinancePaymentStatus = "success"
+)
+
+func (e *BinancePaymentStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BinancePaymentStatus(s)
+	case string:
+		*e = BinancePaymentStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BinancePaymentStatus: %T", src)
+	}
+	return nil
+}
+
+type NullBinancePaymentStatus struct {
+	BinancePaymentStatus BinancePaymentStatus
+	Valid                bool // Valid is true if BinancePaymentStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullBinancePaymentStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.BinancePaymentStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.BinancePaymentStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullBinancePaymentStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return ns.BinancePaymentStatus, nil
+}
+
 type EntryPosition string
 
 const (
@@ -218,6 +302,26 @@ func (ns NullPostCryptoStatus) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	return ns.PostCryptoStatus, nil
+}
+
+// Stores binance payment transactions info and history
+type BinancePaymentTransaction struct {
+	ID            string                 `json:"id"`
+	QrcodeLink    string                 `json:"qrcode_link"`
+	CheckoutLink  string                 `json:"checkout_link"`
+	DeepLink      string                 `json:"deep_link"`
+	UniversalLink string                 `json:"universal_link"`
+	Status        BinancePaymentStatus   `json:"status"`
+	UserID        string                 `json:"user_id"`
+	MoniestID     string                 `json:"moniest_id"`
+	DateType      BinancePaymentDateType `json:"date_type"`
+	DateValue     int32                  `json:"date_value"`
+	MoniestFee    float64                `json:"moniest_fee"`
+	Amount        float64                `json:"amount"`
+	WebhookUrl    string                 `json:"webhook_url"`
+	PayerID       sql.NullString         `json:"payer_id"`
+	CreatedAt     time.Time              `json:"created_at"`
+	UpdatedAt     time.Time              `json:"updated_at"`
 }
 
 // Stores single card data

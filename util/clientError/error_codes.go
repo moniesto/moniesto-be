@@ -117,6 +117,7 @@ const (
 	Moniest_GetMoniest_NoMoniest             = "Moniest_GetMoniest_NoMoniest"
 	Moniest_GetMoniest_ServerErrorGetMoniest = "Moniest_GetMoniest_ServerErrorGetMoniest"
 
+	Moniest_Subscribe_InvalidBody                     = "Moniest_Subscribe_InvalidBody"
 	Moniest_Subscribe_SubscribeOwn                    = "Moniest_Subscribe_SubscribeOwn"
 	Moniest_Subscribe_ServerErrorGetSubscription      = "Moniest_Subscribe_ServerErrorGetSubscription"
 	Moniest_Subscribe_AlreadySubscribed               = "Moniest_Subscribe_AlreadySubscribed"
@@ -293,6 +294,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_GetMoniest_NoMoniest:             "Not any moniest exist",
 	Moniest_GetMoniest_ServerErrorGetMoniest: "Server error on getting moniest",
 
+	Moniest_Subscribe_InvalidBody:                     "Subscribe to moniest request body is invalid",
 	Moniest_Subscribe_SubscribeOwn:                    "User can't subscribe to own",
 	Moniest_Subscribe_ServerErrorGetSubscription:      "Server error on getting subscription",
 	Moniest_Subscribe_AlreadySubscribed:               "Already subscribed to moniest",

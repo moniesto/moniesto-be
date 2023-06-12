@@ -4,6 +4,10 @@ CREATE TYPE "entry_position" AS ENUM ('long', 'short');
 
 CREATE TYPE "post_crypto_status" AS ENUM ('pending', 'fail', 'success');
 
+CREATE TYPE "binance_payment_status" AS ENUM ('pending', 'fail', 'success');
+
+CREATE TYPE "binance_payment_date_type" AS ENUM ('MONTH');
+
 CREATE TYPE "payout_source" AS ENUM ('BINANCE');
 
 CREATE TYPE "payout_type" AS ENUM ('BINANCE_ID');
@@ -145,6 +149,25 @@ CREATE TABLE "feedback" (
   "solved_at" timestamp
 );
 
+CREATE TABLE "binance_payment_transaction" (
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "qrcode_link" text NOT NULL,
+  "checkout_link" text NOT NULL,
+  "deep_link" text NOT NULL,
+  "universal_link" text NOT NULL,
+  "status" binance_payment_status NOT NULL DEFAULT 'pending',
+  "user_id" varchar NOT NULL,
+  "moniest_id" varchar NOT NULL,
+  "date_type" binance_payment_date_type NOT NULL DEFAULT 'MONTH',
+  "date_value" integer NOT NULL,
+  "moniest_fee" float NOT NULL,
+  "amount" float NOT NULL,
+  "webhook_url" text NOT NULL,
+  "payer_id" varchar,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
+);
+
 CREATE UNIQUE INDEX ON "user" ("username");
 
 CREATE UNIQUE INDEX ON "user" ("email");
@@ -195,6 +218,8 @@ COMMENT ON TABLE "email_verification_token" IS 'Stores email verification token 
 
 COMMENT ON TABLE "feedback" IS 'Stores feedback from users';
 
+COMMENT ON TABLE "binance_payment_transaction" IS 'Stores binance payment transactions info and history';
+
 ALTER TABLE "image"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
@@ -211,6 +236,12 @@ ALTER TABLE "moniest_subscription_info"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
 ALTER TABLE "moniest_payout_info"
+ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
+
+ALTER TABLE "binance_payment_transaction"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+
+ALTER TABLE "binance_payment_transaction"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
 ALTER TABLE "user_subscription"

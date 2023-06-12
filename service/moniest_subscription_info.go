@@ -8,6 +8,7 @@ import (
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
+	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
@@ -23,7 +24,7 @@ func (service *Service) CreateSubsriptionInfo(ctx *gin.Context, moniest_id strin
 	if err := validation.Fee(req.Fee, service.config); err != nil {
 		return db.MoniestSubscriptionInfo{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_CreateSubscriptionInfo_InvalidFee)
 	}
-	subscriptionInfoParams.Fee = req.Fee
+	subscriptionInfoParams.Fee = util.RoundAmountDown(req.Fee)
 
 	// STEP: message is valid
 	if req.Message != "" {

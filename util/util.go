@@ -1,6 +1,9 @@
 package util
 
-import "time"
+import (
+	"math"
+	"time"
+)
 
 const (
 	MAX_LIMIT     = 50
@@ -63,4 +66,12 @@ func SafeSearchText(searchText string) string {
 
 func DateToTimestamp(date time.Time) int64 {
 	return date.UnixNano() / int64(time.Millisecond)
+}
+
+func RoundAmountDown(fee float64) float64 {
+	return (math.Floor(fee*100) / 100)
+}
+
+func RoundAmountUp(fee float64) float64 {
+	return (math.Ceil(fee*100) / 100)
 }

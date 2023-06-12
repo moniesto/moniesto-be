@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS "binance_payment_transaction";
+
 DROP TABLE IF EXISTS "feedback";
 
 DROP TABLE IF EXISTS "email_verification_token";
@@ -33,3 +35,7 @@ DROP TYPE "post_crypto_status";
 DROP TYPE "payout_source";
 
 DROP TYPE "payout_type";
+
+DROP TYPE "binance_payment_status";
+
+DROP TYPE "binance_payment_date_type";

@@ -8,6 +8,7 @@ import (
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/validation"
 )
 
 // @Summary Be Moniest
@@ -147,6 +148,45 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+func (server *Server) subscribeMoniest(ctx *gin.Context) {
+	// STEP: get username from param
+	username := ctx.Param("username")
+
+	var req model.SubscribeMoniestRequest
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_Subscribe_InvalidBody))
+		return
+	}
+
+	// STEP: valid date value
+	if !validation.SubscriptionDateValue(req.NumberOfMonths) {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_Subscribe_InvalidBody))
+		return
+	}
+
+	// STEP: check "username" is a real moniest
+	moniest, err := server.service.GetMoniestByUsername(ctx, username)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: check user is not subscribing own
+	if moniest.ID == user_id {
+		ctx.AbortWithStatusJSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_Subscribe_SubscribeOwn))
+		return
+	}
+
+	// STEP: create binance payment transaction
+	server.service.CreateBinancePaymentTransaction(ctx, req, moniest, user_id)
+
+}
+
 // @Summary Subscribe to Moniest
 // @Description Subscribe to Moniest
 // @Security bearerAuth
@@ -160,7 +200,7 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 // @Failure 404 {object} clientError.ErrorResponse "moniest is not found"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /moniests/:username/subscribe [post]
-func (server *Server) subscribeMoniest(ctx *gin.Context) {
+func (server *Server) subscribeMoniest1(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")
 

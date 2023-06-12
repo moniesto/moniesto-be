@@ -14,6 +14,12 @@ type CreateMoniestRequest struct {
 	BinanceID   string  `json:"binance_id" binding:"required"`
 }
 
+type SubscribeMoniestRequest struct {
+	NumberOfMonths int    `json:"number_of_months" binding:"required,min=1"`
+	ReturnURL      string `json:"returnURL" binding:"required"`
+	CancelURL      string `json:"cancelURL" binding:"required"`
+}
+
 type Moniest struct {
 	ID                      string                   `json:"id,omitempty"`
 	Bio                     string                   `json:"bio,omitempty"`

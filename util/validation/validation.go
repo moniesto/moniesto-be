@@ -201,6 +201,14 @@ func UserIsAdmin(email string) bool {
 	return contains(adminEmails, strings.ToLower(email))
 }
 
+func SubscriptionDateValue(number_of_months int) bool {
+	if number_of_months >= 1 && number_of_months <= MaxSubscriptionMonth {
+		return true
+	}
+
+	return false
+}
+
 func contains(s []string, str string) bool {
 	for _, v := range s {
 		if v == str {

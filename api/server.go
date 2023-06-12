@@ -132,6 +132,12 @@ func (server *Server) setupRouter() {
 		adminRouters.POST("/update_posts_status", server.UpdatePostsStatusManual)
 	}
 
+	// Webhooks
+	webhookRouters := router.Group("/webhooks")
+	{
+		webhookRouters.POST("/binance/payment") // TODO: add service function to handle webhook
+	}
+
 	// Swagger docs
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

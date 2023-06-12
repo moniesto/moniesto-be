@@ -1,5 +1,11 @@
 package binance
 
+import "time"
+
+const CREATE_ORDER_STATUS_SUCCESS = "SUCCESS"
+const CREATE_ORDER_STATUS_FAIL = "FAIL"
+const ORDER_EXPIRE_TIME = time.Minute * 5 // 5 mins
+
 type RequestHeader struct {
 	ContentType             string
 	BinancepayTimestamp     int64
@@ -14,7 +20,34 @@ type CreateOrderRequest struct {
 	OrderAmount     float64 `json:"orderAmount"`
 	Currency        string  `json:"currency"` // BUSD | USDT | MBOX
 	Goods           Goods   `json:"goods"`
-	// Shipping        Shipping `json:"Shipping"`
+	ReturnURL       string  `json:"returnUrl"`
+	CancelURL       string  `json:"cancelUrl"`
+	WebhookURL      string  `json:"webhookUrl"`
+	OrderExpireTime int64   `json:"orderExpireTime"`
+}
+
+type CreateOrderResponse struct {
+	Status string    `json:"status"`
+	Code   string    `json:"code"`
+	Data   OrderData `json:"data"`
+
+	// only failure | error case
+	ErrorMessage string `json:"errorMessage"`
+}
+
+type OrderData struct {
+	Currency     string `json:"currency"`
+	TotalFee     string `json:"totalFee"`
+	PrepayId     string `json:"prepayId"`
+	TerminalType string `json:"terminalType"`
+	ExpireTime   int    `json:"expireTime"`
+
+	// pay links
+	QrcodeLink   string `json:"qrcodeLink"`
+	QrContent    string `json:"qrContent"`
+	CheckoutUrl  string `json:"checkoutUrl"`
+	Deeplink     string `json:"deeplink"`
+	UniversalUrl string `json:"universalUrl"`
 }
 
 type Env struct {
@@ -26,24 +59,4 @@ type Goods struct {
 	GoodsCategory    string `json:"goodsCategory"` // 0000: Electronics & Computers
 	ReferenceGoodsId string `json:"referenceGoodsId"`
 	GoodsName        string `json:"goodsName"`
-	// GoodsUnitAmount  GoodsUnitAmount `json:"goodsUnitAmount"`
-}
-
-type GoodsUnitAmount struct {
-	Currency string  `json:"currency"`
-	Amount   float64 `json:"amount"`
-}
-
-type Shipping struct {
-	ShippingName    ShippingName    `json:"shippingName"`
-	ShippingAddress ShippingAddress `json:"shippingAddress"`
-}
-
-type ShippingName struct {
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-}
-
-type ShippingAddress struct {
-	Region string `json:"region"`
 }
