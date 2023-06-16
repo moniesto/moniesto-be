@@ -117,12 +117,14 @@ const (
 	Moniest_GetMoniest_NoMoniest             = "Moniest_GetMoniest_NoMoniest"
 	Moniest_GetMoniest_ServerErrorGetMoniest = "Moniest_GetMoniest_ServerErrorGetMoniest"
 
-	Moniest_Subscribe_InvalidBody                     = "Moniest_Subscribe_InvalidBody"
-	Moniest_Subscribe_SubscribeOwn                    = "Moniest_Subscribe_SubscribeOwn"
-	Moniest_Subscribe_ServerErrorGetSubscription      = "Moniest_Subscribe_ServerErrorGetSubscription"
-	Moniest_Subscribe_AlreadySubscribed               = "Moniest_Subscribe_AlreadySubscribed"
-	Moniest_Subscribe_ServerErrorActivateSubscription = "Moniest_Subscribe_ServerErrorActivateSubscription"
-	Moniest_Subscribe_ServerErrorCreateSubscriptionDB = "Moniest_Subscribe_ServerErrorCreateSubscriptionDB"
+	Moniest_Subscribe_InvalidBody                         = "Moniest_Subscribe_InvalidBody"
+	Moniest_Subscribe_SubscribeOwn                        = "Moniest_Subscribe_SubscribeOwn"
+	Moniest_Subscribe_ServerErrorGetSubscription          = "Moniest_Subscribe_ServerErrorGetSubscription"
+	Moniest_Subscribe_AlreadySubscribed                   = "Moniest_Subscribe_AlreadySubscribed"
+	Moniest_Subscribe_ServerErrorCreateBinanceOrder       = "Moniest_Subscribe_ServerErrorCreateBinanceOrder"
+	Moniest_Subscribe_ServerErrorCreateBinanceTransaction = "Moniest_Subscribe_ServerErrorCreateBinanceTransaction"
+	Moniest_Subscribe_ServerErrorActivateSubscription     = "Moniest_Subscribe_ServerErrorActivateSubscription"
+	Moniest_Subscribe_ServerErrorCreateSubscriptionDB     = "Moniest_Subscribe_ServerErrorCreateSubscriptionDB"
 
 	Moniest_Unsubscribe_UnsubscribeOwn         = "Moniest_Unsubscribe_UnsubscribeOwn"
 	Moniest_Unsubscribe_NotSubscribed          = "Moniest_Unsubscribe_NotSubscribed"
@@ -298,6 +300,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_Subscribe_SubscribeOwn:                    "User can't subscribe to own",
 	Moniest_Subscribe_ServerErrorGetSubscription:      "Server error on getting subscription",
 	Moniest_Subscribe_AlreadySubscribed:               "Already subscribed to moniest",
+	Moniest_Subscribe_ServerErrorCreateBinanceOrder:   "Server error on creating binance payment link",
 	Moniest_Subscribe_ServerErrorActivateSubscription: "Server error on activating subscription",
 	Moniest_Subscribe_ServerErrorCreateSubscriptionDB: "Server error on creating subscription on DB",
 

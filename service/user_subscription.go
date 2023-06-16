@@ -14,7 +14,7 @@ import (
 
 func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, userID string) error {
 	// STEP: get subscription status
-	exist, subscription, err := service.getUserSubscriptionStatus(ctx, moniestID, userID)
+	exist, subscription, err := service.GetUserSubscriptionStatus(ctx, moniestID, userID)
 	if err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 
 func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, userID string) error {
 	// STEP: get subscription status
-	exist, subscription, err := service.getUserSubscriptionStatus(ctx, moniestID, userID)
+	exist, subscription, err := service.GetUserSubscriptionStatus(ctx, moniestID, userID)
 	if err != nil {
 		return err
 	}
@@ -93,7 +93,7 @@ func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, u
 	return nil
 }
 
-func (service *Service) getUserSubscriptionStatus(ctx *gin.Context, moniestID string, userID string) (bool, db.UserSubscription, error) {
+func (service *Service) GetUserSubscriptionStatus(ctx *gin.Context, moniestID string, userID string) (bool, db.UserSubscription, error) {
 
 	params := db.GetSubscriptionParams{
 		UserID:    userID,

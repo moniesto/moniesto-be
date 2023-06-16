@@ -1064,11 +1064,23 @@ const docTemplate = `{
                         "name": "username",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "all fields are required",
+                        "name": "UpdateMoniestBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SubscribeMoniestRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.SubscribeMoniestResponse"
+                        }
                     },
                     "400": {
                         "description": "already subscribed",
@@ -2245,6 +2257,43 @@ const docTemplate = `{
             ],
             "properties": {
                 "redirect_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SubscribeMoniestRequest": {
+            "type": "object",
+            "required": [
+                "cancelURL",
+                "number_of_months",
+                "returnURL"
+            ],
+            "properties": {
+                "cancelURL": {
+                    "type": "string"
+                },
+                "number_of_months": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "returnURL": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SubscribeMoniestResponse": {
+            "type": "object",
+            "properties": {
+                "checkout_link": {
+                    "type": "string"
+                },
+                "deep_link": {
+                    "type": "string"
+                },
+                "qrcode_link": {
+                    "type": "string"
+                },
+                "universal_link": {
                     "type": "string"
                 }
             }

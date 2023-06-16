@@ -148,6 +148,20 @@ func (server *Server) updateMoniestProfile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary Subscribe to Moniest
+// @Description Subscribe to Moniest
+// @Security bearerAuth
+// @Tags Moniest
+// @Accept json
+// @Produce json
+// @Param username path string true "moniest username"
+// @Param UpdateMoniestBody body model.SubscribeMoniestRequest true "all fields are required"
+// @Success 200 {object} model.SubscribeMoniestResponse
+// @Failure 400 {object} clientError.ErrorResponse "already subscribed"
+// @Failure 403 {object} clientError.ErrorResponse "subscribe own"
+// @Failure 404 {object} clientError.ErrorResponse "moniest is not found"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/:username/subscribe [post]
 func (server *Server) subscribeMoniest(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")
@@ -182,24 +196,41 @@ func (server *Server) subscribeMoniest(ctx *gin.Context) {
 		return
 	}
 
-	// STEP: create binance payment transaction
-	server.service.CreateBinancePaymentTransaction(ctx, req, moniest, user_id)
+	// STEP: check subscription status -> prevent already subscribed
+	exist, subscription, err := server.service.GetUserSubscriptionStatus(ctx, moniest.MoniestID, user_id)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
 
+	if exist {
+		if subscription.Active {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, clientError.Moniest_Subscribe_AlreadySubscribed)
+			return
+		}
+	}
+
+	// STEP: create binance payment transaction
+	binancePaymentTransaction, err := server.service.CreateBinancePaymentTransaction(ctx, req, moniest, user_id)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: create job to check order status
+	// TODO: create checker job
+
+	response := model.SubscribeMoniestResponse{
+		QrcodeLink:    binancePaymentTransaction.QrcodeLink,
+		CheckoutLink:  binancePaymentTransaction.CheckoutLink,
+		DeepLink:      binancePaymentTransaction.DeepLink,
+		UniversalLink: binancePaymentTransaction.UniversalLink,
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }
 
-// @Summary Subscribe to Moniest
-// @Description Subscribe to Moniest
-// @Security bearerAuth
-// @Tags Moniest
-// @Accept json
-// @Produce json
-// @Param username path string true "moniest username"
-// @Success 200
-// @Failure 400 {object} clientError.ErrorResponse "already subscribed"
-// @Failure 403 {object} clientError.ErrorResponse "subscribe own"
-// @Failure 404 {object} clientError.ErrorResponse "moniest is not found"
-// @Failure 500 {object} clientError.ErrorResponse "server error"
-// @Router /moniests/:username/subscribe [post]
+// offline
 func (server *Server) subscribeMoniest1(ctx *gin.Context) {
 	// STEP: get username from param
 	username := ctx.Param("username")

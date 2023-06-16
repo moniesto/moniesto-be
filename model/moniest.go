@@ -20,6 +20,13 @@ type SubscribeMoniestRequest struct {
 	CancelURL      string `json:"cancelURL" binding:"required"`
 }
 
+type SubscribeMoniestResponse struct {
+	QrcodeLink    string `json:"qrcode_link"`
+	CheckoutLink  string `json:"checkout_link"`
+	DeepLink      string `json:"deep_link"`
+	UniversalLink string `json:"universal_link"`
+}
+
 type Moniest struct {
 	ID                      string                   `json:"id,omitempty"`
 	Bio                     string                   `json:"bio,omitempty"`
