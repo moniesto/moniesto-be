@@ -87,8 +87,6 @@ func (server *Server) createMoniest(ctx *gin.Context) {
 		return
 	}
 
-	// PAYMENT FUTURE TODO: add card payment info
-
 	// STEP: update data form
 	response := model.NewCreateMoniestResponse(createdMoniest)
 
@@ -217,9 +215,6 @@ func (server *Server) subscribeMoniest(ctx *gin.Context) {
 		return
 	}
 
-	// STEP: create job to check order status
-	// TODO: create checker job
-
 	response := model.SubscribeMoniestResponse{
 		QrcodeLink:    binancePaymentTransaction.QrcodeLink,
 		CheckoutLink:  binancePaymentTransaction.CheckoutLink,
@@ -228,39 +223,42 @@ func (server *Server) subscribeMoniest(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, response)
+
+	// STEP: create job to check order status
+	go server.service.SetPaymentTransactionCheckerJob(ctx, 6, 12, binancePaymentTransaction.ID)
 }
 
-// offline
-func (server *Server) subscribeMoniest1(ctx *gin.Context) {
-	// STEP: get username from param
-	username := ctx.Param("username")
+// // offline
+// func (server *Server) subscribeMoniest1(ctx *gin.Context) {
+// 	// STEP: get username from param
+// 	username := ctx.Param("username")
 
-	// STEP: check "username" is a real moniest
-	moniest, err := server.service.GetMoniestByUsername(ctx, username)
-	if err != nil {
-		ctx.AbortWithStatusJSON(clientError.ParseError(err))
-		return
-	}
+// 	// STEP: check "username" is a real moniest
+// 	moniest, err := server.service.GetMoniestByUsername(ctx, username)
+// 	if err != nil {
+// 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+// 		return
+// 	}
 
-	// STEP: get user id from token
-	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	user_id := authPayload.User.ID
+// 	// STEP: get user id from token
+// 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+// 	user_id := authPayload.User.ID
 
-	// STEP: check user is not subscribing own
-	if moniest.ID == user_id {
-		ctx.AbortWithStatusJSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_Subscribe_SubscribeOwn))
-		return
-	}
+// 	// STEP: check user is not subscribing own
+// 	if moniest.ID == user_id {
+// 		ctx.AbortWithStatusJSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_Subscribe_SubscribeOwn))
+// 		return
+// 	}
 
-	// STEP: create subscription
-	err = server.service.SubscribeMoniest(ctx, moniest.MoniestID, user_id)
-	if err != nil {
-		ctx.AbortWithStatusJSON(clientError.ParseError(err))
-		return
-	}
+// 	// STEP: create subscription
+// 	err = server.service.SubscribeMoniest(ctx, moniest.MoniestID, user_id)
+// 	if err != nil {
+// 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+// 		return
+// 	}
 
-	ctx.Status(http.StatusOK)
-}
+// 	ctx.Status(http.StatusOK)
+// }
 
 // @Summary Unsubscribe from Moniest
 // @Description Unsubscribe from Moniest
@@ -346,6 +344,17 @@ func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
 
 	response := model.CheckSubscriptionResponse{
 		Subscribed: userIsSubscribed,
+	}
+
+	// STEP: check if it is still pending
+	if !userIsSubscribed {
+		pendingTransaction, err := server.service.CheckPendingPaymentTransaction(ctx, username, user_id)
+		if err != nil {
+			ctx.AbortWithStatusJSON(clientError.ParseError(err))
+			return
+		}
+
+		response.Pending = &pendingTransaction
 	}
 
 	ctx.JSON(http.StatusOK, response)

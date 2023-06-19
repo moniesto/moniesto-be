@@ -14,18 +14,30 @@ import (
 const activateSubscription = `-- name: ActivateSubscription :exec
 UPDATE "user_subscription"
 SET active = true,
+    latest_transaction_id = $3,
+    subscription_start_date = $4,
+    subscription_end_date = $5,
     updated_at = now()
 WHERE user_id = $1
     AND moniest_id = $2
 `
 
 type ActivateSubscriptionParams struct {
-	UserID    string `json:"user_id"`
-	MoniestID string `json:"moniest_id"`
+	UserID                string         `json:"user_id"`
+	MoniestID             string         `json:"moniest_id"`
+	LatestTransactionID   sql.NullString `json:"latest_transaction_id"`
+	SubscriptionStartDate time.Time      `json:"subscription_start_date"`
+	SubscriptionEndDate   time.Time      `json:"subscription_end_date"`
 }
 
 func (q *Queries) ActivateSubscription(ctx context.Context, arg ActivateSubscriptionParams) error {
-	_, err := q.db.ExecContext(ctx, activateSubscription, arg.UserID, arg.MoniestID)
+	_, err := q.db.ExecContext(ctx, activateSubscription,
+		arg.UserID,
+		arg.MoniestID,
+		arg.LatestTransactionID,
+		arg.SubscriptionStartDate,
+		arg.SubscriptionEndDate,
+	)
 	return err
 }
 
@@ -56,27 +68,43 @@ INSERT INTO "user_subscription" (
         id,
         user_id,
         moniest_id,
+        latest_transaction_id,
+        subscription_start_date,
+        subscription_end_date,
         created_at,
         updated_at
     )
-VALUES ($1, $2, $3, now(), now())
-RETURNING id, user_id, moniest_id, active, created_at, updated_at
+VALUES ($1, $2, $3, $4, $5, $6, now(), now())
+RETURNING id, user_id, moniest_id, active, latest_transaction_id, subscription_start_date, subscription_end_date, created_at, updated_at
 `
 
 type CreateSubscriptionParams struct {
-	ID        string `json:"id"`
-	UserID    string `json:"user_id"`
-	MoniestID string `json:"moniest_id"`
+	ID                    string         `json:"id"`
+	UserID                string         `json:"user_id"`
+	MoniestID             string         `json:"moniest_id"`
+	LatestTransactionID   sql.NullString `json:"latest_transaction_id"`
+	SubscriptionStartDate time.Time      `json:"subscription_start_date"`
+	SubscriptionEndDate   time.Time      `json:"subscription_end_date"`
 }
 
 func (q *Queries) CreateSubscription(ctx context.Context, arg CreateSubscriptionParams) (UserSubscription, error) {
-	row := q.db.QueryRowContext(ctx, createSubscription, arg.ID, arg.UserID, arg.MoniestID)
+	row := q.db.QueryRowContext(ctx, createSubscription,
+		arg.ID,
+		arg.UserID,
+		arg.MoniestID,
+		arg.LatestTransactionID,
+		arg.SubscriptionStartDate,
+		arg.SubscriptionEndDate,
+	)
 	var i UserSubscription
 	err := row.Scan(
 		&i.ID,
 		&i.UserID,
 		&i.MoniestID,
 		&i.Active,
+		&i.LatestTransactionID,
+		&i.SubscriptionStartDate,
+		&i.SubscriptionEndDate,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
@@ -237,7 +265,7 @@ func (q *Queries) GetSubscribers(ctx context.Context, arg GetSubscribersParams) 
 }
 
 const getSubscription = `-- name: GetSubscription :one
-SELECT id, user_id, moniest_id, active, created_at, updated_at
+SELECT id, user_id, moniest_id, active, latest_transaction_id, subscription_start_date, subscription_end_date, created_at, updated_at
 FROM "user_subscription"
 WHERE user_id = $1
     AND moniest_id = $2
@@ -256,6 +284,9 @@ func (q *Queries) GetSubscription(ctx context.Context, arg GetSubscriptionParams
 		&i.UserID,
 		&i.MoniestID,
 		&i.Active,
+		&i.LatestTransactionID,
+		&i.SubscriptionStartDate,
+		&i.SubscriptionEndDate,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)

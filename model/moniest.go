@@ -48,7 +48,8 @@ type UpdateMoniestProfileRequest struct {
 }
 
 type CheckSubscriptionResponse struct {
-	Subscribed bool `json:"subscribed"`
+	Subscribed bool  `json:"subscribed"`
+	Pending    *bool `json:"pending,omitempty"`
 }
 
 type GetMoniestPostsRequest struct {

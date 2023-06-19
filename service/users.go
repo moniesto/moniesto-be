@@ -10,6 +10,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/systemError"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -22,7 +23,7 @@ func (service *Service) GetOwnUserByUsername(ctx *gin.Context, username string) 
 			return db.GetOwnUserByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByUsername)
 		}
 
-		// TODO: log server error
+		systemError.Log("server error on getting own user by username")
 		return db.GetOwnUserByUsernameRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.User_GetUser_ServerErrorGetUser)
 
 	}
@@ -39,7 +40,7 @@ func (service *Service) GetUserByUsername(ctx *gin.Context, username string) (db
 			return db.GetUserByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByUsername)
 		}
 
-		// TODO: log server error
+		systemError.Log("server error on getting user by username")
 		return db.GetUserByUsernameRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.User_GetUser_ServerErrorGetUser)
 
 	}

@@ -11,9 +11,6 @@ import (
 	"github.com/moniesto/moniesto-be/util"
 )
 
-const BASE_URL = "https://bpay.binanceapi.com"
-const CREATE_ORDER_PATH = "/binancepay/openapi/v2/order"
-
 func CreateOrder(ctx *gin.Context, config config.Config, transactionID string, amount float64, productName, returnURL, cancelURL, webhookURL string) (OrderData, error) {
 
 	uri := BASE_URL + CREATE_ORDER_PATH
@@ -54,7 +51,7 @@ func CreateOrder(ctx *gin.Context, config config.Config, transactionID string, a
 		return OrderData{}, fmt.Errorf("error while marshall response body")
 	}
 
-	if responseBody.Status == CREATE_ORDER_STATUS_FAIL {
+	if responseBody.Status == BINANCE_REQUEST_STATUS_FAIL {
 		return OrderData{}, fmt.Errorf("error while creating order: %s", responseBody.ErrorMessage)
 	}
 

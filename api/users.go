@@ -10,7 +10,6 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
-// PRIMARY TODO: update user db requests with moniest db requests (dont have idea why)
 // @Summary Get User by Username
 // @Description get user info with username
 // @Security bearerAuth

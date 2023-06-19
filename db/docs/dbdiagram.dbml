@@ -104,6 +104,9 @@
     user_id varchar [not null]
     moniest_id varchar [not null]
     active boolean [not null, default: true]
+    latest_transaction_id varchar
+    subscription_start_date timestamp [not null, default: `now()`]
+    subscription_end_date timestamp [not null, default: `now()`]
     
     created_at timestamp [not null, default: `now()`]
     updated_at timestamp [not null, default: `now()`]

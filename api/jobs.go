@@ -10,7 +10,6 @@ func (server *Server) UpdatePostStatus() {
 
 	activePosts, err := server.service.GetAllActivePosts()
 	if err != nil {
-		// TODO: better system error
 		systemError.Log("CRON JOB - Update Post Status: db error while getting active posts")
 		return
 	}

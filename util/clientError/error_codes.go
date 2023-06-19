@@ -179,6 +179,12 @@ const (
 
 	User_GetStats_ServerErrorGetStats    = "User_GetStats_ServerErrorGetStats"
 	Moniest_GetStats_ServerErrorGetStats = "Moniest_GetStats_ServerErrorGetStats"
+
+	Payment_CheckBinanceTransaction_TransactionIDNotFound          = "Payment_CheckBinanceTransaction_TransactionIDNotFound"
+	Payment_CheckBinanceTransaction_ServerErrorGetTransaction      = "Payment_CheckBinanceTransaction_ServerErrorGetTransaction"
+	Payment_CheckBinanceTransaction_ServerErrorQueryTransaction    = "Payment_CheckBinanceTransaction_ServerErrorQueryTransaction"
+	Payment_CheckBinanceTransaction_ServerErrorUpdateStatusSuccess = "Payment_CheckBinanceTransaction_ServerErrorUpdateStatusSuccess"
+	Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail    = "Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail"
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
@@ -357,4 +363,10 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 
 	User_GetStats_ServerErrorGetStats:    "Server error on getting user stats",
 	Moniest_GetStats_ServerErrorGetStats: "Server error on getting moniest stats",
+
+	Payment_CheckBinanceTransaction_TransactionIDNotFound:          "TransactionID not found",
+	Payment_CheckBinanceTransaction_ServerErrorGetTransaction:      "Server error on getting transaction data",
+	Payment_CheckBinanceTransaction_ServerErrorQueryTransaction:    "Server error on query transaction",
+	Payment_CheckBinanceTransaction_ServerErrorUpdateStatusSuccess: "Server error on updating transaction status [success case]",
+	Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail:    "Server error on updating transaction status [fail case]",
 }

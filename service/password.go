@@ -37,7 +37,7 @@ func (service *Service) UpdatePassword(ctx *gin.Context, user_id, password strin
 	// STEP: hash password
 	hashedPassword, err := util.HashPassword(password)
 	if err != nil {
-		// TODO: add server error
+		systemError.Log("server error on hashing password")
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorPassword)
 	}
 
@@ -91,7 +91,7 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 	// STEP: delete older password reset tokens
 	err = service.Store.DeletePasswordResetTokenByUserID(ctx, user.ID)
 	if err != nil {
-		// TODO: add system error [only system error]
+		systemError.Log("server error on deleting password reset token by user id")
 	}
 
 	// STEP: create password reset token object
@@ -132,7 +132,7 @@ func (service *Service) GetPasswordResetToken(ctx *gin.Context, encoded_token st
 			return db.PasswordResetToken{}, clientError.CreateError(http.StatusNotFound, clientError.Account_ChangePassword_NotFoundToken)
 		}
 
-		// TODO: add server error
+		systemError.Log("server error on getting password reset token by token")
 		return db.PasswordResetToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorGetToken)
 	}
 
@@ -148,7 +148,7 @@ func (service *Service) DeletePasswordResetToken(ctx *gin.Context, token string)
 	err := service.Store.DeletePasswordResetTokenByToken(ctx, token)
 
 	if err != nil {
-		// TODO: add server error
+		systemError.Log("server error on deleting password reset token by token")
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorDeleteToken)
 	}
 

@@ -1,11 +1,5 @@
 package binance
 
-import "time"
-
-const CREATE_ORDER_STATUS_SUCCESS = "SUCCESS"
-const CREATE_ORDER_STATUS_FAIL = "FAIL"
-const ORDER_EXPIRE_TIME = time.Minute * 5 // 5 mins
-
 type RequestHeader struct {
 	ContentType             string
 	BinancepayTimestamp     int64
@@ -24,6 +18,19 @@ type CreateOrderRequest struct {
 	CancelURL       string  `json:"cancelUrl"`
 	WebhookURL      string  `json:"webhookUrl"`
 	OrderExpireTime int64   `json:"orderExpireTime"`
+}
+
+type QueryOrderRequest struct {
+	MerchantTradeNo string `json:"merchantTradeNo"`
+}
+
+type QueryOrderResponse struct {
+	Status string         `json:"status"`
+	Code   string         `json:"code"`
+	Data   QueryOrderData `json:"data"`
+
+	// only failure | error case
+	ErrorMessage string `json:"errorMessage"`
 }
 
 type CreateOrderResponse struct {
@@ -48,6 +55,34 @@ type OrderData struct {
 	CheckoutUrl  string `json:"checkoutUrl"`
 	Deeplink     string `json:"deeplink"`
 	UniversalUrl string `json:"universalUrl"`
+}
+
+type QueryOrderData struct {
+	MerchantID      int    `json:"merchantId"`
+	PrepayID        string `json:"prepayId"`
+	MerchantTradeNo string `json:"merchantTradeNo"`
+	Status          string `json:"status"`
+	Currency        string `json:"currency"`
+	CreateTime      int64  `json:"createTime"`
+	OrderAmount     string `json:"orderAmount"`
+
+	// paid specific
+	OpenUserId   string           `json:"openUserId"`
+	TransactTime int64            `json:"transactTime"`
+	PaymentInfo  QueryPaymentInfo `json:"paymentInfo"`
+}
+
+type QueryPaymentInfo struct {
+	PayerId             string                     `json:"payerId"`
+	PayMethod           string                     `json:"payMethod"`
+	PaymentInstructions []QueryPaymentInstructions `json:"paymentInstructions"`
+	Channel             string                     `json:"channel"`
+}
+
+type QueryPaymentInstructions struct {
+	Currency string `json:"currency"`
+	Amount   string `json:"amount"`
+	Price    string `json:"price"`
 }
 
 type Env struct {

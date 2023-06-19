@@ -5,7 +5,16 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/util/payment"
+	"github.com/moniesto/moniesto-be/util/payment/binance"
 )
+
+func (server *Server) CheckBinancePaymentTransaction(ctx *gin.Context) {
+	// STEP: get username from param
+	transactionID := ctx.Param("transaction_id")
+
+	binance.QueryOrder(ctx, server.config, transactionID)
+
+}
 
 func (server *Server) addConnectedAccount(ctx *gin.Context) {
 

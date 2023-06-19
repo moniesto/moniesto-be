@@ -9,6 +9,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/systemError"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -23,7 +24,7 @@ func (service *Service) GetMoniestByUserID(ctx *gin.Context, user_id string) (db
 			return db.GetMoniestByUserIdRow{}, nil
 		}
 
-		// TODO: add server error
+		systemError.Log("server error on getting moniest by user id")
 		return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_CreateMoniest_ServerErrorUserIsMoniest)
 	}
 
@@ -79,7 +80,7 @@ func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req mode
 	// STEP: create moniest
 	moniest, err := service.Store.CreateMoniest(ctx, moniestParams)
 	if err != nil {
-		// TODO: add server error
+		systemError.Log("server error on create moniest")
 		return db.Moniest{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_CreateMoniest_ServerErrorCreateMoniest)
 	}
 
@@ -127,7 +128,7 @@ func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, r
 			return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusForbidden, clientError.General_UserNotMoniest)
 		}
 
-		// TODO: add server error
+		systemError.Log("server error on getting moniest by user id")
 		return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdateMoniest_ServerErrorGetUser)
 	}
 

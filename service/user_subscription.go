@@ -3,6 +3,7 @@ package service
 import (
 	"database/sql"
 	"net/http"
+	"time"
 	"unsafe"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +13,7 @@ import (
 	"github.com/moniesto/moniesto-be/util/clientError"
 )
 
-func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, userID string) error {
+func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, userID string, latestTransactionID string, numberOfMonths int) error {
 	// STEP: get subscription status
 	exist, subscription, err := service.GetUserSubscriptionStatus(ctx, moniestID, userID)
 	if err != nil {
@@ -26,12 +27,18 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 		}
 	}
 
+	subscriptionStartDate := time.Now().UTC()
+	subscriptionEndDate := subscriptionStartDate.AddDate(0, numberOfMonths, 0)
+
 	// STEP: add | update db
 	if exist {
 		// STEP: update db
 		params := db.ActivateSubscriptionParams{
-			UserID:    userID,
-			MoniestID: moniestID,
+			UserID:                userID,
+			MoniestID:             moniestID,
+			LatestTransactionID:   sql.NullString{Valid: true, String: latestTransactionID},
+			SubscriptionStartDate: subscriptionStartDate,
+			SubscriptionEndDate:   subscriptionEndDate,
 		}
 
 		err = service.Store.ActivateSubscription(ctx, params)
@@ -41,9 +48,12 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 	} else {
 		// STEP: add to db
 		params := db.CreateSubscriptionParams{
-			ID:        core.CreateID(),
-			UserID:    userID,
-			MoniestID: moniestID,
+			ID:                    core.CreateID(),
+			UserID:                userID,
+			MoniestID:             moniestID,
+			LatestTransactionID:   sql.NullString{Valid: true, String: latestTransactionID},
+			SubscriptionStartDate: subscriptionStartDate,
+			SubscriptionEndDate:   subscriptionEndDate,
 		}
 
 		_, err := service.Store.CreateSubscription(ctx, params)
@@ -53,8 +63,9 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 	}
 
 	// STEP: payment
-	// PAYMENT FUTURE TODO: subscribe to moniest
-	// remove from db if payment failed
+
+	// TODO: start payout operation
+	service.StartPayout() // TODO: update
 
 	return nil
 }

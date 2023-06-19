@@ -3,10 +3,13 @@ INSERT INTO "user_subscription" (
         id,
         user_id,
         moniest_id,
+        latest_transaction_id,
+        subscription_start_date,
+        subscription_end_date,
         created_at,
         updated_at
     )
-VALUES ($1, $2, $3, now(), now())
+VALUES ($1, $2, $3, $4, $5, $6, now(), now())
 RETURNING *;
 
 -- name: GetSubscription :one
@@ -18,6 +21,9 @@ WHERE user_id = $1
 -- name: ActivateSubscription :exec
 UPDATE "user_subscription"
 SET active = true,
+    latest_transaction_id = $3,
+    subscription_start_date = $4,
+    subscription_end_date = $5,
     updated_at = now()
 WHERE user_id = $1
     AND moniest_id = $2;

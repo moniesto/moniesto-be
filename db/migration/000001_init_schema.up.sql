@@ -74,6 +74,9 @@ CREATE TABLE "user_subscription" (
     "user_id" varchar NOT NULL,
     "moniest_id" varchar NOT NULL,
     "active" boolean NOT NULL DEFAULT true,
+    "latest_transaction_id" varchar,
+    "subscription_start_date" timestamp NOT NULL DEFAULT (now()),
+    "subscription_end_date" timestamp NOT NULL DEFAULT (now()),
     "created_at" timestamp NOT NULL DEFAULT (now()),
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );

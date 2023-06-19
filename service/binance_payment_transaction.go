@@ -1,9 +1,11 @@
 package service
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
@@ -19,7 +21,8 @@ func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req mo
 
 	// STEP: create order in binance and get payment links
 	product_name := getProductName(req, moniest)
-	amount := getAmount(req, moniest)
+	//	amount := getAmount(req, moniest)
+	amount := 0.00000001
 	transactionID := core.CreatePlainID()
 	webhookURL := createWebhookURL(ctx, transactionID)
 	req.ReturnURL, req.CancelURL = updateNavigateURLs(transactionID, req.ReturnURL, req.CancelURL) // add transactionID to urls
@@ -56,6 +59,123 @@ func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req mo
 	return binancePaymentTransaction, nil
 }
 
+// run CheckPaymentTransactionStatus function X times in Y minute
+func (service *Service) SetPaymentTransactionCheckerJob(ctx *gin.Context, minute, times int, transactionID string) {
+
+	seconds := minute * 60
+
+	interval := seconds / times
+
+	count := times
+
+	for count > 0 {
+
+		time.Sleep(time.Duration(interval) * time.Second)
+		count += -1
+		fmt.Println("CHECKER RUN")
+
+		latestTransactionStatus, err := service.CheckPaymentTransactionStatus(ctx, transactionID)
+
+		// if any error occurs, skip
+		if err != nil {
+			_, msg := clientError.ParseError(err)
+			systemError.Log("error while checking payment transaction status", msg)
+		} else {
+			if latestTransactionStatus != string(db.BinancePaymentStatusPending) {
+				count = -1 // stop the loop
+			}
+		}
+	}
+}
+
+func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transactionID string) (string, error) {
+
+	// STEP: get transaction data
+	binancePaymentTransaction, err := service.Store.GetBinancePaymentTransaction(ctx, transactionID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", clientError.CreateError(http.StatusNotFound, clientError.Payment_CheckBinanceTransaction_TransactionIDNotFound)
+		}
+
+		return "", clientError.CreateError(http.StatusInternalServerError, clientError.Payment_CheckBinanceTransaction_ServerErrorGetTransaction)
+	}
+
+	// STEP: check it is still pending
+	if binancePaymentTransaction.Status != db.BinancePaymentStatusPending {
+		return string(binancePaymentTransaction.Status), nil
+	}
+
+	orderData, err := binance.QueryOrder(ctx, service.config, transactionID)
+	if err != nil {
+		return "", clientError.CreateError(http.StatusInternalServerError, clientError.Payment_CheckBinanceTransaction_ServerErrorQueryTransaction)
+	}
+
+	// STEP: still pending state
+	if orderData.Status == binance.QUERY_ORDER_STATUS_INITIAL {
+		return string(binancePaymentTransaction.Status), nil // TODO: update return -> nothing to do
+	}
+
+	// STEP: payment successful case
+	if orderData.Status == binance.QUERY_ORDER_STATUS_PAID {
+
+		// STEP: update transaction status
+		param := db.UpdateBinancePaymentTransactionStatusParams{
+			ID:      transactionID,
+			Status:  db.BinancePaymentStatusSuccess,
+			PayerID: sql.NullString{Valid: true, String: orderData.PaymentInfo.PayerId},
+		}
+
+		updatedBinancePaymentTransaction, err := service.Store.UpdateBinancePaymentTransactionStatus(ctx, param)
+		if err != nil {
+			return "", clientError.CreateError(http.StatusInternalServerError, clientError.Payment_CheckBinanceTransaction_ServerErrorUpdateStatusSuccess)
+		}
+
+		// STEP: subscribe to moniest
+		err = service.SubscribeMoniest(ctx,
+			updatedBinancePaymentTransaction.MoniestID,
+			updatedBinancePaymentTransaction.UserID,
+			updatedBinancePaymentTransaction.ID,
+			int(updatedBinancePaymentTransaction.DateValue),
+		)
+		if err != nil {
+			return "", err
+		}
+
+		// TODO: create payout history (or maybe do it in subscribe function)
+
+		return string(updatedBinancePaymentTransaction.Status), nil
+	}
+
+	// STEP: payment failed cases [rest of them]
+	param := db.UpdateBinancePaymentTransactionStatusParams{
+		ID:     transactionID,
+		Status: db.BinancePaymentStatusFail,
+	}
+	updatedBinancePaymentTransaction, err := service.Store.UpdateBinancePaymentTransactionStatus(ctx, param)
+	if err != nil {
+		return "", clientError.CreateError(http.StatusInternalServerError, clientError.Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail)
+	}
+
+	return string(updatedBinancePaymentTransaction.Status), nil
+}
+
+func (service *Service) CheckPendingPaymentTransaction(ctx *gin.Context, moniestUsername, user_id string) (bool, error) {
+
+	// STEP: check payment transaction is in pending status
+	param := db.CheckPendingBinancePaymentTransactionByMoniestUsernameParams{
+		UserID:   user_id,
+		Username: moniestUsername,
+	}
+
+	transactionIsPending, err := service.Store.CheckPendingBinancePaymentTransactionByMoniestUsername(ctx, param)
+	if err != nil {
+		return false, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_SubscribeCheck_ServerErrorCheck)
+	}
+
+	return transactionIsPending, nil
+}
+
+// HELPER functions
 func getProductName(req model.SubscribeMoniestRequest, moniest db.GetMoniestByUsernameRow) string {
 	return fmt.Sprintf("You are subscribing to %s %s at a monthly fee of $%.2f for %d months.", moniest.Name, moniest.Surname, util.RoundAmountDown(moniest.Fee), req.NumberOfMonths)
 }

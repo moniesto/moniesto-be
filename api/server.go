@@ -132,6 +132,12 @@ func (server *Server) setupRouter() {
 		adminRouters.POST("/update_posts_status", server.UpdatePostsStatusManual)
 	}
 
+	// Payment routes
+	paymentRouters := router.Group("/payment") //.Use(authMiddleware(server.tokenMaker))
+	{
+		paymentRouters.POST("/binance/transactions/check/:transaction_id", server.CheckBinancePaymentTransaction)
+	}
+
 	// Webhooks
 	webhookRouters := router.Group("/webhooks")
 	{

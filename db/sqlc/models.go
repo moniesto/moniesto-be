@@ -466,10 +466,13 @@ type UserCard struct {
 
 // Stores user subscription info
 type UserSubscription struct {
-	ID        string    `json:"id"`
-	UserID    string    `json:"user_id"`
-	MoniestID string    `json:"moniest_id"`
-	Active    bool      `json:"active"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID                    string         `json:"id"`
+	UserID                string         `json:"user_id"`
+	MoniestID             string         `json:"moniest_id"`
+	Active                bool           `json:"active"`
+	LatestTransactionID   sql.NullString `json:"latest_transaction_id"`
+	SubscriptionStartDate time.Time      `json:"subscription_start_date"`
+	SubscriptionEndDate   time.Time      `json:"subscription_end_date"`
+	CreatedAt             time.Time      `json:"created_at"`
+	UpdatedAt             time.Time      `json:"updated_at"`
 }
