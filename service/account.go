@@ -46,7 +46,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	// any user with same email
 	checkEmail, err := service.Store.CheckEmail(ctx, validEmail)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["CheckEmail"](err))
+		systemError.Log("server error on check email", err.Error())
 		return db.User{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Register_ServerErrorCheckEmail)
 	}
 	if !checkEmail {
@@ -56,7 +56,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	// any user with same username
 	checkUsername, err := service.Store.CheckUsername(ctx, registerRequest.Username)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["CheckUsername"](err))
+		systemError.Log("server error on check username", err.Error())
 		return db.User{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Register_ServerErrorCheckUsername)
 	}
 	if !checkUsername {
@@ -66,7 +66,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 	// hash password
 	hashedPassword, err := util.HashPassword(registerRequest.Password)
 	if err != nil {
-		// TODO: add server error
+		systemError.Log("hash password error", err.Error())
 		return db.User{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Register_ServerErrorPassword)
 	}
 
@@ -81,7 +81,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 
 	createdUser, err = service.Store.CreateUser(ctx, user)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["CreateUser"](err))
+		systemError.Log("server error on creating user", err.Error())
 		return db.User{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_Register_ServerErrorCreateUser)
 	}
 
@@ -161,7 +161,7 @@ func (service *Service) GetUserByID(ctx *gin.Context, user_id string) (db.GetUse
 			return db.GetUserByIDRow{}, clientError.CreateError(http.StatusNotFound, clientError.Account_GetUser_NotFound)
 		}
 
-		// TODO: add server error
+		systemError.Log("get user by id error", err.Error())
 		return db.GetUserByIDRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_GetUser_ServerError)
 	}
 
@@ -186,7 +186,7 @@ func (service *Service) CheckUsername(ctx *gin.Context, username string) (bool, 
 
 	checkUsername, err := service.Store.CheckUsername(ctx, username)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["CheckUsername"](err))
+		systemError.Log("server error on check username", err.Error())
 		return false, clientError.CreateError(http.StatusInternalServerError, clientError.Account_CheckUsername_ServerErrorCheckUsername)
 	}
 	if !checkUsername {
@@ -202,7 +202,7 @@ func (service *Service) CreateEmailVerificationToken(ctx *gin.Context, userID, r
 	// STEP: delete older email verification tokens
 	err := service.Store.DeleteEmailVerificationTokenByUserID(ctx, userID)
 	if err != nil {
-		// TODO: add system error [only system error]
+		systemError.Log("delete email verification token by user id error", err.Error())
 	}
 
 	// STEP: create email verification token object
@@ -219,7 +219,7 @@ func (service *Service) CreateEmailVerificationToken(ctx *gin.Context, userID, r
 	// STEP: insert DB
 	email_verification_token, err := service.Store.CreateEmailVerificationToken(ctx, params)
 	if err != nil {
-		// TODO: add system error
+		systemError.Log("create email verification token error", err.Error())
 		return db.EmailVerificationToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorCreateToken)
 	}
 
@@ -246,7 +246,7 @@ func (service *Service) GetEmailVerificationToken(ctx *gin.Context, encoded_toke
 			return db.EmailVerificationToken{}, clientError.CreateError(http.StatusNotFound, clientError.Account_EmailVerification_NotFoundToken)
 		}
 
-		// TODO: add server error
+		systemError.Log("get email verification token error", err.Error())
 		return db.EmailVerificationToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorGetToken)
 	}
 
@@ -264,6 +264,7 @@ func (service *Service) VerifyEmail(ctx *gin.Context, user_id string) error {
 	// STEP: verify email
 	err := service.Store.VerifyEmail(ctx, user_id)
 	if err != nil {
+		systemError.Log("server error on verify email", err.Error())
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorVerifyEmail)
 	}
 
@@ -276,7 +277,7 @@ func (service *Service) DeleteEmailVerificationToken(ctx *gin.Context, token str
 	err := service.Store.DeleteEmailVerificationTokenByToken(ctx, token)
 
 	if err != nil {
-		// TODO: add server error
+		systemError.Log("delete email verification token error", err.Error())
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorDeleteToken)
 	}
 
@@ -300,6 +301,7 @@ func (service *Service) ChangeUsername(ctx *gin.Context, user_id, new_username s
 	// STEP: update/set new username
 	err = service.Store.SetUsername(ctx, params)
 	if err != nil {
+		systemError.Log("server error on set username", err.Error())
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangeUsername_ServerErrorChangeUsername)
 	}
 

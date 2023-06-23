@@ -11,6 +11,7 @@ import (
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/mailing"
+	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 // @Summary Login
@@ -49,7 +50,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		},
 	}, server.config.AccessTokenDuration)
 	if err != nil {
-		// TODO: add server error
+		systemError.Log("create token error", err.Error())
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_Login_ServerErrorToken))
 		return
 	}
@@ -309,7 +310,7 @@ func (server *Server) changeUsername(ctx *gin.Context) {
 		},
 	}, server.config.AccessTokenDuration)
 	if err != nil {
-		// TODO: add server error
+		systemError.Log("create token error", err.Error())
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_ChangeUsername_ServerErrorToken))
 		return
 	}

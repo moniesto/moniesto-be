@@ -10,6 +10,7 @@ import (
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscribed, active bool, sortBy string, limit, offset int) ([]model.GetContentPostResponse, error) {
@@ -33,6 +34,7 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 			if userIsMoniest {
 				postsFromDB, err := service.Store.GetSubscribedActivePostsWithOwn(ctx, db.GetSubscribedActivePostsWithOwnParams(params))
 				if err != nil {
+					systemError.Log("server error on get subscribed active posts with own", err.Error())
 					return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
 				}
 
@@ -42,6 +44,7 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 			} else {
 				postsFromDB, err := service.Store.GetSubscribedActivePosts(ctx, params)
 				if err != nil {
+					systemError.Log("server error on get subscribed active posts", err.Error())
 					return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
 				}
 
@@ -62,6 +65,7 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 		if userIsMoniest {
 			postsFromDB, err := service.Store.GetSubscribedDeactivePostsWithOwn(ctx, db.GetSubscribedDeactivePostsWithOwnParams(params))
 			if err != nil {
+				systemError.Log("server error on get subscribed deactive posts with own", err.Error())
 				return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
 			}
 
@@ -72,6 +76,7 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 			postsFromDB, err := service.Store.GetSubscribedDeactivePosts(ctx, params)
 
 			if err != nil {
+				systemError.Log("server error on get subscribed deactive posts", err.Error())
 				return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
 			}
 
@@ -92,6 +97,7 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 			if err == sql.ErrNoRows {
 				return []model.GetContentPostResponse{}, nil
 			}
+			systemError.Log("server error on get deactive posts by score", err.Error())
 			return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
 		}
 		posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
@@ -104,6 +110,7 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 		Offset: int32(offset),
 	})
 	if err != nil {
+		systemError.Log("server error on get deactive posts by created at", err.Error())
 		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
 	}
 	posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
@@ -119,6 +126,7 @@ func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, lim
 
 	moniestFromDB, err := service.Store.GetMoniests(ctx, params)
 	if err != nil {
+		systemError.Log("server error on get content moniests", err.Error())
 		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetMoniests_ServerErrorGetMoniests)
 	}
 
@@ -137,6 +145,7 @@ func (service *Service) SearchMoniest(ctx *gin.Context, searchText string, limit
 
 	moniestFromDB, err := service.Store.SearchMoniests(ctx, params)
 	if err != nil {
+		systemError.Log("server error on search moniests", err.Error())
 		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_SearchMoniests_ServerErrorSearchMoniest)
 	}
 

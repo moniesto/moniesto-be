@@ -14,6 +14,7 @@ import (
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/scoring"
+	"github.com/moniesto/moniesto-be/util/systemError"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -28,6 +29,7 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 
 	post, err := service.Store.CreatePost(ctx, createPostParams)
 	if err != nil {
+		systemError.Log("server error on create post", err.Error())
 		return db.CreatePostRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_ServerErrorCreatePost)
 	}
 
@@ -58,6 +60,7 @@ func (service *Service) getValidPost(req model.CreatePostRequest, currency model
 	// STEP: currency price is valid
 	currency_price, err := strconv.ParseFloat(currency.Price, 64)
 	if err != nil {
+		systemError.Log("server error on parse currency", err.Error())
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_InvalidCurrencyPrice)
 	}
 
@@ -100,6 +103,7 @@ func (service *Service) CreatePostDescription(postID, description string, ctx *g
 	// STEP: convert image base64's to URL (upload to storage)
 	descriptionWithPhoto, err := service.postDescriptionImageReplacer(ctx, description)
 	if err != nil {
+		systemError.Log("server error on post description image replacer", err.Error())
 		return db.PostCryptoDescription{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_ServerErrorPostPhotoUpload)
 	}
 
@@ -112,6 +116,7 @@ func (service *Service) CreatePostDescription(postID, description string, ctx *g
 	// STEP: create description
 	createdDescription, err := service.Store.AddPostDescription(ctx, createDescription)
 	if err != nil {
+		systemError.Log("server error on add post description", err.Error())
 		return db.PostCryptoDescription{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_ServerErrorCreateDescription)
 	}
 
@@ -177,6 +182,7 @@ func (service *Service) GetMoniestPosts(ctx *gin.Context, moniest_username strin
 
 			postsFromDB, err := service.Store.GetMoniestActivePostsByUsername(ctx, params)
 			if err != nil {
+				systemError.Log("server error on get moniest active posts by username", err.Error())
 				return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniestPosts_ServerErrorGetPosts)
 			}
 
@@ -192,6 +198,7 @@ func (service *Service) GetMoniestPosts(ctx *gin.Context, moniest_username strin
 			}
 			postsFromDB, err := service.Store.GetMoniestAllPostsByUsername(ctx, params)
 			if err != nil {
+				systemError.Log("server error on get moniest all posts by username", err.Error())
 				return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniestPosts_ServerErrorGetPosts)
 			}
 
@@ -210,6 +217,7 @@ func (service *Service) GetMoniestPosts(ctx *gin.Context, moniest_username strin
 
 	postsFromDB, err := service.Store.GetMoniestDeactivePostsByUsername(ctx, params)
 	if err != nil {
+		systemError.Log("server error on get moniest deactive posts by username", err.Error())
 		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniestPosts_ServerErrorGetPosts)
 	}
 
@@ -229,6 +237,7 @@ func (service *Service) GetOwnPosts(ctx *gin.Context, moniest_username string, a
 
 		postsFromDB, err := service.Store.GetOwnActivePostsByUsername(ctx, params)
 		if err != nil {
+			systemError.Log("server error on get own active posts by username", err.Error())
 			return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniestPosts_ServerErrorGetPosts)
 		}
 
@@ -245,6 +254,7 @@ func (service *Service) GetOwnPosts(ctx *gin.Context, moniest_username string, a
 
 		postsFromDB, err := service.Store.GetOwnAllPostsByUsername(ctx, params)
 		if err != nil {
+			systemError.Log("server error on get own all posts by username", err.Error())
 			return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniestPosts_ServerErrorGetPosts)
 		}
 

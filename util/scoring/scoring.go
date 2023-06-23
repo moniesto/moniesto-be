@@ -8,6 +8,7 @@ import (
 	"github.com/moniesto/moniesto-be/config"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
+	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 var calculateApproximateURI = "/calculateApproximateScore"
@@ -32,7 +33,7 @@ func CalculateApproxScore(endDate time.Time, startPrice float64, endPrice float6
 	resp, err := client.R().SetResult(&response).SetBody(requestBody).Post(api_link)
 
 	if err != nil || resp.StatusCode() >= 400 {
-		// TODO: add server error
+		systemError.Log("calculate approximate score error", err.Error())
 		return -1
 	}
 
@@ -40,7 +41,6 @@ func CalculateApproxScore(endDate time.Time, startPrice float64, endPrice float6
 }
 
 // CalculateScore calculates the exact score of the post (run only for active posts)
-// TODO: handle both error and success cases
 func CalculateScore(requestBody model.CalculateScoreRequest, config config.Config) (model.CalculateScoreResponse, error) {
 
 	client := resty.New()
@@ -52,7 +52,7 @@ func CalculateScore(requestBody model.CalculateScoreRequest, config config.Confi
 	resp, err := client.R().SetResult(&response).SetBody(requestBody).Post(api_link)
 
 	if err != nil || resp.StatusCode() >= 400 {
-		// TODO: add server error
+		systemError.Log("calculate score error", err.Error())
 		return model.CalculateScoreResponse{}, fmt.Errorf("calculate score error")
 	}
 

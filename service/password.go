@@ -19,14 +19,14 @@ func (service *Service) CheckPassword(ctx *gin.Context, user_id, password string
 	// STEP: get old password [in hashed form]
 	hashedPasword, err := service.Store.GetPasswordByID(ctx, user_id)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["GetPassword"](err))
+		systemError.Log("server error on getting password", err.Error())
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckPassword)
 	}
 
 	// STEP: check the password
 	err = util.CheckPassword(password, hashedPasword)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["LoginFail"](err))
+		systemError.Log("login failed", err.Error())
 		return clientError.CreateError(http.StatusForbidden, clientError.Account_ChangePassword_WrongPassword)
 	}
 
@@ -49,7 +49,7 @@ func (service *Service) UpdatePassword(ctx *gin.Context, user_id, password strin
 	// STEP: update/set password
 	err = service.Store.SetPassword(ctx, setPasswordParams)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["UpdatePassword"](err))
+		systemError.Log("server error on updating password", err.Error())
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorUpdatePassword)
 	}
 
@@ -66,7 +66,7 @@ func (service *Service) CheckEmailExistidy(ctx *gin.Context, email string) (vali
 	// STEP: get email existidy in the system
 	checkEmail, err := service.Store.CheckEmail(ctx, validEmail)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["CheckEmail"](err))
+		systemError.Log("server error on check email", err.Error())
 		return "", clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckEmail)
 	}
 
@@ -84,7 +84,8 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 		if err == sql.ErrNoRows {
 			return "", db.PasswordResetToken{}, clientError.CreateError(http.StatusNotFound, clientError.Account_ChangePassword_NotFoundEmail)
 		}
-		systemError.Log(systemError.InternalMessages["GetUserByEmail"](err))
+
+		systemError.Log("server error on getting user by email", err.Error())
 		return "", db.PasswordResetToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckEmail)
 	}
 
@@ -107,7 +108,7 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 	// STEP: insert DB
 	password_reset_token, err := service.Store.CreatePasswordResetToken(ctx, params)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["CreatePasswordResetToken"](err))
+		systemError.Log("server error on creating password reset token on db", err.Error())
 		return "", db.PasswordResetToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCreateToken)
 	}
 

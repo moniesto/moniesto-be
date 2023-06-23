@@ -9,6 +9,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 func (service *Service) CreateFeedback(ctx *gin.Context, userID string, req model.CreateFeedbackRequest) error {
@@ -36,6 +37,7 @@ func (service *Service) CreateFeedback(ctx *gin.Context, userID string, req mode
 	// STEP: create feedback in db
 	err := service.Store.CreateFeedback(ctx, params)
 	if err != nil {
+		systemError.Log("server error on create feedback", err.Error())
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Feedback_CreateFeedback_ServerErrorCreateFeedback)
 	}
 

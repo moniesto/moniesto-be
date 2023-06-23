@@ -96,6 +96,7 @@ func (service *Service) GetMoniestByMoniestID(ctx *gin.Context, moniest_id strin
 			return db.GetMoniestByMoniestIdRow{}, clientError.CreateError(http.StatusNotFound, clientError.Moniest_GetMoniest_NoMoniest)
 		}
 
+		systemError.Log("server error on get moniest by moniest ID", err.Error())
 		return db.GetMoniestByMoniestIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniest_ServerErrorGetMoniest)
 	}
 
@@ -111,6 +112,7 @@ func (service *Service) GetMoniestByUsername(ctx *gin.Context, username string) 
 			return db.GetMoniestByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_MoniestNotFoundByUsername)
 		}
 
+		systemError.Log("server error on get moniest by moniest username", err.Error())
 		return db.GetMoniestByUsernameRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorGetMoniestByUsername)
 	}
 
@@ -175,6 +177,7 @@ func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, r
 		// STEP: update moniest
 		_, err = service.Store.UpdateMoniest(ctx, param)
 		if err != nil {
+			systemError.Log("server error on update moniest", err.Error())
 			return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdateMoniest_ServerErrorUpdateMoniest)
 		}
 	}
@@ -187,6 +190,7 @@ func (service *Service) CheckUserIsMoniestByUsername(ctx *gin.Context, username 
 	// STEP: check user is moniest
 	userIsMoniest, err := service.Store.CheckUserIsMoniestByUsername(ctx, username)
 	if err != nil {
+		systemError.Log("server error on check user is moniest by username", err.Error())
 		return false, clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorCheckMoniestByUsername)
 	}
 
@@ -198,6 +202,7 @@ func (service *Service) CheckUserIsMoniestByUserID(ctx *gin.Context, user_id str
 	// STEP: check user is moniest
 	userIsMoniest, err := service.Store.CheckUserIsMoniestByID(ctx, user_id)
 	if err != nil {
+		systemError.Log("server error on check user is moniest by ID", err.Error())
 		return false, clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorCheckMoniestByUserID)
 	}
 
@@ -207,6 +212,7 @@ func (service *Service) CheckUserIsMoniestByUserID(ctx *gin.Context, user_id str
 func (service *Service) GetMoniestStats(ctx *gin.Context, username string) (model.MoniestStatResponse, error) {
 	stats, err := service.Store.GetMoniestStatsByUsername(ctx, username)
 	if err != nil {
+		systemError.Log("server error on get moniest stats by username", err.Error())
 		return model.MoniestStatResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetStats_ServerErrorGetStats)
 	}
 
