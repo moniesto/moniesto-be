@@ -135,13 +135,13 @@ func (server *Server) setupRouter() {
 	// Payment routes
 	paymentRouters := router.Group("/payment") //.Use(authMiddleware(server.tokenMaker))
 	{
-		paymentRouters.POST("/binance/transactions/check/:transaction_id", server.CheckBinancePaymentTransaction)
+		paymentRouters.POST("/binance/transactions/check/:transaction_id", server.CheckBinancePaymentTransaction) // TODO: complete here
 	}
 
 	// Webhooks
 	webhookRouters := router.Group("/webhooks")
 	{
-		webhookRouters.POST("/binance/payment") // TODO: add service function to handle webhook
+		webhookRouters.POST("/binance/transaction", server.TriggerBinanceTransactionWebhook)
 	}
 
 	// Swagger docs
@@ -155,6 +155,10 @@ func (server *Server) setupCRONJobs() {
 
 	// update post status job
 	job.AddFunc(util.JOB_TYPE_EVERY_1AM, server.UpdatePostStatus)
+
+	// TODO: a job that look at the all transactions in pending state, and update if more than 10 minutes (can run in 1hour)
+	// TODO: a job checking ended subscription
+	// TODO: a job for payout
 
 	job.Start()
 }

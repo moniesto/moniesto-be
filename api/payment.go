@@ -2,11 +2,32 @@ package api
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/util/payment"
 	"github.com/moniesto/moniesto-be/util/payment/binance"
+	"github.com/moniesto/moniesto-be/util/systemError"
 )
+
+func (server *Server) TriggerBinanceTransactionWebhook(ctx *gin.Context) {
+	var req binance.WebhookRequest
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		systemError.Log("webhook body bind error", err.Error())
+		return
+	}
+
+	// STEP: check payment transaction status
+	_, err := server.service.CheckPaymentTransactionStatus(ctx, req.WebhookData.MerchantTradeNo)
+	if err != nil {
+		systemError.Log("webhook check transaction status error", err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, `{"returnCode":"SUCCESS","returnMessage":null}`)
+}
 
 func (server *Server) CheckBinancePaymentTransaction(ctx *gin.Context) {
 	// STEP: get username from param

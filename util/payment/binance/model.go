@@ -95,3 +95,48 @@ type Goods struct {
 	ReferenceGoodsId string `json:"referenceGoodsId"`
 	GoodsName        string `json:"goodsName"`
 }
+
+type WebhookRequest struct {
+	BizType     string      `json:"bizType"`
+	BizStatus   string      `json:"bizStatus"`
+	WebhookData WebhookData `json:"data"`
+	PayerId     int64       `json:"payerId"`
+}
+
+type WebhookData struct {
+	MerchantTradeNo string           `json:"merchantTradeNo"`
+	PaymentInfo     QueryPaymentInfo `json:"paymentInfo"`
+}
+
+/*
+- Example webhook data
+	{
+		"bizType": "PAY",
+		"data": {
+			"merchantTradeNo": "755f2a5bdc42444991b08124eda15638",
+			"productType": "02",
+			"productName": "Moniest 1 - A",
+			"transactTime": 1685921049737,
+			"tradeType": "WEB",
+			"totalFee": 1e-7,
+			"currency": "USDT",
+			"transactionId": "P_A1BQS87BCQ171112",
+			"commission": 0,
+			"paymentInfo": {
+			"payerId": 741232235,
+			"payMethod": "funding",
+			"paymentInstructions": [
+				{
+				"currency": "USDT",
+				"amount": 1e-7,
+				"price": 1
+				}
+			],
+			"channel": "DEFAULT"
+			}
+		},
+		"bizIdStr": "232103202548367360",
+		"bizId": 232103202548367360,
+		"bizStatus": "PAY_SUCCESS"
+		}
+*/

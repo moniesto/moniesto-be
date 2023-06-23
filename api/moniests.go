@@ -208,6 +208,8 @@ func (server *Server) subscribeMoniest(ctx *gin.Context) {
 		}
 	}
 
+	// TODO: check user does already have pending transaction or not [and pending one is not occurs more than 5 minutes]
+
 	// STEP: create binance payment transaction
 	binancePaymentTransaction, err := server.service.CreateBinancePaymentTransaction(ctx, req, moniest, user_id)
 	if err != nil {
