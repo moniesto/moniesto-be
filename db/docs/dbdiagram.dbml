@@ -254,6 +254,37 @@
     Note: 'Stores binance payment transactions info and history'
   }
 
+  Table binance_payout_history as BPH {
+    id varchar [not null, pk, unique]
+    transaction_id varchar [not null]
+    user_id varchar [not null]
+    moniest_id varchar [not null] 
+    payer_id varchar [not null] 
+    total_amount float [not null]
+    amount float [not null]
+    date_type binance_payment_date_type [not null, default: "MONTH"]
+    date_value integer [not null]
+
+    payout_date timestamp [not null]
+    payout_year integer [not null]
+    payout_month integer [not null]
+    payout_day integer [not null]
+    status binance_payout_status [not null, default: "pending"]
+
+    operation_fee_percentage float
+
+    payout_done_at timestamp [not null]
+
+    created_at timestamp [not null, default: `now()`]
+    updated_at timestamp [not null, default: `now()`]
+
+    indexes {
+      (transaction_id, user_id, moniest_id, payout_year, payout_month, payout_day) [unique]
+    }
+
+    Note: 'Stores binance payout info and history'
+  }
+
 
   // > many-to-one; < one-to-many; - one-to-one; <> many-to-many
   // Refs
@@ -265,6 +296,8 @@
   Ref: MPI.moniest_id > M.id
   Ref: BPT.user_id > U.id
   Ref: BPT.moniest_id > M.id
+  Ref: BPH.user_id > U.id
+  Ref: BPH.moniest_id > M.id
   Ref: US.user_id > U.id
   Ref: US.moniest_id > M.id
   Ref: PC.moniest_id > M.id
@@ -295,6 +328,13 @@
     pending
     fail
     success
+  }
+
+  Enum binance_payout_status {
+    pending
+    fail
+    success
+    refund
   }
 
   Enum binance_payment_date_type {

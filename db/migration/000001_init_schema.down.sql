@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS "binance_payout_history";
+
 DROP TABLE IF EXISTS "binance_payment_transaction";
 
 DROP TABLE IF EXISTS "feedback";

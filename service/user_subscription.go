@@ -65,11 +65,6 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 		}
 	}
 
-	// STEP: payment
-
-	// TODO: start payout operation
-	service.StartPayout() // TODO: update
-
 	return nil
 }
 

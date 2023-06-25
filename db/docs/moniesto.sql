@@ -6,6 +6,8 @@ CREATE TYPE "post_crypto_status" AS ENUM ('pending', 'fail', 'success');
 
 CREATE TYPE "binance_payment_status" AS ENUM ('pending', 'fail', 'success');
 
+CREATE TYPE "binance_payout_status" AS ENUM ('pending', 'fail', 'success', 'refund');
+
 CREATE TYPE "binance_payment_date_type" AS ENUM ('MONTH');
 
 CREATE TYPE "payout_source" AS ENUM ('BINANCE');
@@ -171,6 +173,27 @@ CREATE TABLE "binance_payment_transaction" (
   "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
+CREATE TABLE "binance_payout_history" (
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "transaction_id" varchar NOT NULL,
+  "user_id" varchar NOT NULL,
+  "moniest_id" varchar NOT NULL,
+  "payer_id" varchar NOT NULL,
+  "total_amount" float NOT NULL,
+  "amount" float NOT NULL,
+  "date_type" binance_payment_date_type NOT NULL DEFAULT 'MONTH',
+  "date_value" integer NOT NULL,
+  "payout_date" timestamp NOT NULL,
+  "payout_year" integer NOT NULL,
+  "payout_month" integer NOT NULL,
+  "payout_day" integer NOT NULL,
+  "status" binance_payout_status NOT NULL DEFAULT 'pending',
+  "operation_fee_percentage" float,
+  "payout_done_at" timestamp NOT NULL,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
+);
+
 CREATE UNIQUE INDEX ON "user" ("username");
 
 CREATE UNIQUE INDEX ON "user" ("email");
@@ -194,6 +217,15 @@ CREATE UNIQUE INDEX ON "user_card" ("user_id", "card_id");
 CREATE UNIQUE INDEX ON "password_reset_token" ("user_id", "token");
 
 CREATE UNIQUE INDEX ON "email_verification_token" ("user_id", "token");
+
+CREATE UNIQUE INDEX ON "binance_payout_history" (
+  "transaction_id",
+  "user_id",
+  "moniest_id",
+  "payout_year",
+  "payout_month",
+  "payout_day"
+);
 
 COMMENT ON TABLE "user" IS 'Stores user data';
 
@@ -223,6 +255,8 @@ COMMENT ON TABLE "feedback" IS 'Stores feedback from users';
 
 COMMENT ON TABLE "binance_payment_transaction" IS 'Stores binance payment transactions info and history';
 
+COMMENT ON TABLE "binance_payout_history" IS 'Stores binance payout info and history';
+
 ALTER TABLE "image"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
@@ -245,6 +279,12 @@ ALTER TABLE "binance_payment_transaction"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "binance_payment_transaction"
+ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
+
+ALTER TABLE "binance_payout_history"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+
+ALTER TABLE "binance_payout_history"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
 ALTER TABLE "user_subscription"

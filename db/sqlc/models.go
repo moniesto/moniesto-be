@@ -95,6 +95,50 @@ func (ns NullBinancePaymentStatus) Value() (driver.Value, error) {
 	return ns.BinancePaymentStatus, nil
 }
 
+type BinancePayoutStatus string
+
+const (
+	BinancePayoutStatusPending BinancePayoutStatus = "pending"
+	BinancePayoutStatusFail    BinancePayoutStatus = "fail"
+	BinancePayoutStatusSuccess BinancePayoutStatus = "success"
+	BinancePayoutStatusRefund  BinancePayoutStatus = "refund"
+)
+
+func (e *BinancePayoutStatus) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = BinancePayoutStatus(s)
+	case string:
+		*e = BinancePayoutStatus(s)
+	default:
+		return fmt.Errorf("unsupported scan type for BinancePayoutStatus: %T", src)
+	}
+	return nil
+}
+
+type NullBinancePayoutStatus struct {
+	BinancePayoutStatus BinancePayoutStatus
+	Valid               bool // Valid is true if BinancePayoutStatus is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullBinancePayoutStatus) Scan(value interface{}) error {
+	if value == nil {
+		ns.BinancePayoutStatus, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.BinancePayoutStatus.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullBinancePayoutStatus) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return ns.BinancePayoutStatus, nil
+}
+
 type EntryPosition string
 
 const (
@@ -322,6 +366,28 @@ type BinancePaymentTransaction struct {
 	PayerID       sql.NullString         `json:"payer_id"`
 	CreatedAt     time.Time              `json:"created_at"`
 	UpdatedAt     time.Time              `json:"updated_at"`
+}
+
+// Stores binance payout info and history
+type BinancePayoutHistory struct {
+	ID                     string                 `json:"id"`
+	TransactionID          string                 `json:"transaction_id"`
+	UserID                 string                 `json:"user_id"`
+	MoniestID              string                 `json:"moniest_id"`
+	PayerID                string                 `json:"payer_id"`
+	TotalAmount            float64                `json:"total_amount"`
+	Amount                 float64                `json:"amount"`
+	DateType               BinancePaymentDateType `json:"date_type"`
+	DateValue              int32                  `json:"date_value"`
+	PayoutDate             time.Time              `json:"payout_date"`
+	PayoutYear             int32                  `json:"payout_year"`
+	PayoutMonth            int32                  `json:"payout_month"`
+	PayoutDay              int32                  `json:"payout_day"`
+	Status                 BinancePayoutStatus    `json:"status"`
+	OperationFeePercentage sql.NullFloat64        `json:"operation_fee_percentage"`
+	PayoutDoneAt           time.Time              `json:"payout_done_at"`
+	CreatedAt              time.Time              `json:"created_at"`
+	UpdatedAt              time.Time              `json:"updated_at"`
 }
 
 // Stores single card data

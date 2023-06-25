@@ -88,6 +88,15 @@ func (service *Service) SetPaymentTransactionCheckerJob(ctx *gin.Context, minute
 	}
 }
 
+// CheckPaymentTransactionStatus check binance transaction status
+//   - on succuss:
+//     -- update transaction status to success
+//     -- subscribe to moniest
+//     -- create payout operation
+//   - on failure:
+//     -- update transaction status to failure
+//   - on pending:
+//     -- do nothing
 func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transactionID string) (string, error) {
 
 	// STEP: get transaction data
@@ -145,6 +154,16 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 		}
 
 		// TODO: create payout history (or maybe do it in subscribe function)
+		service.CreateBinancePayoutHistories(ctx, db.CreateBinancePayoutHistoryParams{
+			TransactionID: updatedBinancePaymentTransaction.ID,
+			UserID:        updatedBinancePaymentTransaction.UserID,
+			MoniestID:     updatedBinancePaymentTransaction.MoniestID,
+			PayerID:       orderData.PaymentInfo.PayerId,
+			TotalAmount:   updatedBinancePaymentTransaction.Amount,
+			Amount:        updatedBinancePaymentTransaction.MoniestFee,
+			DateType:      updatedBinancePaymentTransaction.DateType,
+			DateValue:     updatedBinancePaymentTransaction.DateValue,
+		})
 
 		return string(updatedBinancePaymentTransaction.Status), nil
 	}
