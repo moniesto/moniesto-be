@@ -8,10 +8,6 @@ DROP TABLE IF EXISTS "email_verification_token";
 
 DROP TABLE IF EXISTS "password_reset_token";
 
-DROP TABLE IF EXISTS "user_card";
-
-DROP TABLE IF EXISTS "card";
-
 DROP TABLE IF EXISTS "post_crypto_description";
 
 DROP TABLE IF EXISTS "post_crypto";

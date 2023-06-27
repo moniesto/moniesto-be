@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-	"time"
 	"unsafe"
 
 	"github.com/gin-gonic/gin"
@@ -91,7 +90,7 @@ func (service *Service) getValidPost(req model.CreatePostRequest, currency model
 		Direction:        db.EntryPosition(req.Direction),
 		Score:            score,
 		LastTargetHit:    currency_price,
-		LastJobTimestamp: util.DateToTimestamp(time.Now().UTC()),
+		LastJobTimestamp: util.DateToTimestamp(util.Now()),
 	}
 
 	return createPostParam, nil

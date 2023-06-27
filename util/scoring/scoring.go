@@ -19,7 +19,7 @@ func CalculateApproxScore(endDate time.Time, startPrice float64, endPrice float6
 	client := resty.New()
 
 	var requestBody model.CalculateApproximateScoreRequest = model.CalculateApproximateScoreRequest{
-		StartDate:  util.DateToTimestamp(time.Now().UTC()),
+		StartDate:  util.DateToTimestamp(util.Now()),
 		EndDate:    util.DateToTimestamp(endDate),
 		StartPrice: startPrice,
 		EndPrice:   endPrice,

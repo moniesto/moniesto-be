@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/moniesto/moniesto-be/util"
 )
 
 // Types of the Token errors
@@ -44,8 +45,8 @@ func NewPayload(generalPaylod GeneralPaylod, duration time.Duration) (*Payload, 
 			ID:       generalPaylod.UserPayload.ID,
 			Username: generalPaylod.UserPayload.Username,
 		},
-		IssuedAt:  time.Now().UTC(),
-		ExpiredAt: time.Now().UTC().Add(duration),
+		IssuedAt:  util.Now(),
+		ExpiredAt: util.Now().Add(duration),
 	}
 
 	return payload, nil
@@ -53,7 +54,7 @@ func NewPayload(generalPaylod GeneralPaylod, duration time.Duration) (*Payload, 
 
 // Valid checks if the token payload is valid or not
 func (payload *Payload) Valid() error {
-	if time.Now().UTC().After(payload.ExpiredAt) {
+	if util.Now().After(payload.ExpiredAt) {
 		return ErrExpiredToken
 	}
 

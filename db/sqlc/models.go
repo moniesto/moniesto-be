@@ -379,24 +379,16 @@ type BinancePayoutHistory struct {
 	Amount                 float64                `json:"amount"`
 	DateType               BinancePaymentDateType `json:"date_type"`
 	DateValue              int32                  `json:"date_value"`
+	DateIndex              int32                  `json:"date_index"`
 	PayoutDate             time.Time              `json:"payout_date"`
 	PayoutYear             int32                  `json:"payout_year"`
 	PayoutMonth            int32                  `json:"payout_month"`
 	PayoutDay              int32                  `json:"payout_day"`
 	Status                 BinancePayoutStatus    `json:"status"`
 	OperationFeePercentage sql.NullFloat64        `json:"operation_fee_percentage"`
-	PayoutDoneAt           time.Time              `json:"payout_done_at"`
+	PayoutDoneAt           sql.NullTime           `json:"payout_done_at"`
 	CreatedAt              time.Time              `json:"created_at"`
 	UpdatedAt              time.Time              `json:"updated_at"`
-}
-
-// Stores single card data
-type Card struct {
-	ID        string         `json:"id"`
-	Token     sql.NullString `json:"token"`
-	Deleted   bool           `json:"deleted"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
 }
 
 // Stores email verification token for verifying account
@@ -522,12 +514,6 @@ type User struct {
 	CreatedAt     time.Time      `json:"created_at"`
 	UpdatedAt     time.Time      `json:"updated_at"`
 	LastLogin     time.Time      `json:"last_login"`
-}
-
-// Stores relation between user and card
-type UserCard struct {
-	UserID string `json:"user_id"`
-	CardID string `json:"card_id"`
 }
 
 // Stores user subscription info

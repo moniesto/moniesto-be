@@ -9,13 +9,12 @@ INSERT INTO "binance_payout_history" (
         amount,
         date_type,
         date_value,
+        date_index,
         payout_date,
         payout_year,
         payout_month,
         payout_day,
         status,
-        operation_fee_percentage,
-        payout_done_at,
         created_at,
         updated_at
     )
@@ -35,7 +34,6 @@ VALUES (
         $13,
         $14,
         $15,
-        $16,
         now(),
         now()
     )

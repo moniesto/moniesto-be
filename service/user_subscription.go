@@ -3,13 +3,13 @@ package service
 import (
 	"database/sql"
 	"net/http"
-	"time"
 	"unsafe"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
+	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
@@ -28,7 +28,7 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 		}
 	}
 
-	subscriptionStartDate := time.Now().UTC()
+	subscriptionStartDate := util.Now()
 	subscriptionEndDate := subscriptionStartDate.AddDate(0, numberOfMonths, 0)
 
 	// STEP: add | update db

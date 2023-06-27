@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 	"time"
 )
 
@@ -22,13 +21,12 @@ INSERT INTO "binance_payout_history" (
         amount,
         date_type,
         date_value,
+        date_index,
         payout_date,
         payout_year,
         payout_month,
         payout_day,
         status,
-        operation_fee_percentage,
-        payout_done_at,
         created_at,
         updated_at
     )
@@ -48,30 +46,28 @@ VALUES (
         $13,
         $14,
         $15,
-        $16,
         now(),
         now()
     )
-RETURNING id, transaction_id, user_id, moniest_id, payer_id, total_amount, amount, date_type, date_value, payout_date, payout_year, payout_month, payout_day, status, operation_fee_percentage, payout_done_at, created_at, updated_at
+RETURNING id, transaction_id, user_id, moniest_id, payer_id, total_amount, amount, date_type, date_value, date_index, payout_date, payout_year, payout_month, payout_day, status, operation_fee_percentage, payout_done_at, created_at, updated_at
 `
 
 type CreateBinancePayoutHistoryParams struct {
-	ID                     string                 `json:"id"`
-	TransactionID          string                 `json:"transaction_id"`
-	UserID                 string                 `json:"user_id"`
-	MoniestID              string                 `json:"moniest_id"`
-	PayerID                string                 `json:"payer_id"`
-	TotalAmount            float64                `json:"total_amount"`
-	Amount                 float64                `json:"amount"`
-	DateType               BinancePaymentDateType `json:"date_type"`
-	DateValue              int32                  `json:"date_value"`
-	PayoutDate             time.Time              `json:"payout_date"`
-	PayoutYear             int32                  `json:"payout_year"`
-	PayoutMonth            int32                  `json:"payout_month"`
-	PayoutDay              int32                  `json:"payout_day"`
-	Status                 BinancePayoutStatus    `json:"status"`
-	OperationFeePercentage sql.NullFloat64        `json:"operation_fee_percentage"`
-	PayoutDoneAt           time.Time              `json:"payout_done_at"`
+	ID            string                 `json:"id"`
+	TransactionID string                 `json:"transaction_id"`
+	UserID        string                 `json:"user_id"`
+	MoniestID     string                 `json:"moniest_id"`
+	PayerID       string                 `json:"payer_id"`
+	TotalAmount   float64                `json:"total_amount"`
+	Amount        float64                `json:"amount"`
+	DateType      BinancePaymentDateType `json:"date_type"`
+	DateValue     int32                  `json:"date_value"`
+	DateIndex     int32                  `json:"date_index"`
+	PayoutDate    time.Time              `json:"payout_date"`
+	PayoutYear    int32                  `json:"payout_year"`
+	PayoutMonth   int32                  `json:"payout_month"`
+	PayoutDay     int32                  `json:"payout_day"`
+	Status        BinancePayoutStatus    `json:"status"`
 }
 
 func (q *Queries) CreateBinancePayoutHistory(ctx context.Context, arg CreateBinancePayoutHistoryParams) (BinancePayoutHistory, error) {
@@ -85,13 +81,12 @@ func (q *Queries) CreateBinancePayoutHistory(ctx context.Context, arg CreateBina
 		arg.Amount,
 		arg.DateType,
 		arg.DateValue,
+		arg.DateIndex,
 		arg.PayoutDate,
 		arg.PayoutYear,
 		arg.PayoutMonth,
 		arg.PayoutDay,
 		arg.Status,
-		arg.OperationFeePercentage,
-		arg.PayoutDoneAt,
 	)
 	var i BinancePayoutHistory
 	err := row.Scan(
@@ -104,6 +99,7 @@ func (q *Queries) CreateBinancePayoutHistory(ctx context.Context, arg CreateBina
 		&i.Amount,
 		&i.DateType,
 		&i.DateValue,
+		&i.DateIndex,
 		&i.PayoutDate,
 		&i.PayoutYear,
 		&i.PayoutMonth,

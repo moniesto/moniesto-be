@@ -3,7 +3,6 @@ package binance
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/config"
@@ -31,7 +30,7 @@ func CreateOrder(ctx *gin.Context, config config.Config, transactionID string, a
 		WebhookURL:      webhookURL,
 		ReturnURL:       returnURL,
 		CancelURL:       cancelURL,
-		OrderExpireTime: util.DateToTimestamp(time.Now().UTC().Add(ORDER_EXPIRE_TIME)),
+		OrderExpireTime: util.DateToTimestamp(util.Now().Add(ORDER_EXPIRE_TIME)),
 	}
 
 	req, err := requestWithBinanceHeader(body, config)

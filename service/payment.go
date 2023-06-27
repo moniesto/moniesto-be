@@ -22,7 +22,7 @@ func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req mo
 	// STEP: create order in binance and get payment links
 	product_name := getProductName(req, moniest)
 	//	amount := getAmount(req, moniest)
-	amount := 0.00000001
+	amount := 0.00000001 // TODO: update to real amount
 	transactionID := core.CreatePlainID()
 	webhookURL := createWebhookURL(ctx, transactionID)
 	req.ReturnURL, req.CancelURL = updateNavigateURLs(transactionID, req.ReturnURL, req.CancelURL) // add transactionID to urls
@@ -163,6 +163,7 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 			Amount:        updatedBinancePaymentTransaction.MoniestFee,
 			DateType:      updatedBinancePaymentTransaction.DateType,
 			DateValue:     updatedBinancePaymentTransaction.DateValue,
+			Status:        db.BinancePayoutStatusPending,
 		})
 
 		return string(updatedBinancePaymentTransaction.Status), nil

@@ -212,7 +212,7 @@ func (service *Service) CreateEmailVerificationToken(ctx *gin.Context, userID, r
 		ID:          core.CreateID(),
 		UserID:      userID,
 		Token:       plain_token,
-		TokenExpiry: time.Now().UTC().Add(expiryAt),
+		TokenExpiry: util.Now().Add(expiryAt),
 		RedirectUrl: redirectURL,
 	}
 
@@ -251,7 +251,7 @@ func (service *Service) GetEmailVerificationToken(ctx *gin.Context, encoded_toke
 	}
 
 	// STEP: token is not expired
-	if time.Now().UTC().After(email_verification_token.TokenExpiry) {
+	if util.Now().After(email_verification_token.TokenExpiry) {
 		return db.EmailVerificationToken{}, clientError.CreateError(http.StatusForbidden, clientError.Account_EmailVerification_ExpiredToken)
 	}
 

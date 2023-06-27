@@ -112,19 +112,6 @@ CREATE TABLE "post_crypto_description" (
   "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "card" (
-  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-  "token" varchar,
-  "deleted" boolean NOT NULL DEFAULT false,
-  "created_at" timestamp NOT NULL DEFAULT (now()),
-  "updated_at" timestamp NOT NULL DEFAULT (now())
-);
-
-CREATE TABLE "user_card" (
-  "user_id" varchar NOT NULL,
-  "card_id" varchar UNIQUE NOT NULL
-);
-
 CREATE TABLE "password_reset_token" (
   "id" varchar UNIQUE PRIMARY KEY NOT NULL,
   "user_id" varchar NOT NULL,
@@ -183,13 +170,14 @@ CREATE TABLE "binance_payout_history" (
   "amount" float NOT NULL,
   "date_type" binance_payment_date_type NOT NULL DEFAULT 'MONTH',
   "date_value" integer NOT NULL,
+  "date_index" integer NOT NULL,
   "payout_date" timestamp NOT NULL,
   "payout_year" integer NOT NULL,
   "payout_month" integer NOT NULL,
   "payout_day" integer NOT NULL,
   "status" binance_payout_status NOT NULL DEFAULT 'pending',
   "operation_fee_percentage" float,
-  "payout_done_at" timestamp NOT NULL,
+  "payout_done_at" timestamp,
   "created_at" timestamp NOT NULL DEFAULT (now()),
   "updated_at" timestamp NOT NULL DEFAULT (now())
 );
@@ -211,8 +199,6 @@ CREATE UNIQUE INDEX ON "user_subscription" ("user_id", "moniest_id");
 CREATE INDEX ON "post_crypto" ("moniest_id");
 
 CREATE INDEX ON "post_crypto_description" ("post_id");
-
-CREATE UNIQUE INDEX ON "user_card" ("user_id", "card_id");
 
 CREATE UNIQUE INDEX ON "password_reset_token" ("user_id", "token");
 
@@ -243,10 +229,6 @@ COMMENT ON TABLE "post_crypto" IS 'Stores crypto posts data';
 
 COMMENT ON TABLE "post_crypto_description" IS 'Stores crypto post description data';
 
-COMMENT ON TABLE "card" IS 'Stores single card data';
-
-COMMENT ON TABLE "user_card" IS 'Stores relation between user and card';
-
 COMMENT ON TABLE "password_reset_token" IS 'Stores reset token for forget password operations';
 
 COMMENT ON TABLE "email_verification_token" IS 'Stores email verification token for verifying account';
@@ -262,12 +244,6 @@ ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "moniest"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
-ALTER TABLE "user_card"
-ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
-ALTER TABLE "user_card"
-ADD FOREIGN KEY ("card_id") REFERENCES "card" ("id");
 
 ALTER TABLE "moniest_subscription_info"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");

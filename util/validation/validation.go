@@ -8,6 +8,7 @@ import (
 
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
+	"github.com/moniesto/moniesto-be/util"
 )
 
 // Password checks the password is valid
@@ -123,9 +124,9 @@ func SubscriptionMessage(message string, config config.Config) error {
 // Duration checks if is valid -> after now & less than 90 days
 func Duration(duration time.Time) error {
 
-	maxDayDate := time.Now().UTC().Add(time.Hour * 24 * time.Duration(MaxDurationDay))
+	maxDayDate := util.Now().Add(time.Hour * 24 * time.Duration(MaxDurationDay))
 
-	if time.Now().UTC().After(duration) || duration.After(maxDayDate) {
+	if util.Now().After(duration) || duration.After(maxDayDate) {
 		return fmt.Errorf("invalid duration: more than %d day or assigned for past", MaxDurationDay)
 	}
 

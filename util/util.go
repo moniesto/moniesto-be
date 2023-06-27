@@ -75,3 +75,7 @@ func RoundAmountDown(fee float64) float64 {
 func RoundAmountUp(fee float64) float64 {
 	return (math.Ceil(fee*100) / 100)
 }
+
+func Now() time.Time {
+	return time.Now().UTC()
+}
