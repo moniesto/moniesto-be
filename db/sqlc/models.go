@@ -387,6 +387,8 @@ type BinancePayoutHistory struct {
 	Status                 BinancePayoutStatus    `json:"status"`
 	OperationFeePercentage sql.NullFloat64        `json:"operation_fee_percentage"`
 	PayoutDoneAt           sql.NullTime           `json:"payout_done_at"`
+	PayoutRequestID        sql.NullString         `json:"payout_request_id"`
+	FailureMessage         sql.NullString         `json:"failure_message"`
 	CreatedAt              time.Time              `json:"created_at"`
 	UpdatedAt              time.Time              `json:"updated_at"`
 }

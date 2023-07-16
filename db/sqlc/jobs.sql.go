@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"time"
 )
 
@@ -94,11 +95,106 @@ func (q *Queries) GetAllActivePosts(ctx context.Context) ([]GetAllActivePostsRow
 	return items, nil
 }
 
+const getAllPendingPayouts = `-- name: GetAllPendingPayouts :many
+SELECT "bph"."id",
+    "bph"."transaction_id",
+    "bph"."user_id",
+    "bph"."moniest_id",
+    "bph"."payer_id",
+    "bph"."total_amount",
+    "bph"."amount",
+    "bph"."date_type",
+    "bph"."date_value",
+    "bph"."date_index",
+    "bph"."payout_date",
+    "bph"."payout_year",
+    "bph"."payout_month",
+    "bph"."payout_day",
+    "bph"."status",
+    "bph"."operation_fee_percentage",
+    "bph"."created_at",
+    "bph"."updated_at",
+    "mpi"."type" as "moniest_payout_type",
+    "mpi"."value" as "moniest_payout_value"
+FROM "binance_payout_history" as "bph"
+    INNER JOIN "moniest_payout_info" as "mpi" ON "mpi"."moniest_id" = "bph"."moniest_id"
+WHERE "status" = 'pending'
+    AND payout_date <= now()
+`
+
+type GetAllPendingPayoutsRow struct {
+	ID                     string                 `json:"id"`
+	TransactionID          string                 `json:"transaction_id"`
+	UserID                 string                 `json:"user_id"`
+	MoniestID              string                 `json:"moniest_id"`
+	PayerID                string                 `json:"payer_id"`
+	TotalAmount            float64                `json:"total_amount"`
+	Amount                 float64                `json:"amount"`
+	DateType               BinancePaymentDateType `json:"date_type"`
+	DateValue              int32                  `json:"date_value"`
+	DateIndex              int32                  `json:"date_index"`
+	PayoutDate             time.Time              `json:"payout_date"`
+	PayoutYear             int32                  `json:"payout_year"`
+	PayoutMonth            int32                  `json:"payout_month"`
+	PayoutDay              int32                  `json:"payout_day"`
+	Status                 BinancePayoutStatus    `json:"status"`
+	OperationFeePercentage sql.NullFloat64        `json:"operation_fee_percentage"`
+	CreatedAt              time.Time              `json:"created_at"`
+	UpdatedAt              time.Time              `json:"updated_at"`
+	MoniestPayoutType      PayoutType             `json:"moniest_payout_type"`
+	MoniestPayoutValue     string                 `json:"moniest_payout_value"`
+}
+
+func (q *Queries) GetAllPendingPayouts(ctx context.Context) ([]GetAllPendingPayoutsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAllPendingPayouts)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetAllPendingPayoutsRow{}
+	for rows.Next() {
+		var i GetAllPendingPayoutsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.TransactionID,
+			&i.UserID,
+			&i.MoniestID,
+			&i.PayerID,
+			&i.TotalAmount,
+			&i.Amount,
+			&i.DateType,
+			&i.DateValue,
+			&i.DateIndex,
+			&i.PayoutDate,
+			&i.PayoutYear,
+			&i.PayoutMonth,
+			&i.PayoutDay,
+			&i.Status,
+			&i.OperationFeePercentage,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.MoniestPayoutType,
+			&i.MoniestPayoutValue,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateFinishedPostStatus = `-- name: UpdateFinishedPostStatus :exec
 UPDATE "post_crypto"
 SET "status" = $1,
     "score" = $2,
-    "finished" = TRUE
+    "finished" = TRUE,
+    updated_at = now()
 WHERE "id" = $3
 `
 
@@ -115,7 +211,8 @@ func (q *Queries) UpdateFinishedPostStatus(ctx context.Context, arg UpdateFinish
 
 const updateMoniestScore = `-- name: UpdateMoniestScore :exec
 UPDATE "moniest"
-SET "score" = GREATEST("score" + $1, 0)
+SET "score" = GREATEST("score" + $1, 0),
+    updated_at = now()
 WHERE "id" = $2
 `
 
@@ -129,10 +226,43 @@ func (q *Queries) UpdateMoniestScore(ctx context.Context, arg UpdateMoniestScore
 	return err
 }
 
+const updatePayoutHistory = `-- name: UpdatePayoutHistory :exec
+UPDATE "binance_payout_history"
+SET "status" = $2,
+    operation_fee_percentage = $3,
+    "payout_done_at" = $4,
+    "failure_message" = $5,
+    payout_request_id = $6,
+    updated_at = now()
+WHERE "id" = $1
+`
+
+type UpdatePayoutHistoryParams struct {
+	ID                     string              `json:"id"`
+	Status                 BinancePayoutStatus `json:"status"`
+	OperationFeePercentage sql.NullFloat64     `json:"operation_fee_percentage"`
+	PayoutDoneAt           sql.NullTime        `json:"payout_done_at"`
+	FailureMessage         sql.NullString      `json:"failure_message"`
+	PayoutRequestID        sql.NullString      `json:"payout_request_id"`
+}
+
+func (q *Queries) UpdatePayoutHistory(ctx context.Context, arg UpdatePayoutHistoryParams) error {
+	_, err := q.db.ExecContext(ctx, updatePayoutHistory,
+		arg.ID,
+		arg.Status,
+		arg.OperationFeePercentage,
+		arg.PayoutDoneAt,
+		arg.FailureMessage,
+		arg.PayoutRequestID,
+	)
+	return err
+}
+
 const updateUnfinishedPostStatus = `-- name: UpdateUnfinishedPostStatus :exec
 UPDATE "post_crypto"
 SET "last_target_hit" = $1,
-    "last_job_timestamp" = $2
+    "last_job_timestamp" = $2,
+    updated_at = now()
 WHERE "id" = $3
 `
 

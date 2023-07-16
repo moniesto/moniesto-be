@@ -178,6 +178,8 @@ CREATE TABLE "binance_payout_history" (
   "status" binance_payout_status NOT NULL DEFAULT 'pending',
   "operation_fee_percentage" float,
   "payout_done_at" timestamp,
+  "payout_request_id" varchar,
+  "failure_message" text,
   "created_at" timestamp NOT NULL DEFAULT (now()),
   "updated_at" timestamp NOT NULL DEFAULT (now())
 );

@@ -156,6 +156,9 @@ func (server *Server) setupCRONJobs() {
 	// update post status job
 	job.AddFunc(util.JOB_TYPE_EVERY_1AM, server.UpdatePostStatus)
 
+	// job.AddFunc(util.JOB_TYPE_EVERY_SECOND, server.PayoutToMoniest)
+	job.AddFunc(util.JOB_TYPE_EVERY_12AM, server.PayoutToMoniest)
+
 	// TODO: a job that look at the all transactions in pending state, and update if more than 10 minutes (can run in 1hour)
 	// TODO: a job checking ended subscription
 	// TODO: a job for payout

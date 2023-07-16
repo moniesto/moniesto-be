@@ -253,6 +253,8 @@
     operation_fee_percentage float
 
     payout_done_at timestamp
+    payout_request_id varchar
+    failure_message text
 
     created_at timestamp [not null, default: `now()`]
     updated_at timestamp [not null, default: `now()`]

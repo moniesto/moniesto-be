@@ -10,7 +10,7 @@ func (server *Server) UpdatePostStatus() {
 
 	activePosts, err := server.service.GetAllActivePosts()
 	if err != nil {
-		systemError.Log("CRON JOB - Update Post Status: db error while getting active posts")
+		systemError.Log("JOB ERROR: POST STATUS => db error while getting active posts")
 		return
 	}
 
@@ -20,7 +20,23 @@ func (server *Server) UpdatePostStatus() {
 		fmt.Printf("post start: %d id: %s\n", i, post.ID)
 		err := server.service.UpdatePostStatus(post)
 		if err != nil {
-			systemError.Log(fmt.Sprintf("CRON JOB - Update Post Status: %s", err))
+			systemError.Log(fmt.Sprintf("JOB ERROR: POST STATUS => %s", err))
+		}
+	}
+}
+
+func (server *Server) PayoutToMoniest() {
+
+	pendingPayouts, err := server.service.GetAllPendingPayouts()
+	if err != nil {
+		systemError.Log("JOB ERROR: PAYOUT => db error while getting pending payouts", err.Error())
+		return
+	}
+
+	for _, pendingPayout := range pendingPayouts {
+		err := server.service.PayoutToMoniest(pendingPayout)
+		if err != nil {
+			systemError.Log(err)
 		}
 	}
 }

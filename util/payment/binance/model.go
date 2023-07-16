@@ -127,9 +127,9 @@ type WebhookData struct {
 			"payMethod": "funding",
 			"paymentInstructions": [
 				{
-				"currency": "USDT",
-				"amount": 1e-7,
-				"price": 1
+					"currency": "USDT",
+					"amount": 1e-7,
+					"price": 1
 				}
 			],
 			"channel": "DEFAULT"
@@ -140,3 +140,36 @@ type WebhookData struct {
 		"bizStatus": "PAY_SUCCESS"
 		}
 */
+
+type CreatePayoutRequest struct {
+	RequestID          string           `json:"requestId"`
+	BatchName          string           `json:"batchName"`
+	Currency           string           `json:"currency"`
+	TotalAmount        float64          `json:"totalAmount"`
+	TotalNumber        int              `json:"totalNumber"`
+	BizScene           string           `json:"bizScene"`
+	TransferDetailList []TransferDetail `json:"transferDetailList"`
+}
+
+type TransferDetail struct {
+	MerchantSendId string  `json:"merchantSendId"`
+	TransferAmount float64 `json:"transferAmount"`
+	ReceiveType    string  `json:"receiveType"`
+	TransferMethod string  `json:"transferMethod"`
+	Receiver       string  `json:"receiver"`
+	Remark         string  `json:"remark"`
+}
+
+type CreatePayoutResponse struct {
+	Status string                 `json:"status"`
+	Code   string                 `json:"code"`
+	Data   PayoutTransferResponse `json:"data"`
+
+	// only failure | error case
+	ErrorMessage string `json:"errorMessage"`
+}
+
+type PayoutTransferResponse struct {
+	RequestID string `json:"requestId"`
+	Status    string `json:"status"`
+}

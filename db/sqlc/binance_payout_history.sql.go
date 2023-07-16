@@ -49,7 +49,7 @@ VALUES (
         now(),
         now()
     )
-RETURNING id, transaction_id, user_id, moniest_id, payer_id, total_amount, amount, date_type, date_value, date_index, payout_date, payout_year, payout_month, payout_day, status, operation_fee_percentage, payout_done_at, created_at, updated_at
+RETURNING id, transaction_id, user_id, moniest_id, payer_id, total_amount, amount, date_type, date_value, date_index, payout_date, payout_year, payout_month, payout_day, status, operation_fee_percentage, payout_done_at, payout_request_id, failure_message, created_at, updated_at
 `
 
 type CreateBinancePayoutHistoryParams struct {
@@ -107,6 +107,8 @@ func (q *Queries) CreateBinancePayoutHistory(ctx context.Context, arg CreateBina
 		&i.Status,
 		&i.OperationFeePercentage,
 		&i.PayoutDoneAt,
+		&i.PayoutRequestID,
+		&i.FailureMessage,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
