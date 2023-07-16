@@ -6,8 +6,7 @@ var ValidPasswordLength = 6
 var MaxBioLength = 150
 var MaxDescriptionLength = 5000
 var MaxSubscriptionMessageLength = 150
-var MaxNameLength = 30
-var MaxSurnameLength = 30
+var MaxFullnameLength = 50
 var MaxLocationLength = 30
 
 var MaxDurationDay = 90

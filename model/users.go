@@ -14,8 +14,7 @@ type UserStatResponse struct {
 
 type OwnUser struct {
 	Id                           string    `json:"id,omitempty"`
-	Name                         string    `json:"name,omitempty"`
-	Surname                      string    `json:"surname,omitempty"`
+	Fullname                     string    `json:"fullname,omitempty"`
 	Username                     string    `json:"username,omitempty"`
 	Email                        string    `json:"email,omitempty"`
 	EmailVerified                bool      `json:"email_verified"`
@@ -31,8 +30,7 @@ type OwnUser struct {
 
 type User struct {
 	Id                           string     `json:"id,omitempty"`
-	Name                         string     `json:"name,omitempty"`
-	Surname                      string     `json:"surname,omitempty"`
+	Fullname                     string     `json:"fullname,omitempty"`
 	Username                     string     `json:"username,omitempty"`
 	EmailVerified                bool       `json:"email_verified"`
 	Location                     string     `json:"location,omitempty"`
@@ -46,8 +44,7 @@ type User struct {
 }
 
 type UpdateUserProfileRequest struct {
-	Name            string `json:"name"`
-	Surname         string `json:"surname"`
+	Fullname        string `json:"fullname"`
 	Location        string `json:"location"`
 	ProfilePhoto    string `json:"profile_photo"`
 	BackgroundPhoto string `json:"background_photo"`
@@ -57,8 +54,7 @@ type UpdateUserProfileRequest struct {
 func NewGetOwnUserResponseByUsername(user db.GetOwnUserByUsernameRow) (response OwnUser) {
 	response = OwnUser{
 		Id:                           user.ID,
-		Name:                         user.Name,
-		Surname:                      user.Surname,
+		Fullname:                     user.Fullname,
 		Username:                     user.Username,
 		Email:                        user.Email,
 		EmailVerified:                user.EmailVerified,
@@ -96,8 +92,7 @@ func NewGetOwnUserResponseByUsername(user db.GetOwnUserByUsernameRow) (response 
 func NewGetOwnUserResponseByID(user db.GetOwnUserByIDRow) (response OwnUser) {
 	response = OwnUser{
 		Id:                           user.ID,
-		Name:                         user.Name,
-		Surname:                      user.Surname,
+		Fullname:                     user.Fullname,
 		Username:                     user.Username,
 		Email:                        user.Email,
 		EmailVerified:                user.EmailVerified,
@@ -135,8 +130,7 @@ func NewGetOwnUserResponseByID(user db.GetOwnUserByIDRow) (response OwnUser) {
 func NewGetUserResponse(user db.GetUserByUsernameRow) (response User) {
 	response = User{
 		Id:                           user.ID,
-		Name:                         user.Name,
-		Surname:                      user.Surname,
+		Fullname:                     user.Fullname,
 		Username:                     user.Username,
 		EmailVerified:                user.EmailVerified,
 		Location:                     user.Location.String,
@@ -176,8 +170,7 @@ func NewGetUsersResponse(users []db.GetUserByUsernameRow) []User {
 	for _, user := range users {
 		response := User{
 			Id:                           user.ID,
-			Name:                         user.Name,
-			Surname:                      user.Surname,
+			Fullname:                     user.Fullname,
 			Username:                     user.Username,
 			EmailVerified:                user.EmailVerified,
 			Location:                     user.Location.String,

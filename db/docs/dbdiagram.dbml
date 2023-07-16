@@ -5,8 +5,7 @@
 
   Table user as U {
     id varchar [not null, pk, unique]
-    name varchar [not null]
-    surname varchar [not null]
+    fullname varchar [not null]
     username varchar [not null, unique]
     email varchar [not null, unique]
     email_verified boolean [not null, default: false]

@@ -8,7 +8,7 @@ import (
 var resetPasswordURL string = "change-password"
 var verifyEmailURL string = "verify-email"
 
-func SendPasswordResetEmail(to string, config config.Config, name, token string) error {
+func SendPasswordResetEmail(to string, config config.Config, fullname, token string) error {
 	templatePath := "util/mailing/templates/password_reset.html"
 	subject := "Moniesto: Reset password"
 
@@ -16,7 +16,7 @@ func SendPasswordResetEmail(to string, config config.Config, name, token string)
 		Name      string
 		ActionUrl string
 	}{
-		Name:      name,
+		Name:      fullname,
 		ActionUrl: createResetPasswordURL(config.ClientURL, token),
 	}
 

@@ -69,17 +69,9 @@ func Location(location string) error {
 	return nil
 }
 
-func Name(name string) error {
-	if len(name) > MaxNameLength {
-		return fmt.Errorf("name length is more than %d", MaxNameLength)
-	}
-
-	return nil
-}
-
-func Surname(surname string) error {
-	if len(surname) > MaxSurnameLength {
-		return fmt.Errorf("surname length is more than %d", MaxSurnameLength)
+func Fullname(fullname string) error {
+	if len(fullname) > MaxFullnameLength {
+		return fmt.Errorf("fullname length is more than %d", MaxFullnameLength)
 	}
 
 	return nil

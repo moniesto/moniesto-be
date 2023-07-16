@@ -102,7 +102,7 @@ func (server *Server) getContentMoniests(ctx *gin.Context) {
 }
 
 // @Summary Search Moniest
-// @Description Search Moniest by their name & surname & username
+// @Description Search Moniest by their fullname & username
 // @Security bearerAuth
 // @Tags Content
 // @Accept json

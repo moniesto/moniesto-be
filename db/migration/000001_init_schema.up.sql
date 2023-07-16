@@ -16,8 +16,7 @@ CREATE TYPE "payout_type" AS ENUM ('BINANCE_ID');
 
 CREATE TABLE "user" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "name" varchar NOT NULL,
-    "surname" varchar NOT NULL,
+    "fullname" varchar NOT NULL,
     "username" varchar UNIQUE NOT NULL,
     "email" varchar UNIQUE NOT NULL,
     "email_verified" boolean NOT NULL DEFAULT false,

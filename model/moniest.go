@@ -68,8 +68,7 @@ type MoniestStatResponse struct {
 func NewCreateMoniestResponse(moniest db.GetMoniestByMoniestIdRow) OwnUser {
 	response := OwnUser{
 		Id:                           moniest.ID,
-		Name:                         moniest.Name,
-		Surname:                      moniest.Surname,
+		Fullname:                     moniest.Fullname,
 		Username:                     moniest.Username,
 		Email:                        moniest.Email,
 		EmailVerified:                moniest.EmailVerified,

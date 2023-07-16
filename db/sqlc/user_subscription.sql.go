@@ -132,8 +132,7 @@ func (q *Queries) Endsubscription(ctx context.Context, arg EndsubscriptionParams
 const getSubscribers = `-- name: GetSubscribers :many
 SELECT "u"."id",
     "m"."id" as "moniest_id",
-    "u"."name",
-    "u"."surname",
+    "u"."fullname",
     "u"."username",
     "u"."email_verified",
     "u"."location",
@@ -200,8 +199,7 @@ type GetSubscribersParams struct {
 type GetSubscribersRow struct {
 	ID                               string          `json:"id"`
 	MoniestID                        sql.NullString  `json:"moniest_id"`
-	Name                             string          `json:"name"`
-	Surname                          string          `json:"surname"`
+	Fullname                         string          `json:"fullname"`
 	Username                         string          `json:"username"`
 	EmailVerified                    bool            `json:"email_verified"`
 	Location                         sql.NullString  `json:"location"`
@@ -232,8 +230,7 @@ func (q *Queries) GetSubscribers(ctx context.Context, arg GetSubscribersParams) 
 		if err := rows.Scan(
 			&i.ID,
 			&i.MoniestID,
-			&i.Name,
-			&i.Surname,
+			&i.Fullname,
 			&i.Username,
 			&i.EmailVerified,
 			&i.Location,

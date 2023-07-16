@@ -63,7 +63,7 @@ func (service *Service) GetOwnUserByID(ctx *gin.Context, userID string) (db.GetO
 	return user, nil
 }
 
-// UpdateUserProfile updates profile fields [name | surname | location]
+// UpdateUserProfile updates profile fields [name | location]
 func (service *Service) UpdateUserProfile(ctx *gin.Context, user_id string, req model.UpdateUserProfileRequest) error {
 	difference := false
 
@@ -81,30 +81,20 @@ func (service *Service) UpdateUserProfile(ctx *gin.Context, user_id string, req 
 	// STEP: update the ones that provided on parameters
 	var param db.UpdateUserParams = db.UpdateUserParams{
 		ID:       user_id,
-		Name:     user.Name,
-		Surname:  user.Surname,
+		Fullname: user.Fullname,
 		Location: user.Location,
 	}
 
-	if req.Name != "" || req.Surname != "" || req.Location != "" {
+	if req.Fullname != "" || req.Location != "" {
 		difference = true
 
-		if req.Name != "" {
-			err := validation.Name(req.Name)
+		if req.Fullname != "" {
+			err := validation.Fullname(req.Fullname)
 			if err != nil {
-				return clientError.CreateError(http.StatusNotAcceptable, clientError.Account_UpdateUserProfile_InvalidName)
+				return clientError.CreateError(http.StatusNotAcceptable, clientError.Account_UpdateUserProfile_InvalidFullname)
 			}
 
-			param.Name = req.Name
-		}
-
-		if req.Surname != "" {
-			err := validation.Surname(req.Surname)
-			if err != nil {
-				return clientError.CreateError(http.StatusNotAcceptable, clientError.Account_UpdateUserProfile_InvalidSurname)
-			}
-
-			param.Surname = req.Surname
+			param.Fullname = req.Fullname
 		}
 
 		if req.Location != "" {

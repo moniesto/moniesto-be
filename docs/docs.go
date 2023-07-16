@@ -1638,7 +1638,7 @@ const docTemplate = `{
                         "bearerAuth": []
                     }
                 ],
-                "description": "Update user profile [name, surname, location, profile photo, background photo]",
+                "description": "Update user profile [fullname, location, profile photo, background photo]",
                 "consumes": [
                     "application/json"
                 ],
@@ -1776,6 +1776,9 @@ const docTemplate = `{
         "model.CheckSubscriptionResponse": {
             "type": "object",
             "properties": {
+                "pending": {
+                    "type": "boolean"
+                },
                 "subscribed": {
                     "type": "boolean"
                 }
@@ -1953,6 +1956,9 @@ const docTemplate = `{
                 "email_verified": {
                     "type": "boolean"
                 },
+                "fullname": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -1962,16 +1968,10 @@ const docTemplate = `{
                 "moniest": {
                     "$ref": "#/definitions/model.contentMoniest"
                 },
-                "name": {
-                    "type": "string"
-                },
                 "profile_photo_link": {
                     "type": "string"
                 },
                 "profile_photo_thumbnail_link": {
-                    "type": "string"
-                },
-                "surname": {
                     "type": "string"
                 },
                 "updated_at": {
@@ -2050,16 +2050,13 @@ const docTemplate = `{
                 "max_duration_day": {
                     "type": "integer"
                 },
+                "max_fullname_length": {
+                    "type": "integer"
+                },
                 "max_location_length": {
                     "type": "integer"
                 },
-                "max_name_length": {
-                    "type": "integer"
-                },
                 "max_subscription_message_length": {
-                    "type": "integer"
-                },
-                "max_surname_length": {
                     "type": "integer"
                 },
                 "min_fee": {
@@ -2170,6 +2167,9 @@ const docTemplate = `{
                 "email_verified": {
                     "type": "boolean"
                 },
+                "fullname": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -2179,16 +2179,10 @@ const docTemplate = `{
                 "moniest": {
                     "$ref": "#/definitions/model.Moniest"
                 },
-                "name": {
-                    "type": "string"
-                },
                 "profile_photo_link": {
                     "type": "string"
                 },
                 "profile_photo_thumbnail_link": {
-                    "type": "string"
-                },
-                "surname": {
                     "type": "string"
                 },
                 "updated_at": {
@@ -2203,25 +2197,20 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "email",
-                "name",
+                "fullname",
                 "password",
-                "surname",
                 "username"
             ],
             "properties": {
                 "email": {
                     "type": "string"
                 },
-                "name": {
+                "fullname": {
                     "type": "string",
                     "minLength": 1
                 },
                 "password": {
                     "type": "string"
-                },
-                "surname": {
-                    "type": "string",
-                    "minLength": 1
                 },
                 "username": {
                     "type": "string"
@@ -2318,16 +2307,13 @@ const docTemplate = `{
                 "background_photo": {
                     "type": "string"
                 },
+                "fullname": {
+                    "type": "string"
+                },
                 "location": {
                     "type": "string"
                 },
-                "name": {
-                    "type": "string"
-                },
                 "profile_photo": {
-                    "type": "string"
-                },
-                "surname": {
                     "type": "string"
                 }
             }
@@ -2347,6 +2333,9 @@ const docTemplate = `{
                 "email_verified": {
                     "type": "boolean"
                 },
+                "fullname": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -2356,16 +2345,10 @@ const docTemplate = `{
                 "moniest": {
                     "$ref": "#/definitions/model.Moniest"
                 },
-                "name": {
-                    "type": "string"
-                },
                 "profile_photo_link": {
                     "type": "string"
                 },
                 "profile_photo_thumbnail_link": {
-                    "type": "string"
-                },
-                "surname": {
                     "type": "string"
                 },
                 "updated_at": {

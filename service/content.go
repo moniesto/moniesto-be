@@ -138,9 +138,9 @@ func (service *Service) SearchMoniest(ctx *gin.Context, searchText string, limit
 	querySearchText := "%" + searchText + "%"
 
 	params := db.SearchMoniestsParams{
-		Name:   querySearchText,
-		Limit:  int32(limit),
-		Offset: int32(offset),
+		Fullname: querySearchText,
+		Limit:    int32(limit),
+		Offset:   int32(offset),
 	}
 
 	moniestFromDB, err := service.Store.SearchMoniests(ctx, params)

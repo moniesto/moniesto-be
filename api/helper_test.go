@@ -26,8 +26,7 @@ func getRandomUsersDataWithID(count int) []registeredUserWithID {
 		all_users = append(all_users, registeredUserWithID{
 			ID: "",
 			RegisterRequest: model.RegisterRequest{
-				Name:     random_user.Name,
-				Surname:  random_user.Surname,
+				Fullname: random_user.Fullname,
 				Username: random_user.Username,
 				Email:    random_user.Email,
 				Password: random_user.Password,
@@ -76,8 +75,7 @@ func createUserDBLevel(t *testing.T, ctx *gin.Context, service *service.Service,
 
 	dbUser := db.CreateUserParams{
 		ID:       core.CreateID(),
-		Name:     registerRequest.Name,
-		Surname:  registerRequest.Surname,
+		Fullname: registerRequest.Fullname,
 		Username: registerRequest.Username,
 		Email:    registerRequest.Email,
 		Password: hashed_password,
@@ -90,8 +88,7 @@ func createUserDBLevel(t *testing.T, ctx *gin.Context, service *service.Service,
 // getRandomUserData returns 1 random model.RegisterRequest
 func getRandomUserData() model.RegisterRequest {
 	return model.RegisterRequest{
-		Name:     util.RandomName(),
-		Surname:  util.RandomSurname(),
+		Fullname: util.RandomFullname(),
 		Username: util.RandomUsername(),
 		Email:    util.RandomEmail(),
 		Password: util.RandomPassword(),

@@ -65,8 +65,7 @@ type GetOwnPostResponse struct {
 
 type GetContentMoniestResponse struct {
 	Id                           string          `json:"id,omitempty"`
-	Name                         string          `json:"name,omitempty"`
-	Surname                      string          `json:"surname,omitempty"`
+	Fullname                     string          `json:"fullname,omitempty"`
 	Username                     string          `json:"username,omitempty"`
 	EmailVerified                bool            `json:"email_verified"`
 	Location                     string          `json:"location,omitempty"`
@@ -120,8 +119,7 @@ func NewGetContentPostResponse(posts PostDBResponse) []GetContentPostResponse {
 			UpdatedAt:   post.UpdatedAt,
 			User: User{
 				Id:                           post.UserID,
-				Name:                         post.Name,
-				Surname:                      post.Surname,
+				Fullname:                     post.Fullname,
 				Username:                     post.Username,
 				EmailVerified:                post.EmailVerified,
 				ProfilePhotoLink:             post.ProfilePhotoLink.(string),
@@ -163,8 +161,7 @@ func NewGetOwnPostResponse(posts OwnPostDBResponse) []GetOwnPostResponse {
 			UpdatedAt:   post.UpdatedAt,
 			User: User{
 				Id:                           post.UserID,
-				Name:                         post.Name,
-				Surname:                      post.Surname,
+				Fullname:                     post.Fullname,
 				Username:                     post.Username,
 				EmailVerified:                post.EmailVerified,
 				ProfilePhotoLink:             post.ProfilePhotoLink.(string),
@@ -190,8 +187,7 @@ func NewGetMoniestsResponse(moniests MoniestDBResponse) []User {
 	for _, user := range moniests {
 		response = append(response, User{
 			Id:                           user.ID,
-			Name:                         user.Name,
-			Surname:                      user.Surname,
+			Fullname:                     user.Fullname,
 			Username:                     user.Username,
 			EmailVerified:                user.EmailVerified,
 			Location:                     user.Location.String,
@@ -224,8 +220,7 @@ func NewGetContentMoniestResponse(moniests ContentMoniestDBResponse) []GetConten
 	for _, user := range moniests {
 		response = append(response, GetContentMoniestResponse{
 			Id:                           user.ID,
-			Name:                         user.Name,
-			Surname:                      user.Surname,
+			Fullname:                     user.Fullname,
 			Username:                     user.Username,
 			EmailVerified:                user.EmailVerified,
 			Location:                     user.Location.String,

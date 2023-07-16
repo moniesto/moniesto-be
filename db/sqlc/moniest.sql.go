@@ -81,8 +81,7 @@ func (q *Queries) CreateMoniest(ctx context.Context, arg CreateMoniestParams) (M
 const getMoniestByMoniestId = `-- name: GetMoniestByMoniestId :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -146,8 +145,7 @@ WHERE "moniest"."id" = $1
 type GetMoniestByMoniestIdRow struct {
 	ID                               string         `json:"id"`
 	MoniestID                        string         `json:"moniest_id"`
-	Name                             string         `json:"name"`
-	Surname                          string         `json:"surname"`
+	Fullname                         string         `json:"fullname"`
 	Username                         string         `json:"username"`
 	Email                            string         `json:"email"`
 	EmailVerified                    bool           `json:"email_verified"`
@@ -173,8 +171,7 @@ func (q *Queries) GetMoniestByMoniestId(ctx context.Context, id string) (GetMoni
 	err := row.Scan(
 		&i.ID,
 		&i.MoniestID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
@@ -199,8 +196,7 @@ func (q *Queries) GetMoniestByMoniestId(ctx context.Context, id string) (GetMoni
 const getMoniestByUserId = `-- name: GetMoniestByUserId :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -260,8 +256,7 @@ WHERE "user"."id" = $1
 type GetMoniestByUserIdRow struct {
 	ID                               string         `json:"id"`
 	MoniestID                        string         `json:"moniest_id"`
-	Name                             string         `json:"name"`
-	Surname                          string         `json:"surname"`
+	Fullname                         string         `json:"fullname"`
 	Username                         string         `json:"username"`
 	Email                            string         `json:"email"`
 	EmailVerified                    bool           `json:"email_verified"`
@@ -287,8 +282,7 @@ func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMon
 	err := row.Scan(
 		&i.ID,
 		&i.MoniestID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
@@ -313,8 +307,7 @@ func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMon
 const getMoniestByUsername = `-- name: GetMoniestByUsername :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -378,8 +371,7 @@ WHERE "user"."username" = $1
 type GetMoniestByUsernameRow struct {
 	ID                               string         `json:"id"`
 	MoniestID                        string         `json:"moniest_id"`
-	Name                             string         `json:"name"`
-	Surname                          string         `json:"surname"`
+	Fullname                         string         `json:"fullname"`
 	Username                         string         `json:"username"`
 	Email                            string         `json:"email"`
 	EmailVerified                    bool           `json:"email_verified"`
@@ -405,8 +397,7 @@ func (q *Queries) GetMoniestByUsername(ctx context.Context, username string) (Ge
 	err := row.Scan(
 		&i.ID,
 		&i.MoniestID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,

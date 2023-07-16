@@ -1,8 +1,7 @@
 -- name: LoginUserByUsername :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -66,8 +65,7 @@ WHERE "user"."username" = $1
 -- name: LoginUserByEmail :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",

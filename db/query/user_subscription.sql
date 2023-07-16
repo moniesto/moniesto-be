@@ -47,8 +47,7 @@ WHERE "user_subscription"."active" = TRUE
 -- name: GetSubscribers :many
 SELECT "u"."id",
     "m"."id" as "moniest_id",
-    "u"."name",
-    "u"."surname",
+    "u"."fullname",
     "u"."username",
     "u"."email_verified",
     "u"."location",

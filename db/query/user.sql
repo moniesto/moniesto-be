@@ -1,15 +1,14 @@
 -- name: CreateUser :one
 INSERT INTO "user" (
         id,
-        name,
-        surname,
+        fullname,
         username,
         email,
         password,
         created_at,
         last_login
     )
-VALUES ($1, $2, $3, $4, $5, $6, now(), now())
+VALUES ($1, $2, $3, $4, $5, now(), now())
 RETURNING *;
 
 -- name: DeleteUser :one
@@ -21,8 +20,7 @@ RETURNING *;
 
 -- name: GetUserByID :one
 SELECT "user"."id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email_verified",
     "user"."location",
@@ -71,8 +69,7 @@ WHERE "user"."id" = $1
 -- name: GetOwnUserByID :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -131,8 +128,7 @@ WHERE "user"."id" = $1
 -- name: GetUserByUsername :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email_verified",
     "user"."location",
@@ -194,8 +190,7 @@ WHERE "user"."username" = $1
 -- name: GetOwnUserByUsername :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -257,8 +252,7 @@ WHERE "user"."username" = $1
 
 -- name: GetUserByEmail :one
 SELECT "user"."id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -311,9 +305,8 @@ WHERE "user"."email" = $1
 
 -- name: UpdateUser :exec
 UPDATE "user"
-SET name = $2,
-    surname = $3,
-    location = $4,
+SET fullname = $2,
+    location = $3,
     updated_at = now()
 WHERE id = $1;
 
@@ -366,8 +359,7 @@ WHERE username = $1;
 -- name: GetSubscriptions :many
 SELECT "u"."id",
     "m"."id" as "moniest_id",
-    "u"."name",
-    "u"."surname",
+    "u"."fullname",
     "u"."username",
     "u"."email_verified",
     "u"."location",

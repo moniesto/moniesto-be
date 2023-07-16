@@ -132,8 +132,7 @@ func checkSuccessLoginResponse(t *testing.T, body *bytes.Buffer) {
 	require.NotEmpty(t, gotResponse.Token)
 	require.NotEmpty(t, gotResponse.User)
 	require.NotEmpty(t, gotResponse.User.Id)
-	require.NotEmpty(t, gotResponse.User.Name)
-	require.NotEmpty(t, gotResponse.User.Surname)
+	require.NotEmpty(t, gotResponse.User.Fullname)
 	require.NotEmpty(t, gotResponse.User.Username)
 	require.NotEmpty(t, gotResponse.User.Email)
 
@@ -391,8 +390,7 @@ func getRegisterCases() RegisterCases {
 			name:       "Invalid Email",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
 			body: model.RegisterRequest{
-				Name:     registerUsers[0].Name,
-				Surname:  registerUsers[0].Surname,
+				Fullname: registerUsers[0].Fullname,
 				Username: registerUsers[0].Username,
 				Email:    "test@.c", // is invalid
 				Password: registerUsers[0].Password,
@@ -409,8 +407,7 @@ func getRegisterCases() RegisterCases {
 			name:       "Invalid Password",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
 			body: model.RegisterRequest{
-				Name:     registerUsers[1].Name,
-				Surname:  registerUsers[1].Surname,
+				Fullname: registerUsers[1].Fullname,
 				Username: registerUsers[1].Username,
 				Email:    registerUsers[1].Email,
 				Password: "tes", // is invalid
@@ -427,8 +424,7 @@ func getRegisterCases() RegisterCases {
 			name:       "Invalid Username",
 			initialize: func(t *testing.T, ctx *gin.Context, service *service.Service) {},
 			body: model.RegisterRequest{
-				Name:     registerUsers[2].Name,
-				Surname:  registerUsers[2].Surname,
+				Fullname: registerUsers[2].Fullname,
 				Username: "Test Username", // is invalid
 				Email:    registerUsers[2].Email,
 				Password: registerUsers[2].Password,
@@ -447,16 +443,14 @@ func getRegisterCases() RegisterCases {
 				checkUserNotInSystemByEmail(t, ctx, service, registerUsers[3].Email)
 
 				createUserDBLevel(t, ctx, service, model.RegisterRequest{
-					Name:     registerUsers[3].Name,
-					Surname:  registerUsers[3].Surname,
+					Fullname: registerUsers[3].Fullname,
 					Username: registerUsers[3].Username,
 					Email:    registerUsers[3].Email,
 					Password: registerUsers[3].Password,
 				})
 			},
 			body: model.RegisterRequest{
-				Name:     registerUsers[3].Name,
-				Surname:  registerUsers[3].Surname,
+				Fullname: registerUsers[3].Fullname,
 				Username: registerUsers[3].Username,
 				Email:    registerUsers[3].Email,
 				Password: registerUsers[3].Password,
@@ -475,16 +469,14 @@ func getRegisterCases() RegisterCases {
 				checkUserNotInSystemByUsername(t, ctx, service, registerUsers[4].Username)
 
 				createUserDBLevel(t, ctx, service, model.RegisterRequest{
-					Name:     registerUsers[4].Name,
-					Surname:  registerUsers[4].Surname,
+					Fullname: registerUsers[4].Fullname,
 					Username: registerUsers[4].Username,
 					Email:    registerUsers[4].Email,
 					Password: registerUsers[4].Password,
 				})
 			},
 			body: model.RegisterRequest{
-				Name:     registerUsers[4].Name,
-				Surname:  registerUsers[4].Surname,
+				Fullname: registerUsers[4].Fullname,
 				Username: registerUsers[4].Username,
 				Email:    registerUsers[4].Email,
 				Password: registerUsers[4].Password,
@@ -503,8 +495,7 @@ func getRegisterCases() RegisterCases {
 				checkUserNotInSystemByUsername(t, ctx, service, registerUsers[5].Username)
 			},
 			body: model.RegisterRequest{
-				Name:     registerUsers[5].Name,
-				Surname:  registerUsers[5].Surname,
+				Fullname: registerUsers[5].Fullname,
 				Username: registerUsers[5].Username,
 				Email:    registerUsers[5].Email,
 				Password: registerUsers[5].Password,

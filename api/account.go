@@ -103,7 +103,7 @@ func (server *Server) registerUser(ctx *gin.Context) {
 	server.loginUser(ctx)
 
 	// STEP: send welcoming email
-	go mailing.SendWelcomingEmail(createdUser.Email, server.config, createdUser.Name)
+	go mailing.SendWelcomingEmail(createdUser.Email, server.config, createdUser.Fullname)
 }
 
 // @Summary Check Username
@@ -182,10 +182,10 @@ func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 
 	// STEP: send verification email -> dont wait for the response
-	go mailing.SendEmailVerificationEmail(user.Email, server.config, user.Name, email_verification_token.Token)
+	go mailing.SendEmailVerificationEmail(user.Email, server.config, user.Fullname, email_verification_token.Token)
 
 	// // STEP: send verification email -> wait for the response
-	// err = mailing.SendEmailVerificationEmail(user.Email, server.config, user.Name, email_verification_token.Token)
+	// err = mailing.SendEmailVerificationEmail(user.Email, server.config, user.Fullname, email_verification_token.Token)
 	// if err != nil {
 	// 	ctx.AbortWithStatusJSON(http.StatusInternalServerError, clientError.GetError(clientError.Account_EmailVerification_SendEmail))
 	// }

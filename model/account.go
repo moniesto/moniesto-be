@@ -5,8 +5,7 @@ import (
 )
 
 type RegisterRequest struct {
-	Name     string `json:"name" binding:"required,min=1"`
-	Surname  string `json:"surname" binding:"required,min=1"`
+	Fullname string `json:"fullname" binding:"required,min=1"`
 	Username string `json:"username" binding:"required"`
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
@@ -49,8 +48,7 @@ type ChangeUsernameResponse struct {
 }
 
 // type UpdateProfileRequest struct {
-// 	Name            string `json:"name"`
-// 	Surname         string `json:"surname"`
+// 	Fullname            string `json:"fullname"`
 // 	Location        string `json:"location"`
 // 	ProfilePhoto    string `json:"profile_photo"`
 // 	BackgroundPhoto string `json:"background_photo"`
@@ -82,8 +80,7 @@ func NewRegisterResponse(token string, user db.LoginUserByEmailRow) (response Re
 		Token: token,
 		User: OwnUser{
 			Id:                           user.ID,
-			Name:                         user.Name,
-			Surname:                      user.Surname,
+			Fullname:                     user.Fullname,
 			Username:                     user.Username,
 			Email:                        user.Email,
 			EmailVerified:                user.EmailVerified,

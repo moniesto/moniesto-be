@@ -504,8 +504,7 @@ type PostCryptoDescription struct {
 // Stores user data
 type User struct {
 	ID            string         `json:"id"`
-	Name          string         `json:"name"`
-	Surname       string         `json:"surname"`
+	Fullname      string         `json:"fullname"`
 	Username      string         `json:"username"`
 	Email         string         `json:"email"`
 	EmailVerified bool           `json:"email_verified"`

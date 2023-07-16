@@ -14,8 +14,7 @@ import (
 const loginUserByEmail = `-- name: LoginUserByEmail :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -80,8 +79,7 @@ WHERE "user"."email" = $1
 type LoginUserByEmailRow struct {
 	ID                               string          `json:"id"`
 	MoniestID                        sql.NullString  `json:"moniest_id"`
-	Name                             string          `json:"name"`
-	Surname                          string          `json:"surname"`
+	Fullname                         string          `json:"fullname"`
 	Username                         string          `json:"username"`
 	Email                            string          `json:"email"`
 	EmailVerified                    bool            `json:"email_verified"`
@@ -108,8 +106,7 @@ func (q *Queries) LoginUserByEmail(ctx context.Context, email string) (LoginUser
 	err := row.Scan(
 		&i.ID,
 		&i.MoniestID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
@@ -135,8 +132,7 @@ func (q *Queries) LoginUserByEmail(ctx context.Context, email string) (LoginUser
 const loginUserByUsername = `-- name: LoginUserByUsername :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -201,8 +197,7 @@ WHERE "user"."username" = $1
 type LoginUserByUsernameRow struct {
 	ID                               string          `json:"id"`
 	MoniestID                        sql.NullString  `json:"moniest_id"`
-	Name                             string          `json:"name"`
-	Surname                          string          `json:"surname"`
+	Fullname                         string          `json:"fullname"`
 	Username                         string          `json:"username"`
 	Email                            string          `json:"email"`
 	EmailVerified                    bool            `json:"email_verified"`
@@ -229,8 +224,7 @@ func (q *Queries) LoginUserByUsername(ctx context.Context, username string) (Log
 	err := row.Scan(
 		&i.ID,
 		&i.MoniestID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
@@ -259,7 +253,7 @@ SET login_count = login_count + 1,
     last_login = now(),
     updated_at = now()
 WHERE id = $1
-RETURNING id, name, surname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
+RETURNING id, fullname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
 `
 
 func (q *Queries) UpdateLoginStats(ctx context.Context, id string) (User, error) {
@@ -267,8 +261,7 @@ func (q *Queries) UpdateLoginStats(ctx context.Context, id string) (User, error)
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,

@@ -33,14 +33,9 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidUsername)
 	}
 
-	err = validation.Name(registerRequest.Name)
+	err = validation.Fullname(registerRequest.Fullname)
 	if err != nil {
-		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidName)
-	}
-
-	err = validation.Surname(registerRequest.Surname)
-	if err != nil {
-		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidSurname)
+		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidFullname)
 	}
 
 	// any user with same email
@@ -72,8 +67,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 
 	user := db.CreateUserParams{
 		ID:       core.CreateID(),
-		Name:     registerRequest.Name,
-		Surname:  registerRequest.Surname,
+		Fullname: registerRequest.Fullname,
 		Username: registerRequest.Username,
 		Email:    registerRequest.Email,
 		Password: hashedPassword,

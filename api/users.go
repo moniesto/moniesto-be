@@ -65,7 +65,7 @@ func (server *Server) getUserByUsername(ctx *gin.Context) {
 }
 
 // @Summary Update User Profile
-// @Description Update user profile [name, surname, location, profile photo, background photo]
+// @Description Update user profile [fullname, location, profile photo, background photo]
 // @Security bearerAuth
 // @Tags User
 // @Accept json

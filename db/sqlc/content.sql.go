@@ -30,8 +30,7 @@ SELECT "pc"."id",
     "m"."description",
     "m"."score" as "moniest_score",
     "u"."id" as "user_id",
-    "u"."name",
-    "u"."surname",
+    "u"."fullname",
     "u"."username",
     "u"."email_verified",
     "u"."location",
@@ -109,8 +108,7 @@ type GetDeactivePostsByCreatedAtRow struct {
 	Description                  sql.NullString   `json:"description"`
 	MoniestScore                 float64          `json:"moniest_score"`
 	UserID                       string           `json:"user_id"`
-	Name                         string           `json:"name"`
-	Surname                      string           `json:"surname"`
+	Fullname                     string           `json:"fullname"`
 	Username                     string           `json:"username"`
 	EmailVerified                bool             `json:"email_verified"`
 	Location                     sql.NullString   `json:"location"`
@@ -149,8 +147,7 @@ func (q *Queries) GetDeactivePostsByCreatedAt(ctx context.Context, arg GetDeacti
 			&i.Description,
 			&i.MoniestScore,
 			&i.UserID,
-			&i.Name,
-			&i.Surname,
+			&i.Fullname,
 			&i.Username,
 			&i.EmailVerified,
 			&i.Location,
@@ -192,8 +189,7 @@ SELECT "pc"."id",
     "m"."description",
     "m"."score" as "moniest_score",
     "u"."id" as "user_id",
-    "u"."name",
-    "u"."surname",
+    "u"."fullname",
     "u"."username",
     "u"."email_verified",
     "u"."location",
@@ -271,8 +267,7 @@ type GetDeactivePostsByScoreRow struct {
 	Description                  sql.NullString   `json:"description"`
 	MoniestScore                 float64          `json:"moniest_score"`
 	UserID                       string           `json:"user_id"`
-	Name                         string           `json:"name"`
-	Surname                      string           `json:"surname"`
+	Fullname                     string           `json:"fullname"`
 	Username                     string           `json:"username"`
 	EmailVerified                bool             `json:"email_verified"`
 	Location                     sql.NullString   `json:"location"`
@@ -311,8 +306,7 @@ func (q *Queries) GetDeactivePostsByScore(ctx context.Context, arg GetDeactivePo
 			&i.Description,
 			&i.MoniestScore,
 			&i.UserID,
-			&i.Name,
-			&i.Surname,
+			&i.Fullname,
 			&i.Username,
 			&i.EmailVerified,
 			&i.Location,
@@ -338,8 +332,7 @@ func (q *Queries) GetDeactivePostsByScore(ctx context.Context, arg GetDeactivePo
 const getMoniests = `-- name: GetMoniests :many
 SELECT "u"."id",
     "m"."id" as "moniest_id",
-    "u"."name",
-    "u"."surname",
+    "u"."fullname",
     "u"."username",
     "u"."email_verified",
     "u"."location",
@@ -409,8 +402,7 @@ type GetMoniestsParams struct {
 type GetMoniestsRow struct {
 	ID                               string         `json:"id"`
 	MoniestID                        string         `json:"moniest_id"`
-	Name                             string         `json:"name"`
-	Surname                          string         `json:"surname"`
+	Fullname                         string         `json:"fullname"`
 	Username                         string         `json:"username"`
 	EmailVerified                    bool           `json:"email_verified"`
 	Location                         sql.NullString `json:"location"`
@@ -441,8 +433,7 @@ func (q *Queries) GetMoniests(ctx context.Context, arg GetMoniestsParams) ([]Get
 		if err := rows.Scan(
 			&i.ID,
 			&i.MoniestID,
-			&i.Name,
-			&i.Surname,
+			&i.Fullname,
 			&i.Username,
 			&i.EmailVerified,
 			&i.Location,
@@ -492,8 +483,7 @@ SELECT "pc"."id",
     "m"."description",
     "m"."score" as "moniest_score",
     "u"."id" as "user_id",
-    "u"."name",
-    "u"."surname",
+    "u"."fullname",
     "u"."username",
     "u"."email_verified",
     "u"."location",
@@ -571,8 +561,7 @@ type GetSubscribedActivePostsRow struct {
 	Description                  sql.NullString   `json:"description"`
 	MoniestScore                 float64          `json:"moniest_score"`
 	UserID                       string           `json:"user_id"`
-	Name                         string           `json:"name"`
-	Surname                      string           `json:"surname"`
+	Fullname                     string           `json:"fullname"`
 	Username                     string           `json:"username"`
 	EmailVerified                bool             `json:"email_verified"`
 	Location                     sql.NullString   `json:"location"`
@@ -611,8 +600,7 @@ func (q *Queries) GetSubscribedActivePosts(ctx context.Context, arg GetSubscribe
 			&i.Description,
 			&i.MoniestScore,
 			&i.UserID,
-			&i.Name,
-			&i.Surname,
+			&i.Fullname,
 			&i.Username,
 			&i.EmailVerified,
 			&i.Location,
@@ -655,8 +643,7 @@ const getSubscribedActivePostsWithOwn = `-- name: GetSubscribedActivePostsWithOw
         "m"."description",
         "m"."score" as "moniest_score",
         "u"."id" as "user_id",
-        "u"."name",
-        "u"."surname",
+        "u"."fullname",
         "u"."username",
         "u"."email_verified",
         "u"."location",
@@ -726,8 +713,7 @@ UNION ALL
         "m"."description",
         "m"."score" as "moniest_score",
         "u"."id" as "user_id",
-        "u"."name",
-        "u"."surname",
+        "u"."fullname",
         "u"."username",
         "u"."email_verified",
         "u"."location",
@@ -805,8 +791,7 @@ type GetSubscribedActivePostsWithOwnRow struct {
 	Description                  sql.NullString   `json:"description"`
 	MoniestScore                 float64          `json:"moniest_score"`
 	UserID                       string           `json:"user_id"`
-	Name                         string           `json:"name"`
-	Surname                      string           `json:"surname"`
+	Fullname                     string           `json:"fullname"`
 	Username                     string           `json:"username"`
 	EmailVerified                bool             `json:"email_verified"`
 	Location                     sql.NullString   `json:"location"`
@@ -845,8 +830,7 @@ func (q *Queries) GetSubscribedActivePostsWithOwn(ctx context.Context, arg GetSu
 			&i.Description,
 			&i.MoniestScore,
 			&i.UserID,
-			&i.Name,
-			&i.Surname,
+			&i.Fullname,
 			&i.Username,
 			&i.EmailVerified,
 			&i.Location,
@@ -888,8 +872,7 @@ SELECT "pc"."id",
     "m"."description",
     "m"."score" as "moniest_score",
     "u"."id" as "user_id",
-    "u"."name",
-    "u"."surname",
+    "u"."fullname",
     "u"."username",
     "u"."email_verified",
     "u"."location",
@@ -969,8 +952,7 @@ type GetSubscribedDeactivePostsRow struct {
 	Description                  sql.NullString   `json:"description"`
 	MoniestScore                 float64          `json:"moniest_score"`
 	UserID                       string           `json:"user_id"`
-	Name                         string           `json:"name"`
-	Surname                      string           `json:"surname"`
+	Fullname                     string           `json:"fullname"`
 	Username                     string           `json:"username"`
 	EmailVerified                bool             `json:"email_verified"`
 	Location                     sql.NullString   `json:"location"`
@@ -1009,8 +991,7 @@ func (q *Queries) GetSubscribedDeactivePosts(ctx context.Context, arg GetSubscri
 			&i.Description,
 			&i.MoniestScore,
 			&i.UserID,
-			&i.Name,
-			&i.Surname,
+			&i.Fullname,
 			&i.Username,
 			&i.EmailVerified,
 			&i.Location,
@@ -1053,8 +1034,7 @@ const getSubscribedDeactivePostsWithOwn = `-- name: GetSubscribedDeactivePostsWi
         "m"."description",
         "m"."score" as "moniest_score",
         "u"."id" as "user_id",
-        "u"."name",
-        "u"."surname",
+        "u"."fullname",
         "u"."username",
         "u"."email_verified",
         "u"."location",
@@ -1126,8 +1106,7 @@ UNION ALL
         "m"."description",
         "m"."score" as "moniest_score",
         "u"."id" as "user_id",
-        "u"."name",
-        "u"."surname",
+        "u"."fullname",
         "u"."username",
         "u"."email_verified",
         "u"."location",
@@ -1207,8 +1186,7 @@ type GetSubscribedDeactivePostsWithOwnRow struct {
 	Description                  sql.NullString   `json:"description"`
 	MoniestScore                 float64          `json:"moniest_score"`
 	UserID                       string           `json:"user_id"`
-	Name                         string           `json:"name"`
-	Surname                      string           `json:"surname"`
+	Fullname                     string           `json:"fullname"`
 	Username                     string           `json:"username"`
 	EmailVerified                bool             `json:"email_verified"`
 	Location                     sql.NullString   `json:"location"`
@@ -1247,8 +1225,7 @@ func (q *Queries) GetSubscribedDeactivePostsWithOwn(ctx context.Context, arg Get
 			&i.Description,
 			&i.MoniestScore,
 			&i.UserID,
-			&i.Name,
-			&i.Surname,
+			&i.Fullname,
 			&i.Username,
 			&i.EmailVerified,
 			&i.Location,
@@ -1274,8 +1251,7 @@ func (q *Queries) GetSubscribedDeactivePostsWithOwn(ctx context.Context, arg Get
 const searchMoniests = `-- name: SearchMoniests :many
 SELECT "u"."id",
     "m"."id" as "moniest_id",
-    "u"."name",
-    "u"."surname",
+    "u"."fullname",
     "u"."username",
     "u"."email_verified",
     "u"."location",
@@ -1326,28 +1302,22 @@ SELECT "u"."id",
 FROM "user" as "u"
     INNER JOIN "moniest" as "m" ON "m"."user_id" = "u"."id"
     INNER JOIN "moniest_subscription_info" as "msi" ON "msi"."moniest_id" = "m"."id"
-WHERE (
-        "u"."name" || ' ' || "u"."surname" ILIKE $1
-    )
-    OR (
-        "u"."surname" || ' ' || "u"."name" ILIKE $1
-    )
+WHERE ("u"."fullname" ILIKE $1)
     OR ("u"."username" ILIKE $1)
     AND "u"."deleted" = FALSE
 LIMIT $2 OFFSET $3
 `
 
 type SearchMoniestsParams struct {
-	Name   string `json:"name"`
-	Limit  int32  `json:"limit"`
-	Offset int32  `json:"offset"`
+	Fullname string `json:"fullname"`
+	Limit    int32  `json:"limit"`
+	Offset   int32  `json:"offset"`
 }
 
 type SearchMoniestsRow struct {
 	ID                               string         `json:"id"`
 	MoniestID                        string         `json:"moniest_id"`
-	Name                             string         `json:"name"`
-	Surname                          string         `json:"surname"`
+	Fullname                         string         `json:"fullname"`
 	Username                         string         `json:"username"`
 	EmailVerified                    bool           `json:"email_verified"`
 	Location                         sql.NullString `json:"location"`
@@ -1366,7 +1336,7 @@ type SearchMoniestsRow struct {
 }
 
 func (q *Queries) SearchMoniests(ctx context.Context, arg SearchMoniestsParams) ([]SearchMoniestsRow, error) {
-	rows, err := q.db.QueryContext(ctx, searchMoniests, arg.Name, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, searchMoniests, arg.Fullname, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -1377,8 +1347,7 @@ func (q *Queries) SearchMoniests(ctx context.Context, arg SearchMoniestsParams) 
 		if err := rows.Scan(
 			&i.ID,
 			&i.MoniestID,
-			&i.Name,
-			&i.Surname,
+			&i.Fullname,
 			&i.Username,
 			&i.EmailVerified,
 			&i.Location,

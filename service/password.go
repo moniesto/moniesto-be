@@ -116,7 +116,7 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 	encoded_token := token.EncodeValidatingToken(plain_token)
 	password_reset_token.Token = encoded_token
 
-	return user.Name, password_reset_token, nil
+	return user.Fullname, password_reset_token, nil
 }
 
 func (service *Service) GetPasswordResetToken(ctx *gin.Context, encoded_token string) (db.PasswordResetToken, error) {

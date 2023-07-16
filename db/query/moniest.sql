@@ -26,8 +26,7 @@ RETURNING *;
 -- name: GetMoniestByUserId :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -86,8 +85,7 @@ WHERE "user"."id" = $1
 -- name: GetMoniestByMoniestId :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -150,8 +148,7 @@ WHERE "moniest"."id" = $1
 -- name: GetMoniestByUsername :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -238,8 +235,7 @@ where "user"."username" = $1;
 -- -- name: GetMoniestByEmail :one
 -- SELECT "user"."id",
 --     "moniest"."id" as "moniest_id",
---     "user"."name",
---     "user"."surname",
+--     "user"."fullname",
 --     "user"."username",
 --     "user"."email",
 --     "user"."email_verified",

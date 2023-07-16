@@ -95,7 +95,7 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
 	}
 
 	// STEP: create password_reset_token in DB
-	name, password_reset_token, err := server.service.CreatePasswordResetToken(ctx, validEmail, server.config.PasswordResetTokenDuration)
+	fullname, password_reset_token, err := server.service.CreatePasswordResetToken(ctx, validEmail, server.config.PasswordResetTokenDuration)
 	if err != nil {
 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
@@ -104,7 +104,7 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 
 	// STEP: send password reset email -> dont wait for the response
-	go mailing.SendPasswordResetEmail(validEmail, server.config, name, password_reset_token.Token)
+	go mailing.SendPasswordResetEmail(validEmail, server.config, fullname, password_reset_token.Token)
 
 	// // STEP: send password reset email -> wait for the response
 	// err = mailing.SendPasswordResetEmail(validEmail, server.config, name, password_reset_token.Token)

@@ -5,7 +5,7 @@ import (
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
-func SendEmailVerificationEmail(to string, config config.Config, name, token string) error {
+func SendEmailVerificationEmail(to string, config config.Config, fullname, token string) error {
 	templatePath := "util/mailing/templates/email_verification.html"
 	subject := "Moniesto: Email Verification"
 
@@ -13,7 +13,7 @@ func SendEmailVerificationEmail(to string, config config.Config, name, token str
 		Name      string
 		ActionUrl string
 	}{
-		Name:      name,
+		Name:      fullname,
 		ActionUrl: createEmailVerificationURL(config.ClientURL, token),
 	}
 

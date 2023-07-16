@@ -57,6 +57,8 @@ definitions:
     type: object
   model.CheckSubscriptionResponse:
     properties:
+      pending:
+        type: boolean
       subscribed:
         type: boolean
     type: object
@@ -176,19 +178,17 @@ definitions:
         type: string
       email_verified:
         type: boolean
+      fullname:
+        type: string
       id:
         type: string
       location:
         type: string
       moniest:
         $ref: '#/definitions/model.contentMoniest'
-      name:
-        type: string
       profile_photo_link:
         type: string
       profile_photo_thumbnail_link:
-        type: string
-      surname:
         type: string
       updated_at:
         type: string
@@ -240,13 +240,11 @@ definitions:
         type: integer
       max_duration_day:
         type: integer
+      max_fullname_length:
+        type: integer
       max_location_length:
         type: integer
-      max_name_length:
-        type: integer
       max_subscription_message_length:
-        type: integer
-      max_surname_length:
         type: integer
       min_fee:
         type: number
@@ -319,19 +317,17 @@ definitions:
         type: string
       email_verified:
         type: boolean
+      fullname:
+        type: string
       id:
         type: string
       location:
         type: string
       moniest:
         $ref: '#/definitions/model.Moniest'
-      name:
-        type: string
       profile_photo_link:
         type: string
       profile_photo_thumbnail_link:
-        type: string
-      surname:
         type: string
       updated_at:
         type: string
@@ -342,21 +338,17 @@ definitions:
     properties:
       email:
         type: string
-      name:
+      fullname:
         minLength: 1
         type: string
       password:
-        type: string
-      surname:
-        minLength: 1
         type: string
       username:
         type: string
     required:
     - email
-    - name
+    - fullname
     - password
-    - surname
     - username
     type: object
   model.RegisterResponse:
@@ -418,13 +410,11 @@ definitions:
     properties:
       background_photo:
         type: string
+      fullname:
+        type: string
       location:
         type: string
-      name:
-        type: string
       profile_photo:
-        type: string
-      surname:
         type: string
     type: object
   model.User:
@@ -437,19 +427,17 @@ definitions:
         type: string
       email_verified:
         type: boolean
+      fullname:
+        type: string
       id:
         type: string
       location:
         type: string
       moniest:
         $ref: '#/definitions/model.Moniest'
-      name:
-        type: string
       profile_photo_link:
         type: string
       profile_photo_thumbnail_link:
-        type: string
-      surname:
         type: string
       updated_at:
         type: string
@@ -1546,7 +1534,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: Update user profile [name, surname, location, profile photo, background
+      description: Update user profile [fullname, location, profile photo, background
         photo]
       parameters:
       - description: all fields are optional

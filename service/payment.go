@@ -202,7 +202,7 @@ func (service *Service) CheckPendingPaymentTransaction(ctx *gin.Context, moniest
 
 // HELPER functions
 func getProductName(req model.SubscribeMoniestRequest, moniest db.GetMoniestByUsernameRow) string {
-	return fmt.Sprintf("You are subscribing to %s %s at a monthly fee of $%.2f for %d months.", moniest.Name, moniest.Surname, util.RoundAmountDown(moniest.Fee), req.NumberOfMonths)
+	return fmt.Sprintf("You are subscribing to %s at a monthly fee of $%.2f for %d months.", moniest.Fullname, util.RoundAmountDown(moniest.Fee), req.NumberOfMonths)
 }
 
 func updateNavigateURLs(transactionID, returnURL, cancelURL string) (string, string) {

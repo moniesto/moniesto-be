@@ -37,10 +37,6 @@ func RandomPassword() string {
 	return RandomString(6)
 }
 
-func RandomName() string {
-	return RandomString(6)
-}
-
-func RandomSurname() string {
-	return RandomString(6)
+func RandomFullname() string {
+	return RandomString(6) + RandomString(6)
 }

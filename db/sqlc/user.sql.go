@@ -40,22 +40,20 @@ func (q *Queries) CheckUsername(ctx context.Context, username string) (bool, err
 const createUser = `-- name: CreateUser :one
 INSERT INTO "user" (
         id,
-        name,
-        surname,
+        fullname,
         username,
         email,
         password,
         created_at,
         last_login
     )
-VALUES ($1, $2, $3, $4, $5, $6, now(), now())
-RETURNING id, name, surname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
+VALUES ($1, $2, $3, $4, $5, now(), now())
+RETURNING id, fullname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
 `
 
 type CreateUserParams struct {
 	ID       string `json:"id"`
-	Name     string `json:"name"`
-	Surname  string `json:"surname"`
+	Fullname string `json:"fullname"`
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -64,8 +62,7 @@ type CreateUserParams struct {
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
 	row := q.db.QueryRowContext(ctx, createUser,
 		arg.ID,
-		arg.Name,
-		arg.Surname,
+		arg.Fullname,
 		arg.Username,
 		arg.Email,
 		arg.Password,
@@ -73,8 +70,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
@@ -94,7 +90,7 @@ UPDATE "user"
 SET deleted = true,
     updated_at = now()
 WHERE id = $1
-RETURNING id, name, surname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
+RETURNING id, fullname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
 `
 
 func (q *Queries) DeleteUser(ctx context.Context, id string) (User, error) {
@@ -102,8 +98,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id string) (User, error) {
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
@@ -181,8 +176,7 @@ func (q *Queries) GetInactiveUsersVerifiedEmails(ctx context.Context) ([]string,
 const getOwnUserByID = `-- name: GetOwnUserByID :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -242,8 +236,7 @@ WHERE "user"."id" = $1
 type GetOwnUserByIDRow struct {
 	ID                               string          `json:"id"`
 	MoniestID                        sql.NullString  `json:"moniest_id"`
-	Name                             string          `json:"name"`
-	Surname                          string          `json:"surname"`
+	Fullname                         string          `json:"fullname"`
 	Username                         string          `json:"username"`
 	Email                            string          `json:"email"`
 	EmailVerified                    bool            `json:"email_verified"`
@@ -269,8 +262,7 @@ func (q *Queries) GetOwnUserByID(ctx context.Context, userID string) (GetOwnUser
 	err := row.Scan(
 		&i.ID,
 		&i.MoniestID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
@@ -295,8 +287,7 @@ func (q *Queries) GetOwnUserByID(ctx context.Context, userID string) (GetOwnUser
 const getOwnUserByUsername = `-- name: GetOwnUserByUsername :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -360,8 +351,7 @@ WHERE "user"."username" = $1
 type GetOwnUserByUsernameRow struct {
 	ID                               string          `json:"id"`
 	MoniestID                        sql.NullString  `json:"moniest_id"`
-	Name                             string          `json:"name"`
-	Surname                          string          `json:"surname"`
+	Fullname                         string          `json:"fullname"`
 	Username                         string          `json:"username"`
 	Email                            string          `json:"email"`
 	EmailVerified                    bool            `json:"email_verified"`
@@ -387,8 +377,7 @@ func (q *Queries) GetOwnUserByUsername(ctx context.Context, username string) (Ge
 	err := row.Scan(
 		&i.ID,
 		&i.MoniestID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
@@ -427,8 +416,7 @@ func (q *Queries) GetPasswordByID(ctx context.Context, id string) (string, error
 const getSubscriptions = `-- name: GetSubscriptions :many
 SELECT "u"."id",
     "m"."id" as "moniest_id",
-    "u"."name",
-    "u"."surname",
+    "u"."fullname",
     "u"."username",
     "u"."email_verified",
     "u"."location",
@@ -495,8 +483,7 @@ type GetSubscriptionsParams struct {
 type GetSubscriptionsRow struct {
 	ID                               string         `json:"id"`
 	MoniestID                        string         `json:"moniest_id"`
-	Name                             string         `json:"name"`
-	Surname                          string         `json:"surname"`
+	Fullname                         string         `json:"fullname"`
 	Username                         string         `json:"username"`
 	EmailVerified                    bool           `json:"email_verified"`
 	Location                         sql.NullString `json:"location"`
@@ -526,8 +513,7 @@ func (q *Queries) GetSubscriptions(ctx context.Context, arg GetSubscriptionsPara
 		if err := rows.Scan(
 			&i.ID,
 			&i.MoniestID,
-			&i.Name,
-			&i.Surname,
+			&i.Fullname,
 			&i.Username,
 			&i.EmailVerified,
 			&i.Location,
@@ -559,8 +545,7 @@ func (q *Queries) GetSubscriptions(ctx context.Context, arg GetSubscriptionsPara
 
 const getUserByEmail = `-- name: GetUserByEmail :one
 SELECT "user"."id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email",
     "user"."email_verified",
@@ -614,8 +599,7 @@ WHERE "user"."email" = $1
 
 type GetUserByEmailRow struct {
 	ID                           string         `json:"id"`
-	Name                         string         `json:"name"`
-	Surname                      string         `json:"surname"`
+	Fullname                     string         `json:"fullname"`
 	Username                     string         `json:"username"`
 	Email                        string         `json:"email"`
 	EmailVerified                bool           `json:"email_verified"`
@@ -633,8 +617,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (GetUserByEm
 	var i GetUserByEmailRow
 	err := row.Scan(
 		&i.ID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
@@ -651,8 +634,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (GetUserByEm
 
 const getUserByID = `-- name: GetUserByID :one
 SELECT "user"."id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email_verified",
     "user"."location",
@@ -701,8 +683,7 @@ WHERE "user"."id" = $1
 
 type GetUserByIDRow struct {
 	ID                           string         `json:"id"`
-	Name                         string         `json:"name"`
-	Surname                      string         `json:"surname"`
+	Fullname                     string         `json:"fullname"`
 	Username                     string         `json:"username"`
 	EmailVerified                bool           `json:"email_verified"`
 	Location                     sql.NullString `json:"location"`
@@ -719,8 +700,7 @@ func (q *Queries) GetUserByID(ctx context.Context, userID string) (GetUserByIDRo
 	var i GetUserByIDRow
 	err := row.Scan(
 		&i.ID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.EmailVerified,
 		&i.Location,
@@ -737,8 +717,7 @@ func (q *Queries) GetUserByID(ctx context.Context, userID string) (GetUserByIDRo
 const getUserByUsername = `-- name: GetUserByUsername :one
 SELECT "user"."id",
     "moniest"."id" as "moniest_id",
-    "user"."name",
-    "user"."surname",
+    "user"."fullname",
     "user"."username",
     "user"."email_verified",
     "user"."location",
@@ -801,8 +780,7 @@ WHERE "user"."username" = $1
 type GetUserByUsernameRow struct {
 	ID                               string          `json:"id"`
 	MoniestID                        sql.NullString  `json:"moniest_id"`
-	Name                             string          `json:"name"`
-	Surname                          string          `json:"surname"`
+	Fullname                         string          `json:"fullname"`
 	Username                         string          `json:"username"`
 	EmailVerified                    bool            `json:"email_verified"`
 	Location                         sql.NullString  `json:"location"`
@@ -827,8 +805,7 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUs
 	err := row.Scan(
 		&i.ID,
 		&i.MoniestID,
-		&i.Name,
-		&i.Surname,
+		&i.Fullname,
 		&i.Username,
 		&i.EmailVerified,
 		&i.Location,
@@ -900,27 +877,20 @@ func (q *Queries) SetUsername(ctx context.Context, arg SetUsernameParams) error 
 
 const updateUser = `-- name: UpdateUser :exec
 UPDATE "user"
-SET name = $2,
-    surname = $3,
-    location = $4,
+SET fullname = $2,
+    location = $3,
     updated_at = now()
 WHERE id = $1
 `
 
 type UpdateUserParams struct {
 	ID       string         `json:"id"`
-	Name     string         `json:"name"`
-	Surname  string         `json:"surname"`
+	Fullname string         `json:"fullname"`
 	Location sql.NullString `json:"location"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
-	_, err := q.db.ExecContext(ctx, updateUser,
-		arg.ID,
-		arg.Name,
-		arg.Surname,
-		arg.Location,
-	)
+	_, err := q.db.ExecContext(ctx, updateUser, arg.ID, arg.Fullname, arg.Location)
 	return err
 }
 
