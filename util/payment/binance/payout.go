@@ -14,7 +14,8 @@ func CreatePayout(config config.Config, amount, operationFeePercentage float64, 
 
 	request_id := core.CreateID()
 	merchant_send_id := core.CreateID()
-	updatedAmount := core.GetAmountAfterCommission(amount, operationFeePercentage)
+	// updatedAmount := core.GetAmountAfterCommission(amount, operationFeePercentage)
+	updatedAmount := 0.0000001 // TODO: update to real amount
 
 	body := CreatePayoutRequest{
 		RequestID:   request_id,

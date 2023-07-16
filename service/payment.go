@@ -72,7 +72,7 @@ func (service *Service) SetPaymentTransactionCheckerJob(ctx *gin.Context, minute
 
 		time.Sleep(time.Duration(interval) * time.Second)
 		count += -1
-		fmt.Println("CHECKER RUN")
+		fmt.Println("PING - Payment Transaction Checker")
 
 		latestTransactionStatus, err := service.CheckPaymentTransactionStatus(ctx, transactionID)
 
@@ -82,6 +82,7 @@ func (service *Service) SetPaymentTransactionCheckerJob(ctx *gin.Context, minute
 			systemError.Log("error while checking payment transaction status", msg)
 		} else {
 			if latestTransactionStatus != string(db.BinancePaymentStatusPending) {
+				fmt.Println("PING - Payment Transaction Checker - COMPLETED")
 				count = -1 // stop the loop
 			}
 		}
@@ -217,7 +218,7 @@ func updateNavigateURLs(transactionID, returnURL, cancelURL string) (string, str
 
 func createWebhookURL(ctx *gin.Context, transactionID string) string {
 
-	return "https://api.moniesto.com" + "/webhooks/binance/transactions/" + transactionID
+	return "https://moniesto-test-be-1.onrender.com" + "/webhooks/binance/transactions/" + transactionID
 	// TODO: make it host
 	// return ctx.Request.Host + "/webhooks/binance/transactions/" + transactionID
 }
