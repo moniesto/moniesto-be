@@ -144,6 +144,11 @@ func (server *Server) setupRouter() {
 		webhookRouters.POST("/binance/transaction", server.TriggerBinanceTransactionWebhook)
 	}
 
+	healthRouters := router.Group("/health")
+	{
+		healthRouters.GET("/", server.HealthCheck)
+	}
+
 	// Swagger docs
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

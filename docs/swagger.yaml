@@ -1053,6 +1053,19 @@ paths:
       summary: Create Feedback
       tags:
       - Feedback
+  /health:
+    get:
+      description: Health Check
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      summary: HealthCheck
+      tags:
+      - Health
   /moniests:
     post:
       consumes:

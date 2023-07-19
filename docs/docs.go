@@ -888,6 +888,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/health": {
+            "get": {
+                "description": "Health Check",
+                "tags": [
+                    "Health"
+                ],
+                "summary": "HealthCheck",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/moniests": {
             "post": {
                 "security": [

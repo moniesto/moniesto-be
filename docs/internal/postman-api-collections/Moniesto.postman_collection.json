@@ -13,7 +13,7 @@
 					"name": "Account",
 					"item": [
 						{
-							"name": "[local] Login",
+							"name": "Login",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -40,7 +40,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Register",
+							"name": "Register",
 							"protocolProfileBehavior": {
 								"disabledSystemHeaders": {}
 							},
@@ -55,7 +55,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n \"fullname\": \"Parvin Eyvazov\",\r\n \"username\": \"parvvazov1\",\r\n \"email\": \"parvvazov1@gmail.com\",\r\n \"password\": \"123456\"\r\n}",
+									"raw": "{\r\n \"fullname\": \"Parvin Eyvazov\",\r\n \"username\": \"parvvazov4\",\r\n \"email\": \"parvvazov4@gmail.com\",\r\n \"password\": \"123456\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -76,7 +76,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Check Username",
+							"name": "Check Username",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -96,7 +96,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Password: Send Password Reset Token",
+							"name": "Password: Send Password Reset Token",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -124,7 +124,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Password: Verify Token",
+							"name": "Password: Verify Token",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -152,7 +152,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Password: Verify Token & Change Password",
+							"name": "Password: Verify Token & Change Password",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -180,7 +180,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Password: Change Password [Auth]",
+							"name": "Password: Change Password [Auth]",
 							"request": {
 								"method": "PUT",
 								"header": [
@@ -213,7 +213,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Change Username",
+							"name": "Change Username",
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -246,7 +246,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Send Email Verification email",
+							"name": "Send Email Verification email",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -280,7 +280,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Verify Email",
+							"name": "Verify Email",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -313,7 +313,7 @@
 					"name": "Users",
 					"item": [
 						{
-							"name": "[local] Get by Username",
+							"name": "Get by Username",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -337,7 +337,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Update Profile",
+							"name": "Update Profile",
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -370,7 +370,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Get Subscriptions",
+							"name": "Get Subscriptions",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -405,7 +405,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Get Summary Stats",
+							"name": "Get Summary Stats",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -435,19 +435,19 @@
 					"name": "Moniests",
 					"item": [
 						{
-							"name": "[local] Be Moniest",
+							"name": "Be Moniest",
 							"request": {
 								"method": "POST",
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJhMzA5YjUzLTM5NmMtNDNkNS1hNDEwLWU2YjllODQ3NjVkNyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImExYTczY2JiLWNkN2EtNGE2MS1iNDc3LTEwZjRhNGQ0YzM3YyJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA3LTEwVDIwOjQ5OjE0LjMxOTgyOVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wNy0xMVQyMDo0OToxNC4zMTk4MjlaIn0.dfExE_Qy5-sx8FppppkpbQLP-yw5UnwoGBh_Or2iOss",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjllNTAzNWRlLTZhMDQtNGRiNi04MTZkLWVhZWE0NTNhNTA4ZSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3Y0IiwiaWQiOiIyOTZhYzdhMC0wNzRkLTQ2ZDktYWFhNC01ZGU3Yzg4MjE2YmQifSwiaXNzdWVkX2F0IjoiMjAyMy0wNy0xN1QxOTozOTowOS4xOTU3MzE5WiIsImV4cGlyZWRfYXQiOiIyMDIzLTA3LTE4VDE5OjM5OjA5LjE5NTczMTlaIn0.mIlFvem1RfurjIyQMKHDMosMNSq4vyBK2SVJ1wMJtbM",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n \"bio\": \"this is my bio but nio\",\r\n \"binance_id\": \"499573502\",\r\n \"description\": \"this is interesting desc\",\r\n \"fee\": 300,\r\n \"message\": \"sub me\"\r\n}",
+									"raw": "{\r\n \"bio\": \"this is my bio but nio\",\r\n \"binance_id\": \"499573502\",\r\n \"description\": \"this is interesting desc\",\r\n \"fee\": 100,\r\n \"message\": \"sub me\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -467,7 +467,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Update Moniest Profile",
+							"name": "Update Moniest Profile",
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -500,19 +500,19 @@
 							"response": []
 						},
 						{
-							"name": "[local] Subscribe",
+							"name": "Subscribe",
 							"request": {
 								"method": "POST",
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmNTFjODk1LWI5NmEtNDBkMi1iZmU2LTUwOTBjMGVkYWIxYiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YxIiwiaWQiOiJlZmJkZGZmMi03NjhhLTRhYjgtOTY5Yi1kZmM3Mjc5OTAzYTMifSwiaXNzdWVkX2F0IjoiMjAyMy0wNi0yN1QyMjoxNzozMi41NzUwNzQ5WiIsImV4cGlyZWRfYXQiOiIyMDIzLTA2LTI4VDIyOjE3OjMyLjU3NTA3NDlaIn0.b9cGmy2CLMrNq_z0aY90JldOfTvw2ITAHAEiqWJ2txU",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1YjA3YzljLTY5OWEtNGYwMy05ZTQ3LTk3NGFjZmU1YmMxMSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YxIiwiaWQiOiJjNmViYjg4MS02ZjEyLTQ3NmItYTc5Yi0zZDVlOThhNTQ3MmYifSwiaXNzdWVkX2F0IjoiMjAyMy0wNy0xN1QxOTowODozMi4xMzU5NzYyWiIsImV4cGlyZWRfYXQiOiIyMDIzLTA3LTE4VDE5OjA4OjMyLjEzNTk3NjJaIn0.FiLwSBY_kwLN18U22GY0TpWE8ke88kXeziiTvVfgeQY",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n \"number_of_months\": 12,\r\n \"returnURL\": \"https://moniesto.com/returnURL\",\r\n \"cancelURL\": \"https://moniesto.com/cancelURL\"\r\n}",
+									"raw": "{\r\n \"number_of_months\": 12,\r\n \"returnURL\": \"https://moniesto.com/parvvazov/returnURL\",\r\n \"cancelURL\": \"https://moniesto.com/parvvazov/cancelURL\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -520,13 +520,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{be-host}}/moniests/parvvazov/subscribe",
+									"raw": "{{be-host}}/moniests/parvvazov4/subscribe",
 									"host": [
 										"{{be-host}}"
 									],
 									"path": [
 										"moniests",
-										"parvvazov",
+										"parvvazov4",
 										"subscribe"
 									]
 								}
@@ -534,7 +534,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Unsubscribe",
+							"name": "Unsubscribe",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -568,24 +568,24 @@
 							"response": []
 						},
 						{
-							"name": "[local] Subscribe check",
+							"name": "Subscribe check",
 							"request": {
 								"method": "GET",
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdhMjA0NThiLTkxMjgtNDFiZi05NmE3LWEzZTViZDE3ODRmZiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YxIiwiaWQiOiIzODY1OWM4ZC03NTFlLTQzNDQtYjEwOS04YjZkZDJmMDM4YmQifSwiaXNzdWVkX2F0IjoiMjAyMy0wNi0xOVQyMToyODowMC4xNzI0NjA2WiIsImV4cGlyZWRfYXQiOiIyMDIzLTA2LTIwVDIxOjI4OjAwLjE3MjQ2MDZaIn0.hO64edhBrmlpTGQn_6WNBi-4O-CyMSS5E4uNRPiF0ZQ",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1YjA3YzljLTY5OWEtNGYwMy05ZTQ3LTk3NGFjZmU1YmMxMSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YxIiwiaWQiOiJjNmViYjg4MS02ZjEyLTQ3NmItYTc5Yi0zZDVlOThhNTQ3MmYifSwiaXNzdWVkX2F0IjoiMjAyMy0wNy0xN1QxOTowODozMi4xMzU5NzYyWiIsImV4cGlyZWRfYXQiOiIyMDIzLTA3LTE4VDE5OjA4OjMyLjEzNTk3NjJaIn0.FiLwSBY_kwLN18U22GY0TpWE8ke88kXeziiTvVfgeQY",
 										"type": "text"
 									}
 								],
 								"url": {
-									"raw": "{{be-host}}/moniests/parvvazov/subscribe/check",
+									"raw": "{{be-host}}/moniests/parvvazov4/subscribe/check",
 									"host": [
 										"{{be-host}}"
 									],
 									"path": [
 										"moniests",
-										"parvvazov",
+										"parvvazov4",
 										"subscribe",
 										"check"
 									]
@@ -594,7 +594,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Get Subscribers",
+							"name": "Get Subscribers",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -634,7 +634,7 @@
 					"name": "Posts",
 					"item": [
 						{
-							"name": "[local] Create Post",
+							"name": "Create Post",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -667,7 +667,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Calculate Approximate Score",
+							"name": "Calculate Approximate Score",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -701,7 +701,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Get Moniest Posts",
+							"name": "Get Moniest Posts",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -731,7 +731,7 @@
 					"name": "Content",
 					"item": [
 						{
-							"name": "[local] Post: Sub Active",
+							"name": "Post: Sub Active",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -773,7 +773,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Post: Subs Inactive",
+							"name": "Post: Subs Inactive",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -815,7 +815,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Post: All Inactive",
+							"name": "Post: All Inactive",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -857,7 +857,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Moniest",
+							"name": "Moniest",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -891,7 +891,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Search Moniest",
+							"name": "Search Moniest",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -927,7 +927,7 @@
 					"name": "Assets",
 					"item": [
 						{
-							"name": "[local] Get Error Codes",
+							"name": "Get Error Codes",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -945,7 +945,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Get All Configs",
+							"name": "Get All Configs",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -963,7 +963,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Get Validation Configs",
+							"name": "Get Validation Configs",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -981,7 +981,7 @@
 							"response": []
 						},
 						{
-							"name": "[local] Get Validation Configs Copy",
+							"name": "Get Validation Configs Copy",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -1130,7 +1130,7 @@
 					"name": "Feedback",
 					"item": [
 						{
-							"name": "[local] Add Feedback",
+							"name": "Add Feedback",
 							"request": {
 								"method": "POST",
 								"header": [
@@ -1189,6 +1189,29 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Health Check",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZTMyMWRjLTg3MzMtNDYwYi1hNGRiLTdjNTBjNDlmZjYxZiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6ImRkMmI5OWZkLTM0NDMtNGY5Ni1hMTc2LWM2YjY3YTkwMzBhYiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA2LTI1VDE5OjM4OjI0LjM0NzAzNzU0MVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wNi0yNlQxOTozODoyNC4zNDcwMzc2NjFaIn0.kW47xNKpbckYFEK-ZLTmLH0l23Rftl1N8vlcHF07ffA",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{be-host}}/health",
+									"host": [
+										"{{be-host}}"
+									],
+									"path": [
+										"health"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
@@ -1198,7 +1221,7 @@
 			"name": "Scoring Service",
 			"item": [
 				{
-					"name": "[local] Approx Score",
+					"name": "Approx Score",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -1212,12 +1235,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/calculateApproximateScore",
-							"protocol": "http",
+							"raw": "{{scoring-host}}/calculateApproximateScore",
 							"host": [
-								"localhost"
+								"{{scoring-host}}"
 							],
-							"port": "8081",
 							"path": [
 								"calculateApproximateScore"
 							]
@@ -1226,7 +1247,7 @@
 					"response": []
 				},
 				{
-					"name": "[local] Calculate Score",
+					"name": "Calculate Score",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -1240,14 +1261,29 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/calculateScore",
-							"protocol": "http",
+							"raw": "{{scoring-host}}/calculateScore",
 							"host": [
-								"localhost"
+								"{{scoring-host}}"
 							],
-							"port": "8081",
 							"path": [
 								"calculateScore"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{scoring-host}}/",
+							"host": [
+								"{{scoring-host}}"
+							],
+							"path": [
+								""
 							]
 						}
 					},
