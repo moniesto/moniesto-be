@@ -44,14 +44,6 @@ func (server *Server) setupRouter() {
 
 	router.Use(CORSMiddleware())
 
-	router.POST("/payment/create_account", server.addConnectedAccount)
-	router.POST("/payment/create_account_link", server.createAccountLink)
-	router.DELETE("/payment/test/:acc_id", server.deleteConnectedAccount)
-	router.POST("/payment/create_payout", server.createPayout)
-
-	router.POST("/payment/binance/create-order", server.createOrder)
-	router.POST("/payment/binance/webhook", server.webhook)
-
 	// Account routes
 	accountRouters := router.Group("/account")
 	{
@@ -133,15 +125,15 @@ func (server *Server) setupRouter() {
 	}
 
 	// Payment routes
-	paymentRouters := router.Group("/payment") //.Use(authMiddleware(server.tokenMaker))
+	paymentRouters := router.Group("/payment").Use(authMiddleware(server.tokenMaker))
 	{
-		paymentRouters.POST("/binance/transactions/check/:transaction_id", server.CheckBinancePaymentTransaction) // TODO: complete here
+		paymentRouters.POST("/binance/transactions/check/:transaction_id", server.CheckBinancePaymentTransaction)
 	}
 
 	// Webhooks
 	webhookRouters := router.Group("/webhooks")
 	{
-		webhookRouters.POST("/binance/transaction", server.TriggerBinanceTransactionWebhook)
+		webhookRouters.POST("/binance/transactions", server.TriggerBinanceTransactionWebhook)
 	}
 
 	healthRouters := router.Group("/health")

@@ -124,7 +124,7 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 
 	// STEP: still pending state
 	if orderData.Status == binance.QUERY_ORDER_STATUS_INITIAL {
-		return string(binancePaymentTransaction.Status), nil // TODO: update return -> nothing to do
+		return string(binancePaymentTransaction.Status), nil
 	}
 
 	// STEP: payment successful case
@@ -227,7 +227,7 @@ func updateNavigateURLs(transactionID, returnURL, cancelURL string) (string, str
 
 func createWebhookURL(ctx *gin.Context, transactionID string) string {
 
-	return "https://moniesto-test-be-1.onrender.com" + "/webhooks/binance/transaction" // + transactionID
+	return "https://moniesto-test-be-1.onrender.com" + "/webhooks/binance/transactions" // + transactionID
 	// TODO: make it host
 	// return ctx.Request.Host + "/webhooks/binance/transactions/" + transactionID
 }

@@ -1437,6 +1437,35 @@ paths:
       summary: Update Moniest Profile
       tags:
       - Moniest
+  /payment/binance/transactions/check/:transaction_id:
+    post:
+      consumes:
+      - application/json
+      description: Check Transaction ID
+      parameters:
+      - description: transaction ID
+        in: path
+        name: transaction_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: transactionID not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Check Transaction ID
+      tags:
+      - Payment
   /users/:username:
     get:
       consumes:
