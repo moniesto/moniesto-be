@@ -227,7 +227,7 @@ func updateNavigateURLs(transactionID, returnURL, cancelURL string) (string, str
 
 func createWebhookURL(ctx *gin.Context, transactionID string) string {
 
-	return "https://moniesto-test-be-1.onrender.com" + "/webhooks/binance/transactions/" + transactionID
+	return "https://moniesto-test-be-1.onrender.com" + "/webhooks/binance/transaction" // + transactionID
 	// TODO: make it host
 	// return ctx.Request.Host + "/webhooks/binance/transactions/" + transactionID
 }
