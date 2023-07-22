@@ -50,6 +50,7 @@ type UpdateMoniestProfileRequest struct {
 type CheckSubscriptionResponse struct {
 	Subscribed bool  `json:"subscribed"`
 	Pending    *bool `json:"pending,omitempty"`
+	Timeout    *int  `json:"timeout,omitempty"`
 }
 
 type GetMoniestPostsRequest struct {

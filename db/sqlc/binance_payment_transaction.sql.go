@@ -8,16 +8,20 @@ package db
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
-const checkPendingBinancePaymentTransactionByMoniestUsername = `-- name: CheckPendingBinancePaymentTransactionByMoniestUsername :one
-SELECT COUNT(*) != 0 as pending
+const checkPendingBinancePaymentTransactionByMoniestUsername = `-- name: CheckPendingBinancePaymentTransactionByMoniestUsername :many
+SELECT COUNT(*) != 0 as pending,
+    "binance_payment_transaction"."created_at"
 FROM "binance_payment_transaction"
     INNER JOIN "moniest" ON "moniest"."id" = "binance_payment_transaction"."moniest_id"
     INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
     AND "user"."username" = $2
 WHERE "binance_payment_transaction"."status" = 'pending'
     AND "binance_payment_transaction"."user_id" = $1
+GROUP BY "binance_payment_transaction"."id"
+ORDER BY "binance_payment_transaction"."created_at" DESC
 `
 
 type CheckPendingBinancePaymentTransactionByMoniestUsernameParams struct {
@@ -25,11 +29,32 @@ type CheckPendingBinancePaymentTransactionByMoniestUsernameParams struct {
 	Username string `json:"username"`
 }
 
-func (q *Queries) CheckPendingBinancePaymentTransactionByMoniestUsername(ctx context.Context, arg CheckPendingBinancePaymentTransactionByMoniestUsernameParams) (bool, error) {
-	row := q.db.QueryRowContext(ctx, checkPendingBinancePaymentTransactionByMoniestUsername, arg.UserID, arg.Username)
-	var pending bool
-	err := row.Scan(&pending)
-	return pending, err
+type CheckPendingBinancePaymentTransactionByMoniestUsernameRow struct {
+	Pending   bool      `json:"pending"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+func (q *Queries) CheckPendingBinancePaymentTransactionByMoniestUsername(ctx context.Context, arg CheckPendingBinancePaymentTransactionByMoniestUsernameParams) ([]CheckPendingBinancePaymentTransactionByMoniestUsernameRow, error) {
+	rows, err := q.db.QueryContext(ctx, checkPendingBinancePaymentTransactionByMoniestUsername, arg.UserID, arg.Username)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []CheckPendingBinancePaymentTransactionByMoniestUsernameRow{}
+	for rows.Next() {
+		var i CheckPendingBinancePaymentTransactionByMoniestUsernameRow
+		if err := rows.Scan(&i.Pending, &i.CreatedAt); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const createBinancePaymentTransactions = `-- name: CreateBinancePaymentTransactions :one

@@ -63,11 +63,14 @@ SET "status" = $2,
 WHERE id = $1
 RETURNING *;
 
--- name: CheckPendingBinancePaymentTransactionByMoniestUsername :one
-SELECT COUNT(*) != 0 as pending
+-- name: CheckPendingBinancePaymentTransactionByMoniestUsername :many
+SELECT COUNT(*) != 0 as pending,
+    "binance_payment_transaction"."created_at"
 FROM "binance_payment_transaction"
     INNER JOIN "moniest" ON "moniest"."id" = "binance_payment_transaction"."moniest_id"
     INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
     AND "user"."username" = $2
 WHERE "binance_payment_transaction"."status" = 'pending'
-    AND "binance_payment_transaction"."user_id" = $1;
+    AND "binance_payment_transaction"."user_id" = $1
+GROUP BY "binance_payment_transaction"."id"
+ORDER BY "binance_payment_transaction"."created_at" DESC;

@@ -184,7 +184,7 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 	return string(updatedBinancePaymentTransaction.Status), nil
 }
 
-func (service *Service) CheckPendingPaymentTransaction(ctx *gin.Context, moniestUsername, user_id string) (bool, error) {
+func (service *Service) CheckPendingPaymentTransaction(ctx *gin.Context, moniestUsername, user_id string) (bool, *time.Time, error) {
 
 	// STEP: check payment transaction is in pending status
 	param := db.CheckPendingBinancePaymentTransactionByMoniestUsernameParams{
@@ -192,13 +192,22 @@ func (service *Service) CheckPendingPaymentTransaction(ctx *gin.Context, moniest
 		Username: moniestUsername,
 	}
 
-	transactionIsPending, err := service.Store.CheckPendingBinancePaymentTransactionByMoniestUsername(ctx, param)
+	pendingTransaction, err := service.Store.CheckPendingBinancePaymentTransactionByMoniestUsername(ctx, param)
 	if err != nil {
 		systemError.Log("server error on check pending binance payment transaction by moniest username", err.Error())
-		return false, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_SubscribeCheck_ServerErrorCheck)
+		return false, nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_SubscribeCheck_ServerErrorCheck)
 	}
 
-	return transactionIsPending, nil
+	if len(pendingTransaction) == 0 {
+		return false, nil, nil
+	}
+
+	latestTransaction := pendingTransaction[0]
+
+	timeout := (&latestTransaction.CreatedAt).Add(binance.ORDER_EXPIRE_TIME)
+	timeoutPntr := &timeout
+
+	return latestTransaction.Pending, timeoutPntr, nil
 }
 
 // HELPER functions

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"math"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -203,7 +204,7 @@ func (server *Server) subscribeMoniest(ctx *gin.Context) {
 
 	if exist {
 		if subscription.Active {
-			ctx.AbortWithStatusJSON(http.StatusBadRequest, clientError.Moniest_Subscribe_AlreadySubscribed)
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, clientError.GetError(clientError.Moniest_Subscribe_AlreadySubscribed))
 			return
 		}
 	}
@@ -350,13 +351,21 @@ func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
 
 	// STEP: check if it is still pending
 	if !userIsSubscribed {
-		pendingTransaction, err := server.service.CheckPendingPaymentTransaction(ctx, username, user_id)
+		transactionIdPending, timeout, err := server.service.CheckPendingPaymentTransaction(ctx, username, user_id)
 		if err != nil {
 			ctx.AbortWithStatusJSON(clientError.ParseError(err))
 			return
 		}
 
-		response.Pending = &pendingTransaction
+		response.Pending = &transactionIdPending
+
+		if *response.Pending {
+			diff := (*timeout).Sub(util.Now())
+			latestTimeout := math.Max(float64(diff.Seconds()), 0)
+			latestTimeoutInt := int(latestTimeout)
+
+			response.Timeout = &(latestTimeoutInt)
+		}
 	}
 
 	ctx.JSON(http.StatusOK, response)
