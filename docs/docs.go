@@ -1801,6 +1801,9 @@ const docTemplate = `{
                 },
                 "subscribed": {
                     "type": "boolean"
+                },
+                "timeout": {
+                    "type": "integer"
                 }
             }
         },

@@ -1789,6 +1789,9 @@
                 },
                 "subscribed": {
                     "type": "boolean"
+                },
+                "timeout": {
+                    "type": "integer"
                 }
             }
         },

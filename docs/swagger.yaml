@@ -61,6 +61,8 @@ definitions:
         type: boolean
       subscribed:
         type: boolean
+      timeout:
+        type: integer
     type: object
   model.CheckUsernameResponse:
     properties:
