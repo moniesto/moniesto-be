@@ -40,3 +40,11 @@ func (server *Server) PayoutToMoniest() {
 		}
 	}
 }
+
+func (server *Server) DetectExpiredSubscriptions() {
+	fmt.Println("Looking for expired subscriptions...")
+}
+
+func (server *Server) DetectExpiredPendingTransaction() {
+	fmt.Println("Looking for expired pending transactions...")
+}
