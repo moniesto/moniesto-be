@@ -291,7 +291,7 @@ func (server *Server) unsubscribeMoniest(ctx *gin.Context) {
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	user_id := authPayload.User.ID
 
-	// STEP: check user is not subscribing own
+	// STEP: check user is not unsubscribing own
 	if moniest.ID == user_id {
 		ctx.AbortWithStatusJSON(http.StatusForbidden, clientError.GetError(clientError.Moniest_Unsubscribe_UnsubscribeOwn))
 		return
@@ -420,3 +420,5 @@ func (server *Server) getSubscribers(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, subscribers)
 }
+
+func (server *Server) updateMoniestPayoutInfo(ctx *gin.Context) {}
