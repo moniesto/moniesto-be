@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
@@ -174,6 +175,43 @@ func (service *Service) PayoutToMoniest(payoutData db.GetAllPendingPayoutsRow) e
 	systemError.Log("Successfull payout for payoutID", payoutData.ID)
 
 	// TODO: send email to moniest
+
+	return nil
+}
+
+func (service *Service) GetExpiredActiveSubscriptions(ctx context.Context) ([]db.UserSubscription, error) {
+
+	// STEP: get expired subscriptions and return
+	expiredSubscriptions, err := service.Store.GetExpiredActiveSubscriptions(ctx)
+	if err != nil {
+		return []db.UserSubscription{}, fmt.Errorf("error while getting expired active subscriptions")
+	}
+
+	return expiredSubscriptions, nil
+}
+
+func (service *Service) DeactivateExpiredSubscriptions(ctx context.Context, expiredSubscription db.UserSubscription) error {
+
+	// Update expired subsctriptions
+	err := service.Store.UpdateExpiredActiveSubscription(ctx, expiredSubscription.ID)
+	if err != nil {
+		return fmt.Errorf("error while updating expired active subscription")
+	}
+
+	// Save history of subscription
+	params := db.CreateUserSubscriptionHistoryParams{
+		ID:                    core.CreateID(),
+		UserID:                expiredSubscription.UserID,
+		MoniestID:             expiredSubscription.MoniestID,
+		TransactionID:         expiredSubscription.LatestTransactionID,
+		SubscriptionStartDate: expiredSubscription.SubscriptionStartDate,
+		SubscriptionEndDate:   expiredSubscription.SubscriptionEndDate,
+	}
+
+	_, err = service.Store.CreateUserSubscriptionHistory(ctx, params)
+	if err != nil {
+		return fmt.Errorf("error while creating user subscription history")
+	}
 
 	return nil
 }

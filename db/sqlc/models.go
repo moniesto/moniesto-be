@@ -529,3 +529,14 @@ type UserSubscription struct {
 	CreatedAt             time.Time      `json:"created_at"`
 	UpdatedAt             time.Time      `json:"updated_at"`
 }
+
+// Stores user subscriptions history
+type UserSubscriptionHistory struct {
+	ID                    string         `json:"id"`
+	UserID                string         `json:"user_id"`
+	MoniestID             string         `json:"moniest_id"`
+	TransactionID         sql.NullString `json:"transaction_id"`
+	SubscriptionStartDate time.Time      `json:"subscription_start_date"`
+	SubscriptionEndDate   time.Time      `json:"subscription_end_date"`
+	CreatedAt             time.Time      `json:"created_at"`
+}

@@ -11,6 +11,59 @@ import (
 	"time"
 )
 
+const createUserSubscriptionHistory = `-- name: CreateUserSubscriptionHistory :one
+INSERT INTO "user_subscription_history" (
+        id,
+        user_id,
+        moniest_id,
+        transaction_id,
+        subscription_start_date,
+        subscription_end_date,
+        created_at
+    )
+VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6,
+        now()
+    )
+RETURNING id, user_id, moniest_id, transaction_id, subscription_start_date, subscription_end_date, created_at
+`
+
+type CreateUserSubscriptionHistoryParams struct {
+	ID                    string         `json:"id"`
+	UserID                string         `json:"user_id"`
+	MoniestID             string         `json:"moniest_id"`
+	TransactionID         sql.NullString `json:"transaction_id"`
+	SubscriptionStartDate time.Time      `json:"subscription_start_date"`
+	SubscriptionEndDate   time.Time      `json:"subscription_end_date"`
+}
+
+func (q *Queries) CreateUserSubscriptionHistory(ctx context.Context, arg CreateUserSubscriptionHistoryParams) (UserSubscriptionHistory, error) {
+	row := q.db.QueryRowContext(ctx, createUserSubscriptionHistory,
+		arg.ID,
+		arg.UserID,
+		arg.MoniestID,
+		arg.TransactionID,
+		arg.SubscriptionStartDate,
+		arg.SubscriptionEndDate,
+	)
+	var i UserSubscriptionHistory
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.MoniestID,
+		&i.TransactionID,
+		&i.SubscriptionStartDate,
+		&i.SubscriptionEndDate,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const getAllActivePosts = `-- name: GetAllActivePosts :many
 SELECT "pc"."id",
     "pc"."moniest_id",
@@ -187,6 +240,58 @@ func (q *Queries) GetAllPendingPayouts(ctx context.Context) ([]GetAllPendingPayo
 		return nil, err
 	}
 	return items, nil
+}
+
+const getExpiredActiveSubscriptions = `-- name: GetExpiredActiveSubscriptions :many
+SELECT id, user_id, moniest_id, active, latest_transaction_id, subscription_start_date, subscription_end_date, created_at, updated_at
+FROM "user_subscription"
+WHERE active = TRUE
+    AND subscription_end_date <= now()
+`
+
+func (q *Queries) GetExpiredActiveSubscriptions(ctx context.Context) ([]UserSubscription, error) {
+	rows, err := q.db.QueryContext(ctx, getExpiredActiveSubscriptions)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []UserSubscription{}
+	for rows.Next() {
+		var i UserSubscription
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.MoniestID,
+			&i.Active,
+			&i.LatestTransactionID,
+			&i.SubscriptionStartDate,
+			&i.SubscriptionEndDate,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateExpiredActiveSubscription = `-- name: UpdateExpiredActiveSubscription :exec
+UPDATE "user_subscription"
+SET active = FALSE,
+    updated_at = now()
+WHERE "id" = $1
+`
+
+func (q *Queries) UpdateExpiredActiveSubscription(ctx context.Context, id string) error {
+	_, err := q.db.ExecContext(ctx, updateExpiredActiveSubscription, id)
+	return err
 }
 
 const updateFinishedPostStatus = `-- name: UpdateFinishedPostStatus :exec

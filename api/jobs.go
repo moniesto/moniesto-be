@@ -1,12 +1,14 @@
 package api
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 func (server *Server) UpdatePostStatus() {
+	fmt.Println("JOB TRIGGER: Update Post Status")
 
 	activePosts, err := server.service.GetAllActivePosts()
 	if err != nil {
@@ -26,6 +28,7 @@ func (server *Server) UpdatePostStatus() {
 }
 
 func (server *Server) PayoutToMoniest() {
+	fmt.Println("JOB TRIGGER: Payout To Moniest")
 
 	pendingPayouts, err := server.service.GetAllPendingPayouts()
 	if err != nil {
@@ -41,10 +44,30 @@ func (server *Server) PayoutToMoniest() {
 	}
 }
 
-func (server *Server) DetectExpiredSubscriptions() {
-	fmt.Println("Looking for expired subscriptions...")
+func (server *Server) DetectExpiredActiveSubscriptions() {
+	fmt.Println("JOB TRIGGER: Detect Expired Active Subscriptions")
+
+	ctx := context.Background()
+
+	expiredSubscriptions, err := server.service.GetExpiredActiveSubscriptions(ctx)
+	if err != nil {
+		systemError.Log(err)
+		return
+	}
+
+	fmt.Println("# of expired subscriptions", len(expiredSubscriptions))
+
+	for _, expiredSubscription := range expiredSubscriptions {
+		err := server.service.DeactivateExpiredSubscriptions(ctx, expiredSubscription)
+		if err != nil {
+			systemError.Log(err, "user subsription ID:", expiredSubscription.ID)
+			// return
+		}
+	}
+
+	// TODO: send email to expired subscriptions [users]
 }
 
 func (server *Server) DetectExpiredPendingTransaction() {
-	fmt.Println("Looking for expired pending transactions...")
+	fmt.Println("JOB TRIGGER: Detect Expired Pending Transaction")
 }

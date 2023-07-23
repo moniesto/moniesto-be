@@ -117,6 +117,23 @@
     Note: 'Stores user subscription info'
   }
 
+  Table user_subscription_history as USH {
+    id varchar [not null, pk, unique]
+    user_id varchar [not null]
+    moniest_id varchar [not null]
+    transaction_id varchar
+    subscription_start_date timestamp [not null, default: `now()`]
+    subscription_end_date timestamp [not null, default: `now()`]
+
+    created_at timestamp [not null, default: `now()`]
+
+    indexes {
+      (user_id, moniest_id, transaction_id) [unique]
+    }
+    
+    Note: 'Stores user subscriptions history'
+  }
+
   Table post_crypto as PC {
     id varchar [not null, pk, unique]
     moniest_id varchar [not null]
@@ -278,6 +295,8 @@
   Ref: BPH.moniest_id > M.id
   Ref: US.user_id > U.id
   Ref: US.moniest_id > M.id
+  Ref: USH.user_id > U.id
+  Ref: USH.moniest_id > M.id
   Ref: PC.moniest_id > M.id
   Ref: PRT.user_id > U.id
   Ref: EV.user_id > U.id

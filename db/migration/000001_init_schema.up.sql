@@ -82,6 +82,16 @@ CREATE TABLE "user_subscription" (
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
+CREATE TABLE "user_subscription_history" (
+    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+    "user_id" varchar NOT NULL,
+    "moniest_id" varchar NOT NULL,
+    "transaction_id" varchar,
+    "subscription_start_date" timestamp NOT NULL DEFAULT (now()),
+    "subscription_end_date" timestamp NOT NULL DEFAULT (now()),
+    "created_at" timestamp NOT NULL DEFAULT (now())
+);
+
 CREATE TABLE "post_crypto" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "moniest_id" varchar NOT NULL,
@@ -197,6 +207,8 @@ CREATE INDEX ON "moniest_subscription_info" ("moniest_id");
 
 CREATE UNIQUE INDEX ON "user_subscription" ("user_id", "moniest_id");
 
+CREATE UNIQUE INDEX ON "user_subscription_history" ("user_id", "moniest_id", "transaction_id");
+
 CREATE INDEX ON "post_crypto" ("moniest_id");
 
 CREATE INDEX ON "post_crypto_description" ("post_id");
@@ -225,6 +237,8 @@ COMMENT ON TABLE "moniest_payout_info" IS 'Stores moniest payout info';
 COMMENT ON TABLE "moniest_subscription_info" IS 'Stores subscription data of a moniest';
 
 COMMENT ON TABLE "user_subscription" IS 'Stores user subscription info';
+
+COMMENT ON TABLE "user_subscription_history" IS 'Stores user subscriptions history';
 
 COMMENT ON TABLE "post_crypto" IS 'Stores crypto posts data';
 
@@ -268,6 +282,12 @@ ALTER TABLE "user_subscription"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "user_subscription"
+ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
+
+ALTER TABLE "user_subscription_history"
+ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+
+ALTER TABLE "user_subscription_history"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
 ALTER TABLE "post_crypto"

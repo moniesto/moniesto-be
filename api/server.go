@@ -161,7 +161,7 @@ func (server *Server) setupCRONJobs() {
 	job.AddFunc(util.JOB_TYPE_EVERY_HOUR, server.DetectExpiredPendingTransaction)
 
 	// TODO: a job checking ended subscription
-	job.AddFunc(util.JOB_TYPE_EVERY_HOUR, server.DetectExpiredSubscriptions)
+	job.AddFunc(util.JOB_TYPE_EVERY_HOUR, server.DetectExpiredActiveSubscriptions)
 
 	job.Start()
 }

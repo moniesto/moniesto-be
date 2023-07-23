@@ -76,3 +76,36 @@ SET "status" = $2,
     payout_request_id = $6,
     updated_at = now()
 WHERE "id" = $1;
+
+-- name: GetExpiredActiveSubscriptions :many
+SELECT *
+FROM "user_subscription"
+WHERE active = TRUE
+    AND subscription_end_date <= now();
+
+-- name: UpdateExpiredActiveSubscription :exec
+UPDATE "user_subscription"
+SET active = FALSE,
+    updated_at = now()
+WHERE "id" = $1;
+
+-- name: CreateUserSubscriptionHistory :one
+INSERT INTO "user_subscription_history" (
+        id,
+        user_id,
+        moniest_id,
+        transaction_id,
+        subscription_start_date,
+        subscription_end_date,
+        created_at
+    )
+VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6,
+        now()
+    )
+RETURNING *;
