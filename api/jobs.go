@@ -39,7 +39,7 @@ func (server *Server) PayoutToMoniest() {
 	for _, pendingPayout := range pendingPayouts {
 		err := server.service.PayoutToMoniest(pendingPayout)
 		if err != nil {
-			systemError.Log(err)
+			systemError.Log(fmt.Sprintf("JOB ERROR: PAYOUT => %s", err))
 		}
 	}
 }
@@ -51,7 +51,7 @@ func (server *Server) DetectExpiredActiveSubscriptions() {
 
 	expiredSubscriptions, err := server.service.GetExpiredActiveSubscriptions(ctx)
 	if err != nil {
-		systemError.Log(err)
+		systemError.Log(fmt.Sprintf("JOB ERROR: EXPIRED SUBSCRIPTIONS => %s", err))
 		return
 	}
 
@@ -60,8 +60,7 @@ func (server *Server) DetectExpiredActiveSubscriptions() {
 	for _, expiredSubscription := range expiredSubscriptions {
 		err := server.service.DeactivateExpiredSubscriptions(ctx, expiredSubscription)
 		if err != nil {
-			systemError.Log(err, "user subsription ID:", expiredSubscription.ID)
-			// return
+			systemError.Log(fmt.Sprintf("JOB ERROR: EXPIRED SUBSCRIPTIONS => %s, user subsription ID: %s", err, expiredSubscription.ID))
 		}
 	}
 
@@ -70,4 +69,21 @@ func (server *Server) DetectExpiredActiveSubscriptions() {
 
 func (server *Server) DetectExpiredPendingTransaction() {
 	fmt.Println("JOB TRIGGER: Detect Expired Pending Transaction")
+
+	ctx := context.Background()
+
+	expiredPendingTransactions, err := server.service.GetExpiredPendingBinanceTransactions(ctx)
+	if err != nil {
+		systemError.Log(fmt.Sprintf("JOB ERROR: EXPIRED PENDING BINANCE TRANSACTIONS => %s", err))
+	}
+
+	fmt.Println("# of expired pending binance transactions", len(expiredPendingTransactions))
+
+	for _, expiredPendingTransaction := range expiredPendingTransactions {
+		err = server.service.UpdateExpiredPendingBinanceTransaction(ctx, expiredPendingTransaction.ID)
+		if err != nil {
+			systemError.Log(fmt.Sprintf("JOB ERROR: EXPIRED PENDING BINANCE TRANSACTIONS => %s", err))
+		}
+	}
+
 }

@@ -109,3 +109,15 @@ VALUES (
         now()
     )
 RETURNING *;
+
+-- name: GetExpiredPendingBinanceTransactions :many
+SELECT *
+FROM binance_payment_transaction
+WHERE status = 'pending'
+    AND "created_at" + INTERVAL '5 minutes' <= NOW();
+
+-- name: UpdateExpiredPendingBinanceTransaction :exec
+UPDATE "binance_payment_transaction"
+SET status = 'fail',
+    updated_at = now()
+WHERE "id" = $1;

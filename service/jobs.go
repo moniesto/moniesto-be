@@ -215,3 +215,25 @@ func (service *Service) DeactivateExpiredSubscriptions(ctx context.Context, expi
 
 	return nil
 }
+
+func (service *Service) GetExpiredPendingBinanceTransactions(ctx context.Context) ([]db.BinancePaymentTransaction, error) {
+
+	// STEP: get expired pending transactions
+	expiredPendingTransactions, err := service.Store.GetExpiredPendingBinanceTransactions(ctx)
+	if err != nil {
+		return []db.BinancePaymentTransaction{}, err
+	}
+
+	return expiredPendingTransactions, nil
+}
+
+func (service *Service) UpdateExpiredPendingBinanceTransaction(ctx context.Context, transactionID string) error {
+
+	// STEP: update expired pending binance transactions
+	err := service.Store.UpdateExpiredPendingBinanceTransaction(ctx, transactionID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

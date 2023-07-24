@@ -282,6 +282,53 @@ func (q *Queries) GetExpiredActiveSubscriptions(ctx context.Context) ([]UserSubs
 	return items, nil
 }
 
+const getExpiredPendingBinanceTransactions = `-- name: GetExpiredPendingBinanceTransactions :many
+SELECT id, qrcode_link, checkout_link, deep_link, universal_link, status, user_id, moniest_id, date_type, date_value, moniest_fee, amount, webhook_url, payer_id, created_at, updated_at
+FROM binance_payment_transaction
+WHERE status = 'pending'
+    AND "created_at" + INTERVAL '5 minutes' <= NOW()
+`
+
+func (q *Queries) GetExpiredPendingBinanceTransactions(ctx context.Context) ([]BinancePaymentTransaction, error) {
+	rows, err := q.db.QueryContext(ctx, getExpiredPendingBinanceTransactions)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []BinancePaymentTransaction{}
+	for rows.Next() {
+		var i BinancePaymentTransaction
+		if err := rows.Scan(
+			&i.ID,
+			&i.QrcodeLink,
+			&i.CheckoutLink,
+			&i.DeepLink,
+			&i.UniversalLink,
+			&i.Status,
+			&i.UserID,
+			&i.MoniestID,
+			&i.DateType,
+			&i.DateValue,
+			&i.MoniestFee,
+			&i.Amount,
+			&i.WebhookUrl,
+			&i.PayerID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateExpiredActiveSubscription = `-- name: UpdateExpiredActiveSubscription :exec
 UPDATE "user_subscription"
 SET active = FALSE,
@@ -291,6 +338,18 @@ WHERE "id" = $1
 
 func (q *Queries) UpdateExpiredActiveSubscription(ctx context.Context, id string) error {
 	_, err := q.db.ExecContext(ctx, updateExpiredActiveSubscription, id)
+	return err
+}
+
+const updateExpiredPendingBinanceTransaction = `-- name: UpdateExpiredPendingBinanceTransaction :exec
+UPDATE "binance_payment_transaction"
+SET status = 'fail',
+    updated_at = now()
+WHERE "id" = $1
+`
+
+func (q *Queries) UpdateExpiredPendingBinanceTransaction(ctx context.Context, id string) error {
+	_, err := q.db.ExecContext(ctx, updateExpiredPendingBinanceTransaction, id)
 	return err
 }
 
