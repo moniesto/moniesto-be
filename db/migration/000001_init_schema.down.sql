@@ -20,6 +20,8 @@ DROP TABLE IF EXISTS "subscription_info";
 
 DROP TABLE IF EXISTS "moniest_payout_info";
 
+DROP TABLE IF EXISTS "moniest_subscription_info";
+
 DROP TABLE IF EXISTS "moniest";
 
 DROP TABLE IF EXISTS "image";
