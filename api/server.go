@@ -74,7 +74,7 @@ func (server *Server) setupRouter() {
 		moniestsRouters.PATCH("/profile", server.updateMoniestProfile)
 		moniestsRouters.PATCH("/payout", server.updateMoniestPayoutInfo) // TODO: complete endpoint
 		moniestsRouters.POST("/:username/subscribe", server.subscribeMoniest)
-		moniestsRouters.GET("/:username/subscribe/check", server.subscribeMoniestCheck)
+		moniestsRouters.GET("/:username/subscription-info", server.getSubscriptionInfo)
 		moniestsRouters.POST("/:username/unsubscribe", server.unsubscribeMoniest)
 		moniestsRouters.GET("/:username/subscribers", server.getSubscribers)
 		moniestsRouters.GET("/:username/posts", server.getMoniestPosts)

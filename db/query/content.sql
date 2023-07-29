@@ -635,7 +635,8 @@ FROM "moniest" as m
 GROUP BY "u"."id",
     "m"."id",
     "msi"."id"
-ORDER BY "m"."score" DESC
+ORDER BY "m"."score" DESC,
+    "u"."created_at"
 LIMIT $1 OFFSET $2;
 
 -- name: SearchMoniests :many

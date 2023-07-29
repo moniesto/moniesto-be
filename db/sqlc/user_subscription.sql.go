@@ -289,3 +289,47 @@ func (q *Queries) GetSubscription(ctx context.Context, arg GetSubscriptionParams
 	)
 	return i, err
 }
+
+const getUserSubscriptionInfo = `-- name: GetUserSubscriptionInfo :one
+SELECT "user"."id" as "user_id",
+    "moniest"."id" as "moniest_id",
+    "user_subscription"."latest_transaction_id" as "transaction_id",
+    "user_subscription"."subscription_start_date",
+    "user_subscription"."subscription_end_date",
+    "binance_payment_transaction"."payer_id"
+FROM "user_subscription"
+    INNER JOIN "moniest" ON "moniest"."id" = "user_subscription"."moniest_id"
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
+    INNER JOIN "binance_payment_transaction" ON "binance_payment_transaction"."id" = "user_subscription"."latest_transaction_id"
+    AND "user"."username" = $2
+WHERE "user_subscription"."active" = TRUE
+    AND "user_subscription"."user_id" = $1
+`
+
+type GetUserSubscriptionInfoParams struct {
+	UserID   string `json:"user_id"`
+	Username string `json:"username"`
+}
+
+type GetUserSubscriptionInfoRow struct {
+	UserID                string         `json:"user_id"`
+	MoniestID             string         `json:"moniest_id"`
+	TransactionID         sql.NullString `json:"transaction_id"`
+	SubscriptionStartDate time.Time      `json:"subscription_start_date"`
+	SubscriptionEndDate   time.Time      `json:"subscription_end_date"`
+	PayerID               sql.NullString `json:"payer_id"`
+}
+
+func (q *Queries) GetUserSubscriptionInfo(ctx context.Context, arg GetUserSubscriptionInfoParams) (GetUserSubscriptionInfoRow, error) {
+	row := q.db.QueryRowContext(ctx, getUserSubscriptionInfo, arg.UserID, arg.Username)
+	var i GetUserSubscriptionInfoRow
+	err := row.Scan(
+		&i.UserID,
+		&i.MoniestID,
+		&i.TransactionID,
+		&i.SubscriptionStartDate,
+		&i.SubscriptionEndDate,
+		&i.PayerID,
+	)
+	return i, err
+}

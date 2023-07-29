@@ -47,10 +47,25 @@ type UpdateMoniestProfileRequest struct {
 	MoniestSubscriptionInfo *MoniestSubscriptionInfo `json:"subscription_info"`
 }
 
-type CheckSubscriptionResponse struct {
+type GetSubscriptionInfoResponse struct {
 	Subscribed bool  `json:"subscribed"`
 	Pending    *bool `json:"pending,omitempty"`
-	Timeout    *int  `json:"timeout,omitempty"`
+
+	// when pending = true
+	Timeout       *int    `json:"timeout,omitempty"`
+	QrcodeLink    *string `json:"qrcode_link,omitempty"`
+	CheckoutLink  *string `json:"checkout_link,omitempty"`
+	DeepLink      *string `json:"deep_link,omitempty"`
+	UniversalLink *string `json:"universal_link,omitempty"`
+
+	// when subscribed = true
+	SubscriptionInfo *SubscriptionInfo `json:"subscription_info,omitempty"`
+}
+
+type SubscriptionInfo struct {
+	SubscriptionStartDate time.Time `json:"subscription_start_date"`
+	SubscriptionEndDate   time.Time `json:"subscription_ent_date"`
+	PayerID               string    `json:"payer_id"`
 }
 
 type GetMoniestPostsRequest struct {

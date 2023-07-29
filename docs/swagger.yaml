@@ -55,15 +55,6 @@ definitions:
       token:
         type: string
     type: object
-  model.CheckSubscriptionResponse:
-    properties:
-      pending:
-        type: boolean
-      subscribed:
-        type: boolean
-      timeout:
-        type: integer
-    type: object
   model.CheckUsernameResponse:
     properties:
       validity:
@@ -229,6 +220,28 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/model.User'
+    type: object
+  model.GetSubscriptionInfoResponse:
+    properties:
+      checkout_link:
+        type: string
+      deep_link:
+        type: string
+      pending:
+        type: boolean
+      qrcode_link:
+        type: string
+      subscribed:
+        type: boolean
+      subscription_info:
+        allOf:
+        - $ref: '#/definitions/model.SubscriptionInfo'
+        description: when subscribed = true
+      timeout:
+        description: when pending = true
+        type: integer
+      universal_link:
+        type: string
     type: object
   model.GetValidationConfigsResponse:
     properties:
@@ -397,6 +410,15 @@ definitions:
       qrcode_link:
         type: string
       universal_link:
+        type: string
+    type: object
+  model.SubscriptionInfo:
+    properties:
+      payer_id:
+        type: string
+      subscription_ent_date:
+        type: string
+      subscription_start_date:
         type: string
     type: object
   model.UpdateMoniestProfileRequest:
@@ -1211,37 +1233,6 @@ paths:
       summary: Subscribe to Moniest
       tags:
       - Moniest
-  /moniests/:username/subscribe/check:
-    get:
-      consumes:
-      - application/json
-      description: Check Subscribe status to Moniest
-      parameters:
-      - description: moniest username
-        in: path
-        name: username
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'subscribed: true | false information'
-          schema:
-            $ref: '#/definitions/model.CheckSubscriptionResponse'
-        "404":
-          description: moniest not found with this username
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-        "500":
-          description: server error
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-      security:
-      - bearerAuth: []
-      summary: Check Subscribe status
-      tags:
-      - Moniest
   /moniests/:username/subscribers:
     get:
       consumes:
@@ -1285,6 +1276,38 @@ paths:
       security:
       - bearerAuth: []
       summary: Get Subscribers
+      tags:
+      - Moniest
+  /moniests/:username/subscription-info:
+    get:
+      consumes:
+      - application/json
+      description: Get user subscription info
+      parameters:
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'subscribed: true | false, pending: true | false | and other
+            details based on these fields'
+          schema:
+            $ref: '#/definitions/model.GetSubscriptionInfoResponse'
+        "404":
+          description: moniest not found with this username
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get User Subscribe info
       tags:
       - Moniest
   /moniests/:username/unsubscribe:

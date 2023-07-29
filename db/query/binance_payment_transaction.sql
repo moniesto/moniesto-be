@@ -65,6 +65,10 @@ RETURNING *;
 
 -- name: CheckPendingBinancePaymentTransactionByMoniestUsername :many
 SELECT COUNT(*) != 0 as pending,
+    "binance_payment_transaction"."qrcode_link",
+    "binance_payment_transaction"."checkout_link",
+    "binance_payment_transaction"."deep_link",
+    "binance_payment_transaction"."universal_link",
     "binance_payment_transaction"."created_at"
 FROM "binance_payment_transaction"
     INNER JOIN "moniest" ON "moniest"."id" = "binance_payment_transaction"."moniest_id"

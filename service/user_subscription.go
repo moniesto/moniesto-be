@@ -98,6 +98,7 @@ func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, u
 
 	// STEP: stop subscription on payment
 	// PAYMENT FUTURE TODO: unsubscribe from moniest
+	// payout to user by payerID
 	// add db if payment failed
 
 	return nil
@@ -159,4 +160,21 @@ func (service *Service) GetSubscribers(ctx *gin.Context, moniestID string, limit
 
 	users := *(*model.UserDBResponse)(unsafe.Pointer(&usersFromDB))
 	return model.NewGetUsersResponse(users), nil
+}
+
+func (service *Service) GetUserSubscriptionInfo(ctx *gin.Context, userID, moniestUsername string) (db.GetUserSubscriptionInfoRow, error) {
+
+	// STEP: get user subscription info
+	params := db.GetUserSubscriptionInfoParams{
+		UserID:   userID,
+		Username: moniestUsername,
+	}
+
+	userSubscriptionInfo, err := service.Store.GetUserSubscriptionInfo(ctx, params)
+	if err != nil {
+		systemError.Log("server error on getting user subscription info", err.Error())
+		return db.GetUserSubscriptionInfoRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo)
+	}
+
+	return userSubscriptionInfo, nil
 }

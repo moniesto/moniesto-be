@@ -13,6 +13,10 @@ import (
 
 const checkPendingBinancePaymentTransactionByMoniestUsername = `-- name: CheckPendingBinancePaymentTransactionByMoniestUsername :many
 SELECT COUNT(*) != 0 as pending,
+    "binance_payment_transaction"."qrcode_link",
+    "binance_payment_transaction"."checkout_link",
+    "binance_payment_transaction"."deep_link",
+    "binance_payment_transaction"."universal_link",
     "binance_payment_transaction"."created_at"
 FROM "binance_payment_transaction"
     INNER JOIN "moniest" ON "moniest"."id" = "binance_payment_transaction"."moniest_id"
@@ -30,8 +34,12 @@ type CheckPendingBinancePaymentTransactionByMoniestUsernameParams struct {
 }
 
 type CheckPendingBinancePaymentTransactionByMoniestUsernameRow struct {
-	Pending   bool      `json:"pending"`
-	CreatedAt time.Time `json:"created_at"`
+	Pending       bool      `json:"pending"`
+	QrcodeLink    string    `json:"qrcode_link"`
+	CheckoutLink  string    `json:"checkout_link"`
+	DeepLink      string    `json:"deep_link"`
+	UniversalLink string    `json:"universal_link"`
+	CreatedAt     time.Time `json:"created_at"`
 }
 
 func (q *Queries) CheckPendingBinancePaymentTransactionByMoniestUsername(ctx context.Context, arg CheckPendingBinancePaymentTransactionByMoniestUsernameParams) ([]CheckPendingBinancePaymentTransactionByMoniestUsernameRow, error) {
@@ -43,7 +51,14 @@ func (q *Queries) CheckPendingBinancePaymentTransactionByMoniestUsername(ctx con
 	items := []CheckPendingBinancePaymentTransactionByMoniestUsernameRow{}
 	for rows.Next() {
 		var i CheckPendingBinancePaymentTransactionByMoniestUsernameRow
-		if err := rows.Scan(&i.Pending, &i.CreatedAt); err != nil {
+		if err := rows.Scan(
+			&i.Pending,
+			&i.QrcodeLink,
+			&i.CheckoutLink,
+			&i.DeepLink,
+			&i.UniversalLink,
+			&i.CreatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

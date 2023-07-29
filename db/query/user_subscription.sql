@@ -44,6 +44,21 @@ FROM "user_subscription"
 WHERE "user_subscription"."active" = TRUE
     AND "user_subscription"."user_id" = $1;
 
+-- name: GetUserSubscriptionInfo :one
+SELECT "user"."id" as "user_id",
+    "moniest"."id" as "moniest_id",
+    "user_subscription"."latest_transaction_id" as "transaction_id",
+    "user_subscription"."subscription_start_date",
+    "user_subscription"."subscription_end_date",
+    "binance_payment_transaction"."payer_id"
+FROM "user_subscription"
+    INNER JOIN "moniest" ON "moniest"."id" = "user_subscription"."moniest_id"
+    INNER JOIN "user" ON "user"."id" = "moniest"."user_id"
+    INNER JOIN "binance_payment_transaction" ON "binance_payment_transaction"."id" = "user_subscription"."latest_transaction_id"
+    AND "user"."username" = $2
+WHERE "user_subscription"."active" = TRUE
+    AND "user_subscription"."user_id" = $1;
+
 -- name: GetSubscribers :many
 SELECT "u"."id",
     "m"."id" as "moniest_id",

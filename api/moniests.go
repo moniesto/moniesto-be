@@ -307,18 +307,18 @@ func (server *Server) unsubscribeMoniest(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
-// @Summary Check Subscribe status
-// @Description Check Subscribe status to Moniest
+// @Summary Get User Subscribe info
+// @Description Get user subscription info
 // @Security bearerAuth
 // @Tags Moniest
 // @Accept json
 // @Produce json
 // @Param username path string true "moniest username"
-// @Success 200 {object} model.CheckSubscriptionResponse "subscribed: true | false information"
+// @Success 200 {object} model.GetSubscriptionInfoResponse "subscribed: true | false, pending: true | false | and other details based on these fields"
 // @Failure 404 {object} clientError.ErrorResponse "moniest not found with this username"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
-// @Router /moniests/:username/subscribe/check [get]
-func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
+// @Router /moniests/:username/subscription-info [get]
+func (server *Server) getSubscriptionInfo(ctx *gin.Context) {
 
 	// STEP: get username from param
 	username := ctx.Param("username")
@@ -345,13 +345,13 @@ func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
 		return
 	}
 
-	response := model.CheckSubscriptionResponse{
+	response := model.GetSubscriptionInfoResponse{
 		Subscribed: userIsSubscribed,
 	}
 
 	// STEP: check if it is still pending
 	if !userIsSubscribed {
-		transactionIdPending, timeout, err := server.service.CheckPendingPaymentTransaction(ctx, username, user_id)
+		transactionIdPending, timeout, transaction, err := server.service.CheckPendingPaymentTransaction(ctx, username, user_id)
 		if err != nil {
 			ctx.AbortWithStatusJSON(clientError.ParseError(err))
 			return
@@ -365,7 +365,27 @@ func (server *Server) subscribeMoniestCheck(ctx *gin.Context) {
 			latestTimeoutInt := int(latestTimeout)
 
 			response.Timeout = &(latestTimeoutInt)
+
+			// links
+			response.QrcodeLink = &transaction.QrcodeLink
+			response.CheckoutLink = &transaction.CheckoutLink
+			response.DeepLink = &transaction.DeepLink
+			response.UniversalLink = &transaction.UniversalLink
 		}
+	} else {
+
+		// include SubscriptionInfo
+		userSubscriptionInfo, err := server.service.GetUserSubscriptionInfo(ctx, user_id, username)
+		if err != nil {
+			ctx.AbortWithStatusJSON(clientError.ParseError(err))
+			return
+		}
+
+		response.SubscriptionInfo = &model.SubscriptionInfo{}
+
+		response.SubscriptionInfo.PayerID = userSubscriptionInfo.PayerID.String
+		response.SubscriptionInfo.SubscriptionStartDate = userSubscriptionInfo.SubscriptionStartDate
+		response.SubscriptionInfo.SubscriptionEndDate = userSubscriptionInfo.SubscriptionEndDate
 	}
 
 	ctx.JSON(http.StatusOK, response)

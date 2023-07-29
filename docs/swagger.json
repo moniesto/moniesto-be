@@ -1117,55 +1117,6 @@
                 }
             }
         },
-        "/moniests/:username/subscribe/check": {
-            "get": {
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
-                "description": "Check Subscribe status to Moniest",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Moniest"
-                ],
-                "summary": "Check Subscribe status",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "moniest username",
-                        "name": "username",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "subscribed: true | false information",
-                        "schema": {
-                            "$ref": "#/definitions/model.CheckSubscriptionResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "moniest not found with this username",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "server error",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/moniests/:username/subscribers": {
             "get": {
                 "security": [
@@ -1223,6 +1174,55 @@
                     },
                     "406": {
                         "description": "invalid query params",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/moniests/:username/subscription-info": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get user subscription info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Moniest"
+                ],
+                "summary": "Get User Subscribe info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "moniest username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "subscribed: true | false, pending: true | false | and other details based on these fields",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetSubscriptionInfoResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "moniest not found with this username",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorResponse"
                         }
@@ -1827,20 +1827,6 @@
                 }
             }
         },
-        "model.CheckSubscriptionResponse": {
-            "type": "object",
-            "properties": {
-                "pending": {
-                    "type": "boolean"
-                },
-                "subscribed": {
-                    "type": "boolean"
-                },
-                "timeout": {
-                    "type": "integer"
-                }
-            }
-        },
         "model.CheckUsernameResponse": {
             "type": "object",
             "properties": {
@@ -2086,6 +2072,41 @@
                 },
                 "user": {
                     "$ref": "#/definitions/model.User"
+                }
+            }
+        },
+        "model.GetSubscriptionInfoResponse": {
+            "type": "object",
+            "properties": {
+                "checkout_link": {
+                    "type": "string"
+                },
+                "deep_link": {
+                    "type": "string"
+                },
+                "pending": {
+                    "type": "boolean"
+                },
+                "qrcode_link": {
+                    "type": "string"
+                },
+                "subscribed": {
+                    "type": "boolean"
+                },
+                "subscription_info": {
+                    "description": "when subscribed = true",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/model.SubscriptionInfo"
+                        }
+                    ]
+                },
+                "timeout": {
+                    "description": "when pending = true",
+                    "type": "integer"
+                },
+                "universal_link": {
+                    "type": "string"
                 }
             }
         },
@@ -2340,6 +2361,20 @@
                     "type": "string"
                 },
                 "universal_link": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SubscriptionInfo": {
+            "type": "object",
+            "properties": {
+                "payer_id": {
+                    "type": "string"
+                },
+                "subscription_ent_date": {
+                    "type": "string"
+                },
+                "subscription_start_date": {
                     "type": "string"
                 }
             }

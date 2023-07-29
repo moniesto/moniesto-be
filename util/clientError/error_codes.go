@@ -183,6 +183,8 @@ const (
 	Payment_CheckBinanceTransaction_ServerErrorQueryTransaction    = "Payment_CheckBinanceTransaction_ServerErrorQueryTransaction"
 	Payment_CheckBinanceTransaction_ServerErrorUpdateStatusSuccess = "Payment_CheckBinanceTransaction_ServerErrorUpdateStatusSuccess"
 	Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail    = "Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail"
+
+	Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo = "Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo"
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
@@ -365,4 +367,6 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Payment_CheckBinanceTransaction_ServerErrorQueryTransaction:    "Server error on query transaction",
 	Payment_CheckBinanceTransaction_ServerErrorUpdateStatusSuccess: "Server error on updating transaction status [success case]",
 	Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail:    "Server error on updating transaction status [fail case]",
+
+	Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo: "Server error on getting user subscription info",
 }
