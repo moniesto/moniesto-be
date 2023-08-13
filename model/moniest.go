@@ -66,6 +66,8 @@ type SubscriptionInfo struct {
 	SubscriptionStartDate time.Time `json:"subscription_start_date"`
 	SubscriptionEndDate   time.Time `json:"subscription_ent_date"`
 	PayerID               string    `json:"payer_id"`
+
+	// TODO: Fee of moniest
 }
 
 type GetMoniestPostsRequest struct {

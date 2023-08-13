@@ -67,7 +67,7 @@ FROM "binance_payout_history" as "bph"
 WHERE "status" = 'pending'
     AND payout_date <= now();
 
--- name: UpdatePayoutHistory :exec
+-- name: UpdateBinancePayoutHistoryPayout :exec
 UPDATE "binance_payout_history"
 SET "status" = $2,
     operation_fee_percentage = $3,

@@ -124,9 +124,11 @@ const (
 	Moniest_Subscribe_ServerErrorActivateSubscription     = "Moniest_Subscribe_ServerErrorActivateSubscription"
 	Moniest_Subscribe_ServerErrorCreateSubscriptionDB     = "Moniest_Subscribe_ServerErrorCreateSubscriptionDB"
 
-	Moniest_Unsubscribe_UnsubscribeOwn         = "Moniest_Unsubscribe_UnsubscribeOwn"
-	Moniest_Unsubscribe_NotSubscribed          = "Moniest_Unsubscribe_NotSubscribed"
-	Moniest_Unsubscribe_ServerErrorUnsubscribe = "Moniest_Unsubscribe_ServerErrorUnsubscribe"
+	Moniest_Unsubscribe_UnsubscribeOwn              = "Moniest_Unsubscribe_UnsubscribeOwn"
+	Moniest_Unsubscribe_NotSubscribed               = "Moniest_Unsubscribe_NotSubscribed"
+	Moniest_Unsubscribe_ServerErrorUnsubscribe      = "Moniest_Unsubscribe_ServerErrorUnsubscribe"
+	Moniest_Unsubscribe_ServerErrorGetPayoutHistory = "Moniest_Unsubscribe_ServerErrorGetPayoutHistory"
+	Moniest_Unsubscribe_ServerErrorRefund           = "Moniest_Unsubscribe_ServerErrorRefund"
 
 	Moniest_CreateSubscriptionInfo_InvalidFee                 = "Moniest_CreateSubscriptionInfo_InvalidFee"
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage = "Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage"
@@ -308,9 +310,11 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_Subscribe_ServerErrorActivateSubscription: "Server error on activating subscription",
 	Moniest_Subscribe_ServerErrorCreateSubscriptionDB: "Server error on creating subscription on DB",
 
-	Moniest_Unsubscribe_UnsubscribeOwn:         "User can't unsubscribe from own",
-	Moniest_Unsubscribe_NotSubscribed:          "User is not subscribed to moniest",
-	Moniest_Unsubscribe_ServerErrorUnsubscribe: "Server error on unsubscribe",
+	Moniest_Unsubscribe_UnsubscribeOwn:              "User can't unsubscribe from own",
+	Moniest_Unsubscribe_NotSubscribed:               "User is not subscribed to moniest",
+	Moniest_Unsubscribe_ServerErrorUnsubscribe:      "Server error on unsubscribe",
+	Moniest_Unsubscribe_ServerErrorGetPayoutHistory: "Server error on getting payout histories",
+	Moniest_Unsubscribe_ServerErrorRefund:           "Server error on refund user",
 
 	Moniest_CreateSubscriptionInfo_InvalidFee:                 "Fee is invalid",
 	Moniest_CreateSubscriptionInfo_InvalidSubscriptionMessage: "Subscription message is invalid",

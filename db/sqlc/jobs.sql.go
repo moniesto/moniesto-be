@@ -329,6 +329,38 @@ func (q *Queries) GetExpiredPendingBinanceTransactions(ctx context.Context) ([]B
 	return items, nil
 }
 
+const updateBinancePayoutHistoryPayout = `-- name: UpdateBinancePayoutHistoryPayout :exec
+UPDATE "binance_payout_history"
+SET "status" = $2,
+    operation_fee_percentage = $3,
+    "payout_done_at" = $4,
+    "failure_message" = $5,
+    payout_request_id = $6,
+    updated_at = now()
+WHERE "id" = $1
+`
+
+type UpdateBinancePayoutHistoryPayoutParams struct {
+	ID                     string              `json:"id"`
+	Status                 BinancePayoutStatus `json:"status"`
+	OperationFeePercentage sql.NullFloat64     `json:"operation_fee_percentage"`
+	PayoutDoneAt           sql.NullTime        `json:"payout_done_at"`
+	FailureMessage         sql.NullString      `json:"failure_message"`
+	PayoutRequestID        sql.NullString      `json:"payout_request_id"`
+}
+
+func (q *Queries) UpdateBinancePayoutHistoryPayout(ctx context.Context, arg UpdateBinancePayoutHistoryPayoutParams) error {
+	_, err := q.db.ExecContext(ctx, updateBinancePayoutHistoryPayout,
+		arg.ID,
+		arg.Status,
+		arg.OperationFeePercentage,
+		arg.PayoutDoneAt,
+		arg.FailureMessage,
+		arg.PayoutRequestID,
+	)
+	return err
+}
+
 const updateExpiredActiveSubscription = `-- name: UpdateExpiredActiveSubscription :exec
 UPDATE "user_subscription"
 SET active = FALSE,
@@ -387,38 +419,6 @@ type UpdateMoniestScoreParams struct {
 
 func (q *Queries) UpdateMoniestScore(ctx context.Context, arg UpdateMoniestScoreParams) error {
 	_, err := q.db.ExecContext(ctx, updateMoniestScore, arg.Score, arg.ID)
-	return err
-}
-
-const updatePayoutHistory = `-- name: UpdatePayoutHistory :exec
-UPDATE "binance_payout_history"
-SET "status" = $2,
-    operation_fee_percentage = $3,
-    "payout_done_at" = $4,
-    "failure_message" = $5,
-    payout_request_id = $6,
-    updated_at = now()
-WHERE "id" = $1
-`
-
-type UpdatePayoutHistoryParams struct {
-	ID                     string              `json:"id"`
-	Status                 BinancePayoutStatus `json:"status"`
-	OperationFeePercentage sql.NullFloat64     `json:"operation_fee_percentage"`
-	PayoutDoneAt           sql.NullTime        `json:"payout_done_at"`
-	FailureMessage         sql.NullString      `json:"failure_message"`
-	PayoutRequestID        sql.NullString      `json:"payout_request_id"`
-}
-
-func (q *Queries) UpdatePayoutHistory(ctx context.Context, arg UpdatePayoutHistoryParams) error {
-	_, err := q.db.ExecContext(ctx, updatePayoutHistory,
-		arg.ID,
-		arg.Status,
-		arg.OperationFeePercentage,
-		arg.PayoutDoneAt,
-		arg.FailureMessage,
-		arg.PayoutRequestID,
-	)
 	return err
 }
 

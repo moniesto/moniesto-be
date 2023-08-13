@@ -332,6 +332,7 @@
     fail
     success
     refund
+    refund_fail
   }
 
   Enum binance_payment_date_type {

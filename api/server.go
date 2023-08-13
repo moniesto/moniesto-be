@@ -128,6 +128,7 @@ func (server *Server) setupRouter() {
 	// Payment routes
 	paymentRouters := router.Group("/payment").Use(authMiddleware(server.tokenMaker))
 	{
+		// TODO: info endpoint
 		paymentRouters.POST("/binance/transactions/check/:transaction_id", server.CheckBinancePaymentTransaction)
 	}
 

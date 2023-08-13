@@ -68,20 +68,20 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 	return nil
 }
 
-func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, userID string) error {
+func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, userID string) (db.UserSubscription, error) {
 	// STEP: get subscription status
 	exist, subscription, err := service.GetUserSubscriptionStatus(ctx, moniestID, userID)
 	if err != nil {
-		return err
+		return db.UserSubscription{}, err
 	}
 
 	// STEP: check user is not already unsubscribed OR in deactive status
 	if exist {
 		if !subscription.Active {
-			return clientError.CreateError(http.StatusBadRequest, clientError.Moniest_Unsubscribe_NotSubscribed)
+			return db.UserSubscription{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_Unsubscribe_NotSubscribed)
 		}
 	} else {
-		return clientError.CreateError(http.StatusBadRequest, clientError.Moniest_Unsubscribe_NotSubscribed)
+		return db.UserSubscription{}, clientError.CreateError(http.StatusBadRequest, clientError.Moniest_Unsubscribe_NotSubscribed)
 	}
 
 	// STEP: deactivate subscription
@@ -93,7 +93,7 @@ func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, u
 	err = service.Store.Endsubscription(ctx, params)
 	if err != nil {
 		systemError.Log("server error on end subscription", err.Error())
-		return clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Unsubscribe_ServerErrorUnsubscribe)
+		return db.UserSubscription{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Unsubscribe_ServerErrorUnsubscribe)
 	}
 
 	// STEP: stop subscription on payment
@@ -101,7 +101,7 @@ func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, u
 	// payout to user by payerID
 	// add db if payment failed
 
-	return nil
+	return subscription, nil
 }
 
 func (service *Service) GetUserSubscriptionStatus(ctx *gin.Context, moniestID string, userID string) (bool, db.UserSubscription, error) {

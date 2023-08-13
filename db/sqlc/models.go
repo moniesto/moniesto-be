@@ -98,10 +98,11 @@ func (ns NullBinancePaymentStatus) Value() (driver.Value, error) {
 type BinancePayoutStatus string
 
 const (
-	BinancePayoutStatusPending BinancePayoutStatus = "pending"
-	BinancePayoutStatusFail    BinancePayoutStatus = "fail"
-	BinancePayoutStatusSuccess BinancePayoutStatus = "success"
-	BinancePayoutStatusRefund  BinancePayoutStatus = "refund"
+	BinancePayoutStatusPending    BinancePayoutStatus = "pending"
+	BinancePayoutStatusFail       BinancePayoutStatus = "fail"
+	BinancePayoutStatusSuccess    BinancePayoutStatus = "success"
+	BinancePayoutStatusRefund     BinancePayoutStatus = "refund"
+	BinancePayoutStatusRefundFail BinancePayoutStatus = "refund_fail"
 )
 
 func (e *BinancePayoutStatus) Scan(src interface{}) error {

@@ -141,7 +141,7 @@ type WebhookData struct {
 		}
 */
 
-type CreatePayoutRequest struct {
+type CreateTransferRequest struct {
 	RequestID          string           `json:"requestId"`
 	BatchName          string           `json:"batchName"`
 	Currency           string           `json:"currency"`
@@ -160,16 +160,16 @@ type TransferDetail struct {
 	Remark         string  `json:"remark"`
 }
 
-type CreatePayoutResponse struct {
-	Status string                 `json:"status"`
-	Code   string                 `json:"code"`
-	Data   PayoutTransferResponse `json:"data"`
+type CreateTransferResponse struct {
+	Status string           `json:"status"`
+	Code   string           `json:"code"`
+	Data   TransferResponse `json:"data"`
 
 	// only failure | error case
 	ErrorMessage string `json:"errorMessage"`
 }
 
-type PayoutTransferResponse struct {
+type TransferResponse struct {
 	RequestID string `json:"requestId"`
 	Status    string `json:"status"`
 }

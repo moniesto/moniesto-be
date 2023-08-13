@@ -6,7 +6,13 @@ CREATE TYPE "post_crypto_status" AS ENUM ('pending', 'fail', 'success');
 
 CREATE TYPE "binance_payment_status" AS ENUM ('pending', 'fail', 'success');
 
-CREATE TYPE "binance_payout_status" AS ENUM ('pending', 'fail', 'success', 'refund');
+CREATE TYPE "binance_payout_status" AS ENUM (
+  'pending',
+  'fail',
+  'success',
+  'refund',
+  'refund_fail'
+);
 
 CREATE TYPE "binance_payment_date_type" AS ENUM ('MONTH');
 

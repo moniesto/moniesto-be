@@ -35,6 +35,7 @@ func (service *Service) GetValidationConfigs() model.GetValidationConfigsRespons
 		MaxDurationDay:               validation.MaxDurationDay,
 		LongMaxTargetMultiplier:      validation.MaxTargetMultiplierLong,
 		ShortMaxStopMultiplier:       validation.MaxStopMultiplierShort,
+		// TODO: OPERATION_FEE_PERCENTAGE
 	}
 
 	return validation_configs

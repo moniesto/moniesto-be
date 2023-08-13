@@ -127,9 +127,9 @@ func (service *Service) PayoutToMoniest(payoutData db.GetAllPendingPayoutsRow) e
 	ctx := context.Background()
 
 	// STEP: make payout to moniest
-	requestID, _, err := binance.CreatePayout(service.config, payoutData.Amount, operationFeePercentage, string(payoutData.MoniestPayoutType), payoutData.MoniestPayoutValue)
+	requestID, _, err := binance.CreateTransfer(service.config, payoutData.Amount, operationFeePercentage, binance.BINANCE_TRANSFER_TYPE_MERCHANT_PAYMENT, string(payoutData.MoniestPayoutType), payoutData.MoniestPayoutValue, binance.BINANCE_TRANSFER_REMARK_PAYOUT)
 	if err != nil {
-		err = service.Store.UpdatePayoutHistory(ctx, db.UpdatePayoutHistoryParams{
+		err1 := service.Store.UpdateBinancePayoutHistoryPayout(ctx, db.UpdateBinancePayoutHistoryPayoutParams{
 			ID:     payoutData.ID,
 			Status: db.BinancePayoutStatusFail,
 			OperationFeePercentage: sql.NullFloat64{
@@ -146,14 +146,14 @@ func (service *Service) PayoutToMoniest(payoutData db.GetAllPendingPayoutsRow) e
 			},
 		})
 
-		if err != nil {
-			return fmt.Errorf("error while updating payout history failure for payoutID: %s. %s", payoutData.ID, err.Error())
+		if err1 != nil {
+			return fmt.Errorf("error while updating payout history failure for payoutID: %s. %s", payoutData.ID, err1.Error())
 		}
 
 		return fmt.Errorf("error while creating payout history for payoutID: %s. %s", payoutData.ID, err.Error())
 	}
 
-	err = service.Store.UpdatePayoutHistory(ctx, db.UpdatePayoutHistoryParams{
+	err = service.Store.UpdateBinancePayoutHistoryPayout(ctx, db.UpdateBinancePayoutHistoryPayoutParams{
 		ID:     payoutData.ID,
 		Status: db.BinancePayoutStatusSuccess,
 		OperationFeePercentage: sql.NullFloat64{
