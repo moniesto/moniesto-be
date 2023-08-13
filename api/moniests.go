@@ -449,4 +449,64 @@ func (server *Server) getSubscribers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, subscribers)
 }
 
-func (server *Server) updateMoniestPayoutInfo(ctx *gin.Context) {}
+// @Summary Get Moniest Payout Info
+// @Description Get Moniest Payout Info [binance id]
+// @Security bearerAuth
+// @Tags Moniest
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.GetMoniestPayoutInfos
+// @Failure 403 {object} clientError.ErrorResponse "user is not moniest"
+// @Failure 404 {object} clientError.ErrorResponse "user is not found"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/payout [get]
+func (server *Server) getMoniestPayoutInfo(ctx *gin.Context) {
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: get moniest payout info
+	payoutInfo, err := server.service.GetMoniestPayoutInfos(ctx, user_id)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, payoutInfo)
+}
+
+// @Summary Update Moniest Payout Info
+// @Description Update Moniest Payout Info [binance id]
+// @Security bearerAuth
+// @Tags Moniest
+// @Accept json
+// @Produce json
+// @Param UpdateMoniestBody body model.UpdateMoniestPayoutInfo true "binance_id is required"
+// @Success 200 {object} model.GetMoniestPayoutInfos
+// @Failure 403 {object} clientError.ErrorResponse "user is not moniest"
+// @Failure 404 {object} clientError.ErrorResponse "user is not found"
+// @Failure 406 {object} clientError.ErrorResponse "invalid body"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/payout [patch]
+func (server *Server) updateMoniestPayoutInfo(ctx *gin.Context) {
+
+	var req model.UpdateMoniestPayoutInfo
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_UpdatePayout_InvalidBody))
+		return
+	}
+
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: update moniest payout info
+	payoutInfo, err := server.service.UpdateMoniestPayoutInfo(ctx, user_id, req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, payoutInfo)
+}

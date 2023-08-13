@@ -112,6 +112,14 @@ const (
 	Moniest_UpdateMoniest_ServerErrorGetSubscriptionInfo    = "Moniest_UpdateMoniest_ServerErrorGetSubscriptionInfo"
 	Moniest_UpdateMoniest_ServerErrorUpdateSubscriptionInfo = "Moniest_UpdateMoniest_ServerErrorUpdateSubscriptionInfo"
 
+	Moniest_GetPayoutInfo_ServerErrorGetMoniest    = "Moniest_GetPayoutInfo_ServerErrorGetMoniest"
+	Moniest_GetPayoutInfo_ServerErrorGetPayoutInfo = "Moniest_GetPayoutInfo_ServerErrorGetPayoutInfo"
+	Moniest_GetPayoutInfo_PayoutInfoNotFound       = "Moniest_GetPayoutInfo_PayoutInfoNotFound"
+
+	Moniest_UpdatePayout_InvalidBody                 = "Moniest_UpdatePayout_InvalidBody"
+	Moniest_UpdatePayout_ServerErrorGetMoniest       = "Moniest_UpdatePayout_ServerErrorGetMoniest"
+	Moniest_UpdatePayout_ServerErrorUpdatePayoutInfo = "Moniest_UpdatePayout_ServerErrorUpdatePayoutInfo"
+
 	Moniest_GetMoniest_NoMoniest             = "Moniest_GetMoniest_NoMoniest"
 	Moniest_GetMoniest_ServerErrorGetMoniest = "Moniest_GetMoniest_ServerErrorGetMoniest"
 
@@ -298,6 +306,14 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_UpdateMoniest_InvalidSubscriptionMessage:        "Subscription message is invalid",
 	Moniest_UpdateMoniest_ServerErrorGetSubscriptionInfo:    "Server error on getting subscription info",
 	Moniest_UpdateMoniest_ServerErrorUpdateSubscriptionInfo: "Server error on updating subscription info",
+
+	Moniest_GetPayoutInfo_ServerErrorGetMoniest:    "Server error on get moniest",
+	Moniest_GetPayoutInfo_ServerErrorGetPayoutInfo: "Server error on getting payout infos",
+	Moniest_GetPayoutInfo_PayoutInfoNotFound:       "Moniest does not have any payout info",
+
+	Moniest_UpdatePayout_InvalidBody:                 "Update moniest payout info request body is invalid",
+	Moniest_UpdatePayout_ServerErrorGetMoniest:       "Server error on getting moniest",
+	Moniest_UpdatePayout_ServerErrorUpdatePayoutInfo: "Server error on updating payout info",
 
 	Moniest_GetMoniest_NoMoniest:             "Not any moniest exist",
 	Moniest_GetMoniest_ServerErrorGetMoniest: "Server error on getting moniest",

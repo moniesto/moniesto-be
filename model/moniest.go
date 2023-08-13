@@ -7,7 +7,7 @@ import (
 )
 
 type CreateMoniestRequest struct {
-	Bio         string  `json:"bio"`         // optional
+	Bio         string  `json:"bio" binding:"required"`
 	Description string  `json:"description"` // optional
 	Fee         float64 `json:"fee" binding:"required"`
 	Message     string  `json:"message"` // optional
@@ -79,6 +79,23 @@ type MoniestStatResponse struct {
 	SubscriptionCount int64 `json:"subscription_count"`
 	SubscriberCount   int64 `json:"subscriber_count"`
 	PostCount         int64 `json:"post_count"`
+}
+
+type UpdateMoniestPayoutInfo struct {
+	BinanceID string `json:"binance_id" binding:"required"`
+}
+
+type GetMoniestPayoutInfos struct {
+	PayoutMethods PayoutMethods `json:"payout_methods"`
+}
+
+type PayoutMethods struct {
+	PayoutMethodBinance []PayoutMethodBinance `json:"binance"`
+}
+
+type PayoutMethodBinance struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
 }
 
 // MAKER

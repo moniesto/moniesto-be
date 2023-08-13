@@ -1329,6 +1329,113 @@ const docTemplate = `{
                 }
             }
         },
+        "/moniests/payout": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get Moniest Payout Info [binance id]",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Moniest"
+                ],
+                "summary": "Get Moniest Payout Info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetMoniestPayoutInfos"
+                        }
+                    },
+                    "403": {
+                        "description": "user is not moniest",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "user is not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Update Moniest Payout Info [binance id]",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Moniest"
+                ],
+                "summary": "Update Moniest Payout Info",
+                "parameters": [
+                    {
+                        "description": "binance_id is required",
+                        "name": "UpdateMoniestBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateMoniestPayoutInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetMoniestPayoutInfos"
+                        }
+                    },
+                    "403": {
+                        "description": "user is not moniest",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "user is not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/moniests/posts": {
             "post": {
                 "security": [
@@ -1889,6 +1996,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "binance_id",
+                "bio",
                 "fee"
             ],
             "properties": {
@@ -1896,7 +2004,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "bio": {
-                    "description": "optional",
                     "type": "string"
                 },
                 "description": {
@@ -2121,6 +2228,14 @@ const docTemplate = `{
                 }
             }
         },
+        "model.GetMoniestPayoutInfos": {
+            "type": "object",
+            "properties": {
+                "payout_methods": {
+                    "$ref": "#/definitions/model.PayoutMethods"
+                }
+            }
+        },
         "model.GetSubscriptionInfoResponse": {
             "type": "object",
             "properties": {
@@ -2317,6 +2432,28 @@ const docTemplate = `{
                 }
             }
         },
+        "model.PayoutMethodBinance": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.PayoutMethods": {
+            "type": "object",
+            "properties": {
+                "binance": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.PayoutMethodBinance"
+                    }
+                }
+            }
+        },
         "model.RegisterRequest": {
             "type": "object",
             "required": [
@@ -2424,6 +2561,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "subscription_start_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateMoniestPayoutInfo": {
+            "type": "object",
+            "required": [
+                "binance_id"
+            ],
+            "properties": {
+                "binance_id": {
                     "type": "string"
                 }
             }

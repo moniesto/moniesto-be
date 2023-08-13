@@ -185,6 +185,72 @@ func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, r
 	return moniest, nil
 }
 
+func (service *Service) GetMoniestPayoutInfos(ctx *gin.Context, user_id string) (model.GetMoniestPayoutInfos, error) {
+
+	// STEP: get moniest by user id
+	moniest, err := service.Store.GetMoniestByUserId(ctx, user_id)
+	if err != nil {
+		// STEP: no moniest with this user id
+		if err == sql.ErrNoRows {
+			return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusForbidden, clientError.General_UserNotMoniest)
+		}
+
+		systemError.Log("server error on getting moniest by user id")
+		return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetPayoutInfo_ServerErrorGetMoniest)
+	}
+
+	payoutInfos, err := service.Store.GetMoniestPayoutInfos(ctx, moniest.MoniestID)
+	if err != nil {
+		return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetPayoutInfo_ServerErrorGetPayoutInfo)
+	}
+
+	if len(payoutInfos) == 0 {
+		return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusNotFound, clientError.Moniest_GetPayoutInfo_PayoutInfoNotFound)
+	}
+
+	response := model.GetMoniestPayoutInfos{
+		PayoutMethods: model.PayoutMethods{
+			PayoutMethodBinance: []model.PayoutMethodBinance{
+				{
+					Type:  string(payoutInfos[0].Type),
+					Value: payoutInfos[0].Value,
+				},
+			},
+		},
+	}
+
+	return response, nil
+}
+
+func (service *Service) UpdateMoniestPayoutInfo(ctx *gin.Context, user_id string, req model.UpdateMoniestPayoutInfo) (model.GetMoniestPayoutInfos, error) {
+
+	// STEP: get moniest by user id
+	moniest, err := service.Store.GetMoniestByUserId(ctx, user_id)
+	if err != nil {
+		// STEP: no moniest with this user id
+		if err == sql.ErrNoRows {
+			return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusForbidden, clientError.General_UserNotMoniest)
+		}
+
+		systemError.Log("server error on getting moniest by user id")
+		return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdatePayout_ServerErrorGetMoniest)
+	}
+
+	params := db.UpdateMoniestPayoutInfoParams{
+		MoniestID: moniest.MoniestID,
+		Source:    db.PayoutSourceBINANCE,
+		Type:      db.PayoutTypeBINANCEID,
+		Value:     req.BinanceID,
+	}
+
+	err = service.Store.UpdateMoniestPayoutInfo(ctx, params)
+	if err != nil {
+		return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdatePayout_ServerErrorUpdatePayoutInfo)
+	}
+
+	return service.GetMoniestPayoutInfos(ctx, user_id)
+}
+
 func (service *Service) CheckUserIsMoniestByUsername(ctx *gin.Context, username string) (bool, error) {
 
 	// STEP: check user is moniest

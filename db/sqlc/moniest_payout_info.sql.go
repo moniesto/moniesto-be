@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"time"
 )
 
 const createMoniestPayoutInfo = `-- name: CreateMoniestPayoutInfo :one
@@ -58,4 +59,80 @@ func (q *Queries) CreateMoniestPayoutInfo(ctx context.Context, arg CreateMoniest
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const getMoniestPayoutInfos = `-- name: GetMoniestPayoutInfos :many
+SELECT "id",
+    "moniest_id",
+    "source",
+    "type",
+    "value",
+    "updated_at"
+FROM "moniest_payout_info"
+WHERE "moniest_id" = $1
+`
+
+type GetMoniestPayoutInfosRow struct {
+	ID        string       `json:"id"`
+	MoniestID string       `json:"moniest_id"`
+	Source    PayoutSource `json:"source"`
+	Type      PayoutType   `json:"type"`
+	Value     string       `json:"value"`
+	UpdatedAt time.Time    `json:"updated_at"`
+}
+
+func (q *Queries) GetMoniestPayoutInfos(ctx context.Context, moniestID string) ([]GetMoniestPayoutInfosRow, error) {
+	rows, err := q.db.QueryContext(ctx, getMoniestPayoutInfos, moniestID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetMoniestPayoutInfosRow{}
+	for rows.Next() {
+		var i GetMoniestPayoutInfosRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.MoniestID,
+			&i.Source,
+			&i.Type,
+			&i.Value,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateMoniestPayoutInfo = `-- name: UpdateMoniestPayoutInfo :exec
+UPDATE "moniest_payout_info"
+SET "value" = $4,
+    "updated_at" = now()
+WHERE "moniest_id" = $1
+    AND "source" = $2
+    AND "type" = $3
+`
+
+type UpdateMoniestPayoutInfoParams struct {
+	MoniestID string       `json:"moniest_id"`
+	Source    PayoutSource `json:"source"`
+	Type      PayoutType   `json:"type"`
+	Value     string       `json:"value"`
+}
+
+func (q *Queries) UpdateMoniestPayoutInfo(ctx context.Context, arg UpdateMoniestPayoutInfoParams) error {
+	_, err := q.db.ExecContext(ctx, updateMoniestPayoutInfo,
+		arg.MoniestID,
+		arg.Source,
+		arg.Type,
+		arg.Value,
+	)
+	return err
 }

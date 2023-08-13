@@ -75,7 +75,6 @@ definitions:
       binance_id:
         type: string
       bio:
-        description: optional
         type: string
       description:
         description: optional
@@ -87,6 +86,7 @@ definitions:
         type: string
     required:
     - binance_id
+    - bio
     - fee
     type: object
   model.CreatePostRequest:
@@ -228,6 +228,11 @@ definitions:
       operation_fee_percentage:
         type: number
     type: object
+  model.GetMoniestPayoutInfos:
+    properties:
+      payout_methods:
+        $ref: '#/definitions/model.PayoutMethods'
+    type: object
   model.GetSubscriptionInfoResponse:
     properties:
       checkout_link:
@@ -356,6 +361,20 @@ definitions:
       username:
         type: string
     type: object
+  model.PayoutMethodBinance:
+    properties:
+      type:
+        type: string
+      value:
+        type: string
+    type: object
+  model.PayoutMethods:
+    properties:
+      binance:
+        items:
+          $ref: '#/definitions/model.PayoutMethodBinance'
+        type: array
+    type: object
   model.RegisterRequest:
     properties:
       email:
@@ -429,6 +448,13 @@ definitions:
         type: string
       subscription_start_date:
         type: string
+    type: object
+  model.UpdateMoniestPayoutInfo:
+    properties:
+      binance_id:
+        type: string
+    required:
+    - binance_id
     type: object
   model.UpdateMoniestProfileRequest:
     properties:
@@ -1369,6 +1395,74 @@ paths:
       security:
       - bearerAuth: []
       summary: Unsubscribe from Moniest
+      tags:
+      - Moniest
+  /moniests/payout:
+    get:
+      consumes:
+      - application/json
+      description: Get Moniest Payout Info [binance id]
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetMoniestPayoutInfos'
+        "403":
+          description: user is not moniest
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: user is not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get Moniest Payout Info
+      tags:
+      - Moniest
+    patch:
+      consumes:
+      - application/json
+      description: Update Moniest Payout Info [binance id]
+      parameters:
+      - description: binance_id is required
+        in: body
+        name: UpdateMoniestBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateMoniestPayoutInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetMoniestPayoutInfos'
+        "403":
+          description: user is not moniest
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: user is not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "406":
+          description: invalid body
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Update Moniest Payout Info
       tags:
       - Moniest
   /moniests/posts:
