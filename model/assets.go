@@ -3,8 +3,9 @@ package model
 import "github.com/moniesto/moniesto-be/util/clientError"
 
 type GetConfigsResponse struct {
-	Validation GetValidationConfigsResponse  `json:"validation"`
-	ErrorCodes clientError.ErrorMessagesType `json:"error_codes"`
+	Validation  GetValidationConfigsResponse  `json:"validation"`
+	ErrorCodes  clientError.ErrorMessagesType `json:"error_codes"`
+	GeneralInfo GetGeneralInfoResponse        `json:"general_info"`
 }
 
 type GetValidationConfigsResponse struct {
@@ -21,4 +22,8 @@ type GetValidationConfigsResponse struct {
 	MaxDurationDay          int `json:"max_duration_day"`
 	LongMaxTargetMultiplier int `json:"long_max_target_multiplier"`
 	ShortMaxStopMultiplier  int `json:"short_max_stop_multiplier"`
+}
+
+type GetGeneralInfoResponse struct {
+	OperationFeePercentage float64 `json:"operation_fee_percentage"`
 }

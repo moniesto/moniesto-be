@@ -158,6 +158,8 @@ definitions:
     properties:
       error_codes:
         $ref: '#/definitions/clientError.ErrorMessagesType'
+      general_info:
+        $ref: '#/definitions/model.GetGeneralInfoResponse'
       validation:
         $ref: '#/definitions/model.GetValidationConfigsResponse'
     type: object
@@ -220,6 +222,11 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/model.User'
+    type: object
+  model.GetGeneralInfoResponse:
+    properties:
+      operation_fee_percentage:
+        type: number
     type: object
   model.GetSubscriptionInfoResponse:
     properties:
@@ -911,6 +918,21 @@ paths:
           schema:
             $ref: '#/definitions/clientError.ErrorMessagesType'
       summary: Get Error Codes
+      tags:
+      - Assets
+  /assets/general-info:
+    get:
+      consumes:
+      - application/json
+      description: Get General Information Configs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetGeneralInfoResponse'
+      summary: Get General Info Configs
       tags:
       - Assets
   /assets/validations:

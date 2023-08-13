@@ -9,11 +9,20 @@ import (
 func (service *Service) GetConfigs() model.GetConfigsResponse {
 
 	configs := model.GetConfigsResponse{
-		ErrorCodes: service.GetErrorCodes(),
-		Validation: service.GetValidationConfigs(),
+		ErrorCodes:  service.GetErrorCodes(),
+		Validation:  service.GetValidationConfigs(),
+		GeneralInfo: service.GetGeneralInfoConfigs(),
 	}
 
 	return configs
+}
+
+func (service *Service) GetGeneralInfoConfigs() model.GetGeneralInfoResponse {
+	general_info := model.GetGeneralInfoResponse{
+		OperationFeePercentage: service.config.OperationFeePercentage,
+	}
+
+	return general_info
 }
 
 func (service *Service) GetErrorCodes() clientError.ErrorMessagesType {
@@ -35,7 +44,6 @@ func (service *Service) GetValidationConfigs() model.GetValidationConfigsRespons
 		MaxDurationDay:               validation.MaxDurationDay,
 		LongMaxTargetMultiplier:      validation.MaxTargetMultiplierLong,
 		ShortMaxStopMultiplier:       validation.MaxStopMultiplierShort,
-		// TODO: OPERATION_FEE_PERCENTAGE
 	}
 
 	return validation_configs

@@ -103,6 +103,7 @@ func (server *Server) setupRouter() {
 		assetRouters.GET("/configs", server.getConfigs)
 		assetRouters.GET("/error-codes", server.getErrorCodes)
 		assetRouters.GET("/validations", server.getValidationConfigs)
+		assetRouters.GET("/general-info", server.getGeneralInfoConfigs)
 	}
 
 	// Feedback routes

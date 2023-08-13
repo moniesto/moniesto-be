@@ -35,6 +35,20 @@ func (server *Server) getValidationConfigs(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, validation_configs)
 }
 
+// @Summary Get General Info Configs
+// @Description Get General Information Configs
+// @Tags Assets
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.GetGeneralInfoResponse
+// @Router /assets/general-info [get]
+func (server *Server) getGeneralInfoConfigs(ctx *gin.Context) {
+
+	general_info := server.service.GetGeneralInfoConfigs()
+
+	ctx.JSON(http.StatusOK, general_info)
+}
+
 // @Summary Get All Configs
 // @Description Get All Configs of system
 // @Tags Assets

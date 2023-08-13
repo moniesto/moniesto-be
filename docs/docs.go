@@ -632,6 +632,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/assets/general-info": {
+            "get": {
+                "description": "Get General Information Configs",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assets"
+                ],
+                "summary": "Get General Info Configs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetGeneralInfoResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/assets/validations": {
             "get": {
                 "description": "Get Validation Configs of system",
@@ -1991,6 +2014,9 @@ const docTemplate = `{
                 "error_codes": {
                     "$ref": "#/definitions/clientError.ErrorMessagesType"
                 },
+                "general_info": {
+                    "$ref": "#/definitions/model.GetGeneralInfoResponse"
+                },
                 "validation": {
                     "$ref": "#/definitions/model.GetValidationConfigsResponse"
                 }
@@ -2084,6 +2110,14 @@ const docTemplate = `{
                 },
                 "user": {
                     "$ref": "#/definitions/model.User"
+                }
+            }
+        },
+        "model.GetGeneralInfoResponse": {
+            "type": "object",
+            "properties": {
+                "operation_fee_percentage": {
+                    "type": "number"
                 }
             }
         },
