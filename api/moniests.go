@@ -390,7 +390,8 @@ func (server *Server) getSubscriptionInfo(ctx *gin.Context) {
 
 		response.SubscriptionInfo = &model.SubscriptionInfo{}
 
-		response.SubscriptionInfo.PayerID = userSubscriptionInfo.PayerID.String
+		response.SubscriptionInfo.PayerID = userSubscriptionInfo.PayerID
+		response.SubscriptionInfo.SubscribedFee = userSubscriptionInfo.Amount
 		response.SubscriptionInfo.SubscriptionStartDate = userSubscriptionInfo.SubscriptionStartDate
 		response.SubscriptionInfo.SubscriptionEndDate = userSubscriptionInfo.SubscriptionEndDate
 	}

@@ -12,22 +12,22 @@ definitions:
     type: object
   db.EntryPosition:
     enum:
-      - long
-      - short
+    - long
+    - short
     type: string
     x-enum-varnames:
-      - EntryPositionLong
-      - EntryPositionShort
+    - EntryPositionLong
+    - EntryPositionShort
   db.PostCryptoStatus:
     enum:
-      - pending
-      - fail
-      - success
+    - pending
+    - fail
+    - success
     type: string
     x-enum-varnames:
-      - PostCryptoStatusPending
-      - PostCryptoStatusFail
-      - PostCryptoStatusSuccess
+    - PostCryptoStatusPending
+    - PostCryptoStatusFail
+    - PostCryptoStatusSuccess
   model.CalculateApproxScoreResponse:
     properties:
       score:
@@ -40,15 +40,15 @@ definitions:
       old:
         type: string
     required:
-      - new
-      - old
+    - new
+    - old
     type: object
   model.ChangeUsernameRequest:
     properties:
       new:
         type: string
     required:
-      - new
+    - new
     type: object
   model.ChangeUsernameResponse:
     properties:
@@ -68,7 +68,7 @@ definitions:
         description: optional
         type: string
     required:
-      - message
+    - message
     type: object
   model.CreateMoniestRequest:
     properties:
@@ -86,8 +86,8 @@ definitions:
         description: optional
         type: string
     required:
-      - binance_id
-      - fee
+    - binance_id
+    - fee
     type: object
   model.CreatePostRequest:
     properties:
@@ -108,13 +108,13 @@ definitions:
       target3:
         type: number
     required:
-      - currency
-      - direction
-      - duration
-      - stop
-      - target1
-      - target2
-      - target3
+    - currency
+    - direction
+    - duration
+    - stop
+    - target1
+    - target2
+    - target3
     type: object
   model.CreatePostResponse:
     properties:
@@ -125,7 +125,7 @@ definitions:
       description:
         type: string
       direction:
-        $ref: "#/definitions/db.EntryPosition"
+        $ref: '#/definitions/db.EntryPosition'
       duration:
         type: string
       id:
@@ -157,11 +157,11 @@ definitions:
   model.GetConfigsResponse:
     properties:
       error_codes:
-        $ref: "#/definitions/clientError.ErrorMessagesType"
+        $ref: '#/definitions/clientError.ErrorMessagesType'
       general_info:
-        $ref: "#/definitions/model.GetGeneralInfoResponse"
+        $ref: '#/definitions/model.GetGeneralInfoResponse'
       validation:
-        $ref: "#/definitions/model.GetValidationConfigsResponse"
+        $ref: '#/definitions/model.GetValidationConfigsResponse'
     type: object
   model.GetContentMoniestResponse:
     properties:
@@ -180,7 +180,7 @@ definitions:
       location:
         type: string
       moniest:
-        $ref: "#/definitions/model.contentMoniest"
+        $ref: '#/definitions/model.contentMoniest'
       profile_photo_link:
         type: string
       profile_photo_thumbnail_link:
@@ -199,7 +199,7 @@ definitions:
       description:
         type: string
       direction:
-        $ref: "#/definitions/db.EntryPosition"
+        $ref: '#/definitions/db.EntryPosition'
       duration:
         type: string
       finished:
@@ -209,7 +209,7 @@ definitions:
       start_price:
         type: number
       status:
-        $ref: "#/definitions/db.PostCryptoStatus"
+        $ref: '#/definitions/db.PostCryptoStatus'
       stop:
         type: number
       target1:
@@ -221,7 +221,7 @@ definitions:
       updated_at:
         type: string
       user:
-        $ref: "#/definitions/model.User"
+        $ref: '#/definitions/model.User'
     type: object
   model.GetGeneralInfoResponse:
     properties:
@@ -242,7 +242,7 @@ definitions:
         type: boolean
       subscription_info:
         allOf:
-          - $ref: "#/definitions/model.SubscriptionInfo"
+        - $ref: '#/definitions/model.SubscriptionInfo'
         description: when subscribed = true
       timeout:
         description: when pending = true
@@ -286,15 +286,15 @@ definitions:
         minLength: 6
         type: string
     required:
-      - identifier
-      - password
+    - identifier
+    - password
     type: object
   model.LoginResponse:
     properties:
       token:
         type: string
       user:
-        $ref: "#/definitions/model.OwnUser"
+        $ref: '#/definitions/model.OwnUser'
     type: object
   model.Moniest:
     properties:
@@ -307,7 +307,7 @@ definitions:
       score:
         type: number
       subscription_info:
-        $ref: "#/definitions/model.MoniestSubscriptionInfo"
+        $ref: '#/definitions/model.MoniestSubscriptionInfo'
     type: object
   model.MoniestStatResponse:
     properties:
@@ -346,7 +346,7 @@ definitions:
       location:
         type: string
       moniest:
-        $ref: "#/definitions/model.Moniest"
+        $ref: '#/definitions/model.Moniest'
       profile_photo_link:
         type: string
       profile_photo_thumbnail_link:
@@ -368,31 +368,31 @@ definitions:
       username:
         type: string
     required:
-      - email
-      - fullname
-      - password
-      - username
+    - email
+    - fullname
+    - password
+    - username
     type: object
   model.RegisterResponse:
     properties:
       token:
         type: string
       user:
-        $ref: "#/definitions/model.OwnUser"
+        $ref: '#/definitions/model.OwnUser'
     type: object
   model.SendResetPasswordEmailRequest:
     properties:
       email:
         type: string
     required:
-      - email
+    - email
     type: object
   model.SendVerificationEmailRequest:
     properties:
       redirect_url:
         type: string
     required:
-      - redirect_url
+    - redirect_url
     type: object
   model.SubscribeMoniestRequest:
     properties:
@@ -404,9 +404,9 @@ definitions:
       returnURL:
         type: string
     required:
-      - cancelURL
-      - number_of_months
-      - returnURL
+    - cancelURL
+    - number_of_months
+    - returnURL
     type: object
   model.SubscribeMoniestResponse:
     properties:
@@ -423,6 +423,8 @@ definitions:
     properties:
       payer_id:
         type: string
+      subscribed_fee:
+        type: number
       subscription_ent_date:
         type: string
       subscription_start_date:
@@ -435,7 +437,7 @@ definitions:
       description:
         type: string
       subscription_info:
-        $ref: "#/definitions/model.MoniestSubscriptionInfo"
+        $ref: '#/definitions/model.MoniestSubscriptionInfo'
     type: object
   model.UpdateUserProfileRequest:
     properties:
@@ -465,7 +467,7 @@ definitions:
       location:
         type: string
       moniest:
-        $ref: "#/definitions/model.Moniest"
+        $ref: '#/definitions/model.Moniest'
       profile_photo_link:
         type: string
       profile_photo_thumbnail_link:
@@ -480,7 +482,7 @@ definitions:
       token:
         type: string
     required:
-      - token
+    - token
     type: object
   model.VerifyEmailResponse:
     properties:
@@ -494,15 +496,15 @@ definitions:
       token:
         type: string
     required:
-      - new
-      - token
+    - new
+    - token
     type: object
   model.VerifyTokenRequest:
     properties:
       token:
         type: string
     required:
-      - token
+    - token
     type: object
   model.contentMoniest:
     properties:
@@ -517,7 +519,7 @@ definitions:
       subscriber_count:
         type: integer
       subscription_info:
-        $ref: "#/definitions/model.MoniestSubscriptionInfo"
+        $ref: '#/definitions/model.MoniestSubscriptionInfo'
     type: object
 info:
   contact: {}
@@ -525,354 +527,354 @@ paths:
   /account/email/send_verification_email:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Email verification email sender
       parameters:
-        - description: redirect_url is required
-          in: body
-          name: SendVerificationEmailBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.SendVerificationEmailRequest"
+      - description: redirect_url is required
+        in: body
+        name: SendVerificationEmailBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.SendVerificationEmailRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "202":
           description: Accepted
         "400":
           description: email already verified
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "404":
           description: user not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Send Verification Email
       tags:
-        - Account
+      - Account
   /account/email/verify_email:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Verify email by token
       parameters:
-        - description: token is required
-          in: body
-          name: VerifyEmailBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.VerifyEmailRequest"
+      - description: token is required
+        in: body
+        name: VerifyEmailBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.VerifyEmailRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.VerifyEmailResponse"
+            $ref: '#/definitions/model.VerifyEmailResponse'
         "400":
           description: already verified email
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "403":
           description: expired token
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "404":
           description: token not found | user not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body & token
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       summary: Verify Email
       tags:
-        - Account
+      - Account
   /account/login:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Login with [email & password] OR [username & password]
       parameters:
-        - description: identifier can be email OR username
-          in: body
-          name: LoginBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.LoginRequest"
+      - description: identifier can be email OR username
+        in: body
+        name: LoginBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.LoginResponse"
+            $ref: '#/definitions/model.LoginResponse'
         "403":
           description: wrong password
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "404":
           description: email OR username not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body & data
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       summary: Login
       tags:
-        - Auth
+      - Auth
   /account/password:
     put:
       consumes:
-        - application/json
+      - application/json
       description: Authenticated user password change
       parameters:
-        - description: " "
-          in: body
-          name: ChangePasswordBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.ChangePasswordRequest"
+      - description: ' '
+        in: body
+        name: ChangePasswordBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.ChangePasswordRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
         "403":
           description: wrong password
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body & data
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Change Password
       tags:
-        - Password
+      - Password
   /account/password/change_password:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Unauthenticated verify token & change password
       parameters:
-        - description: token & new fiels are required
-          in: body
-          name: VerifyTokenBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.VerifyPasswordResetRequest"
+      - description: token & new fiels are required
+        in: body
+        name: VerifyTokenBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.VerifyPasswordResetRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
         "403":
           description: token is expired
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "404":
           description: reset token not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body & data
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       summary: Verify Token & Change Password
       tags:
-        - Password
+      - Password
   /account/password/send_email:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Unauthenticated user send reset password email
       parameters:
-        - description: " "
-          in: body
-          name: SendEmailBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.SendResetPasswordEmailRequest"
+      - description: ' '
+        in: body
+        name: SendEmailBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.SendResetPasswordEmailRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "202":
           description: Accepted
         "406":
           description: invalid body & data
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       summary: Send Reset Password Email
       tags:
-        - Password
+      - Password
   /account/password/verify_token:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Unauthenticated verify token
       parameters:
-        - description: token is required
-          in: body
-          name: VerifyTokenBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.VerifyTokenRequest"
+      - description: token is required
+        in: body
+        name: VerifyTokenBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.VerifyTokenRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
         "403":
           description: token is expired
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "404":
           description: reset token not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       summary: Verify Token
       tags:
-        - Password
+      - Password
   /account/register:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Register as user
       parameters:
-        - description: " "
-          in: body
-          name: RegisterBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.RegisterRequest"
+      - description: ' '
+        in: body
+        name: RegisterBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.RegisterResponse"
+            $ref: '#/definitions/model.RegisterResponse'
         "403":
           description: wrong password
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body & data
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       summary: Register
       tags:
-        - Auth
+      - Auth
   /account/username:
     patch:
       consumes:
-        - application/json
+      - application/json
       description: Change username of the user
       parameters:
-        - description: new is required
-          in: body
-          name: ChangeUsernameBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.ChangeUsernameRequest"
+      - description: new is required
+        in: body
+        name: ChangeUsernameBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.ChangeUsernameRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.ChangeUsernameResponse"
+            $ref: '#/definitions/model.ChangeUsernameResponse'
         "403":
           description: username is already taken
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body or username
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Change Username
       tags:
-        - Account
+      - Account
   /account/usernames/:username/check:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Check username is valid of not
       parameters:
-        - description: username
-          in: path
-          name: username
-          required: true
-          type: string
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.CheckUsernameResponse"
+            $ref: '#/definitions/model.CheckUsernameResponse'
         "406":
           description: invalid username
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       summary: Check Username
       tags:
-        - Account
+      - Account
   /admin/update_posts_status:
     post:
       description: Can update the status of the posts manually
@@ -884,222 +886,221 @@ paths:
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Update Posts status
       tags:
-        - Admin
+      - Admin
   /assets/configs:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get All Configs of system
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.GetConfigsResponse"
+            $ref: '#/definitions/model.GetConfigsResponse'
       summary: Get All Configs
       tags:
-        - Assets
+      - Assets
   /assets/error-codes:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get All Error Codes in the system
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/clientError.ErrorMessagesType"
+            $ref: '#/definitions/clientError.ErrorMessagesType'
       summary: Get Error Codes
       tags:
-        - Assets
+      - Assets
   /assets/general-info:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get General Information Configs
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.GetGeneralInfoResponse"
+            $ref: '#/definitions/model.GetGeneralInfoResponse'
       summary: Get General Info Configs
       tags:
-        - Assets
+      - Assets
   /assets/validations:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get Validation Configs of system
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.GetValidationConfigsResponse"
+            $ref: '#/definitions/model.GetValidationConfigsResponse'
       summary: Get Validation Configs
       tags:
-        - Assets
+      - Assets
   /content/moniests:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get All moniests
       parameters:
-        - description: "default: 10 & max: 50"
-          in: query
-          name: limit
-          type: integer
-        - description: "default: 0"
-          in: query
-          name: offset
-          type: integer
+      - description: 'default: 10 & max: 50'
+        in: query
+        name: limit
+        type: integer
+      - description: 'default: 0'
+        in: query
+        name: offset
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: "#/definitions/model.GetContentMoniestResponse"
+              $ref: '#/definitions/model.GetContentMoniestResponse'
             type: array
         "406":
           description: invalid body
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Get Content Moniests
       tags:
-        - Content
+      - Content
   /content/posts:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get Posts for timeline & explore
       parameters:
-        - description: "default: true"
-          in: query
-          name: subscribed
-          type: boolean
-        - description: "default: true"
-          in: query
-          name: active
-          type: boolean
-        - description:
-            "options: [score | created_at] default: score, only affect when
-            subscription & active = false"
-          in: query
-          name: sortBy
-          type: string
-        - description: "default: 10 & max: 50"
-          in: query
-          name: limit
-          type: integer
-        - description: "default: 0"
-          in: query
-          name: offset
-          type: integer
+      - description: 'default: true'
+        in: query
+        name: subscribed
+        type: boolean
+      - description: 'default: true'
+        in: query
+        name: active
+        type: boolean
+      - description: 'options: [score | created_at] default: score, only affect when
+          subscription & active = false'
+        in: query
+        name: sortBy
+        type: string
+      - description: 'default: 10 & max: 50'
+        in: query
+        name: limit
+        type: integer
+      - description: 'default: 0'
+        in: query
+        name: offset
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: "#/definitions/model.GetContentPostResponse"
+              $ref: '#/definitions/model.GetContentPostResponse'
             type: array
         "406":
           description: invalid body
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Get Content Posts
       tags:
-        - Content
+      - Content
   /crypto/currencies:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Search crypto currencies by name
       parameters:
-        - description: name
-          in: query
-          name: name
-          required: true
-          type: string
+      - description: name
+        in: query
+        name: name
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: "#/definitions/model.Currency"
+              $ref: '#/definitions/model.Currency'
             type: array
         "406":
           description: invalid name
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error & crypto api error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Crypto Currency Search
       tags:
-        - Crypto
+      - Crypto
   /feedback:
     post:
       consumes:
-        - application/json
-      description: "[AUTH OPTIONAL] Create Feedback as Authenticated or Anonymous"
+      - application/json
+      description: '[AUTH OPTIONAL] Create Feedback as Authenticated or Anonymous'
       parameters:
-        - description: type is optional
-          in: body
-          name: CreateFeedbackBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.CreateFeedbackRequest"
+      - description: type is optional
+        in: body
+        name: CreateFeedbackBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateFeedbackRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
         "406":
           description: invalid body & data
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - '""': []
-          bearerAuth: []
+      - '""': []
+        bearerAuth: []
       summary: Create Feedback
       tags:
-        - Feedback
+      - Feedback
   /health:
     get:
       description: Health Check
@@ -1109,559 +1110,554 @@ paths:
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       summary: HealthCheck
       tags:
-        - Health
+      - Health
   /moniests:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Turn into moniest
       parameters:
-        - description: " "
-          in: body
-          name: CreateMoniestBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.CreateMoniestRequest"
+      - description: ' '
+        in: body
+        name: CreateMoniestBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateMoniestRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.OwnUser"
+            $ref: '#/definitions/model.OwnUser'
         "400":
           description: user is already moniest
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "403":
-          description: "forbidden operation: email is not verified"
+          description: 'forbidden operation: email is not verified'
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "404":
           description: not found user
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Be Moniest
       tags:
-        - Moniest
+      - Moniest
   /moniests/:username/posts:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get Posts of Moniest [active or all]
       parameters:
-        - description: moniest username
-          in: path
-          name: username
-          required: true
-          type: string
-        - description: "default: false, true: only live(active), false: all posts"
-          in: query
-          name: active
-          type: boolean
-        - description: "default: 10 & max: 50"
-          in: query
-          name: limit
-          type: integer
-        - description: "default: 0"
-          in: query
-          name: offset
-          type: integer
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: 'default: false, true: only live(active), false: all posts'
+        in: query
+        name: active
+        type: boolean
+      - description: 'default: 10 & max: 50'
+        in: query
+        name: limit
+        type: integer
+      - description: 'default: 0'
+        in: query
+        name: offset
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: ' +"score" field if fetching own posts'
           schema:
             items:
-              $ref: "#/definitions/model.GetContentPostResponse"
+              $ref: '#/definitions/model.GetContentPostResponse'
             type: array
         "403":
-          description:
-            forbidden access (when not subscribed, but asks for active
+          description: forbidden access (when not subscribed, but asks for active
             posts)
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "404":
           description: no moniest with this username
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid params
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Get Moniest Posts
       tags:
-        - Post
+      - Post
   /moniests/:username/subscribe:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Subscribe to Moniest
       parameters:
-        - description: moniest username
-          in: path
-          name: username
-          required: true
-          type: string
-        - description: all fields are required
-          in: body
-          name: UpdateMoniestBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.SubscribeMoniestRequest"
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: all fields are required
+        in: body
+        name: UpdateMoniestBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.SubscribeMoniestRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.SubscribeMoniestResponse"
+            $ref: '#/definitions/model.SubscribeMoniestResponse'
         "400":
           description: already subscribed
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "403":
           description: subscribe own
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "404":
           description: moniest is not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Subscribe to Moniest
       tags:
-        - Moniest
+      - Moniest
   /moniests/:username/subscribers:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get Subscribers of Moniest
       parameters:
-        - description: moniest username
-          in: path
-          name: username
-          required: true
-          type: string
-        - description: "default: 10 & max: 50"
-          in: query
-          name: limit
-          type: integer
-        - description: "default: 0"
-          in: query
-          name: offset
-          type: integer
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: 'default: 10 & max: 50'
+        in: query
+        name: limit
+        type: integer
+      - description: 'default: 0'
+        in: query
+        name: offset
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: "#/definitions/model.User"
+              $ref: '#/definitions/model.User'
             type: array
         "404":
           description: moniest not found with this username
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid query params
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Get Subscribers
       tags:
-        - Moniest
+      - Moniest
   /moniests/:username/subscription-info:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get user subscription info
       parameters:
-        - description: moniest username
-          in: path
-          name: username
-          required: true
-          type: string
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
-          description:
-            "subscribed: true | false, pending: true | false | and other
-            details based on these fields"
+          description: 'subscribed: true | false, pending: true | false | and other
+            details based on these fields'
           schema:
-            $ref: "#/definitions/model.GetSubscriptionInfoResponse"
+            $ref: '#/definitions/model.GetSubscriptionInfoResponse'
         "404":
           description: moniest not found with this username
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Get User Subscribe info
       tags:
-        - Moniest
+      - Moniest
   /moniests/:username/unsubscribe:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Unsubscribe from Moniest
       parameters:
-        - description: moniest username
-          in: path
-          name: username
-          required: true
-          type: string
+      - description: moniest username
+        in: path
+        name: username
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
         "400":
           description: user not subscribed
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "403":
           description: unsubscribe own
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "404":
           description: moniest is not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Unsubscribe from Moniest
       tags:
-        - Moniest
+      - Moniest
   /moniests/posts:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Create Crypto Post
       parameters:
-        - description: "`description` is optional"
-          in: body
-          name: CreatePostBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.CreatePostRequest"
+      - description: '`description` is optional'
+        in: body
+        name: CreatePostBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatePostRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.CreatePostResponse"
+            $ref: '#/definitions/model.CreatePostResponse'
         "400":
           description: user is not moniest
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Create Post
       tags:
-        - Post
+      - Post
   /moniests/posts/approximateScore:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Calculate Approximate Score for Post
       parameters:
-        - description: "`description` is optional"
-          in: body
-          name: CalculateApproxScoreBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.CreatePostRequest"
+      - description: '`description` is optional'
+        in: body
+        name: CalculateApproxScoreBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatePostRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.CalculateApproxScoreResponse"
+            $ref: '#/definitions/model.CalculateApproxScoreResponse'
         "400":
           description: user is not moniest
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Calculate Approximate Score for Post
       tags:
-        - Post
+      - Post
   /moniests/profile:
     patch:
       consumes:
-        - application/json
+      - application/json
       description: Update Moniest Profile details
       parameters:
-        - description: all fields are optional
-          in: body
-          name: UpdateMoniestBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.UpdateMoniestProfileRequest"
+      - description: all fields are optional
+        in: body
+        name: UpdateMoniestBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateMoniestProfileRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.OwnUser"
+            $ref: '#/definitions/model.OwnUser'
         "403":
           description: user is not moniest
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "404":
           description: user is not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
-          description:
-            invalid body | invalid bio | invalid desc | invalid fee | invalid
+          description: invalid body | invalid bio | invalid desc | invalid fee | invalid
             message
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Update Moniest Profile
       tags:
-        - Moniest
+      - Moniest
   /payment/binance/transactions/check/:transaction_id:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Check Transaction ID
       parameters:
-        - description: transaction ID
-          in: path
-          name: transaction_id
-          required: true
-          type: string
+      - description: transaction ID
+        in: path
+        name: transaction_id
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
         "404":
           description: transactionID not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Check Transaction ID
       tags:
-        - Payment
+      - Payment
   /users/:username:
     get:
       consumes:
-        - application/json
+      - application/json
       description: get user info with username
       parameters:
-        - description: username
-          in: path
-          name: username
-          required: true
-          type: string
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
-          description: "'email' field will be visible if user request for own account"
+          description: '''email'' field will be visible if user request for own account'
           schema:
-            $ref: "#/definitions/model.User"
+            $ref: '#/definitions/model.User'
         "404":
           description: not any user with this username
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid username
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Get User by Username
       tags:
-        - User
+      - User
   /users/:username/subscriptions:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get subscribed Users
       parameters:
-        - description: username
-          in: path
-          name: username
-          required: true
-          type: string
-        - description: "default: 10 & max: 50"
-          in: query
-          name: limit
-          type: integer
-        - description: "default: 0"
-          in: query
-          name: offset
-          type: integer
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: 'default: 10 & max: 50'
+        in: query
+        name: limit
+        type: integer
+      - description: 'default: 0'
+        in: query
+        name: offset
+        type: integer
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: "#/definitions/model.User"
+              $ref: '#/definitions/model.User'
             type: array
         "404":
           description: user not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Get Subscriptions
       tags:
-        - User
+      - User
   /users/:username/summary-stats:
     get:
       consumes:
-        - application/json
+      - application/json
       description: Get User & Moniest Stats
       parameters:
-        - description: username
-          in: path
-          name: username
-          required: true
-          type: string
+      - description: username
+        in: path
+        name: username
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
-          description:
-            when user is not moniest, it will NOT return `subscriber_count`
+          description: when user is not moniest, it will NOT return `subscriber_count`
             and `post_count`
           schema:
-            $ref: "#/definitions/model.MoniestStatResponse"
+            $ref: '#/definitions/model.MoniestStatResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Get Stats
       tags:
-        - User
+      - User
   /users/profile:
     patch:
       consumes:
-        - application/json
-      description:
-        Update user profile [fullname, location, profile photo, background
+      - application/json
+      description: Update user profile [fullname, location, profile photo, background
         photo]
       parameters:
-        - description: all fields are optional
-          in: body
-          name: UpdateUserBody
-          required: true
-          schema:
-            $ref: "#/definitions/model.UpdateUserProfileRequest"
+      - description: all fields are optional
+        in: body
+        name: UpdateUserBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateUserProfileRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/model.OwnUser"
+            $ref: '#/definitions/model.OwnUser'
         "404":
           description: user not found
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "406":
           description: invalid body & data
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
-            $ref: "#/definitions/clientError.ErrorResponse"
+            $ref: '#/definitions/clientError.ErrorResponse'
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       summary: Update User Profile
       tags:
-        - User
+      - User
 securityDefinitions:
   bearerAuth:
     in: header

@@ -2417,6 +2417,9 @@ const docTemplate = `{
                 "payer_id": {
                     "type": "string"
                 },
+                "subscribed_fee": {
+                    "type": "number"
+                },
                 "subscription_ent_date": {
                     "type": "string"
                 },
