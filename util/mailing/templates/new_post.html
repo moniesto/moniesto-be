@@ -189,7 +189,6 @@
         -premailer-cellspacing: 0;
         text-align: center;
       }
-
       .body-action .detail-table {
         width: 100%;
         border-collapse: collapse;
@@ -210,7 +209,7 @@
       .body-sub {
         margin-top: 25px;
         padding-top: 25px;
-        border-top: 1px solid #eaeaec;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
 
       .content-cell {
@@ -262,10 +261,7 @@
   </head>
 
   <body>
-    <span class="preheader"
-      >Use this link to reset your password. The link is only valid for 24
-      hours.</span
-    >
+    <span class="preheader">New analysis published from Moniesto.</span>
     <table
       class="email-wrapper"
       width="100%"
@@ -285,7 +281,7 @@
             <tr>
               <td class="email-masthead">
                 <a
-                  href="https://moniesto-bd2f6.web.app"
+                  href="https://moniesto.com"
                   class="f-fallback email-masthead_name"
                 >
                   <span class="title-first-letter">m</span
@@ -315,16 +311,11 @@
                       <div class="f-fallback">
                         <h1>Hi {{.Name}},</h1>
                         <p>
-                          You recently requested to reset your password for your
-                          <span class="title-first-letter">m</span
-                          ><span>oniesto</span> account. Use the button below to
-                          reset it.
-                          <strong
-                            >This password reset is only valid for the next 24
-                            hours.</strong
-                          >
+                          {{.Fullname}}({{Username}}) shared his new analysis
+                          for {{.Currency}}. You can see moniest's analysis by
+                          clicking the button below.
                         </p>
-                        <!-- Action -->
+
                         <table
                           class="body-action"
                           align="center"
@@ -333,34 +324,89 @@
                           cellspacing="0"
                           role="presentation"
                         >
-                          <tr>
+                          <tr align="center">
                             <td align="center">
-                              <!-- Border based button
-           https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
-                              <table
-                                width="100%"
-                                border="0"
-                                cellspacing="0"
-                                cellpadding="0"
-                                role="presentation"
+                              <a
+                                href="{{.Moniest_Url}}"
+                                class="f-fallback button button--green"
+                                target="_blank"
                               >
+                                Go to Moniest</a
+                              >
+                            </td>
+                          </tr>
+                        </table>
+                        <!-- Action -->
+                        <!-- <table
+                          class="body-action"
+                          align="center"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                        >
+                          <tr>
+                            <td>
+                              <h2>Subscription Details</h2>
+                              <table class="detail-table">
                                 <tr>
-                                  <td align="center">
-                                    <a
-                                      href="{{.ActionUrl}}"
-                                      class="f-fallback button button--green"
-                                      target="_blank"
-                                      >Reset your password</a
-                                    >
+                                  <td align="start">Moniest</td>
+                                  <td align="end">
+                                    {{.Fullname}}({{Username}})
                                   </td>
+                                </tr>
+                                <tr>
+                                  <td align="start">Subscription Start Date</td>
+                                  <td align="end">
+                                    {{.Subscription_Start_Date}}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="start">Subscription End Date</td>
+                                  <td align="end">
+                                    {{.Subscription_End_Date}}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="start">
+                                    Monthly Subscription Price
+                                  </td>
+                                  <td align="end">{{.Subscription_Fee}}$</td>
+                                </tr>
+                                <tr>
+                                  <td align="start">
+                                    Subscription Time (Month)
+                                  </td>
+                                  <td align="end">{{.Subscription_Month}}</td>
                                 </tr>
                               </table>
                             </td>
                           </tr>
                         </table>
+                        <table
+                          class="body-action"
+                          align="center"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                        >
+                          <tr align="center">
+                            <td align="center">
+                              <a
+                                href="{{.Moniest_Url}}"
+                                class="f-fallback button button--green"
+                                target="_blank"
+                              >
+                                {{.Username}}</a
+                              >
+                            </td>
+                          </tr>
+                        </table> -->
+
                         <p>
-                          If you did not request a password reset, please ignore
-                          this email.
+                          Quickly review before the analysis expires, be one
+                          step ahead.
                         </p>
                         <p>
                           Thanks, <br />
@@ -373,11 +419,10 @@
                           <tr>
                             <td>
                               <p class="f-fallback sub">
-                                If you’re having trouble with the button above,
-                                copy and paste the URL below into your web
-                                browser.
+                                In case of any questions or problems, please do
+                                not hesitate to contact us at
+                                official@moniesto.com.
                               </p>
-                              <p class="f-fallback sub">{{.ActionUrl}}</p>
                             </td>
                           </tr>
                         </table>

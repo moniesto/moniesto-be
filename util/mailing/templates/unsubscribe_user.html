@@ -189,7 +189,6 @@
         -premailer-cellspacing: 0;
         text-align: center;
       }
-
       .body-action .detail-table {
         width: 100%;
         border-collapse: collapse;
@@ -210,7 +209,7 @@
       .body-sub {
         margin-top: 25px;
         padding-top: 25px;
-        border-top: 1px solid #eaeaec;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
 
       .content-cell {
@@ -261,5 +260,136 @@
     </style>
   </head>
 
-  <body></body>
+  <body>
+    <span class="preheader">Your subscription has been cancelled.</span>
+    <table
+      class="email-wrapper"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      role="presentation"
+    >
+      <tr>
+        <td align="center">
+          <table
+            class="email-content"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            role="presentation"
+          >
+            <tr>
+              <td class="email-masthead">
+                <a
+                  href="https://moniesto.com"
+                  class="f-fallback email-masthead_name"
+                >
+                  <span class="title-first-letter">m</span
+                  ><span class="title-rest-letters">oniesto</span>
+                </a>
+              </td>
+            </tr>
+            <!-- Email Body -->
+            <tr>
+              <td
+                class="email-body"
+                width="570"
+                cellpadding="0"
+                cellspacing="0"
+              >
+                <table
+                  class="email-body_inner"
+                  align="center"
+                  width="570"
+                  cellpadding="0"
+                  cellspacing="0"
+                  role="presentation"
+                >
+                  <!-- Body content -->
+                  <tr>
+                    <td class="content-cell">
+                      <div class="f-fallback">
+                        <h1>Hi {{.Name}},</h1>
+                        <p>
+                          Your subscription to {{.Fullname}}({{Username}}) has
+                          been successfully cancelled. Your remaining refund (if
+                          any) has been sent to your Binance account with
+                          {{PayerID}} Pay ID.
+                        </p>
+                        <!-- Action -->
+                        <table
+                          class="body-action"
+                          align="center"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                        >
+                          <tr>
+                            <td>
+                              <h2>Subscription Cancellation Details</h2>
+                              <table class="detail-table">
+                                <tr>
+                                  <td align="start">Cancellation Date</td>
+                                  <td align="end">
+                                    {{.Subscription_Cancel_Date}}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="start">
+                                    Monthly Subscription Price
+                                  </td>
+                                  <td align="end">{{.Subscription_Fee}}$</td>
+                                </tr>
+                                <tr>
+                                  <td align="start">
+                                    Remaining Subscription Time (Months)
+                                  </td>
+                                  <td align="end">{{.Remaining_Month}}</td>
+                                </tr>
+                                <tr>
+                                  <td align="start">
+                                    Operation Fee
+                                    ({{Operation_Fee_Percentage}}%)
+                                  </td>
+                                  <td align="end">- {{.Operation_Fee}}$</td>
+                                </tr>
+                                <tr></tr>
+                                <tr class="bordered">
+                                  <td align="start">Amount</td>
+                                  <td align="end">{{.Amount}}$</td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        <p>
+                          Thanks, <br />
+                          <span class="title-first-letter">M</span
+                          ><span>oniesto</span>
+                          team
+                        </p>
+                        <!-- Sub copy -->
+                        <table class="body-sub" role="presentation">
+                          <tr>
+                            <td>
+                              <p class="f-fallback sub">
+                                In case of any questions or problems, please do
+                                not hesitate to contact us at
+                                official@moniesto.com.
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

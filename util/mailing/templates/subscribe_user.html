@@ -189,7 +189,6 @@
         -premailer-cellspacing: 0;
         text-align: center;
       }
-
       .body-action .detail-table {
         width: 100%;
         border-collapse: collapse;
@@ -210,7 +209,7 @@
       .body-sub {
         margin-top: 25px;
         padding-top: 25px;
-        border-top: 1px solid #eaeaec;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
       }
 
       .content-cell {
@@ -261,5 +260,146 @@
     </style>
   </head>
 
-  <body></body>
+  <body>
+    <span class="preheader">You have successfully subscribed to Moniest.</span>
+    <table
+      class="email-wrapper"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      role="presentation"
+    >
+      <tr>
+        <td align="center">
+          <table
+            class="email-content"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            role="presentation"
+          >
+            <tr>
+              <td class="email-masthead">
+                <a
+                  href="https://moniesto.com"
+                  class="f-fallback email-masthead_name"
+                >
+                  <span class="title-first-letter">m</span
+                  ><span class="title-rest-letters">oniesto</span>
+                </a>
+              </td>
+            </tr>
+            <!-- Email Body -->
+            <tr>
+              <td
+                class="email-body"
+                width="570"
+                cellpadding="0"
+                cellspacing="0"
+              >
+                <table
+                  class="email-body_inner"
+                  align="center"
+                  width="570"
+                  cellpadding="0"
+                  cellspacing="0"
+                  role="presentation"
+                >
+                  <!-- Body content -->
+                  <tr>
+                    <td class="content-cell">
+                      <div class="f-fallback">
+                        <h1>Hi {{.Name}},</h1>
+                        <p>
+                          We are happy to inform you that your subscription has
+                          started successfully and your payment has been
+                          received. You can now access exclusive analytics for
+                          the {{.Fullname}}({{Username}}) account.
+                        </p>
+                        <!-- Action -->
+                        <table
+                          class="body-action"
+                          align="center"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                        >
+                          <tr>
+                            <td>
+                              <h2>Subscription Detail</h2>
+                              <table class="detail-table">
+                                <tr>
+                                  <td align="start">Moniest</td>
+                                  <td align="end">
+                                    {{.Fullname}}({{Username}})
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="start">Subscription Start Date</td>
+                                  <td align="end">
+                                    {{.Subscription_Start_Date}}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="start">Subscription End Date</td>
+                                  <td align="end">
+                                    {{.Subscription_End_Date}}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="start">
+                                    Monthly Subscription Price
+                                  </td>
+                                  <td align="end">{{.Subscription_Fee}}$</td>
+                                </tr>
+                                <tr>
+                                  <td align="start">
+                                    Subscription Time (Month)
+                                  </td>
+                                  <td align="end">{{.Subscription_Month}}</td>
+                                </tr>
+                                <tr></tr>
+                                <tr class="bordered">
+                                  <td align="start">Total Amount</td>
+                                  <td align="end">{{.Amount}}$</td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                        <p>
+                          Your subscription gives you access to valuable
+                          analytics.
+                        </p>
+                        <p>We wish you a nice subscription experience!</p>
+                        <p>
+                          Thanks, <br />
+                          <span class="title-first-letter">M</span
+                          ><span>oniesto</span>
+                          team
+                        </p>
+                        <!-- Sub copy -->
+                        <table class="body-sub" role="presentation">
+                          <tr>
+                            <td>
+                              <p class="f-fallback sub">
+                                In case of any questions or problems, please do
+                                not hesitate to contact us at
+                                official@moniesto.com.
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>
