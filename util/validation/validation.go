@@ -180,6 +180,14 @@ func Stop(price, stop float64, direction db.EntryPosition) error {
 	return nil
 }
 
+func Language(language string) error {
+	if contains(supportedLanguages, language) {
+		return nil
+	}
+
+	return fmt.Errorf("language is not supported: %s", language)
+}
+
 func BinanceID(binance_id string) error {
 
 	if len(binance_id) > 0 {

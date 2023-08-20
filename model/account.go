@@ -5,10 +5,11 @@ import (
 )
 
 type RegisterRequest struct {
-	Fullname string `json:"fullname" binding:"required,min=1"`
-	Username string `json:"username" binding:"required"`
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Fullname string          `json:"fullname" binding:"required,min=1"`
+	Username string          `json:"username" binding:"required"`
+	Email    string          `json:"email" binding:"required"`
+	Password string          `json:"password" binding:"required"`
+	Language db.UserLanguage `json:"language" binding:"required"`
 }
 
 type RegisterResponse struct {
@@ -84,6 +85,7 @@ func NewRegisterResponse(token string, user db.LoginUserByEmailRow) (response Re
 			Username:                     user.Username,
 			Email:                        user.Email,
 			EmailVerified:                user.EmailVerified,
+			Language:                     user.Language,
 			Location:                     user.Location.String,
 			ProfilePhotoLink:             user.ProfilePhotoLink.(string),
 			ProfilePhotoThumbnailLink:    user.ProfilePhotoThumbnailLink.(string),

@@ -32,6 +32,8 @@ DROP TABLE IF EXISTS "schema_migrations";
 
 DROP TYPE IF EXISTS "entry_position";
 
+DROP TYPE IF EXISTS "user_language";
+
 DROP TYPE IF EXISTS "image_type";
 
 DROP TYPE IF EXISTS "post_crypto_status";

@@ -6,11 +6,6 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 )
 
-type UserLanguage string
-
-const LANGUAGE_ENGLISH UserLanguage = "en"
-const LANGUAGE_TURKISH UserLanguage = "tr"
-
 type UserDBResponse []db.GetUserByUsernameRow
 
 type UserStatResponse struct {
@@ -18,19 +13,20 @@ type UserStatResponse struct {
 }
 
 type OwnUser struct {
-	Id                           string    `json:"id,omitempty"`
-	Fullname                     string    `json:"fullname,omitempty"`
-	Username                     string    `json:"username,omitempty"`
-	Email                        string    `json:"email,omitempty"`
-	EmailVerified                bool      `json:"email_verified"`
-	Location                     string    `json:"location,omitempty"`
-	ProfilePhotoLink             string    `json:"profile_photo_link,omitempty"`
-	ProfilePhotoThumbnailLink    string    `json:"profile_photo_thumbnail_link,omitempty"`
-	BackgroundPhotoLink          string    `json:"background_photo_link,omitempty"`
-	BackgroundPhotoThumbnailLink string    `json:"background_photo_thumbnail_link,omitempty"`
-	CreatedAt                    time.Time `json:"created_at,omitempty"`
-	UpdatedAt                    time.Time `json:"updated_at,omitempty"`
-	Moniest                      *Moniest  `json:"moniest,omitempty"`
+	Id                           string          `json:"id,omitempty"`
+	Fullname                     string          `json:"fullname,omitempty"`
+	Username                     string          `json:"username,omitempty"`
+	Email                        string          `json:"email,omitempty"`
+	EmailVerified                bool            `json:"email_verified"`
+	Language                     db.UserLanguage `json:"language"`
+	Location                     string          `json:"location,omitempty"`
+	ProfilePhotoLink             string          `json:"profile_photo_link,omitempty"`
+	ProfilePhotoThumbnailLink    string          `json:"profile_photo_thumbnail_link,omitempty"`
+	BackgroundPhotoLink          string          `json:"background_photo_link,omitempty"`
+	BackgroundPhotoThumbnailLink string          `json:"background_photo_thumbnail_link,omitempty"`
+	CreatedAt                    time.Time       `json:"created_at,omitempty"`
+	UpdatedAt                    time.Time       `json:"updated_at,omitempty"`
+	Moniest                      *Moniest        `json:"moniest,omitempty"`
 }
 
 type User struct {
@@ -49,10 +45,11 @@ type User struct {
 }
 
 type UpdateUserProfileRequest struct {
-	Fullname        string `json:"fullname"`
-	Location        string `json:"location"`
-	ProfilePhoto    string `json:"profile_photo"`
-	BackgroundPhoto string `json:"background_photo"`
+	Fullname        string          `json:"fullname"`
+	Location        string          `json:"location"`
+	ProfilePhoto    string          `json:"profile_photo"`
+	BackgroundPhoto string          `json:"background_photo"`
+	Language        db.UserLanguage `json:"language"`
 }
 
 // MAKER
@@ -63,6 +60,7 @@ func NewGetOwnUserResponseByUsername(user db.GetOwnUserByUsernameRow) (response 
 		Username:                     user.Username,
 		Email:                        user.Email,
 		EmailVerified:                user.EmailVerified,
+		Language:                     user.Language,
 		Location:                     user.Location.String,
 		ProfilePhotoLink:             user.ProfilePhotoLink.(string),
 		ProfilePhotoThumbnailLink:    user.ProfilePhotoThumbnailLink.(string),
@@ -101,6 +99,7 @@ func NewGetOwnUserResponseByID(user db.GetOwnUserByIDRow) (response OwnUser) {
 		Username:                     user.Username,
 		Email:                        user.Email,
 		EmailVerified:                user.EmailVerified,
+		Language:                     user.Language,
 		Location:                     user.Location.String,
 		ProfilePhotoLink:             user.ProfilePhotoLink.(string),
 		ProfilePhotoThumbnailLink:    user.ProfilePhotoThumbnailLink.(string),

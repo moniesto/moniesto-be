@@ -12,6 +12,7 @@
     password varchar [not null]
     location varchar
     login_count integer [not null, default: 1]
+    language user_language [not null, default: "en"]
 
     deleted boolean [not null, default: false]
     
@@ -305,6 +306,11 @@
 
 
   // Enums
+  Enum user_language {
+    en
+    tr
+  }
+
   Enum image_type {
     profile_photo
     background_photo

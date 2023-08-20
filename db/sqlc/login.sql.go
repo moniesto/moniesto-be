@@ -19,6 +19,7 @@ SELECT "user"."id",
     "user"."email",
     "user"."email_verified",
     "user"."password",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -84,6 +85,7 @@ type LoginUserByEmailRow struct {
 	Email                            string          `json:"email"`
 	EmailVerified                    bool            `json:"email_verified"`
 	Password                         string          `json:"password"`
+	Language                         UserLanguage    `json:"language"`
 	Location                         sql.NullString  `json:"location"`
 	CreatedAt                        time.Time       `json:"created_at"`
 	UpdatedAt                        time.Time       `json:"updated_at"`
@@ -111,6 +113,7 @@ func (q *Queries) LoginUserByEmail(ctx context.Context, email string) (LoginUser
 		&i.Email,
 		&i.EmailVerified,
 		&i.Password,
+		&i.Language,
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -137,6 +140,7 @@ SELECT "user"."id",
     "user"."email",
     "user"."email_verified",
     "user"."password",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -202,6 +206,7 @@ type LoginUserByUsernameRow struct {
 	Email                            string          `json:"email"`
 	EmailVerified                    bool            `json:"email_verified"`
 	Password                         string          `json:"password"`
+	Language                         UserLanguage    `json:"language"`
 	Location                         sql.NullString  `json:"location"`
 	CreatedAt                        time.Time       `json:"created_at"`
 	UpdatedAt                        time.Time       `json:"updated_at"`
@@ -229,6 +234,7 @@ func (q *Queries) LoginUserByUsername(ctx context.Context, username string) (Log
 		&i.Email,
 		&i.EmailVerified,
 		&i.Password,
+		&i.Language,
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -253,7 +259,7 @@ SET login_count = login_count + 1,
     last_login = now(),
     updated_at = now()
 WHERE id = $1
-RETURNING id, fullname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
+RETURNING id, fullname, username, email, email_verified, password, location, login_count, language, deleted, created_at, updated_at, last_login
 `
 
 func (q *Queries) UpdateLoginStats(ctx context.Context, id string) (User, error) {
@@ -268,6 +274,7 @@ func (q *Queries) UpdateLoginStats(ctx context.Context, id string) (User, error)
 		&i.Password,
 		&i.Location,
 		&i.LoginCount,
+		&i.Language,
 		&i.Deleted,
 		&i.CreatedAt,
 		&i.UpdatedAt,

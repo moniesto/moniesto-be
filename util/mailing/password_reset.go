@@ -2,14 +2,14 @@ package mailing
 
 import (
 	"github.com/moniesto/moniesto-be/config"
-	"github.com/moniesto/moniesto-be/model"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 var resetPasswordURL string = "change-password"
 var verifyEmailURL string = "verify-email"
 
-func SendPasswordResetEmail(to string, config config.Config, fullname, token string, language model.UserLanguage) error {
+func SendPasswordResetEmail(to string, config config.Config, fullname, token string, language db.UserLanguage) error {
 	template, err := GetTemplate("password-reset", language)
 	if err != nil {
 		return err

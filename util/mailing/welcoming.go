@@ -2,11 +2,11 @@ package mailing
 
 import (
 	"github.com/moniesto/moniesto-be/config"
-	"github.com/moniesto/moniesto-be/model"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
-func SendWelcomingEmail(to string, config config.Config, name string, language model.UserLanguage) error {
+func SendWelcomingEmail(to string, config config.Config, name string, language db.UserLanguage) error {
 	template, err := GetTemplate("welcoming", language)
 	if err != nil {
 		return err

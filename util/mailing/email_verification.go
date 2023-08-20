@@ -2,11 +2,11 @@ package mailing
 
 import (
 	"github.com/moniesto/moniesto-be/config"
-	"github.com/moniesto/moniesto-be/model"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
-func SendEmailVerificationEmail(to string, config config.Config, fullname, token string, language model.UserLanguage) error {
+func SendEmailVerificationEmail(to string, config config.Config, fullname, token string, language db.UserLanguage) error {
 	template, err := GetTemplate("email_verification", language)
 	if err != nil {
 		return err

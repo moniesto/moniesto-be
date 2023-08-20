@@ -2,11 +2,11 @@ package mailing
 
 import (
 	"github.com/moniesto/moniesto-be/config"
-	"github.com/moniesto/moniesto-be/model"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
-func SendPayoutEmail(to string, config config.Config, fullname_user, username_user, fullname_moniest, binanceID string, currentMonth, totalMonth int, subscribedFee, operationFeePercentage, amount float64, language model.UserLanguage) error {
+func SendPayoutEmail(to string, config config.Config, fullname_user, username_user, fullname_moniest, binanceID string, currentMonth, totalMonth int, subscribedFee, operationFeePercentage, amount float64, language db.UserLanguage) error {
 
 	template, err := GetTemplate("payout", language)
 	if err != nil {

@@ -2,11 +2,11 @@ package mailing
 
 import (
 	"github.com/moniesto/moniesto-be/config"
-	"github.com/moniesto/moniesto-be/model"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
-func SendNewPostEmail(to string, config config.Config, fullname_user, fullname_moniest, username, currency string, language model.UserLanguage) error {
+func SendNewPostEmail(to string, config config.Config, fullname_user, fullname_moniest, username, currency string, language db.UserLanguage) error {
 	template, err := GetTemplate("new_post", language)
 	if err != nil {
 		return err

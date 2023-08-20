@@ -1915,6 +1915,17 @@
                 "PostCryptoStatusSuccess"
             ]
         },
+        "db.UserLanguage": {
+            "type": "string",
+            "enum": [
+                "en",
+                "tr"
+            ],
+            "x-enum-varnames": [
+                "UserLanguageEn",
+                "UserLanguageTr"
+            ]
+        },
         "model.CalculateApproxScoreResponse": {
             "type": "object",
             "properties": {
@@ -2400,6 +2411,9 @@
                 "id": {
                     "type": "string"
                 },
+                "language": {
+                    "$ref": "#/definitions/db.UserLanguage"
+                },
                 "location": {
                     "type": "string"
                 },
@@ -2447,6 +2461,7 @@
             "required": [
                 "email",
                 "fullname",
+                "language",
                 "password",
                 "username"
             ],
@@ -2457,6 +2472,9 @@
                 "fullname": {
                     "type": "string",
                     "minLength": 1
+                },
+                "language": {
+                    "$ref": "#/definitions/db.UserLanguage"
                 },
                 "password": {
                     "type": "string"
@@ -2586,6 +2604,9 @@
                 },
                 "fullname": {
                     "type": "string"
+                },
+                "language": {
+                    "$ref": "#/definitions/db.UserLanguage"
                 },
                 "location": {
                     "type": "string"

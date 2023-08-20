@@ -1927,6 +1927,17 @@ const docTemplate = `{
                 "PostCryptoStatusSuccess"
             ]
         },
+        "db.UserLanguage": {
+            "type": "string",
+            "enum": [
+                "en",
+                "tr"
+            ],
+            "x-enum-varnames": [
+                "UserLanguageEn",
+                "UserLanguageTr"
+            ]
+        },
         "model.CalculateApproxScoreResponse": {
             "type": "object",
             "properties": {
@@ -2412,6 +2423,9 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "language": {
+                    "$ref": "#/definitions/db.UserLanguage"
+                },
                 "location": {
                     "type": "string"
                 },
@@ -2459,6 +2473,7 @@ const docTemplate = `{
             "required": [
                 "email",
                 "fullname",
+                "language",
                 "password",
                 "username"
             ],
@@ -2469,6 +2484,9 @@ const docTemplate = `{
                 "fullname": {
                     "type": "string",
                     "minLength": 1
+                },
+                "language": {
+                    "$ref": "#/definitions/db.UserLanguage"
                 },
                 "password": {
                     "type": "string"
@@ -2598,6 +2616,9 @@ const docTemplate = `{
                 },
                 "fullname": {
                     "type": "string"
+                },
+                "language": {
+                    "$ref": "#/definitions/db.UserLanguage"
                 },
                 "location": {
                     "type": "string"

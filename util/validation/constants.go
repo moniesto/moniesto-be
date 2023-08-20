@@ -1,8 +1,17 @@
 package validation
 
+import (
+	db "github.com/moniesto/moniesto-be/db/sqlc"
+)
+
 var adminEmails = []string{
 	"pervin.eyvazov1999@gmail.com",
 	"turugdavut@gmail.com",
+}
+
+var supportedLanguages = []string{
+	string(db.UserLanguageEn),
+	string(db.UserLanguageTr),
 }
 
 var ValidPasswordLength = 6

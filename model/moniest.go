@@ -106,6 +106,7 @@ func NewCreateMoniestResponse(moniest db.GetMoniestByMoniestIdRow) OwnUser {
 		Username:                     moniest.Username,
 		Email:                        moniest.Email,
 		EmailVerified:                moniest.EmailVerified,
+		Language:                     moniest.Language,
 		Location:                     moniest.Location.String,
 		ProfilePhotoLink:             moniest.ProfilePhotoLink.(string),
 		ProfilePhotoThumbnailLink:    moniest.ProfilePhotoThumbnailLink.(string),

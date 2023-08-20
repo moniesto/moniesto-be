@@ -85,6 +85,7 @@ SELECT "user"."id",
     "user"."username",
     "user"."email",
     "user"."email_verified",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -149,6 +150,7 @@ type GetMoniestByMoniestIdRow struct {
 	Username                         string         `json:"username"`
 	Email                            string         `json:"email"`
 	EmailVerified                    bool           `json:"email_verified"`
+	Language                         UserLanguage   `json:"language"`
 	Location                         sql.NullString `json:"location"`
 	CreatedAt                        time.Time      `json:"created_at"`
 	UpdatedAt                        time.Time      `json:"updated_at"`
@@ -175,6 +177,7 @@ func (q *Queries) GetMoniestByMoniestId(ctx context.Context, id string) (GetMoni
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
+		&i.Language,
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -200,6 +203,7 @@ SELECT "user"."id",
     "user"."username",
     "user"."email",
     "user"."email_verified",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -260,6 +264,7 @@ type GetMoniestByUserIdRow struct {
 	Username                         string         `json:"username"`
 	Email                            string         `json:"email"`
 	EmailVerified                    bool           `json:"email_verified"`
+	Language                         UserLanguage   `json:"language"`
 	Location                         sql.NullString `json:"location"`
 	CreatedAt                        time.Time      `json:"created_at"`
 	UpdatedAt                        time.Time      `json:"updated_at"`
@@ -286,6 +291,7 @@ func (q *Queries) GetMoniestByUserId(ctx context.Context, userID string) (GetMon
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
+		&i.Language,
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -311,6 +317,7 @@ SELECT "user"."id",
     "user"."username",
     "user"."email",
     "user"."email_verified",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -375,6 +382,7 @@ type GetMoniestByUsernameRow struct {
 	Username                         string         `json:"username"`
 	Email                            string         `json:"email"`
 	EmailVerified                    bool           `json:"email_verified"`
+	Language                         UserLanguage   `json:"language"`
 	Location                         sql.NullString `json:"location"`
 	CreatedAt                        time.Time      `json:"created_at"`
 	UpdatedAt                        time.Time      `json:"updated_at"`
@@ -401,6 +409,7 @@ func (q *Queries) GetMoniestByUsername(ctx context.Context, username string) (Ge
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
+		&i.Language,
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,

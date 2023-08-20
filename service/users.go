@@ -68,7 +68,7 @@ func (service *Service) UpdateUserProfile(ctx *gin.Context, user_id string, req 
 	difference := false
 
 	// STEP: get user data
-	user, err := service.Store.GetUserByID(ctx, user_id)
+	user, err := service.Store.GetOwnUserByID(ctx, user_id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByID)
@@ -83,9 +83,10 @@ func (service *Service) UpdateUserProfile(ctx *gin.Context, user_id string, req 
 		ID:       user_id,
 		Fullname: user.Fullname,
 		Location: user.Location,
+		Language: user.Language,
 	}
 
-	if req.Fullname != "" || req.Location != "" {
+	if req.Fullname != "" || req.Location != "" || req.Language != "" {
 		difference = true
 
 		if req.Fullname != "" {
@@ -107,6 +108,15 @@ func (service *Service) UpdateUserProfile(ctx *gin.Context, user_id string, req 
 				Valid:  true,
 				String: req.Location,
 			}
+		}
+
+		if req.Language != "" {
+			err := validation.Language(string(req.Language))
+			if err != nil {
+				return clientError.CreateError(http.StatusNotAcceptable, clientError.Account_UpdateUserProfile_UnsupportedLanguage)
+			}
+
+			param.Language = req.Language
 		}
 	}
 

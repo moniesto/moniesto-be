@@ -44,19 +44,21 @@ INSERT INTO "user" (
         username,
         email,
         password,
+        language,
         created_at,
         last_login
     )
-VALUES ($1, $2, $3, $4, $5, now(), now())
-RETURNING id, fullname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
+VALUES ($1, $2, $3, $4, $5, $6, now(), now())
+RETURNING id, fullname, username, email, email_verified, password, location, login_count, language, deleted, created_at, updated_at, last_login
 `
 
 type CreateUserParams struct {
-	ID       string `json:"id"`
-	Fullname string `json:"fullname"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	ID       string       `json:"id"`
+	Fullname string       `json:"fullname"`
+	Username string       `json:"username"`
+	Email    string       `json:"email"`
+	Password string       `json:"password"`
+	Language UserLanguage `json:"language"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -66,6 +68,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.Username,
 		arg.Email,
 		arg.Password,
+		arg.Language,
 	)
 	var i User
 	err := row.Scan(
@@ -77,6 +80,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Password,
 		&i.Location,
 		&i.LoginCount,
+		&i.Language,
 		&i.Deleted,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -90,7 +94,7 @@ UPDATE "user"
 SET deleted = true,
     updated_at = now()
 WHERE id = $1
-RETURNING id, fullname, username, email, email_verified, password, location, login_count, deleted, created_at, updated_at, last_login
+RETURNING id, fullname, username, email, email_verified, password, location, login_count, language, deleted, created_at, updated_at, last_login
 `
 
 func (q *Queries) DeleteUser(ctx context.Context, id string) (User, error) {
@@ -105,6 +109,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id string) (User, error) {
 		&i.Password,
 		&i.Location,
 		&i.LoginCount,
+		&i.Language,
 		&i.Deleted,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -180,6 +185,7 @@ SELECT "user"."id",
     "user"."username",
     "user"."email",
     "user"."email_verified",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -240,6 +246,7 @@ type GetOwnUserByIDRow struct {
 	Username                         string          `json:"username"`
 	Email                            string          `json:"email"`
 	EmailVerified                    bool            `json:"email_verified"`
+	Language                         UserLanguage    `json:"language"`
 	Location                         sql.NullString  `json:"location"`
 	CreatedAt                        time.Time       `json:"created_at"`
 	UpdatedAt                        time.Time       `json:"updated_at"`
@@ -266,6 +273,7 @@ func (q *Queries) GetOwnUserByID(ctx context.Context, userID string) (GetOwnUser
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
+		&i.Language,
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -291,6 +299,7 @@ SELECT "user"."id",
     "user"."username",
     "user"."email",
     "user"."email_verified",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -355,6 +364,7 @@ type GetOwnUserByUsernameRow struct {
 	Username                         string          `json:"username"`
 	Email                            string          `json:"email"`
 	EmailVerified                    bool            `json:"email_verified"`
+	Language                         UserLanguage    `json:"language"`
 	Location                         sql.NullString  `json:"location"`
 	CreatedAt                        time.Time       `json:"created_at"`
 	UpdatedAt                        time.Time       `json:"updated_at"`
@@ -381,6 +391,7 @@ func (q *Queries) GetOwnUserByUsername(ctx context.Context, username string) (Ge
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
+		&i.Language,
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -549,6 +560,7 @@ SELECT "user"."id",
     "user"."username",
     "user"."email",
     "user"."email_verified",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -603,6 +615,7 @@ type GetUserByEmailRow struct {
 	Username                     string         `json:"username"`
 	Email                        string         `json:"email"`
 	EmailVerified                bool           `json:"email_verified"`
+	Language                     UserLanguage   `json:"language"`
 	Location                     sql.NullString `json:"location"`
 	CreatedAt                    time.Time      `json:"created_at"`
 	UpdatedAt                    time.Time      `json:"updated_at"`
@@ -621,6 +634,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (GetUserByEm
 		&i.Username,
 		&i.Email,
 		&i.EmailVerified,
+		&i.Language,
 		&i.Location,
 		&i.CreatedAt,
 		&i.UpdatedAt,
@@ -879,6 +893,7 @@ const updateUser = `-- name: UpdateUser :exec
 UPDATE "user"
 SET fullname = $2,
     location = $3,
+    language = $4,
     updated_at = now()
 WHERE id = $1
 `
@@ -887,10 +902,16 @@ type UpdateUserParams struct {
 	ID       string         `json:"id"`
 	Fullname string         `json:"fullname"`
 	Location sql.NullString `json:"location"`
+	Language UserLanguage   `json:"language"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
-	_, err := q.db.ExecContext(ctx, updateUser, arg.ID, arg.Fullname, arg.Location)
+	_, err := q.db.ExecContext(ctx, updateUser,
+		arg.ID,
+		arg.Fullname,
+		arg.Location,
+		arg.Language,
+	)
 	return err
 }
 

@@ -79,6 +79,7 @@ func createUserDBLevel(t *testing.T, ctx *gin.Context, service *service.Service,
 		Username: registerRequest.Username,
 		Email:    registerRequest.Email,
 		Password: hashed_password,
+		Language: db.UserLanguageEn,
 	}
 
 	_, err = service.Store.CreateUser(ctx, dbUser)

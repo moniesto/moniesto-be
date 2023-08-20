@@ -5,10 +5,11 @@ INSERT INTO "user" (
         username,
         email,
         password,
+        language,
         created_at,
         last_login
     )
-VALUES ($1, $2, $3, $4, $5, now(), now())
+VALUES ($1, $2, $3, $4, $5, $6, now(), now())
 RETURNING *;
 
 -- name: DeleteUser :one
@@ -73,6 +74,7 @@ SELECT "user"."id",
     "user"."username",
     "user"."email",
     "user"."email_verified",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -194,6 +196,7 @@ SELECT "user"."id",
     "user"."username",
     "user"."email",
     "user"."email_verified",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -256,6 +259,7 @@ SELECT "user"."id",
     "user"."username",
     "user"."email",
     "user"."email_verified",
+    "user"."language",
     "user"."location",
     "user"."created_at",
     "user"."updated_at",
@@ -307,6 +311,7 @@ WHERE "user"."email" = $1
 UPDATE "user"
 SET fullname = $2,
     location = $3,
+    language = $4,
     updated_at = now()
 WHERE id = $1;
 

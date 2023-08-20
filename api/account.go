@@ -103,7 +103,7 @@ func (server *Server) registerUser(ctx *gin.Context) {
 	server.loginUser(ctx)
 
 	// STEP: send welcoming email
-	go mailing.SendWelcomingEmail(createdUser.Email, server.config, createdUser.Fullname, model.LANGUAGE_ENGLISH) // TODO: update language
+	go mailing.SendWelcomingEmail(createdUser.Email, server.config, createdUser.Fullname, createdUser.Language)
 }
 
 // @Summary Check Username
@@ -182,7 +182,7 @@ func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 
 	// STEP: send verification email -> dont wait for the response
-	go mailing.SendEmailVerificationEmail(user.Email, server.config, user.Fullname, email_verification_token.Token, model.LANGUAGE_TURKISH) // TODO: update langauge
+	go mailing.SendEmailVerificationEmail(user.Email, server.config, user.Fullname, email_verification_token.Token, user.Language) // TODO: update langauge
 
 	// // STEP: send verification email -> wait for the response
 	// err = mailing.SendEmailVerificationEmail(user.Email, server.config, user.Fullname, email_verification_token.Token)

@@ -31,6 +31,7 @@ const (
 	Account_Register_InvalidUsername          = "Account_Register_InvalidUsername"
 	Account_Register_InvalidPassword          = "Account_Register_InvalidPassword"
 	Account_Register_InvalidFullname          = "Account_Register_InvalidFullname"
+	Account_Register_UnsupportedLanguage      = "Account_Register_UnsupportedLanguage"
 	Account_Register_ServerErrorCheckEmail    = "Account_Register_ServerErrorCheckEmail"
 	Account_Register_ServerErrorCheckUsername = "Account_Register_ServerErrorCheckUsername"
 	Account_Register_RegisteredEmail          = "Account_Register_RegisteredEmail"
@@ -83,6 +84,7 @@ const (
 	Account_UpdateUserProfile_InvalidBody                      = "Account_UpdateUserProfile_InvalidBody"
 	Account_UpdateUserProfile_InvalidFullname                  = "Account_UpdateUserProfile_InvalidFullname"
 	Account_UpdateUserProfile_InvalidLocation                  = "Account_UpdateUserProfile_InvalidLocation"
+	Account_UpdateUserProfile_UnsupportedLanguage              = "Account_UpdateUserProfile_UnsupportedLanguage"
 	Account_UpdateUserProfile_ServerErrorGetUser               = "Account_UpdateUserProfile_ServerErrorGetUser"
 	Account_UpdateUserProfile_ServerErrorUpdateUser            = "Account_UpdateUserProfile_ServerErrorUpdateUser"
 	Account_UpdateUserProfile_ServerErrorGetProfilePhoto       = "Account_UpdateUserProfile_ServerErrorGetProfilePhoto"
@@ -226,6 +228,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Account_Register_InvalidUsername:          "Username is invalid",
 	Account_Register_InvalidPassword:          "Password is invalid",
 	Account_Register_InvalidFullname:          "Fullname is invalid",
+	Account_Register_UnsupportedLanguage:      "Language is not supported. Supported languages: [en, tr]",
 	Account_Register_ServerErrorCheckEmail:    "Server error on checking email",
 	Account_Register_ServerErrorCheckUsername: "Server error on checking username",
 	Account_Register_RegisteredEmail:          "Email is already registered",
@@ -278,6 +281,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Account_UpdateUserProfile_InvalidBody:                      "Update user profile request body is invalid",
 	Account_UpdateUserProfile_InvalidFullname:                  "Fullname is invalid",
 	Account_UpdateUserProfile_InvalidLocation:                  "Location is invalid",
+	Account_UpdateUserProfile_UnsupportedLanguage:              "Language is not supported. Supported languages: [en, tr]",
 	Account_UpdateUserProfile_ServerErrorGetUser:               "Server error on getting user",
 	Account_UpdateUserProfile_ServerErrorUpdateUser:            "Server error updating user",
 	Account_UpdateUserProfile_ServerErrorGetProfilePhoto:       "Server error on getting profile photo",

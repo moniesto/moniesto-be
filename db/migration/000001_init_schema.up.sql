@@ -1,3 +1,5 @@
+CREATE TYPE "user_language" AS ENUM ('en', 'tr');
+
 CREATE TYPE "image_type" AS ENUM ('profile_photo', 'background_photo');
 
 CREATE TYPE "entry_position" AS ENUM ('long', 'short');
@@ -29,6 +31,7 @@ CREATE TABLE "user" (
     "password" varchar NOT NULL,
     "location" varchar,
     "login_count" integer NOT NULL DEFAULT 1,
+    "language" user_language NOT NULL DEFAULT 'en',
     "deleted" boolean NOT NULL DEFAULT false,
     "created_at" timestamp NOT NULL DEFAULT (now()),
     "updated_at" timestamp NOT NULL DEFAULT (now()),

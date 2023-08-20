@@ -3,7 +3,7 @@ package mailing
 import (
 	"fmt"
 
-	"github.com/moniesto/moniesto-be/model"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
 )
 
 type TemplateType struct {
@@ -39,16 +39,16 @@ var EmailTemplates map[string]EmailTemplateTypes = map[string]EmailTemplateTypes
 	},
 }
 
-func GetTemplate(templateName string, language model.UserLanguage) (TemplateType, error) {
+func GetTemplate(templateName string, language db.UserLanguage) (TemplateType, error) {
 	EmailTemplateTypes, ok := EmailTemplates[templateName]
 	if !ok {
 		return TemplateType{}, fmt.Errorf("template not found: %s", templateName)
 	}
 
 	switch language {
-	case model.LANGUAGE_ENGLISH:
+	case db.UserLanguageEn:
 		return EmailTemplateTypes.en, nil
-	case model.LANGUAGE_TURKISH:
+	case db.UserLanguageTr:
 		return EmailTemplateTypes.tr, nil
 	default:
 		return TemplateType{}, fmt.Errorf("template not found: %s with language %s", templateName, language)

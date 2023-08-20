@@ -38,6 +38,11 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_InvalidFullname)
 	}
 
+	err = validation.Language(string(registerRequest.Language))
+	if err != nil {
+		return db.User{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Account_Register_UnsupportedLanguage)
+	}
+
 	// any user with same email
 	checkEmail, err := service.Store.CheckEmail(ctx, validEmail)
 	if err != nil {
@@ -71,6 +76,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 		Username: registerRequest.Username,
 		Email:    registerRequest.Email,
 		Password: hashedPassword,
+		Language: db.UserLanguage(registerRequest.Language),
 	}
 
 	createdUser, err = service.Store.CreateUser(ctx, user)

@@ -349,6 +349,48 @@ func (ns NullPostCryptoStatus) Value() (driver.Value, error) {
 	return ns.PostCryptoStatus, nil
 }
 
+type UserLanguage string
+
+const (
+	UserLanguageEn UserLanguage = "en"
+	UserLanguageTr UserLanguage = "tr"
+)
+
+func (e *UserLanguage) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = UserLanguage(s)
+	case string:
+		*e = UserLanguage(s)
+	default:
+		return fmt.Errorf("unsupported scan type for UserLanguage: %T", src)
+	}
+	return nil
+}
+
+type NullUserLanguage struct {
+	UserLanguage UserLanguage
+	Valid        bool // Valid is true if UserLanguage is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullUserLanguage) Scan(value interface{}) error {
+	if value == nil {
+		ns.UserLanguage, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.UserLanguage.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullUserLanguage) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return ns.UserLanguage, nil
+}
+
 // Stores binance payment transactions info and history
 type BinancePaymentTransaction struct {
 	ID            string                 `json:"id"`
@@ -512,6 +554,7 @@ type User struct {
 	Password      string         `json:"password"`
 	Location      sql.NullString `json:"location"`
 	LoginCount    int32          `json:"login_count"`
+	Language      UserLanguage   `json:"language"`
 	Deleted       bool           `json:"deleted"`
 	CreatedAt     time.Time      `json:"created_at"`
 	UpdatedAt     time.Time      `json:"updated_at"`
