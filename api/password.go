@@ -104,7 +104,7 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 
 	// STEP: send password reset email -> dont wait for the response
-	go mailing.SendPasswordResetEmail(validEmail, server.config, fullname, password_reset_token.Token)
+	go mailing.SendPasswordResetEmail(validEmail, server.config, fullname, password_reset_token.Token, model.LANGUAGE_ENGLISH) // TODO: language update
 
 	// // STEP: send password reset email -> wait for the response
 	// err = mailing.SendPasswordResetEmail(validEmail, server.config, name, password_reset_token.Token)

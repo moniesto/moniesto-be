@@ -10,14 +10,16 @@ import (
 	"net/smtp"
 )
 
+const mainTemplatePath = "util/mailing/templates/main.html"
+
 func send(toEmails []string, fromEmail, fromPassword, smtpHost, smtpPort, templatePath, subject string, data any) error {
-	// STEP: fill template
-	t, err := template.ParseFiles(templatePath)
+	contentTpl, err := fillContentTemplate(templatePath, data)
 	if err != nil {
 		return err
 	}
-	var tpl bytes.Buffer
-	if err := t.Execute(&tpl, data); err != nil {
+
+	mainTpl, err := fillMainTemplate(contentTpl)
+	if err != nil {
 		return err
 	}
 
@@ -38,7 +40,7 @@ func send(toEmails []string, fromEmail, fromPassword, smtpHost, smtpPort, templa
 		message += fmt.Sprintf("%s: %s\r\n", k, v)
 	}
 
-	message += "\r\n" + tpl.String()
+	message += "\r\n" + mainTpl.String()
 
 	// STEP: Authentication. Connect to the SMTP Server
 	servername := smtpHost + ":" + smtpPort
@@ -96,4 +98,38 @@ func send(toEmails []string, fromEmail, fromPassword, smtpHost, smtpPort, templa
 	}
 
 	return nil
+}
+
+func fillContentTemplate(templatePath string, data any) (bytes.Buffer, error) {
+	t, err := template.ParseFiles(templatePath)
+	if err != nil {
+		return bytes.Buffer{}, err
+	}
+	var tpl bytes.Buffer
+	if err := t.Execute(&tpl, data); err != nil {
+		return bytes.Buffer{}, err
+	}
+
+	return tpl, nil
+}
+
+func fillMainTemplate(contentTemplate bytes.Buffer) (bytes.Buffer, error) {
+	t, err := template.ParseFiles(mainTemplatePath)
+	if err != nil {
+		return bytes.Buffer{}, err
+	}
+
+	data := struct {
+		Body      template.HTML
+		ActionUrl string
+	}{
+		Body: template.HTML(contentTemplate.String()),
+	}
+
+	var tpl bytes.Buffer
+	if err := t.Execute(&tpl, data); err != nil {
+		return bytes.Buffer{}, err
+	}
+
+	return tpl, nil
 }

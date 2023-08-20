@@ -125,6 +125,7 @@ func (server *Server) setupRouter() {
 	adminRouters := router.Group("/admin").Use(authMiddleware(server.tokenMaker))
 	{
 		adminRouters.POST("/update_posts_status", server.UpdatePostsStatusManual)
+		//	adminRouters.POST("/send-email/test", server.SendEmailTest)
 	}
 
 	// Payment routes

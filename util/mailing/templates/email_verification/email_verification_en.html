@@ -1,0 +1,122 @@
+<span class="preheader"
+  >Use this link to verify your email. The link is only valid for 24
+  hours.</span
+>
+<table
+  class="email-wrapper"
+  width="100%"
+  cellpadding="0"
+  cellspacing="0"
+  role="presentation"
+>
+  <tr>
+    <td align="center">
+      <table
+        class="email-content"
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        role="presentation"
+      >
+        <tr>
+          <td class="email-masthead">
+            <a
+              href="https://moniesto-bd2f6.web.app"
+              class="f-fallback email-masthead_name"
+            >
+              <span class="title-first-letter">m</span
+              ><span class="title-rest-letters">oniesto</span>
+            </a>
+          </td>
+        </tr>
+        <!-- Email Body -->
+        <tr>
+          <td class="email-body" width="570" cellpadding="0" cellspacing="0">
+            <table
+              class="email-body_inner"
+              align="center"
+              width="570"
+              cellpadding="0"
+              cellspacing="0"
+              role="presentation"
+            >
+              <!-- Body content -->
+              <tr>
+                <td class="content-cell">
+                  <div class="f-fallback">
+                    <h1>Hi {{.Name}},</h1>
+                    <p>
+                      You recently requested to verify your email address for
+                      your
+                      <span class="title-first-letter">m</span
+                      ><span>oniesto</span> account. Use the button below to
+                      verify it.
+                      <strong
+                        >This verification attemp is only valid for the next 24
+                        hours.</strong
+                      >
+                    </p>
+                    <!-- Action -->
+                    <table
+                      class="body-action"
+                      align="center"
+                      width="100%"
+                      cellpadding="0"
+                      cellspacing="0"
+                      role="presentation"
+                    >
+                      <tr>
+                        <td align="center">
+                          <table
+                            width="100%"
+                            border="0"
+                            cellspacing="0"
+                            cellpadding="0"
+                            role="presentation"
+                          >
+                            <tr>
+                              <td align="center">
+                                <a
+                                  href="{{.ActionUrl}}"
+                                  class="f-fallback button button--green"
+                                  target="_blank"
+                                  >Verify Your Email</a
+                                >
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                    <p>
+                      If you did not request an email verification, please
+                      ignore this email.
+                    </p>
+                    <p>
+                      Thanks, <br />
+                      <span class="title-first-letter">M</span
+                      ><span>oniesto</span>
+                      Team
+                    </p>
+                    <!-- Sub copy -->
+                    <table class="body-sub" role="presentation">
+                      <tr>
+                        <td>
+                          <p class="f-fallback sub">
+                            If you’re having trouble with the button above, copy
+                            and paste the URL below into your web browser.
+                          </p>
+                          <p class="f-fallback sub">{{.ActionUrl}}</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

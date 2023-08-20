@@ -4,8 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/mailing"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -36,4 +38,18 @@ func (server *Server) UpdatePostsStatusManual(ctx *gin.Context) {
 	} else {
 		ctx.Status(http.StatusForbidden)
 	}
+}
+
+func (server *Server) SendEmailTest(ctx *gin.Context) {
+
+	mailing.SendPayoutEmail("parvvazov@gmail.com", server.config, "Parvin Eyvazov", "eyvzov", "Davut Turug", "111111", 1, 12, 110, 10, 99, model.LANGUAGE_TURKISH)
+
+	// mailing.SendNewPostEmail("parvvazov@gmail.com", server.config, "Parvin Eyvazov", "Davut Turug", "parvin", "BTCUSDT", model.LANGUAGE_TURKISH)
+
+	// mailing.SendPasswordResetEmail("parvvazov@gmail.com", server.config, "Parvin Eyvazov", "token", model.LANGUAGE_TURKISH)
+
+	//	mailing.SendWelcomingEmail("parvvazov@gmail.com", server.config, "Parvin Eyvazov", model.LANGUAGE_TURKISH)
+
+	// mailing.SendEmailVerificationEmail("parvvazov@gmail.com", server.config, "Parvin Eyvazov", "token1", model.LANGUAGE_TURKISH)
+
 }

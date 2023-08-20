@@ -2,15 +2,18 @@ package mailing
 
 import (
 	"github.com/moniesto/moniesto-be/config"
+	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 var resetPasswordURL string = "change-password"
 var verifyEmailURL string = "verify-email"
 
-func SendPasswordResetEmail(to string, config config.Config, fullname, token string) error {
-	templatePath := "util/mailing/templates/password_reset.html"
-	subject := "Moniesto: Reset password"
+func SendPasswordResetEmail(to string, config config.Config, fullname, token string, language model.UserLanguage) error {
+	template, err := GetTemplate("password-reset", language)
+	if err != nil {
+		return err
+	}
 
 	data := struct {
 		Name      string
@@ -20,7 +23,7 @@ func SendPasswordResetEmail(to string, config config.Config, fullname, token str
 		ActionUrl: createResetPasswordURL(config.ClientURL, token),
 	}
 
-	err := send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, templatePath, subject, data)
+	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)
 	if err != nil {
 		systemError.Log(systemError.InternalMessages["SendPasswordResetEmail"](err))
 		return err

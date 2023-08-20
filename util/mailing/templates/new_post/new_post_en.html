@@ -1,0 +1,110 @@
+<span class="preheader">New analysis published at Moniesto.</span>
+<table
+  class="email-wrapper"
+  width="100%"
+  cellpadding="0"
+  cellspacing="0"
+  role="presentation"
+>
+  <tr>
+    <td align="center">
+      <table
+        class="email-content"
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        role="presentation"
+      >
+        <tr>
+          <td class="email-masthead">
+            <a
+              href="https://moniesto.com"
+              class="f-fallback email-masthead_name"
+            >
+              <span class="title-first-letter">m</span
+              ><span class="title-rest-letters">oniesto</span>
+            </a>
+          </td>
+        </tr>
+        <!-- Email Body -->
+        <tr>
+          <td class="email-body" width="570" cellpadding="0" cellspacing="0">
+            <table
+              class="email-body_inner"
+              align="center"
+              width="570"
+              cellpadding="0"
+              cellspacing="0"
+              role="presentation"
+            >
+              <!-- Body content -->
+              <tr>
+                <td class="content-cell">
+                  <div class="f-fallback">
+                    <h1>Hi {{.NameUser}},</h1>
+                    <p>
+                      {{.NameMoniest}} ( <strong> {{.Username}} </strong> )
+                      shared new analysis for
+                      <span class="currency">{{.Currency}}</span>. You can see
+                      moniest's analysis by clicking the button below.
+                    </p>
+
+                    <table
+                      class="body-action"
+                      align="center"
+                      width="100%"
+                      cellpadding="0"
+                      cellspacing="0"
+                      role="presentation"
+                    >
+                      <tr align="center">
+                        <td align="center">
+                          <a
+                            href="{{.ActionUrl}}"
+                            class="f-fallback button button--green"
+                            target="_blank"
+                          >
+                            Go to Moniest</a
+                          >
+                        </td>
+                      </tr>
+                    </table>
+                    <!-- Action -->
+
+                    <p>
+                      Quickly review before the analysis expires, be one step
+                      ahead.
+                    </p>
+                    <p>
+                      Thanks, <br />
+                      <span class="title-first-letter">M</span
+                      ><span>oniesto</span>
+                      team
+                    </p>
+                    <!-- Sub copy -->
+                    <table class="body-sub" role="presentation">
+                      <tr>
+                        <td>
+                          <p class="f-fallback sub">
+                            If you’re having trouble with the button above, copy
+                            and paste the URL into your web browser:
+                            {{.ActionUrl}}
+                          </p>
+
+                          <p class="f-fallback sub">
+                            In case of any questions or problems, please do not
+                            hesitate to contact us at official@moniesto.com.
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

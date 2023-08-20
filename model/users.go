@@ -6,6 +6,11 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 )
 
+type UserLanguage string
+
+const LANGUAGE_ENGLISH UserLanguage = "en"
+const LANGUAGE_TURKISH UserLanguage = "tr"
+
 type UserDBResponse []db.GetUserByUsernameRow
 
 type UserStatResponse struct {

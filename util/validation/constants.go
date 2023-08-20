@@ -1,6 +1,9 @@
 package validation
 
-var adminEmails = []string{"pervin.eyvazov1999@gmail.com"}
+var adminEmails = []string{
+	"pervin.eyvazov1999@gmail.com",
+	"turugdavut@gmail.com",
+}
 
 var ValidPasswordLength = 6
 var MaxBioLength = 150

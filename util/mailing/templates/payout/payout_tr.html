@@ -1,0 +1,121 @@
+<span class="preheader">Aylık ödeme bilgisi.</span>
+<table
+  class="email-wrapper"
+  width="100%"
+  cellpadding="0"
+  cellspacing="0"
+  role="presentation"
+>
+  <tr>
+    <td align="center">
+      <table
+        class="email-content"
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        role="presentation"
+      >
+        <tr>
+          <td class="email-masthead">
+            <a
+              href="https://moniesto.com"
+              class="f-fallback email-masthead_name"
+            >
+              <span class="title-first-letter">m</span
+              ><span class="title-rest-letters">oniesto</span>
+            </a>
+          </td>
+        </tr>
+        <!-- Email Body -->
+        <tr>
+          <td class="email-body" width="570" cellpadding="0" cellspacing="0">
+            <table
+              class="email-body_inner"
+              align="center"
+              width="570"
+              cellpadding="0"
+              cellspacing="0"
+              role="presentation"
+            >
+              <!-- Body content -->
+              <tr>
+                <td class="content-cell">
+                  <div class="f-fallback">
+                    <h1>Merhaba {{.NameMoniest}},</h1>
+                    <p>
+                      Aboneniz {{.NameUser}} (
+                      <strong>{{.Username}}</strong> )'ın aylık ödemesi
+                      başarıyla <strong>{{.BinanceID}}</strong> Binance ID'li
+                      Binance hesabınıza aktarıldı.
+                    </p>
+                    <!-- Action -->
+                    <table
+                      class="body-action"
+                      align="center"
+                      width="100%"
+                      cellpadding="0"
+                      cellspacing="0"
+                      role="presentation"
+                    >
+                      <tr>
+                        <td>
+                          <h2>Ödeme Detayı</h2>
+                          <table class="detail-table">
+                            <tr>
+                              <td align="start">Dönem</td>
+                              <td align="end">
+                                {{.CurrentMonth}} / {{.TotalMonth}}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td align="start">Abonelik Ücreti</td>
+                              <td align="end">{{.SubscribedFee}} $</td>
+                            </tr>
+                            <tr>
+                              <td align="start">
+                                Operasyon Ücreti ({{.OperationFeePercentage}}%)
+                              </td>
+                              <td align="end">- {{.OperationFee}} $</td>
+                            </tr>
+                            <tr></tr>
+                            <tr class="bordered">
+                              <td align="start">Toplam Tutar</td>
+                              <td align="end">{{.Amount}} $</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                    <p>Değerli katkınız için teşekkür ederiz.</p>
+                    <p>
+                      Profesyonel işbirliğimizin devamını diler, gelecekteki
+                      başarılarınızı sabırsızlıkla bekleriz.
+                    </p>
+                    <p>
+                      Teşekkürler, <br />
+                      <span class="title-first-letter">M</span
+                      ><span>oniesto</span>
+                      Ekibi
+                    </p>
+                    <!-- Sub copy -->
+                    <table class="body-sub" role="presentation">
+                      <tr>
+                        <td>
+                          <p class="f-fallback sub">
+                            Herhangi bir sorunuz veya sorununuz olması
+                            durumunda, lütfen official@moniesto.com adresinden
+                            bizimle iletişime geçmekten çekinmeyin.
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

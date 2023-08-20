@@ -1,0 +1,112 @@
+<span class="preheader">Moniesto'da yeni gönderi.</span>
+<table
+  class="email-wrapper"
+  width="100%"
+  cellpadding="0"
+  cellspacing="0"
+  role="presentation"
+>
+  <tr>
+    <td align="center">
+      <table
+        class="email-content"
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        role="presentation"
+      >
+        <tr>
+          <td class="email-masthead">
+            <a
+              href="https://moniesto.com"
+              class="f-fallback email-masthead_name"
+            >
+              <span class="title-first-letter">m</span
+              ><span class="title-rest-letters">oniesto</span>
+            </a>
+          </td>
+        </tr>
+        <!-- Email Body -->
+        <tr>
+          <td class="email-body" width="570" cellpadding="0" cellspacing="0">
+            <table
+              class="email-body_inner"
+              align="center"
+              width="570"
+              cellpadding="0"
+              cellspacing="0"
+              role="presentation"
+            >
+              <!-- Body content -->
+              <tr>
+                <td class="content-cell">
+                  <div class="f-fallback">
+                    <h1>Merhaba {{.NameUser}},</h1>
+                    <p>
+                      {{.NameMoniest}}({{.Username}}),
+                      <span class="currency">{{.Currency}}</span> için yeni bir
+                      analiz paylaştı. Moniest'in analizini görmek için
+                      aşağıdaki butona tıklayabilirsiniz.
+                    </p>
+
+                    <table
+                      class="body-action"
+                      align="center"
+                      width="100%"
+                      cellpadding="0"
+                      cellspacing="0"
+                      role="presentation"
+                    >
+                      <tr align="center">
+                        <td align="center">
+                          <a
+                            href="{{.ActionUrl}}"
+                            class="f-fallback button button--green"
+                            target="_blank"
+                          >
+                            Moniest'a Git</a
+                          >
+                        </td>
+                      </tr>
+                    </table>
+                    <!-- Action -->
+
+                    <p>
+                      Sona ermeden analizi hızla gözden geçirin, bir adım önde
+                      olun.
+                    </p>
+                    <p>
+                      Teşekkürler, <br />
+                      <span class="title-first-letter">M</span
+                      ><span>oniesto</span>
+                      Ekibi
+                    </p>
+
+                    <!-- Sub copy -->
+                    <table class="body-sub" role="presentation">
+                      <tr>
+                        <td>
+                          <p class="f-fallback sub">
+                            Yukarıdaki butonla ilgili sorun yaşıyorsanız, bu
+                            URL'i web tarayıcınıza kopyalayıp
+                            yapıştırabilirsiniz: {{.ActionUrl}}
+                          </p>
+
+                          <p class="f-fallback sub">
+                            Herhangi bir sorunuz veya sorununuz olması
+                            durumunda, lütfen official@moniesto.com adresinden
+                            bizimle iletişime geçmekten çekinmeyin.
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

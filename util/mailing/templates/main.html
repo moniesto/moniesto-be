@@ -8,11 +8,10 @@
     <meta name="supported-color-schemes" content="light dark" />
     <title></title>
     <style type="text/css" rel="stylesheet" media="all">
-      /* Base ------------------------------ */
       :root {
-        --primary-color: #26283d;
-        --text-color: #26283d;
-        --secondary-color: #24d4b3;
+        --primary-color: #26283d; /* left on purpose */
+        --text-color: #26283d; /* left on purpose */
+        --secondary-color: #24d4b3; /* left on purpose */
         color-scheme: light dark;
       }
       * {
@@ -28,7 +27,7 @@
       }
 
       a {
-        color: var(--secondary-color);
+        color: #24d4b3;
       }
 
       a img {
@@ -54,7 +53,7 @@
 
       h1 {
         margin-top: 0;
-        color: var(--text-color);
+        color: #26283d;
         font-size: 22px;
         font-weight: bold;
         text-align: left;
@@ -62,7 +61,7 @@
 
       h2 {
         margin-top: 0;
-        color: var(--text-color);
+        color: #26283d;
         font-size: 16px;
         font-weight: bold;
         text-align: left;
@@ -70,7 +69,7 @@
 
       h3 {
         margin-top: 0;
-        color: var(--text-color);
+        color: #26283d;
         font-size: 14px;
         font-weight: bold;
         text-align: left;
@@ -90,6 +89,11 @@
         font-size: 13px;
       }
 
+      .currency {
+        color: #f0b90c;
+        font-weight: bold;
+      }
+
       /* Buttons ------------------------------ */
 
       .button {
@@ -104,7 +108,7 @@
       }
 
       .button--green {
-        background-color: var(--secondary-color);
+        background-color: #24d4b3;
       }
 
       @media only screen and (max-width: 500px) {
@@ -117,11 +121,11 @@
       /* Data table ------------------------------ */
       body {
         background-color: #f2f4f6;
-        color: var(--text-color);
+        color: #26283d;
       }
 
       p {
-        color: var(--text-color);
+        color: #26283d;
       }
 
       .email-wrapper {
@@ -218,11 +222,11 @@
       }
 
       .title-first-letter {
-        color: var(--secondary-color);
+        color: #24d4b3;
       }
 
       .title-rest-letters {
-        color: var(--text-color);
+        color: #26283d;
       }
 
       /*Media Queries ------------------------------ */
@@ -261,5 +265,7 @@
     </style>
   </head>
 
-  <body></body>
+  <body>
+    {{.Body}}
+  </body>
 </html>
