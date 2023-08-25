@@ -22,7 +22,7 @@ func SendEmailVerificationEmail(to string, config config.Config, fullname, token
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["SendEmailVerificationEmail"](err))
+		systemError.Log("server error on sending email verification email", err.Error())
 		return err
 	}
 

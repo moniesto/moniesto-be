@@ -261,6 +261,55 @@ func (q *Queries) GetSubscribers(ctx context.Context, arg GetSubscribersParams) 
 	return items, nil
 }
 
+const getSubscribersBriefs = `-- name: GetSubscribersBriefs :many
+SELECT "u"."id",
+    "u"."fullname",
+    "u"."username",
+    "u"."email",
+    "u"."language"
+FROM "user" as u
+    INNER JOIN "user_subscription" as us ON "us"."user_id" = "u"."id"
+    AND "us"."active" = TRUE
+WHERE "us"."moniest_id" = $1
+`
+
+type GetSubscribersBriefsRow struct {
+	ID       string       `json:"id"`
+	Fullname string       `json:"fullname"`
+	Username string       `json:"username"`
+	Email    string       `json:"email"`
+	Language UserLanguage `json:"language"`
+}
+
+func (q *Queries) GetSubscribersBriefs(ctx context.Context, moniestID string) ([]GetSubscribersBriefsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getSubscribersBriefs, moniestID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetSubscribersBriefsRow{}
+	for rows.Next() {
+		var i GetSubscribersBriefsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Fullname,
+			&i.Username,
+			&i.Email,
+			&i.Language,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getSubscription = `-- name: GetSubscription :one
 SELECT id, user_id, moniest_id, active, latest_transaction_id, subscription_start_date, subscription_end_date, created_at, updated_at
 FROM "user_subscription"

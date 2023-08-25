@@ -120,3 +120,14 @@ FROM "user" as u
     LEFT JOIN "moniest_subscription_info" as msi ON "msi"."moniest_id" = "m"."id"
 WHERE "us"."moniest_id" = $1
 LIMIT $2 OFFSET $3;
+
+-- name: GetSubscribersBriefs :many
+SELECT "u"."id",
+    "u"."fullname",
+    "u"."username",
+    "u"."email",
+    "u"."language"
+FROM "user" as u
+    INNER JOIN "user_subscription" as us ON "us"."user_id" = "u"."id"
+    AND "us"."active" = TRUE
+WHERE "us"."moniest_id" = $1;

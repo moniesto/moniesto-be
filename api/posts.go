@@ -9,6 +9,7 @@ import (
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/mailing"
 )
 
 // @Summary Create Post
@@ -83,6 +84,12 @@ func (server *Server) createPost(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, response)
+
+	// STEP: send email to all subscribers
+	subscribers, _ := server.service.GetSubscribersBriefs(ctx, moniest.MoniestID)
+	for _, subscriber := range subscribers {
+		go mailing.SendNewPostEmail(subscriber.Email, server.config, subscriber.Fullname, moniest.Fullname, moniest.Username, post.Currency, subscriber.Language)
+	}
 }
 
 // @Summary Get Moniest Posts

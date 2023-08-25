@@ -162,6 +162,17 @@ func (service *Service) GetSubscribers(ctx *gin.Context, moniestID string, limit
 	return model.NewGetUsersResponse(users), nil
 }
 
+func (service *Service) GetSubscribersBriefs(ctx *gin.Context, moniestID string) ([]db.GetSubscribersBriefsRow, error) {
+
+	subscribers, err := service.Store.GetSubscribersBriefs(ctx, moniestID)
+	if err != nil {
+		systemError.Log("server error on getting subscribers brief", err.Error())
+		return []db.GetSubscribersBriefsRow{}, err
+	}
+
+	return subscribers, nil
+}
+
 func (service *Service) GetUserSubscriptionInfo(ctx *gin.Context, userID, moniestUsername string) (db.GetUserSubscriptionInfoRow, error) {
 
 	// STEP: get user subscription info

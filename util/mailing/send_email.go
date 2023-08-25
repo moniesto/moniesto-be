@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"html/template"
-	"log"
 	"net/mail"
 	"net/smtp"
 )
@@ -49,52 +48,52 @@ func send(toEmails []string, fromEmail, fromPassword, smtpHost, smtpPort, templa
 
 	// TLS config
 	tlsconfig := &tls.Config{
-		InsecureSkipVerify: true,
+		InsecureSkipVerify: false, // false -> prod | true -> test
 		ServerName:         smtpHost,
 	}
 
 	conn, err := tls.Dial("tcp", servername, tlsconfig)
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	c, err := smtp.NewClient(conn, smtpHost)
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	// Auth
 	if err = c.Auth(auth); err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	// To && From
 	if err = c.Mail(fromEmail); err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	if err = c.Rcpt(toEmails[0]); err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	// Data
 	w, err := c.Data()
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	_, err = w.Write([]byte(message))
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	err = w.Close()
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	if err := c.Quit(); err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	return nil

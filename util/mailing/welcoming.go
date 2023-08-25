@@ -22,7 +22,7 @@ func SendWelcomingEmail(to string, config config.Config, name string, language d
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["SendWelcomingEmail"](err))
+		systemError.Log("server error on sending welcoming email", err.Error())
 		return err
 	}
 

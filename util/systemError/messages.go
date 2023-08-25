@@ -53,13 +53,4 @@ var InternalMessages = internalErrorMessageType{
 	"CreatePasswordResetToken": internalReport(InternalErrorMessage{
 		message: "Server error on creating password reset token instance on db",
 	}),
-	"SendPasswordResetEmail": internalReport(InternalErrorMessage{
-		message: "Server error on sending password reset email",
-	}),
-	"SendEmailVerificationEmail": internalReport(InternalErrorMessage{
-		message: "Server error on sending email verification email",
-	}),
-	"SendWelcomingEmail": internalReport(InternalErrorMessage{
-		message: "Server error on sending welcoming email",
-	}),
 }

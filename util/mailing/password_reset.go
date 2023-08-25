@@ -25,7 +25,7 @@ func SendPasswordResetEmail(to string, config config.Config, fullname, token str
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)
 	if err != nil {
-		systemError.Log(systemError.InternalMessages["SendPasswordResetEmail"](err))
+		systemError.Log("server error on sending password reset email", err.Error())
 		return err
 	}
 
