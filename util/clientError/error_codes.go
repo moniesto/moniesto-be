@@ -3,13 +3,15 @@ package clientError
 type ErrorMessagesType map[string]string
 
 const (
-	General_UserNotMoniest                    = "General_UserNotMoniest"
-	General_UserNotFoundByID                  = "General_UserNotFoundByID"
-	General_UserNotFoundByUsername            = "General_UserNotFoundByUsername"
-	General_MoniestNotFoundByUsername         = "General_MoniestNotFoundByUsername"
-	General_ServerErrorGetMoniestByUsername   = "General_ServerErrorGetMoniestByUsername"
-	General_ServerErrorCheckMoniestByUsername = "General_ServerErrorCheckMoniestByUsername"
-	General_ServerErrorCheckMoniestByUserID   = "General_ServerErrorCheckMoniestByUserID"
+	General_UserNotMoniest                        = "General_UserNotMoniest"
+	General_UserNotFoundByID                      = "General_UserNotFoundByID"
+	General_UserNotFoundByUsername                = "General_UserNotFoundByUsername"
+	General_MoniestNotFoundByUsername             = "General_MoniestNotFoundByUsername"
+	General_ServerErrorGetMoniestByUsername       = "General_ServerErrorGetMoniestByUsername"
+	General_ServerErrorCheckMoniestByUsername     = "General_ServerErrorCheckMoniestByUsername"
+	General_ServerErrorCheckMoniestByUserID       = "General_ServerErrorCheckMoniestByUserID"
+	General_ServerErrorGettingUserLanguageByEmail = "General_ServerErrorGettingUserLanguageByEmail"
+	General_ServerErrorUserLanguageNotFound       = "General_ServerErrorUserLanguageNotFound"
 
 	Account_Authorization_NotProvidedHeader = "Account_Authorization_NotProvidedHeader"
 	Account_Authorization_InvalidHeader     = "Account_Authorization_InvalidHeader"
@@ -200,13 +202,15 @@ const (
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
-	General_UserNotMoniest:                    "User is not moniest",
-	General_UserNotFoundByID:                  "User not found with this user ID",
-	General_UserNotFoundByUsername:            "User not found with this username",
-	General_MoniestNotFoundByUsername:         "No moniest with this username",
-	General_ServerErrorGetMoniestByUsername:   "Server error on getting moniest by username",
-	General_ServerErrorCheckMoniestByUsername: "Server error on checking user is moniest by username",
-	General_ServerErrorCheckMoniestByUserID:   "Server error on checking user is moniest by user ID",
+	General_UserNotMoniest:                        "User is not moniest",
+	General_UserNotFoundByID:                      "User not found with this user ID",
+	General_UserNotFoundByUsername:                "User not found with this username",
+	General_MoniestNotFoundByUsername:             "No moniest with this username",
+	General_ServerErrorGetMoniestByUsername:       "Server error on getting moniest by username",
+	General_ServerErrorCheckMoniestByUsername:     "Server error on checking user is moniest by username",
+	General_ServerErrorCheckMoniestByUserID:       "Server error on checking user is moniest by user ID",
+	General_ServerErrorGettingUserLanguageByEmail: "Server error on getting user language by email",
+	General_ServerErrorUserLanguageNotFound:       "User language not found",
 
 	Account_Authorization_NotProvidedHeader: "Authorization Header is not provided",
 	Account_Authorization_InvalidHeader:     "Authorization Header is invalid",

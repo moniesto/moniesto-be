@@ -427,3 +427,17 @@ FROM "user"
     LEFT JOIN "user_subscription" as "us" ON "us"."user_id" = "user"."id"
     AND "us"."active" = TRUE
 where "user"."username" = $1;
+
+-- name: GetUserLanguageByEmail :one
+SELECT "language"
+FROM "user"
+WHERE "email" = $1;
+
+-- -- name: GetUserLanguageByID :one
+-- SELECT "language"
+-- FROM "user"
+-- WHERE "id" = $1;
+-- -- name: GetUserLanguageByUsername :one
+-- SELECT "language"
+-- FROM "user"
+-- WHERE "username" = $1;

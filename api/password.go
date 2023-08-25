@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util/clientError"
@@ -102,10 +101,13 @@ func (server *Server) sendResetPasswordEmail(ctx *gin.Context) {
 		return
 	}
 
+	// STEP: get user language [not handling error part]
+	language, _ := server.service.GetUserLanguageByEmail(ctx, req.Email)
+
 	ctx.Status(http.StatusAccepted)
 
 	// STEP: send password reset email -> dont wait for the response
-	go mailing.SendPasswordResetEmail(validEmail, server.config, fullname, password_reset_token.Token, db.UserLanguageEn) // TODO: language update
+	go mailing.SendPasswordResetEmail(validEmail, server.config, fullname, password_reset_token.Token, language)
 
 	// // STEP: send password reset email -> wait for the response
 	// err = mailing.SendPasswordResetEmail(validEmail, server.config, name, password_reset_token.Token)

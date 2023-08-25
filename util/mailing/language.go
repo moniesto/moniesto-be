@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	db "github.com/moniesto/moniesto-be/db/sqlc"
+	"github.com/moniesto/moniesto-be/util/systemError"
 )
 
 type TemplateType struct {
@@ -50,6 +51,9 @@ func GetTemplate(templateName string, language db.UserLanguage) (TemplateType, e
 		return EmailTemplateTypes.en, nil
 	case db.UserLanguageTr:
 		return EmailTemplateTypes.tr, nil
+	case "": // empty language case
+		systemError.Log("language is empty, using -en- as default")
+		return EmailTemplateTypes.en, nil
 	default:
 		return TemplateType{}, fmt.Errorf("template not found: %s with language %s", templateName, language)
 	}

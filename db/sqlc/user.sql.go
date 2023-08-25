@@ -840,6 +840,19 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUs
 	return i, err
 }
 
+const getUserLanguageByEmail = `-- name: GetUserLanguageByEmail :one
+SELECT "language"
+FROM "user"
+WHERE "email" = $1
+`
+
+func (q *Queries) GetUserLanguageByEmail(ctx context.Context, email string) (UserLanguage, error) {
+	row := q.db.QueryRowContext(ctx, getUserLanguageByEmail, email)
+	var language UserLanguage
+	err := row.Scan(&language)
+	return language, err
+}
+
 const getUserStatsByUsername = `-- name: GetUserStatsByUsername :one
 SELECT COUNT("us"."id") as "user_subscription_count"
 FROM "user"

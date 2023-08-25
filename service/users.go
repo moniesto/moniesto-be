@@ -292,3 +292,18 @@ func (service *Service) GetUserStats(ctx *gin.Context, username string) (model.U
 
 	return model.UserStatResponse{SubscriptionCount: stats}, nil
 }
+
+func (service *Service) GetUserLanguageByEmail(ctx *gin.Context, email string) (db.UserLanguage, error) {
+
+	userLanguage, err := service.Store.GetUserLanguageByEmail(ctx, email)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", clientError.CreateError(http.StatusNotFound, clientError.General_ServerErrorUserLanguageNotFound)
+		}
+
+		systemError.Log("server error while getting user language")
+		return "", clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorGettingUserLanguageByEmail)
+	}
+
+	return userLanguage, nil
+}
