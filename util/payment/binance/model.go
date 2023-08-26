@@ -73,16 +73,16 @@ type QueryOrderData struct {
 }
 
 type QueryPaymentInfo struct {
-	PayerId             int                        `json:"payerId"`
+	PayerId             string                     `json:"payerId"`
 	PayMethod           string                     `json:"payMethod"`
 	PaymentInstructions []QueryPaymentInstructions `json:"paymentInstructions"`
 	Channel             string                     `json:"channel"`
 }
 
 type QueryPaymentInstructions struct {
-	Currency string  `json:"currency"`
-	Amount   float64 `json:"amount"`
-	Price    float64 `json:"price"`
+	Currency string `json:"currency"`
+	Amount   string `json:"amount"`
+	Price    string `json:"price"`
 }
 
 type Env struct {
@@ -104,8 +104,21 @@ type WebhookRequest struct {
 }
 
 type WebhookData struct {
-	MerchantTradeNo string           `json:"merchantTradeNo"`
-	PaymentInfo     QueryPaymentInfo `json:"paymentInfo"`
+	MerchantTradeNo string             `json:"merchantTradeNo"`
+	PaymentInfo     WebhookPaymentInfo `json:"paymentInfo"`
+}
+
+type WebhookPaymentInfo struct {
+	PayerId             int                          `json:"payerId"`
+	PayMethod           string                       `json:"payMethod"`
+	PaymentInstructions []WebhookPaymentInstructions `json:"paymentInstructions"`
+	Channel             string                       `json:"channel"`
+}
+
+type WebhookPaymentInstructions struct {
+	Currency string  `json:"currency"`
+	Amount   float64 `json:"amount"`
+	Price    float64 `json:"price"`
 }
 
 /*
