@@ -12,6 +12,9 @@ import (
 func (server *Server) TriggerBinanceTransactionWebhook(ctx *gin.Context) {
 	var req binance.WebhookRequest
 
+	// TODO: remove log
+	systemError.LogBody("binance trigger webhook", ctx)
+
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		systemError.Log("webhook body bind error", err.Error())
