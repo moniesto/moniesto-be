@@ -15,7 +15,7 @@ func (server *Server) TriggerBinanceTransactionWebhook(ctx *gin.Context) {
 	var req binance.WebhookRequest
 
 	// TODO: remove log
-	systemError.LogBody("binance trigger webhook", ctx)
+	// systemError.LogBody("binance trigger webhook", ctx)
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -37,6 +37,13 @@ func (server *Server) TriggerBinanceTransactionWebhook(ctx *gin.Context) {
 	_, err = server.service.CheckPaymentTransactionStatus(ctx, webhookData.MerchantTradeNo)
 	if err != nil {
 		systemError.Log("webhook check transaction status error", err.Error())
+
+		// STEP: stop sending webhook if user is already subscribed [subscription handled by other checker]
+		if clientError.ParseErrorCode(err) == clientError.Moniest_Subscribe_AlreadySubscribed {
+			ctx.JSON(http.StatusOK, `{"returnCode":"SUCCESS","returnMessage":null}`)
+			return
+		}
+
 		return
 	}
 

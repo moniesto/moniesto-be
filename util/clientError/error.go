@@ -21,6 +21,13 @@ func CreateError(http_code int, error_code string) error {
 	return errors.New(error_str)
 }
 
+func ParseErrorCode(err error) string {
+	error_message := err.Error()
+	messages := strings.Split(error_message, splittedWith)
+
+	return messages[1]
+}
+
 func ParseError(err error) (int, gin.H) {
 	error_message := err.Error()
 	messages := strings.Split(error_message, splittedWith)
