@@ -3,18 +3,18 @@ package service
 import (
 	"database/sql"
 	"net/http"
+	"time"
 	"unsafe"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
-	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/system"
 )
 
-func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, userID string, latestTransactionID string, numberOfMonths int) error {
+func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, userID string, latestTransactionID string, subscriptionStartDate, subscriptionEndDate time.Time) error {
 	// STEP: get subscription status
 	exist, subscription, err := service.GetUserSubscriptionStatus(ctx, moniestID, userID)
 	if err != nil {
@@ -27,9 +27,6 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 			return clientError.CreateError(http.StatusBadRequest, clientError.Moniest_Subscribe_AlreadySubscribed)
 		}
 	}
-
-	subscriptionStartDate := util.Now()
-	subscriptionEndDate := subscriptionStartDate.AddDate(0, numberOfMonths, 0)
 
 	// STEP: add | update db
 	if exist {

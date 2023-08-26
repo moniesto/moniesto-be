@@ -13,6 +13,7 @@ import (
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/mailing"
 	"github.com/moniesto/moniesto-be/util/payment/binance"
 	"github.com/moniesto/moniesto-be/util/system"
 )
@@ -144,18 +145,22 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 			return "", clientError.CreateError(http.StatusInternalServerError, clientError.Payment_CheckBinanceTransaction_ServerErrorUpdateStatusSuccess)
 		}
 
+		subscriptionStartDate := util.Now()
+		subscriptionEndDate := subscriptionStartDate.AddDate(0, int(updatedBinancePaymentTransaction.DateValue), 0)
+
 		// STEP: subscribe to moniest
 		err = service.SubscribeMoniest(ctx,
 			updatedBinancePaymentTransaction.MoniestID,
 			updatedBinancePaymentTransaction.UserID,
 			updatedBinancePaymentTransaction.ID,
-			int(updatedBinancePaymentTransaction.DateValue),
+			subscriptionStartDate,
+			subscriptionEndDate,
 		)
 		if err != nil {
 			return "", err
 		}
 
-		// TODO: create payout history (or maybe do it in subscribe function)
+		// STEP: create payout history
 		service.CreateBinancePayoutHistories(ctx, db.CreateBinancePayoutHistoryParams{
 			TransactionID: updatedBinancePaymentTransaction.ID,
 			UserID:        updatedBinancePaymentTransaction.UserID,
@@ -167,6 +172,13 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 			DateValue:     updatedBinancePaymentTransaction.DateValue,
 			Status:        db.BinancePayoutStatusPending,
 		})
+
+		// STEP: send emails to user and moniest
+		service.sendSubscribedEmails(
+			ctx, updatedBinancePaymentTransaction.UserID, updatedBinancePaymentTransaction.MoniestID,
+			subscriptionStartDate, subscriptionEndDate, updatedBinancePaymentTransaction.MoniestFee,
+			updatedBinancePaymentTransaction.Amount, int(updatedBinancePaymentTransaction.DateValue),
+		)
 
 		return string(updatedBinancePaymentTransaction.Status), nil
 	}
@@ -183,6 +195,28 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 	}
 
 	return string(updatedBinancePaymentTransaction.Status), nil
+}
+
+func (service *Service) sendSubscribedEmails(ctx *gin.Context, userID, moniestID string, subscriptionStartDate, subscriptionEndDate time.Time, subscriptionFee, amount float64, subscriptionMonth int) {
+	// STEP: fetch user and moniest infos
+	moniest, err := service.GetMoniestByMoniestID(ctx, moniestID)
+	if err != nil {
+		system.LogError("sending subscribe email [user] - getting user error", err.Error())
+	}
+
+	user, err := service.GetOwnUserByID(ctx, userID)
+	if err != nil {
+		system.LogError("sending subscribe email [user] - getting user error", err.Error())
+	}
+
+	// STEP: moniest & user is valid
+	if err == nil {
+		// STEP: send subscribed email to moniest
+		go mailing.SendSubscribedEmailMoniest(moniest.Email, service.config, moniest.Fullname, user.Fullname, user.Username, subscriptionStartDate, subscriptionEndDate, subscriptionFee, subscriptionMonth, moniest.Language)
+
+		// STEP: send subscribed email to user
+		go mailing.SendSubscribedEmailUser(user.Email, service.config, user.Fullname, moniest.Fullname, moniest.Username, subscriptionStartDate, subscriptionEndDate, subscriptionFee, amount, subscriptionMonth, user.Language)
+	}
 }
 
 func (service *Service) CheckPendingPaymentTransaction(ctx *gin.Context, moniestUsername, user_id string) (bool, *time.Time, *db.CheckPendingBinancePaymentTransactionByMoniestUsernameRow, error) {
