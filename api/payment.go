@@ -1,7 +1,9 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/util/clientError"
@@ -21,8 +23,18 @@ func (server *Server) TriggerBinanceTransactionWebhook(ctx *gin.Context) {
 		return
 	}
 
+	// STEP: convert webhook data from str to struct
+	webhookDataStr := req.WebhookDataStr
+	webhookDataStr = strings.ReplaceAll(webhookDataStr, "\\", "")
+
+	webhookData := binance.WebhookData{}
+	err := json.Unmarshal([]byte(webhookDataStr), &webhookData)
+	if err != nil {
+		systemError.Log("webhook data bind error", err.Error())
+	}
+
 	// STEP: check payment transaction status
-	_, err := server.service.CheckPaymentTransactionStatus(ctx, req.WebhookData.MerchantTradeNo)
+	_, err = server.service.CheckPaymentTransactionStatus(ctx, webhookData.MerchantTradeNo)
 	if err != nil {
 		systemError.Log("webhook check transaction status error", err.Error())
 		return
