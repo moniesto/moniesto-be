@@ -8,18 +8,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/payment/binance"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 func (server *Server) TriggerBinanceTransactionWebhook(ctx *gin.Context) {
 	var req binance.WebhookRequest
 
 	// TODO: remove log
-	// systemError.LogBody("binance trigger webhook", ctx)
+	// system.LogErrorBody("binance trigger webhook", ctx)
+
+	system.Log("binance transaction webhook trigger")
 
 	// STEP: bind/validation
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		systemError.Log("webhook body bind error", err.Error())
+		system.LogError("webhook body bind error", err.Error())
 		return
 	}
 
@@ -30,13 +32,15 @@ func (server *Server) TriggerBinanceTransactionWebhook(ctx *gin.Context) {
 	webhookData := binance.WebhookData{}
 	err := json.Unmarshal([]byte(webhookDataStr), &webhookData)
 	if err != nil {
-		systemError.Log("webhook data bind error", err.Error())
+		system.LogError("webhook data bind error", err.Error())
 	}
+
+	system.Log("--webhook: transaction", webhookData.MerchantTradeNo)
 
 	// STEP: check payment transaction status
 	_, err = server.service.CheckPaymentTransactionStatus(ctx, webhookData.MerchantTradeNo)
 	if err != nil {
-		systemError.Log("webhook check transaction status error", err.Error())
+		system.LogError("webhook check transaction status error", err.Error())
 
 		// STEP: stop sending webhook if user is already subscribed [subscription handled by other checker]
 		if clientError.ParseErrorCode(err) == clientError.Moniest_Subscribe_AlreadySubscribed {
@@ -69,7 +73,7 @@ func (server *Server) CheckBinancePaymentTransaction(ctx *gin.Context) {
 	_, err := server.service.CheckPaymentTransactionStatus(ctx, transactionID)
 	if err != nil {
 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
-		systemError.Log("check transaction error", err.Error())
+		system.LogError("check transaction error", err.Error())
 		return
 	}
 

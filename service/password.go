@@ -11,7 +11,7 @@ import (
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -19,14 +19,14 @@ func (service *Service) CheckPassword(ctx *gin.Context, user_id, password string
 	// STEP: get old password [in hashed form]
 	hashedPasword, err := service.Store.GetPasswordByID(ctx, user_id)
 	if err != nil {
-		systemError.Log("server error on getting password", err.Error())
+		system.LogError("server error on getting password", err.Error())
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckPassword)
 	}
 
 	// STEP: check the password
 	err = util.CheckPassword(password, hashedPasword)
 	if err != nil {
-		systemError.Log("login failed", err.Error())
+		system.LogError("login failed", err.Error())
 		return clientError.CreateError(http.StatusForbidden, clientError.Account_ChangePassword_WrongPassword)
 	}
 
@@ -37,7 +37,7 @@ func (service *Service) UpdatePassword(ctx *gin.Context, user_id, password strin
 	// STEP: hash password
 	hashedPassword, err := util.HashPassword(password)
 	if err != nil {
-		systemError.Log("server error on hashing password")
+		system.LogError("server error on hashing password")
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorPassword)
 	}
 
@@ -49,7 +49,7 @@ func (service *Service) UpdatePassword(ctx *gin.Context, user_id, password strin
 	// STEP: update/set password
 	err = service.Store.SetPassword(ctx, setPasswordParams)
 	if err != nil {
-		systemError.Log("server error on updating password", err.Error())
+		system.LogError("server error on updating password", err.Error())
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorUpdatePassword)
 	}
 
@@ -66,7 +66,7 @@ func (service *Service) CheckEmailExistidy(ctx *gin.Context, email string) (vali
 	// STEP: get email existidy in the system
 	checkEmail, err := service.Store.CheckEmail(ctx, validEmail)
 	if err != nil {
-		systemError.Log("server error on check email", err.Error())
+		system.LogError("server error on check email", err.Error())
 		return "", clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckEmail)
 	}
 
@@ -85,14 +85,14 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 			return "", db.PasswordResetToken{}, clientError.CreateError(http.StatusNotFound, clientError.Account_ChangePassword_NotFoundEmail)
 		}
 
-		systemError.Log("server error on getting user by email", err.Error())
+		system.LogError("server error on getting user by email", err.Error())
 		return "", db.PasswordResetToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCheckEmail)
 	}
 
 	// STEP: delete older password reset tokens
 	err = service.Store.DeletePasswordResetTokenByUserID(ctx, user.ID)
 	if err != nil {
-		systemError.Log("server error on deleting password reset token by user id")
+		system.LogError("server error on deleting password reset token by user id")
 	}
 
 	// STEP: create password reset token object
@@ -108,7 +108,7 @@ func (service *Service) CreatePasswordResetToken(ctx *gin.Context, email string,
 	// STEP: insert DB
 	password_reset_token, err := service.Store.CreatePasswordResetToken(ctx, params)
 	if err != nil {
-		systemError.Log("server error on creating password reset token on db", err.Error())
+		system.LogError("server error on creating password reset token on db", err.Error())
 		return "", db.PasswordResetToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorCreateToken)
 	}
 
@@ -133,7 +133,7 @@ func (service *Service) GetPasswordResetToken(ctx *gin.Context, encoded_token st
 			return db.PasswordResetToken{}, clientError.CreateError(http.StatusNotFound, clientError.Account_ChangePassword_NotFoundToken)
 		}
 
-		systemError.Log("server error on getting password reset token by token")
+		system.LogError("server error on getting password reset token by token")
 		return db.PasswordResetToken{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorGetToken)
 	}
 
@@ -149,7 +149,7 @@ func (service *Service) DeletePasswordResetToken(ctx *gin.Context, token string)
 	err := service.Store.DeletePasswordResetTokenByToken(ctx, token)
 
 	if err != nil {
-		systemError.Log("server error on deleting password reset token by token")
+		system.LogError("server error on deleting password reset token by token")
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_ChangePassword_ServerErrorDeleteToken)
 	}
 

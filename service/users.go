@@ -10,7 +10,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -23,7 +23,7 @@ func (service *Service) GetOwnUserByUsername(ctx *gin.Context, username string) 
 			return db.GetOwnUserByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByUsername)
 		}
 
-		systemError.Log("server error on getting own user by username", err.Error())
+		system.LogError("server error on getting own user by username", err.Error())
 		return db.GetOwnUserByUsernameRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.User_GetUser_ServerErrorGetUser)
 
 	}
@@ -40,7 +40,7 @@ func (service *Service) GetUserByUsername(ctx *gin.Context, username string) (db
 			return db.GetUserByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByUsername)
 		}
 
-		systemError.Log("server error on getting user by username", err.Error())
+		system.LogError("server error on getting user by username", err.Error())
 		return db.GetUserByUsernameRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.User_GetUser_ServerErrorGetUser)
 
 	}
@@ -56,7 +56,7 @@ func (service *Service) GetOwnUserByID(ctx *gin.Context, userID string) (db.GetO
 			return db.GetOwnUserByIDRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByID)
 		}
 
-		systemError.Log("server error on getting user by id", err.Error())
+		system.LogError("server error on getting user by id", err.Error())
 		return db.GetOwnUserByIDRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Account_EmailVerification_ServerErrorGetUser)
 	}
 
@@ -73,7 +73,7 @@ func (service *Service) UpdateUserProfile(ctx *gin.Context, user_id string, req 
 		if err == sql.ErrNoRows {
 			return clientError.CreateError(http.StatusNotFound, clientError.General_UserNotFoundByID)
 		} else {
-			systemError.Log("server error on getting user by id", err.Error())
+			system.LogError("server error on getting user by id", err.Error())
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorGetUser)
 		}
 	}
@@ -125,7 +125,7 @@ func (service *Service) UpdateUserProfile(ctx *gin.Context, user_id string, req 
 		// STEP: update user
 		err = service.Store.UpdateUser(ctx, param)
 		if err != nil {
-			systemError.Log("server error on update user", err.Error())
+			system.LogError("server error on update user", err.Error())
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorUpdateUser)
 		}
 	}
@@ -148,7 +148,7 @@ func (service *Service) UpdateProfilePhoto(ctx *gin.Context, user_id string, ima
 		if err == sql.ErrNoRows {
 			profilePhotoExists = false
 		} else {
-			systemError.Log("server error on get profile photo", err.Error())
+			system.LogError("server error on get profile photo", err.Error())
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorGetProfilePhoto)
 		}
 	}
@@ -160,7 +160,7 @@ func (service *Service) UpdateProfilePhoto(ctx *gin.Context, user_id string, ima
 	// STEP: upload to storage, get links
 	profile_photo_links, err := service.Storage.UploadProfilePhoto(ctx, image_base64)
 	if err != nil {
-		systemError.Log("server error on upload profile photo", err.Error())
+		system.LogError("server error on upload profile photo", err.Error())
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorUploadProfilePhoto)
 	}
 
@@ -174,7 +174,7 @@ func (service *Service) UpdateProfilePhoto(ctx *gin.Context, user_id string, ima
 
 		_, err := service.Store.UpdateProfilePhoto(ctx, param)
 		if err != nil {
-			systemError.Log("server error on update profile photo", err.Error())
+			system.LogError("server error on update profile photo", err.Error())
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorUpdateProfilePhoto)
 		}
 	} else {
@@ -189,7 +189,7 @@ func (service *Service) UpdateProfilePhoto(ctx *gin.Context, user_id string, ima
 
 		_, err := service.Store.AddImage(ctx, param)
 		if err != nil {
-			systemError.Log("server error on add image", err.Error())
+			system.LogError("server error on add image", err.Error())
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorInsertProfilePhoto)
 		}
 	}
@@ -212,7 +212,7 @@ func (service *Service) UpdateBackgroundPhoto(ctx *gin.Context, user_id string, 
 		if err == sql.ErrNoRows {
 			backgroundPhotoExists = false
 		} else {
-			systemError.Log("server error on get background photo", err.Error())
+			system.LogError("server error on get background photo", err.Error())
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorGetBackgroundPhoto)
 		}
 	}
@@ -224,7 +224,7 @@ func (service *Service) UpdateBackgroundPhoto(ctx *gin.Context, user_id string, 
 	// STEP: upload to storage, get links
 	background_photo_links, err := service.Storage.UploadBackgroundPhoto(ctx, image_base64)
 	if err != nil {
-		systemError.Log("server error on upload background photo", err.Error())
+		system.LogError("server error on upload background photo", err.Error())
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorUploadBackgroundPhoto)
 	}
 
@@ -238,7 +238,7 @@ func (service *Service) UpdateBackgroundPhoto(ctx *gin.Context, user_id string, 
 
 		_, err := service.Store.UpdateBackgroundPhoto(ctx, param)
 		if err != nil {
-			systemError.Log("server error on update background photo", err.Error())
+			system.LogError("server error on update background photo", err.Error())
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorUpdateBackgroundPhoto)
 		}
 	} else {
@@ -253,7 +253,7 @@ func (service *Service) UpdateBackgroundPhoto(ctx *gin.Context, user_id string, 
 
 		_, err := service.Store.AddImage(ctx, param)
 		if err != nil {
-			systemError.Log("server error on add image", err.Error())
+			system.LogError("server error on add image", err.Error())
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Account_UpdateUserProfile_ServerErrorInsertBackgroundPhoto)
 		}
 	}
@@ -274,7 +274,7 @@ func (service *Service) GetSubscriptions(ctx *gin.Context, user_id string, limit
 			return []model.User{}, nil
 		}
 
-		systemError.Log("server error on get subscriptions", err.Error())
+		system.LogError("server error on get subscriptions", err.Error())
 		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.User_GetSubscriptions_ServerErrorGetSubscriptions)
 	}
 
@@ -286,7 +286,7 @@ func (service *Service) GetUserStats(ctx *gin.Context, username string) (model.U
 
 	stats, err := service.Store.GetUserStatsByUsername(ctx, username)
 	if err != nil {
-		systemError.Log("server error on get stats by username", err.Error())
+		system.LogError("server error on get stats by username", err.Error())
 		return model.UserStatResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.User_GetStats_ServerErrorGetStats)
 	}
 
@@ -301,7 +301,7 @@ func (service *Service) GetUserLanguageByEmail(ctx *gin.Context, email string) (
 			return "", clientError.CreateError(http.StatusNotFound, clientError.General_ServerErrorUserLanguageNotFound)
 		}
 
-		systemError.Log("server error while getting user language")
+		system.LogError("server error while getting user language")
 		return "", clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorGettingUserLanguageByEmail)
 	}
 

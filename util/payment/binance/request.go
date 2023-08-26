@@ -13,6 +13,7 @@ import (
 	"github.com/moniesto/moniesto-be/config"
 	"github.com/moniesto/moniesto-be/core"
 	"github.com/moniesto/moniesto-be/util"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 // requestWithBinanceHeader creates binance specific header [with secret, nonce, signature and etc.]
@@ -40,7 +41,7 @@ func createHeader(body any, config config.Config) (RequestHeader, error) {
 
 	b, err := json.Marshal(body)
 	if err != nil {
-		fmt.Println(err)
+		system.LogError("error on binance create header json marshalling", err.Error())
 		return RequestHeader{}, fmt.Errorf("error while marshal body")
 	}
 	bodyInStr := string(b)

@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/moniesto/moniesto-be/model"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 // "https://api3.binance.com/api/v3/ticker/price",
@@ -38,7 +38,7 @@ func GetCurrencies() (model.GetCurrenciesAPIResponse, error) {
 		// if fails, then check another API
 		if err != nil || resp.StatusCode() >= 400 {
 			if link_number+1 == len(APIlinks) { // no more new API
-				systemError.Log("GetCurrencies: binance all APIs are unavaliable")
+				system.LogError("GetCurrencies: binance all APIs are unavaliable")
 				return model.GetCurrenciesAPIResponse{}, fmt.Errorf("binance API error")
 			} else {
 				link_number = link_number + 1
@@ -67,7 +67,7 @@ func GetCurrency(name string) (model.GetCurrencyAPIResponse, error) {
 		// if fails, then check another API
 		if err != nil || resp.StatusCode() >= 400 {
 			if link_number+1 == len(APIlinks) { // no more new API
-				systemError.Log("GetCurrency: binance all APIs are unavaliable")
+				system.LogError("GetCurrency: binance all APIs are unavaliable")
 				return model.GetCurrencyAPIResponse{}, fmt.Errorf("binance API error")
 			} else {
 				link_number = link_number + 1

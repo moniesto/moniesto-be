@@ -8,7 +8,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/payment/binance"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 func (service *Service) RefundToUser(ctx *gin.Context, transactionID, moniestID, userID string) error {
@@ -73,7 +73,7 @@ func (service *Service) UpdateBinancePayoutHistoriesRefund(ctx *gin.Context, pay
 	for _, payoutHistory := range payoutHistories {
 		err := service.UpdateBinancePayoutHistoryRefund(ctx, payoutHistory.ID, status, failureMessage)
 		if err != nil {
-			systemError.Log("error while updating binance payout history [refund]", err.Error(), "| payout id:", payoutHistory.ID)
+			system.LogError("error while updating binance payout history [refund]", err.Error(), "| payout id:", payoutHistory.ID)
 		}
 	}
 }

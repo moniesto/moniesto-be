@@ -14,7 +14,7 @@ import (
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/payment/binance"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req model.SubscribeMoniestRequest, moniest db.GetMoniestByUsernameRow, userID string) (db.BinancePaymentTransaction, error) {
@@ -29,7 +29,7 @@ func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req mo
 
 	orderData, err := binance.CreateOrder(ctx, service.config, transactionID, amount, product_name, req.ReturnURL, req.CancelURL, webhookURL)
 	if err != nil {
-		systemError.Log("create order error", err.Error())
+		system.LogError("create order error", err.Error())
 		return db.BinancePaymentTransaction{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Subscribe_ServerErrorCreateBinanceOrder)
 	}
 
@@ -52,7 +52,7 @@ func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req mo
 
 	binancePaymentTransaction, err := service.Store.CreateBinancePaymentTransactions(ctx, paymentTransactionParams)
 	if err != nil {
-		systemError.Log("create order on db error", err.Error())
+		system.LogError("create order on db error", err.Error())
 		return db.BinancePaymentTransaction{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Subscribe_ServerErrorCreateBinanceTransaction)
 	}
 
@@ -72,17 +72,18 @@ func (service *Service) SetPaymentTransactionCheckerJob(ctx *gin.Context, minute
 
 		time.Sleep(time.Duration(interval) * time.Second)
 		count += -1
-		fmt.Println("PING - Payment Transaction Checker")
+		system.Log("PING - Payment Transaction Checker")
 
 		latestTransactionStatus, err := service.CheckPaymentTransactionStatus(ctx, transactionID)
 
 		// if any error occurs, skip
 		if err != nil {
 			_, msg := clientError.ParseError(err)
-			systemError.Log("error while checking payment transaction status", msg)
+			system.LogError("error while checking payment transaction status", msg)
 		} else {
 			if latestTransactionStatus != string(db.BinancePaymentStatusPending) {
-				fmt.Println("PING - Payment Transaction Checker - COMPLETED")
+				system.Log("PING - Payment Transaction Checker - COMPLETED")
+
 				count = -1 // stop the loop
 			}
 		}
@@ -107,7 +108,7 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 			return "", clientError.CreateError(http.StatusNotFound, clientError.Payment_CheckBinanceTransaction_TransactionIDNotFound)
 		}
 
-		systemError.Log("server error on get binance payment transaction", err.Error())
+		system.LogError("server error on get binance payment transaction", err.Error())
 		return "", clientError.CreateError(http.StatusInternalServerError, clientError.Payment_CheckBinanceTransaction_ServerErrorGetTransaction)
 	}
 
@@ -118,7 +119,7 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 
 	orderData, err := binance.QueryOrder(ctx, service.config, transactionID)
 	if err != nil {
-		systemError.Log("server error on query order", err.Error())
+		system.LogError("server error on query order", err.Error())
 		return "", clientError.CreateError(http.StatusInternalServerError, clientError.Payment_CheckBinanceTransaction_ServerErrorQueryTransaction)
 	}
 
@@ -139,7 +140,7 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 
 		updatedBinancePaymentTransaction, err := service.Store.UpdateBinancePaymentTransactionStatus(ctx, param)
 		if err != nil {
-			systemError.Log("server error on update binance payment transaction status", err.Error())
+			system.LogError("server error on update binance payment transaction status", err.Error())
 			return "", clientError.CreateError(http.StatusInternalServerError, clientError.Payment_CheckBinanceTransaction_ServerErrorUpdateStatusSuccess)
 		}
 
@@ -177,7 +178,7 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 	}
 	updatedBinancePaymentTransaction, err := service.Store.UpdateBinancePaymentTransactionStatus(ctx, param)
 	if err != nil {
-		systemError.Log("server error on update binance payment transaction status", err.Error())
+		system.LogError("server error on update binance payment transaction status", err.Error())
 		return "", clientError.CreateError(http.StatusInternalServerError, clientError.Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail)
 	}
 
@@ -194,7 +195,7 @@ func (service *Service) CheckPendingPaymentTransaction(ctx *gin.Context, moniest
 
 	pendingTransaction, err := service.Store.CheckPendingBinancePaymentTransactionByMoniestUsername(ctx, param)
 	if err != nil {
-		systemError.Log("server error on check pending binance payment transaction by moniest username", err.Error())
+		system.LogError("server error on check pending binance payment transaction by moniest username", err.Error())
 		return false, nil, nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_SubscribeCheck_ServerErrorCheck)
 	}
 

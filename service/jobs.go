@@ -12,7 +12,7 @@ import (
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/payment/binance"
 	"github.com/moniesto/moniesto-be/util/scoring"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 func (service *Service) GetAllActivePosts() ([]db.GetAllActivePostsRow, error) {
@@ -51,10 +51,10 @@ func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) err
 
 	b, err := json.Marshal(response)
 	if err != nil {
-		fmt.Println("ERROR while marshall", err)
+		system.LogError("Update Post status - error while marshall", err)
 		return err
 	}
-	fmt.Println("RESPONSE", string(b))
+	system.Log("scoring response", string(b))
 
 	// STEP: post is finished case
 	if response.Finished {
@@ -172,7 +172,7 @@ func (service *Service) PayoutToMoniest(payoutData db.GetAllPendingPayoutsRow) e
 	if err != nil {
 		return fmt.Errorf("error while updating payout history success for payoutID: %s. %s", payoutData.ID, err.Error())
 	}
-	systemError.Log("Successfull payout for payoutID", payoutData.ID)
+	system.LogError("Successfull payout for payoutID", payoutData.ID)
 
 	// TODO: send email to moniest
 

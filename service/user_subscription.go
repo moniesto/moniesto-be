@@ -11,7 +11,7 @@ import (
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, userID string, latestTransactionID string, numberOfMonths int) error {
@@ -44,7 +44,7 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 
 		err = service.Store.ActivateSubscription(ctx, params)
 		if err != nil {
-			systemError.Log("server error on activate subscription", err.Error())
+			system.LogError("server error on activate subscription", err.Error())
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Subscribe_ServerErrorActivateSubscription)
 		}
 	} else {
@@ -60,7 +60,7 @@ func (service *Service) SubscribeMoniest(ctx *gin.Context, moniestID string, use
 
 		_, err := service.Store.CreateSubscription(ctx, params)
 		if err != nil {
-			systemError.Log("server error on create subscription", err.Error())
+			system.LogError("server error on create subscription", err.Error())
 			return clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Subscribe_ServerErrorCreateSubscriptionDB)
 		}
 	}
@@ -92,7 +92,7 @@ func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, u
 
 	err = service.Store.Endsubscription(ctx, params)
 	if err != nil {
-		systemError.Log("server error on end subscription", err.Error())
+		system.LogError("server error on end subscription", err.Error())
 		return db.UserSubscription{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Unsubscribe_ServerErrorUnsubscribe)
 	}
 
@@ -119,7 +119,7 @@ func (service *Service) GetUserSubscriptionStatus(ctx *gin.Context, moniestID st
 			return false, db.UserSubscription{}, nil
 		}
 
-		systemError.Log("server error on get subscription", err.Error())
+		system.LogError("server error on get subscription", err.Error())
 		return false, db.UserSubscription{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Subscribe_ServerErrorGetSubscription)
 	}
 
@@ -136,7 +136,7 @@ func (service *Service) CheckUserSubscriptionByMoniestUsername(ctx *gin.Context,
 
 	userIsSubscribed, err := service.Store.CheckSubscriptionByMoniestUsername(ctx, param)
 	if err != nil {
-		systemError.Log("server error on check subscription by moniest username", err.Error())
+		system.LogError("server error on check subscription by moniest username", err.Error())
 		return false, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_SubscribeCheck_ServerErrorCheck)
 	}
 
@@ -154,7 +154,7 @@ func (service *Service) GetSubscribers(ctx *gin.Context, moniestID string, limit
 
 	usersFromDB, err := service.Store.GetSubscribers(ctx, param)
 	if err != nil {
-		systemError.Log("server error on get subscribers", err.Error())
+		system.LogError("server error on get subscribers", err.Error())
 		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetSubscriber_ServerErrorGetSubscribers)
 	}
 
@@ -166,7 +166,7 @@ func (service *Service) GetSubscribersBriefs(ctx *gin.Context, moniestID string)
 
 	subscribers, err := service.Store.GetSubscribersBriefs(ctx, moniestID)
 	if err != nil {
-		systemError.Log("server error on getting subscribers brief", err.Error())
+		system.LogError("server error on getting subscribers brief", err.Error())
 		return []db.GetSubscribersBriefsRow{}, err
 	}
 
@@ -183,7 +183,7 @@ func (service *Service) GetUserSubscriptionInfo(ctx *gin.Context, userID, monies
 
 	userSubscriptionInfo, err := service.Store.GetUserSubscriptionInfo(ctx, params)
 	if err != nil {
-		systemError.Log("server error on getting user subscription info", err.Error())
+		system.LogError("server error on getting user subscription info", err.Error())
 		return db.GetUserSubscriptionInfoRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo)
 	}
 

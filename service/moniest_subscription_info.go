@@ -10,7 +10,7 @@ import (
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -39,7 +39,7 @@ func (service *Service) CreateSubsriptionInfo(ctx *gin.Context, moniest_id strin
 	// STEP: create subscription info
 	subscriptionInfo, err := service.Store.CreateMoniestSubscriptionInfo(ctx, subscriptionInfoParams)
 	if err != nil {
-		systemError.Log("create moniest subscription info error", err.Error())
+		system.LogError("create moniest subscription info error", err.Error())
 		return db.MoniestSubscriptionInfo{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_CreateSubscriptionInfo_ServerErrorOnCreate)
 	}
 
@@ -55,7 +55,7 @@ func (service *Service) UpdateSubsriptionInfo(ctx *gin.Context, moniest_id strin
 
 	subscription_info, err := service.Store.GetMoniestSubscriptionInfoByMoniestId(ctx, moniest_id)
 	if err != nil {
-		systemError.Log("get moniest subscription info by moniest ID error", err.Error())
+		system.LogError("get moniest subscription info by moniest ID error", err.Error())
 		return db.MoniestSubscriptionInfo{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdateMoniest_ServerErrorGetSubscriptionInfo)
 	}
 

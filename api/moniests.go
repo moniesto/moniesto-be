@@ -9,7 +9,7 @@ import (
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -308,7 +308,7 @@ func (server *Server) unsubscribeMoniest(ctx *gin.Context) {
 	// STEP: refund to user
 	err = server.service.RefundToUser(ctx, subscriptionInfo.LatestTransactionID.String, moniest.MoniestID, user_id)
 	if err != nil {
-		systemError.Log("error on refund user", err.Error())
+		system.LogError("error on refund user", err.Error())
 	}
 
 	ctx.Status(http.StatusOK)

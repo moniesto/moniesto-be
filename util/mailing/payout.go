@@ -3,7 +3,7 @@ package mailing
 import (
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 func SendPayoutEmail(to string, config config.Config, fullname_user, username_user, fullname_moniest, binanceID string, currentMonth, totalMonth int, subscribedFee, operationFeePercentage, amount float64, language db.UserLanguage) error {
@@ -39,7 +39,7 @@ func SendPayoutEmail(to string, config config.Config, fullname_user, username_us
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)
 	if err != nil {
-		systemError.Log("Server error on sending payout email", err)
+		system.LogError("Server error on sending payout email", err)
 		return err
 	}
 

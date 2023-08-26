@@ -3,7 +3,7 @@ package mailing
 import (
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 func SendNewPostEmail(to string, config config.Config, fullname_user, fullname_moniest, username, currency string, language db.UserLanguage) error {
@@ -28,7 +28,7 @@ func SendNewPostEmail(to string, config config.Config, fullname_user, fullname_m
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)
 	if err != nil {
-		systemError.Log("Server error on sending new post email", err)
+		system.LogError("Server error on sending new post email", err)
 		return err
 	}
 

@@ -3,7 +3,7 @@ package mailing
 import (
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 func SendEmailVerificationEmail(to string, config config.Config, fullname, token string, language db.UserLanguage) error {
@@ -22,7 +22,7 @@ func SendEmailVerificationEmail(to string, config config.Config, fullname, token
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)
 	if err != nil {
-		systemError.Log("server error on sending email verification email", err.Error())
+		system.LogError("server error on sending email verification email", err.Error())
 		return err
 	}
 

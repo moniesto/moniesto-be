@@ -8,7 +8,7 @@ import (
 	"github.com/moniesto/moniesto-be/config"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 var calculateApproximateURI = "/calculateApproximateScore"
@@ -33,7 +33,7 @@ func CalculateApproxScore(endDate time.Time, startPrice float64, endPrice float6
 	resp, err := client.R().SetResult(&response).SetBody(requestBody).Post(api_link)
 
 	if err != nil || resp.StatusCode() >= 400 {
-		systemError.Log("calculate approximate score error", err.Error())
+		system.LogError("calculate approximate score error", err.Error())
 		return -1
 	}
 
@@ -52,7 +52,7 @@ func CalculateScore(requestBody model.CalculateScoreRequest, config config.Confi
 	resp, err := client.R().SetResult(&response).SetBody(requestBody).Post(api_link)
 
 	if err != nil || resp.StatusCode() >= 400 {
-		systemError.Log("calculate score error", err.Error())
+		system.LogError("calculate score error", err.Error())
 		return model.CalculateScoreResponse{}, fmt.Errorf("calculate score error")
 	}
 

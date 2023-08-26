@@ -5,7 +5,7 @@ import (
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 func (service *Service) CreateBinancePayoutHistories(ctx *gin.Context, defaultParam db.CreateBinancePayoutHistoryParams) {
@@ -15,7 +15,7 @@ func (service *Service) CreateBinancePayoutHistories(ctx *gin.Context, defaultPa
 	for _, param := range params {
 		_, err := service.Store.CreateBinancePayoutHistory(ctx, param)
 		if err != nil {
-			systemError.Log("error while create binance payout history on DB, moniestID:", param.MoniestID, err.Error())
+			system.LogError("error while create binance payout history on DB, moniestID:", param.MoniestID, err.Error())
 		}
 	}
 }

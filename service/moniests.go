@@ -9,7 +9,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/systemError"
+	"github.com/moniesto/moniesto-be/util/system"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -24,7 +24,7 @@ func (service *Service) GetMoniestByUserID(ctx *gin.Context, user_id string) (db
 			return db.GetMoniestByUserIdRow{}, nil
 		}
 
-		systemError.Log("server error on getting moniest by user id")
+		system.LogError("server error on getting moniest by user id")
 		return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_CreateMoniest_ServerErrorUserIsMoniest)
 	}
 
@@ -80,7 +80,7 @@ func (service *Service) CreateMoniest(ctx *gin.Context, user_id string, req mode
 	// STEP: create moniest
 	moniest, err := service.Store.CreateMoniest(ctx, moniestParams)
 	if err != nil {
-		systemError.Log("server error on create moniest")
+		system.LogError("server error on create moniest")
 		return db.Moniest{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_CreateMoniest_ServerErrorCreateMoniest)
 	}
 
@@ -96,7 +96,7 @@ func (service *Service) GetMoniestByMoniestID(ctx *gin.Context, moniest_id strin
 			return db.GetMoniestByMoniestIdRow{}, clientError.CreateError(http.StatusNotFound, clientError.Moniest_GetMoniest_NoMoniest)
 		}
 
-		systemError.Log("server error on get moniest by moniest ID", err.Error())
+		system.LogError("server error on get moniest by moniest ID", err.Error())
 		return db.GetMoniestByMoniestIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetMoniest_ServerErrorGetMoniest)
 	}
 
@@ -112,7 +112,7 @@ func (service *Service) GetMoniestByUsername(ctx *gin.Context, username string) 
 			return db.GetMoniestByUsernameRow{}, clientError.CreateError(http.StatusNotFound, clientError.General_MoniestNotFoundByUsername)
 		}
 
-		systemError.Log("server error on get moniest by moniest username", err.Error())
+		system.LogError("server error on get moniest by moniest username", err.Error())
 		return db.GetMoniestByUsernameRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorGetMoniestByUsername)
 	}
 
@@ -130,7 +130,7 @@ func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, r
 			return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusForbidden, clientError.General_UserNotMoniest)
 		}
 
-		systemError.Log("server error on getting moniest by user id")
+		system.LogError("server error on getting moniest by user id")
 		return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdateMoniest_ServerErrorGetUser)
 	}
 
@@ -177,7 +177,7 @@ func (service *Service) UpdateMoniestProfile(ctx *gin.Context, user_id string, r
 		// STEP: update moniest
 		_, err = service.Store.UpdateMoniest(ctx, param)
 		if err != nil {
-			systemError.Log("server error on update moniest", err.Error())
+			system.LogError("server error on update moniest", err.Error())
 			return db.GetMoniestByUserIdRow{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdateMoniest_ServerErrorUpdateMoniest)
 		}
 	}
@@ -195,7 +195,7 @@ func (service *Service) GetMoniestPayoutInfos(ctx *gin.Context, user_id string) 
 			return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusForbidden, clientError.General_UserNotMoniest)
 		}
 
-		systemError.Log("server error on getting moniest by user id")
+		system.LogError("server error on getting moniest by user id")
 		return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetPayoutInfo_ServerErrorGetMoniest)
 	}
 
@@ -232,7 +232,7 @@ func (service *Service) UpdateMoniestPayoutInfo(ctx *gin.Context, user_id string
 			return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusForbidden, clientError.General_UserNotMoniest)
 		}
 
-		systemError.Log("server error on getting moniest by user id")
+		system.LogError("server error on getting moniest by user id")
 		return model.GetMoniestPayoutInfos{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_UpdatePayout_ServerErrorGetMoniest)
 	}
 
@@ -256,7 +256,7 @@ func (service *Service) CheckUserIsMoniestByUsername(ctx *gin.Context, username 
 	// STEP: check user is moniest
 	userIsMoniest, err := service.Store.CheckUserIsMoniestByUsername(ctx, username)
 	if err != nil {
-		systemError.Log("server error on check user is moniest by username", err.Error())
+		system.LogError("server error on check user is moniest by username", err.Error())
 		return false, clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorCheckMoniestByUsername)
 	}
 
@@ -268,7 +268,7 @@ func (service *Service) CheckUserIsMoniestByUserID(ctx *gin.Context, user_id str
 	// STEP: check user is moniest
 	userIsMoniest, err := service.Store.CheckUserIsMoniestByID(ctx, user_id)
 	if err != nil {
-		systemError.Log("server error on check user is moniest by ID", err.Error())
+		system.LogError("server error on check user is moniest by ID", err.Error())
 		return false, clientError.CreateError(http.StatusInternalServerError, clientError.General_ServerErrorCheckMoniestByUserID)
 	}
 
@@ -278,7 +278,7 @@ func (service *Service) CheckUserIsMoniestByUserID(ctx *gin.Context, user_id str
 func (service *Service) GetMoniestStats(ctx *gin.Context, username string) (model.MoniestStatResponse, error) {
 	stats, err := service.Store.GetMoniestStatsByUsername(ctx, username)
 	if err != nil {
-		systemError.Log("server error on get moniest stats by username", err.Error())
+		system.LogError("server error on get moniest stats by username", err.Error())
 		return model.MoniestStatResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_GetStats_ServerErrorGetStats)
 	}
 
