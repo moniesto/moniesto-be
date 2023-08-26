@@ -9,3 +9,7 @@ func GetTotalAmount(numberOfMonths int, fee float64) float64 {
 func GetAmountAfterCommission(amount float64, percentage float64) float64 {
 	return util.RoundAmountDown(amount - ((amount * percentage) / 100))
 }
+
+func GetAmountOfCommission(amount float64, percentage float64) float64 {
+	return util.RoundAmountDown((amount * percentage) / 100)
+}

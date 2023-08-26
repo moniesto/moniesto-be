@@ -2,11 +2,12 @@ package mailing
 
 import (
 	"github.com/moniesto/moniesto-be/config"
+	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util/system"
 )
 
-func SendPayoutEmail(to string, config config.Config, fullname_user, username_user, fullname_moniest, binanceID string, currentMonth, totalMonth int, subscribedFee, operationFeePercentage, amount float64, language db.UserLanguage) error {
+func SendPayoutEmail(to string, config config.Config, fullname_user, username, fullname_moniest, binanceID string, currentMonth, totalMonth int, subscribedFee, operationFeePercentage float64, language db.UserLanguage) error {
 
 	template, err := GetTemplate("payout", language)
 	if err != nil {
@@ -27,14 +28,14 @@ func SendPayoutEmail(to string, config config.Config, fullname_user, username_us
 	}{
 		NameMoniest:            fullname_moniest,
 		NameUser:               fullname_user,
-		Username:               username_user,
+		Username:               username,
 		BinanceID:              binanceID,
 		CurrentMonth:           currentMonth,
 		TotalMonth:             totalMonth,
 		SubscribedFee:          subscribedFee,
 		OperationFeePercentage: operationFeePercentage,
-		OperationFee:           10, // TODO calculate
-		Amount:                 amount,
+		OperationFee:           core.GetAmountOfCommission(subscribedFee, operationFeePercentage),
+		Amount:                 core.GetAmountAfterCommission(subscribedFee, operationFeePercentage),
 	}
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)

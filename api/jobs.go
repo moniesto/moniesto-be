@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/util/system"
 )
 
@@ -31,14 +32,16 @@ func (server *Server) UpdatePostStatus() {
 func (server *Server) PayoutToMoniest() {
 	system.Log("JOB TRIGGER: Payout To Moniest")
 
-	pendingPayouts, err := server.service.GetAllPendingPayouts()
+	ctx := gin.Context{}
+
+	pendingPayouts, err := server.service.GetAllPendingPayouts(&ctx)
 	if err != nil {
 		system.LogError("JOB ERROR: PAYOUT => db error while getting pending payouts", err.Error())
 		return
 	}
 
 	for _, pendingPayout := range pendingPayouts {
-		err := server.service.PayoutToMoniest(pendingPayout)
+		err := server.service.PayoutToMoniest(&ctx, pendingPayout)
 		if err != nil {
 			system.LogError(fmt.Sprintf("JOB ERROR: PAYOUT => %s", err))
 		}

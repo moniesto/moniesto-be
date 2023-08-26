@@ -6,10 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
+	"github.com/moniesto/moniesto-be/util/mailing"
 	"github.com/moniesto/moniesto-be/util/payment/binance"
 	"github.com/moniesto/moniesto-be/util/scoring"
 	"github.com/moniesto/moniesto-be/util/system"
@@ -103,9 +105,7 @@ func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) err
 	return nil
 }
 
-func (service *Service) GetAllPendingPayouts() ([]db.GetAllPendingPayoutsRow, error) {
-
-	ctx := context.Background()
+func (service *Service) GetAllPendingPayouts(ctx *gin.Context) ([]db.GetAllPendingPayoutsRow, error) {
 
 	pendingPayouts, err := service.Store.GetAllPendingPayouts(ctx)
 	if err != nil {
@@ -115,7 +115,7 @@ func (service *Service) GetAllPendingPayouts() ([]db.GetAllPendingPayoutsRow, er
 	return pendingPayouts, nil
 }
 
-func (service *Service) PayoutToMoniest(payoutData db.GetAllPendingPayoutsRow) error {
+func (service *Service) PayoutToMoniest(ctx *gin.Context, payoutData db.GetAllPendingPayoutsRow) error {
 
 	// STEP: if there is specific percentage for this payout, otherwise take default one
 	operationFeePercentage := service.config.OperationFeePercentage
@@ -123,8 +123,6 @@ func (service *Service) PayoutToMoniest(payoutData db.GetAllPendingPayoutsRow) e
 	if payoutData.OperationFeePercentage.Valid {
 		operationFeePercentage = payoutData.OperationFeePercentage.Float64
 	}
-
-	ctx := context.Background()
 
 	// STEP: make payout to moniest
 	requestID, _, err := binance.CreateTransfer(service.config, payoutData.Amount, operationFeePercentage, binance.BINANCE_TRANSFER_TYPE_MERCHANT_PAYMENT, string(payoutData.MoniestPayoutType), payoutData.MoniestPayoutValue, binance.BINANCE_TRANSFER_REMARK_PAYOUT)
@@ -172,11 +170,42 @@ func (service *Service) PayoutToMoniest(payoutData db.GetAllPendingPayoutsRow) e
 	if err != nil {
 		return fmt.Errorf("error while updating payout history success for payoutID: %s. %s", payoutData.ID, err.Error())
 	}
-	system.LogError("Successfull payout for payoutID", payoutData.ID)
 
-	// TODO: send email to moniest
+	service.sendPayoutEmail(ctx, payoutData, operationFeePercentage)
+
+	system.Log("Successfull payout for payoutID", payoutData.ID)
 
 	return nil
+}
+
+func (service *Service) sendPayoutEmail(ctx *gin.Context, payoutData db.GetAllPendingPayoutsRow, operationFeePercentage float64) {
+
+	// STEP: get moniest and user data
+	moniest, err := service.GetMoniestByMoniestID(ctx, payoutData.MoniestID)
+	if err != nil {
+		system.LogError("sending payout email - getting moniest error", err.Error())
+	}
+
+	user, err := service.GetOwnUserByID(ctx, payoutData.UserID)
+	if err != nil {
+		system.LogError("sending payout email - getting user error", err.Error())
+	}
+
+	payoutInfo, err := service.GetMoniestPayoutInfos(ctx, moniest.ID)
+	if err != nil {
+		system.LogError("sending payout email - getting payout-info error", err.Error())
+	}
+
+	if err == nil {
+		go mailing.SendPayoutEmail(
+			moniest.Email, service.config,
+			user.Fullname, user.Username,
+			moniest.Fullname, payoutInfo.PayoutMethods.PayoutMethodBinance[0].Value,
+			int(payoutData.DateIndex), int(payoutData.DateValue),
+			payoutData.TotalAmount, operationFeePercentage,
+			moniest.Language,
+		)
+	}
 }
 
 func (service *Service) GetExpiredActiveSubscriptions(ctx context.Context) ([]db.UserSubscription, error) {

@@ -201,12 +201,12 @@ func (service *Service) sendSubscribedEmails(ctx *gin.Context, userID, moniestID
 	// STEP: fetch user and moniest infos
 	moniest, err := service.GetMoniestByMoniestID(ctx, moniestID)
 	if err != nil {
-		system.LogError("sending subscribe email [user] - getting user error", err.Error())
+		system.LogError("sending subscribe email - getting moniest error", err.Error())
 	}
 
 	user, err := service.GetOwnUserByID(ctx, userID)
 	if err != nil {
-		system.LogError("sending subscribe email [user] - getting user error", err.Error())
+		system.LogError("sending subscribe email - getting user error", err.Error())
 	}
 
 	// STEP: moniest & user is valid
