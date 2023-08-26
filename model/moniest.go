@@ -64,7 +64,7 @@ type GetSubscriptionInfoResponse struct {
 
 type SubscriptionInfo struct {
 	SubscriptionStartDate time.Time `json:"subscription_start_date"`
-	SubscriptionEndDate   time.Time `json:"subscription_ent_date"`
+	SubscriptionEndDate   time.Time `json:"subscription_end_date"`
 	PayerID               string    `json:"payer_id"`
 	SubscribedFee         float64   `json:"subscribed_fee"`
 }

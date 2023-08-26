@@ -2575,7 +2575,7 @@ const docTemplate = `{
                 "subscribed_fee": {
                     "type": "number"
                 },
-                "subscription_ent_date": {
+                "subscription_end_date": {
                     "type": "string"
                 },
                 "subscription_start_date": {
