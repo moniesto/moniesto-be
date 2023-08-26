@@ -1,6 +1,7 @@
 package systemError
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 
@@ -17,4 +18,6 @@ func Log(args ...interface{}) {
 func LogBody(request string, c *gin.Context) {
 	body, _ := io.ReadAll(c.Request.Body)
 	fmt.Println("REQUEST-BODY-LOG", request, string(body))
+
+	c.Request.Body = io.NopCloser(bytes.NewReader(body))
 }
