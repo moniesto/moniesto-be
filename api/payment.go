@@ -44,14 +44,15 @@ func (server *Server) TriggerBinanceTransactionWebhook(ctx *gin.Context) {
 
 		// STEP: stop sending webhook if user is already subscribed [subscription handled by other checker]
 		if clientError.ParseErrorCode(err) == clientError.Moniest_Subscribe_AlreadySubscribed {
-			ctx.JSON(http.StatusOK, `{"returnCode":"SUCCESS","returnMessage":null}`)
+			ctx.JSON(http.StatusOK, binance.WebhookResponseSuccess())
 			return
 		}
 
 		return
 	}
 
-	ctx.JSON(http.StatusOK, `{"returnCode":"SUCCESS","returnMessage":null}`)
+	system.Log("Webhook Transaction - COMPLETED")
+	ctx.JSON(http.StatusOK, binance.WebhookResponseSuccess())
 }
 
 // @Summary Check Transaction ID

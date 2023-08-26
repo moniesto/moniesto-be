@@ -121,6 +121,17 @@ type WebhookPaymentInstructions struct {
 	Price    float64 `json:"price"`
 }
 
+type WebhookResponse struct {
+	ReturnCode    string  `json:"returnCode"`
+	ReturnMessage *string `json:"returnMessage"`
+}
+
+func WebhookResponseSuccess() WebhookResponse {
+	return WebhookResponse{
+		ReturnCode: "SUCCESS",
+	}
+}
+
 /*
 - Example webhook data
 	{
