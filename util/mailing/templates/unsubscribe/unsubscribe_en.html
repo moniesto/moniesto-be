@@ -1,4 +1,4 @@
-<span class="preheader">Aboneliğiniz iptal edildi.</span>
+<span class="preheader">Your subscription has been canceled.</span>
 <table
   class="email-wrapper"
   width="100%"
@@ -41,11 +41,12 @@
               <tr>
                 <td class="content-cell">
                   <div class="f-fallback">
-                    <h1>Merhaba {{.NameUser}},</h1>
+                    <h1>Hi {{.NameUser}},</h1>
                     <p>
-                      {{.NameMoniest}}( <strong>{{.Username}}</strong> ) olan
-                      aboneliğiniz başarıyla iptal edildi. İadeniz (eğer varsa),
-                      {{.PayerID}} Pay ID-li Binance hesabınıza gönderildi.
+                      Your subscription to {{.NameMoniest}}(
+                      <strong>{{.Username}}</strong> ) has been successfully
+                      canceled. Your remaining refund (if any) has been sent to
+                      your Binance account with {{.PayerID}} Pay ID.
                     </p>
                     <!-- Action -->
                     <table
@@ -58,30 +59,31 @@
                     >
                       <tr>
                         <td>
-                          <h2>Abonelik İptal Detayları</h2>
+                          <h2>Subscription Cancellation Details</h2>
                           <table class="detail-table">
                             <tr>
-                              <td align="start">İptal Tarihi</td>
+                              <td align="start">Cancellation Date</td>
                               <td align="end">{{.SubscriptionCancelDate}}</td>
                             </tr>
                             <tr>
-                              <td align="start">Aylık Abonelik Ücreti</td>
+                              <td align="start">Monthly Subscription Price</td>
                               <td align="end">{{.SubscriptionFee}} $</td>
                             </tr>
                             <tr>
-                              <td align="start">Kalan Abonelik Süresi (Ay)</td>
+                              <td align="start">
+                                Remaining Subscription Time (Month)
+                              </td>
                               <td align="end">{{.RemainingMonth}}</td>
                             </tr>
                             <tr>
                               <td align="start">
-                                Operasyon Ücreti
-                                ({{.Operation_Fee_Percentage}}%)
+                                Operation Fee ({{.OperationFeePercentage}}%)
                               </td>
                               <td align="end">- {{.OperationFee}} $</td>
                             </tr>
                             <tr></tr>
                             <tr class="bordered">
-                              <td align="start">Toplam Tutar</td>
+                              <td align="start">Total Amount</td>
                               <td align="end">{{.Amount}} $</td>
                             </tr>
                           </table>
@@ -89,19 +91,18 @@
                       </tr>
                     </table>
                     <p>
-                      Teşekkürler, <br />
+                      Thanks, <br />
                       <span class="title-first-letter">M</span
                       ><span>oniesto</span>
-                      Ekibi
+                      team
                     </p>
                     <!-- Sub copy -->
                     <table class="body-sub" role="presentation">
                       <tr>
                         <td>
                           <p class="f-fallback sub">
-                            Herhangi bir sorunuz veya sorununuz olması
-                            durumunda, lütfen official@moniesto.com adresinden
-                            bizimle iletişime geçmekten çekinmeyin.
+                            In case of any questions or problems, please do not
+                            hesitate to contact us at official@moniesto.com.
                           </p>
                         </td>
                       </tr>
