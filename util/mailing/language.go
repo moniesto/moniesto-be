@@ -46,6 +46,10 @@ var EmailTemplates map[string]EmailTemplateTypes = map[string]EmailTemplateTypes
 		en: TemplateType{Path: "util/mailing/templates/subscribe/subscribe_moniest_en.html", Subject: "Moniesto: New Subscriber!"},
 		tr: TemplateType{Path: "util/mailing/templates/subscribe/subscribe_moniest_tr.html", Subject: "Moniesto: Yeni Abone!"},
 	},
+	"subscription_expired": {
+		en: TemplateType{Path: "util/mailing/templates/subscription_expired/subscription_expired_en.html", Subject: "Moniesto: End of Subscription. You can renew it immediately!"},
+		tr: TemplateType{Path: "util/mailing/templates/subscription_expired/subscription_expired_tr.html", Subject: "Moniesto: Aboneliğinizin Sonu. Hemen yenileyebilirsiniz!"},
+	},
 }
 
 func GetTemplate(templateName string, language db.UserLanguage) (TemplateType, error) {

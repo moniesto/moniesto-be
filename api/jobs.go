@@ -51,9 +51,9 @@ func (server *Server) PayoutToMoniest() {
 func (server *Server) DetectExpiredActiveSubscriptions() {
 	system.Log("JOB TRIGGER: Detect Expired Active Subscriptions")
 
-	ctx := context.Background()
+	ctx := gin.Context{}
 
-	expiredSubscriptions, err := server.service.GetExpiredActiveSubscriptions(ctx)
+	expiredSubscriptions, err := server.service.GetExpiredActiveSubscriptions(&ctx)
 	if err != nil {
 		system.LogError(fmt.Sprintf("JOB ERROR: EXPIRED SUBSCRIPTIONS => %s", err))
 		return
@@ -62,7 +62,7 @@ func (server *Server) DetectExpiredActiveSubscriptions() {
 	system.Log("# of expired subscriptions", len(expiredSubscriptions))
 
 	for _, expiredSubscription := range expiredSubscriptions {
-		err := server.service.DeactivateExpiredSubscriptions(ctx, expiredSubscription)
+		err := server.service.DeactivateExpiredSubscriptions(&ctx, expiredSubscription)
 		if err != nil {
 			system.LogError(fmt.Sprintf("JOB ERROR: EXPIRED SUBSCRIPTIONS => %s, user subsription ID: %s", err, expiredSubscription.ID))
 		}

@@ -43,7 +43,7 @@
                   <div class="f-fallback">
                     <h1>Hi {{.NameUser}},</h1>
                     <p>
-                      Your subscription to moniest {{.NameMoniest}}(
+                      Your subscription to moniest {{.NameMoniest}} (
                       <strong>{{.Username}}</strong> ) has expired.
                     </p>
                     <!-- Action -->
@@ -61,7 +61,10 @@
                           <table class="detail-table">
                             <tr>
                               <td align="start">Moniest</td>
-                              <td align="end">{{.Fullname}}({{.Username}})</td>
+                              <td align="end">
+                                {{.NameMoniest}} (
+                                <strong>{{.Username}}</strong> )
+                              </td>
                             </tr>
                             <tr>
                               <td align="start">Subscription Start Date</td>

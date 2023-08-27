@@ -208,7 +208,7 @@ func (service *Service) sendPayoutEmail(ctx *gin.Context, payoutData db.GetAllPe
 	}
 }
 
-func (service *Service) GetExpiredActiveSubscriptions(ctx context.Context) ([]db.UserSubscription, error) {
+func (service *Service) GetExpiredActiveSubscriptions(ctx *gin.Context) ([]db.UserSubscription, error) {
 
 	// STEP: get expired subscriptions and return
 	expiredSubscriptions, err := service.Store.GetExpiredActiveSubscriptions(ctx)
@@ -219,7 +219,7 @@ func (service *Service) GetExpiredActiveSubscriptions(ctx context.Context) ([]db
 	return expiredSubscriptions, nil
 }
 
-func (service *Service) DeactivateExpiredSubscriptions(ctx context.Context, expiredSubscription db.UserSubscription) error {
+func (service *Service) DeactivateExpiredSubscriptions(ctx *gin.Context, expiredSubscription db.UserSubscription) error {
 
 	// Update expired subsctriptions
 	err := service.Store.UpdateExpiredActiveSubscription(ctx, expiredSubscription.ID)
@@ -242,7 +242,30 @@ func (service *Service) DeactivateExpiredSubscriptions(ctx context.Context, expi
 		return fmt.Errorf("error while creating user subscription history")
 	}
 
+	service.sendSubscriptionExpiredEmail(ctx, expiredSubscription)
+
 	return nil
+}
+
+func (service *Service) sendSubscriptionExpiredEmail(ctx *gin.Context, expiredSubscription db.UserSubscription) {
+	moniest, err := service.GetMoniestByMoniestID(ctx, expiredSubscription.MoniestID)
+	if err != nil {
+		system.LogError("sending subscription expired email - getting moniest error", err.Error())
+	}
+
+	user, err := service.GetOwnUserByID(ctx, expiredSubscription.UserID)
+	if err != nil {
+		system.LogError("sending subscription expired email - getting user error", err.Error())
+	}
+
+	oldBinanceTransaction, err := service.Store.GetBinancePaymentTransaction(ctx, expiredSubscription.LatestTransactionID.String)
+	if err != nil {
+		system.LogError("sending subscription expired email - getting binance transaction details error", err.Error())
+	}
+
+	if err == nil {
+		go mailing.SendSubscriptionExpiredEmail(user.Email, service.config, user.Fullname, moniest.Fullname, moniest.Username, expiredSubscription.SubscriptionStartDate, expiredSubscription.SubscriptionEndDate, oldBinanceTransaction.MoniestFee, int(oldBinanceTransaction.DateValue), user.Language)
+	}
 }
 
 func (service *Service) GetExpiredPendingBinanceTransactions(ctx context.Context) ([]db.BinancePaymentTransaction, error) {

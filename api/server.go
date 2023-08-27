@@ -155,16 +155,17 @@ func (server *Server) setupRouter() {
 func (server *Server) setupCRONJobs() {
 	job := cron.New()
 
-	// updating post status job
+	// JOB: updating post status
 	job.AddFunc(util.JOB_TYPE_EVERY_1AM, server.UpdatePostStatus)
 
+	// JOB: payout to moniest
 	// job.AddFunc(util.JOB_TYPE_EVERY_MINUTE, server.PayoutToMoniest)
 	job.AddFunc(util.JOB_TYPE_EVERY_12AM, server.PayoutToMoniest)
 
-	// TODO: a job that look at the all transactions in pending state, and update if more than 10 minutes (can run in 1hour)
+	// JOB: looking at the all transactions in pending state, and update if more than 10 minutes
 	job.AddFunc(util.JOB_TYPE_EVERY_HOUR, server.DetectExpiredPendingTransaction)
 
-	// TODO: a job checking ended subscription
+	// JOB: checking ended subscription
 	job.AddFunc(util.JOB_TYPE_EVERY_HOUR, server.DetectExpiredActiveSubscriptions)
 
 	job.Start()
