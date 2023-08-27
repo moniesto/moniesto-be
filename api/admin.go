@@ -46,7 +46,7 @@ func (server *Server) SendEmailTest(ctx *gin.Context) {
 
 	// mailing.SendPasswordResetEmail("parvvazov@gmail.com", server.config, "Parvin Eyvazov", "token", model.LANGUAGE_TURKISH)
 
-	//	mailing.SendWelcomingEmail("parvvazov@gmail.com", server.config, "Parvin Eyvazov", model.LANGUAGE_TURKISH)
+	//	mailing.SendWelcomingEmail("1justingame@gmail.com", server.config, "Parvin Eyvazov", db.UserLanguageTr)
 
 	// mailing.SendEmailVerificationEmail("parvvazov@gmail.com", server.config, "Parvin Eyvazov", "token1", model.LANGUAGE_TURKISH)
 
