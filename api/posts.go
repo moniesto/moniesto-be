@@ -55,7 +55,7 @@ func (server *Server) createPost(ctx *gin.Context) {
 	}
 
 	// STEP: get currency
-	currency, err := server.service.GetCurrency(req.Currency)
+	currency, err := server.service.GetCurrency(req.Currency, req.MarketType)
 	if err != nil {
 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
@@ -205,7 +205,7 @@ func (server *Server) calculateApproximateScore(ctx *gin.Context) {
 	}
 
 	// STEP: get currency
-	currency, err := server.service.GetCurrency(req.Currency)
+	currency, err := server.service.GetCurrency(req.Currency, "spot") // TODO: update market by requested market
 	if err != nil {
 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return

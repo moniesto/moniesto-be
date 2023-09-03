@@ -63,12 +63,18 @@ func (service *Service) getValidPost(req model.CreatePostRequest, currency model
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusInternalServerError, clientError.Post_CreatePost_InvalidCurrencyPrice)
 	}
 
+	// STEP: take profit is valid
+	if err := validation.TakeProfit(currency_price, req.TakeProfit, db.EntryPosition(req.Direction)); err != nil {
+		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidTakeProfit)
+	}
+
 	// STEP: targets are valid
-	if err := validation.Target(currency_price, req.Target1, req.Target2, req.Target3, db.EntryPosition(req.Direction)); err != nil {
+	if err := validation.Target(currency_price, req.TakeProfit, req.Target1, req.Target2, req.Target3, db.EntryPosition(req.Direction)); err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidTargets)
 	}
 
 	// STEP: stop is valid
+	// TODO: update stop by using leverage
 	if err := validation.Stop(currency_price, req.Stop, db.EntryPosition(req.Direction)); err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidStop)
 	}

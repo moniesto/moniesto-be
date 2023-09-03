@@ -1,7 +1,8 @@
 package model
 
 type GetCurrenciesRequest struct {
-	Name string `form:"name" json:"name" binding:"required,min=1"`
+	Name       string `form:"name" json:"name" binding:"required,min=1"`
+	MarketType string `form:"market_type" json:"market_type" binding:"required"`
 }
 
 type Currency struct {
@@ -9,10 +10,7 @@ type Currency struct {
 	Price    string `json:"price"`
 }
 
-type GetCurrenciesAPIResponse []struct {
-	Symbol string `json:"symbol"`
-	Price  string `json:"price"`
-}
+type GetCurrenciesAPIResponse []GetCurrencyAPIResponse
 
 type GetCurrencyAPIResponse struct {
 	Symbol string `json:"symbol"`

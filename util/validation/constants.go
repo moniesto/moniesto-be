@@ -14,6 +14,11 @@ var supportedLanguages = []string{
 	string(db.UserLanguageTr),
 }
 
+type MarketType string
+
+var MARKET_TYPE_SPOT MarketType = "spot"
+var MARKET_TYPE_FUTURES MarketType = "futures"
+
 var ValidPasswordLength = 6
 var MaxBioLength = 150
 var MaxDescriptionLength = 5000
@@ -22,7 +27,7 @@ var MaxFullnameLength = 50
 var MaxLocationLength = 30
 
 var MaxDurationDay = 90
-var MaxTargetMultiplierLong = 100
+var MaxTargetMultiplierLong = 10
 var MaxStopMultiplierShort = 2
 
 var MaxSubscriptionMonth = 12

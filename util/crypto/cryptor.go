@@ -6,30 +6,44 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/system"
+	"github.com/moniesto/moniesto-be/util/validation"
 )
 
 // "https://api3.binance.com/api/v3/ticker/price",
 
-var APIlinks []string = []string{
+var spotApiLinks []string = []string{
 	"https://api3.binance.com/api/v3",
 	"https://api2.binance.com/api/v3",
 	"https://api1.binance.com/api/v3",
 	"https://api.binance.com/api/v3",
 }
 
+var futuresApiLinks []string = []string{
+	"https://fapi.binance.com/fapi/v1",
+}
+
+var MARKETS map[string][]string = map[string][]string{
+	string(validation.MARKET_TYPE_SPOT):    spotApiLinks,
+	string(validation.MARKET_TYPE_FUTURES): futuresApiLinks,
+}
+
 var tickerURI = "/ticker/price"
 
 // GetCurrencies get all currencies from the crypto API
-func GetCurrencies() (model.GetCurrenciesAPIResponse, error) {
+func GetCurrencies(marketType string) (model.GetCurrenciesAPIResponse, error) {
 	var currencies model.GetCurrenciesAPIResponse
 
 	client := resty.New()
 
-	link_number := 0
+	apiLinks, ok := MARKETS[marketType]
+	if !ok {
+		return model.GetCurrenciesAPIResponse{}, fmt.Errorf("market is not support: %s", marketType)
+	}
 
+	link_number := 0
 	// check all APIs from the list
 	for {
-		api_link := APIlinks[link_number] + tickerURI
+		api_link := apiLinks[link_number] + tickerURI
 
 		resp, err := client.R().
 			SetResult(&currencies).
@@ -37,7 +51,7 @@ func GetCurrencies() (model.GetCurrenciesAPIResponse, error) {
 
 		// if fails, then check another API
 		if err != nil || resp.StatusCode() >= 400 {
-			if link_number+1 == len(APIlinks) { // no more new API
+			if link_number+1 == len(apiLinks) { // no more new API
 				system.LogError("GetCurrencies: binance all APIs are unavaliable")
 				return model.GetCurrenciesAPIResponse{}, fmt.Errorf("binance API error")
 			} else {
@@ -50,15 +64,19 @@ func GetCurrencies() (model.GetCurrenciesAPIResponse, error) {
 	}
 }
 
-func GetCurrency(name string) (model.GetCurrencyAPIResponse, error) {
+func GetCurrency(name string, marketType string) (model.GetCurrencyAPIResponse, error) {
 	var currency model.GetCurrencyAPIResponse
 
 	client := resty.New()
 
-	link_number := 0
+	apiLinks, ok := MARKETS[marketType]
+	if !ok {
+		return model.GetCurrencyAPIResponse{}, fmt.Errorf("market type is not support: %s", marketType)
+	}
 
+	link_number := 0
 	for {
-		api_link := APIlinks[link_number] + tickerURI + "?symbol=" + name
+		api_link := apiLinks[link_number] + tickerURI + "?symbol=" + name
 
 		resp, err := client.R().
 			SetResult(&currency).
@@ -66,7 +84,7 @@ func GetCurrency(name string) (model.GetCurrencyAPIResponse, error) {
 
 		// if fails, then check another API
 		if err != nil || resp.StatusCode() >= 400 {
-			if link_number+1 == len(APIlinks) { // no more new API
+			if link_number+1 == len(apiLinks) { // no more new API
 				system.LogError("GetCurrency: binance all APIs are unavaliable")
 				return model.GetCurrencyAPIResponse{}, fmt.Errorf("binance API error")
 			} else {

@@ -29,7 +29,7 @@ func (server *Server) getCurrencies(ctx *gin.Context) {
 	}
 
 	// STEP: get currencies with name
-	currencies, err := server.service.GetCurrenciesWithName(req.Name)
+	currencies, err := server.service.GetCurrenciesWithName(req.Name, req.MarketType)
 	if err != nil {
 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return

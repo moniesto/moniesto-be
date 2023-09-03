@@ -165,6 +165,7 @@ const (
 	Post_CreatePost_InvalidDuration              = "Post_CreatePost_InvalidDuration"
 	Post_CreatePost_InvalidCurrencyPrice         = "Post_CreatePost_InvalidCurrencyPrice"
 	Post_CreatePost_InvalidTargets               = "Post_CreatePost_InvalidTargets"
+	Post_CreatePost_InvalidTakeProfit            = "Post_CreatePost_InvalidTakeProfit"
 	Post_CreatePost_InvalidStop                  = "Post_CreatePost_InvalidStop"
 	Post_CreatePost_ServerErrorCreatePost        = "Post_CreatePost_ServerErrorCreatePost"
 	Post_CreatePost_ServerErrorCreateDescription = "Post_CreatePost_ServerErrorCreateDescription"
@@ -363,6 +364,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Post_CreatePost_InvalidDuration:              "Duration is invalid",
 	Post_CreatePost_InvalidCurrencyPrice:         "Currency price is invalid",
 	Post_CreatePost_InvalidTargets:               "Targets are invalid",
+	Post_CreatePost_InvalidTakeProfit:            "Take Profit is invalid",
 	Post_CreatePost_InvalidStop:                  "Stop is invalid",
 	Post_CreatePost_ServerErrorCreatePost:        "Server error on creating post",
 	Post_CreatePost_ServerErrorCreateDescription: "Server error on creating description",

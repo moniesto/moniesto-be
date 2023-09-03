@@ -125,31 +125,73 @@ func Duration(duration time.Time) error {
 	return nil
 }
 
-// Target checks targets are valid [price < target1 < target2 < target3]
-func Target(price, target1, target2, target3 float64, direction db.EntryPosition) error {
-	target_error_message := "targets are not valid"
-	direction_error_message := "direction is not valid"
+func TakeProfit(price, takeProfit float64, direction db.EntryPosition) error {
+	takeProfitErrorMessage := "take profit is not valid"
+	directionErrorMessage := "direction is not valid"
 
-	if target1 <= 0 || target2 <= 0 || target3 <= 0 {
-		return fmt.Errorf(target_error_message)
+	switch direction {
+	case db.EntryPositionLong:
+		if (takeProfit <= price) || (takeProfit > price*float64(MaxTargetMultiplierLong)) {
+			return fmt.Errorf(takeProfitErrorMessage)
+		}
+	case db.EntryPositionShort:
+		if takeProfit >= price {
+			return fmt.Errorf(takeProfitErrorMessage)
+		}
+	default:
+		return fmt.Errorf(directionErrorMessage)
 	}
 
-	if direction == db.EntryPositionLong {
-		if !(price < target1) || !(target1 < target2) || !(target2 < target3) {
-			return fmt.Errorf(target_error_message)
+	return nil
+}
+
+// Target checks targets are valid [price < target1 < target2 < target3 < takeProfit] => for long | or vice-versa for short
+func Target(price float64, takeProfit float64, target1P, target2P, target3P *float64, direction db.EntryPosition) error {
+	targetErrorMessage := "targets are not valid"
+	directionErrorMessage := "direction is not valid"
+
+	if (target3P != nil) && (target1P == nil || target2P == nil) { // tp3 is not nil, but one of tp1 or tp2 is nil
+		return fmt.Errorf(targetErrorMessage)
+	} else if target2P == nil && target3P != nil { // tp2 is nil, but tp3 is not
+		return fmt.Errorf(targetErrorMessage)
+	} else if target1P == nil && (target2P != nil || target3P != nil) { // tp1 is nil, but one of tp2 or tp3 is not nil
+		return fmt.Errorf(targetErrorMessage)
+	}
+
+	targetsP := []*float64{target1P, target2P, target3P}
+	targets := []float64{}
+
+	for _, targetP := range targetsP {
+		if targetP == nil {
+			break
+		}
+		targets = append(targets, *targetP)
+	}
+
+	if len(targets) == 0 {
+		return nil
+	}
+
+	var checkpoint float64 = 0
+	for i, target := range targets {
+		if i == 0 {
+			checkpoint = target
 		}
 
-		// max target can only be MaxTargetMultiplierLong times more than price
-		if target3 > price*float64(MaxTargetMultiplierLong) {
-			return fmt.Errorf(target_error_message)
+		switch direction {
+		case db.EntryPositionLong:
+			if !(price < target) || !(target < takeProfit) || (i != 0 && checkpoint < target) {
+				return fmt.Errorf(targetErrorMessage)
+			}
+		case db.EntryPositionShort:
+			if !(takeProfit < target) || !(target < price) || (i != 0 && checkpoint > target) {
+				return fmt.Errorf(targetErrorMessage)
+			}
+		default:
+			return fmt.Errorf(directionErrorMessage)
 		}
 
-	} else if direction == db.EntryPositionShort {
-		if !(target3 < target2) || !(target2 < target1) || !(target1 < price) {
-			return fmt.Errorf(target_error_message)
-		}
-	} else {
-		return fmt.Errorf(direction_error_message)
+		checkpoint = target
 	}
 
 	return nil
@@ -164,16 +206,16 @@ func Stop(price, stop float64, direction db.EntryPosition) error {
 		return fmt.Errorf(error_message)
 	}
 
-	if direction == db.EntryPositionLong {
+	switch direction {
+	case db.EntryPositionLong:
 		if !(stop < price) {
 			return fmt.Errorf(error_message)
 		}
-	} else if direction == db.EntryPositionShort {
-		// stop can not be smaller than price & MaxStopMultiplierShort times more than price
-		if stop < price || stop > price*float64(MaxStopMultiplierShort) {
+	case db.EntryPositionShort:
+		if stop <= price || stop > price*float64(MaxStopMultiplierShort) {
 			return fmt.Errorf(error_message)
 		}
-	} else {
+	default:
 		return fmt.Errorf(direction_error_message)
 	}
 

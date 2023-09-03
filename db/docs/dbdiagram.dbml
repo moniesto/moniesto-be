@@ -138,20 +138,31 @@
   Table post_crypto as PC {
     id varchar [not null, pk, unique]
     moniest_id varchar [not null]
+
+    market_type post_crypto_market_type [not null]
+
     currency varchar [not null]
     start_price float [not null]
     duration timestamp [not null]
-    target1 float [not null]
-    target2 float [not null]
-    target3 float [not null]
+
+    take_profit float [not null]
     stop float [not null]
+
+    target1 float
+    target2 float
+    target3 float
+
     direction entry_position [not null]
-    score float [not null, default: 0]
+    leverage int
+
     finished boolean [not null, default: false]
     status post_crypto_status [not null, default: "pending"]
-    last_target_hit float [not null]
-    last_job_timestamp bigint [not null]
-    
+
+    pnl float [not null]
+    roi float [not null]
+
+    last_operated_at timestamp [not null, default: `now()`]
+
     deleted boolean [not null, default: false]
     
     created_at timestamp [not null, default: `now()`]
@@ -159,6 +170,10 @@
     
     indexes {
       moniest_id
+      finished
+      duration
+      created_at
+      last_operated_at
     }
     
     Note: 'Stores crypto posts data'
@@ -314,6 +329,11 @@
   Enum image_type {
     profile_photo
     background_photo
+  }
+
+  Enum post_crypto_market_type {
+    spot
+    futures
   }
 
   Enum entry_position {
