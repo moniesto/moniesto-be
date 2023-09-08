@@ -55,7 +55,7 @@ run:
 	go run cmd/main.go
 
 nodeman:
-	nodemon --exec go run cmd/main.go --signal SIGTERM
+	nodemon --exec go run cmd/main.go
 
 test:
 	go test ./...
