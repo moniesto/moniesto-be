@@ -2332,9 +2332,6 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "string"
-                },
                 "post_statistics": {
                     "$ref": "#/definitions/model.CryptoPostStatistics"
                 },

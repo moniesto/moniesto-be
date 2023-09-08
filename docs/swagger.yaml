@@ -335,8 +335,6 @@ definitions:
         type: string
       description:
         type: string
-      id:
-        type: string
       post_statistics:
         $ref: '#/definitions/model.CryptoPostStatistics'
       subscriber_count:
