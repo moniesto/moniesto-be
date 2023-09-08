@@ -337,9 +337,6 @@ definitions:
         type: string
       post_statistics:
         $ref: '#/definitions/model.CryptoPostStatistics'
-      subscriber_count:
-        description: only filled when getting moniests as contents
-        type: integer
       subscription_info:
         $ref: '#/definitions/model.MoniestSubscriptionInfo'
     type: object
@@ -1033,6 +1030,47 @@ paths:
       security:
       - bearerAuth: []
       summary: Get Content Moniests
+      tags:
+      - Content
+  /content/moniests/search:
+    get:
+      consumes:
+      - application/json
+      description: Search Moniest by their fullname & username
+      parameters:
+      - description: length min:1 max:30
+        in: query
+        name: searchText
+        required: true
+        type: string
+      - description: 'default: 10 & max: 50'
+        in: query
+        name: limit
+        type: integer
+      - description: 'default: 0'
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "406":
+          description: invalid body
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Search Moniest
       tags:
       - Content
   /content/posts:

@@ -114,6 +114,7 @@ func (server *Server) getContentMoniests(ctx *gin.Context) {
 // @Failure 406 {object} clientError.ErrorResponse "invalid body"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /content/moniests/search [get]
 func (server *Server) searchMoniest(ctx *gin.Context) {
 	var req model.SearchMoniestRequest = model.SearchMoniestRequest{
 		Limit:  util.DEFAULT_LIMIT,

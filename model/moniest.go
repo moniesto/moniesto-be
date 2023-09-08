@@ -28,11 +28,8 @@ type SubscribeMoniestResponse struct {
 }
 
 type Moniest struct {
-	Bio         string `json:"bio,omitempty"`
-	Description string `json:"description,omitempty"`
-
-	SubscriberCount *int64 `json:"subscriber_count,omitempty"` // only filled when getting moniests as contents
-
+	Bio                     string                   `json:"bio,omitempty"`
+	Description             string                   `json:"description,omitempty"`
 	CryptoPostStatistics    *CryptoPostStatistics    `json:"post_statistics,omitempty"`
 	MoniestSubscriptionInfo *MoniestSubscriptionInfo `json:"subscription_info,omitempty"`
 }

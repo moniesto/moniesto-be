@@ -117,7 +117,7 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 	return model.NewGetContentPostResponse(posts), nil
 }
 
-func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, limit, offset int) ([]model.User, error) {
+func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, limit, offset int) ([]model.UserAsContent, error) {
 	// STEP: get all moniests -> highest pnl first
 	params := db.GetMoniestsParams{
 		Limit:  int32(limit),

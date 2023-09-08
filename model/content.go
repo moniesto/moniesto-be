@@ -20,6 +20,33 @@ type GetContentPostRequest struct {
 	Offset     int    `form:"offset" json:"offset"`
 }
 
+// only difference from User struct is type of "Moniest" field
+type UserAsContent struct {
+	Id                           string            `json:"id,omitempty"`
+	Fullname                     string            `json:"fullname,omitempty"`
+	Username                     string            `json:"username,omitempty"`
+	EmailVerified                bool              `json:"email_verified"`
+	Location                     string            `json:"location,omitempty"`
+	ProfilePhotoLink             string            `json:"profile_photo_link,omitempty"`
+	ProfilePhotoThumbnailLink    string            `json:"profile_photo_thumbnail_link,omitempty"`
+	BackgroundPhotoLink          string            `json:"background_photo_link,omitempty"`
+	BackgroundPhotoThumbnailLink string            `json:"background_photo_thumbnail_link,omitempty"`
+	CreatedAt                    *time.Time        `json:"created_at,omitempty"`
+	UpdatedAt                    *time.Time        `json:"updated_at,omitempty"`
+	Moniest                      *MoniestAsContent `json:"moniest,omitempty"`
+}
+
+// only difference from Moniest struct is additional "SubscriberCount" field
+type MoniestAsContent struct {
+	Bio         string `json:"bio,omitempty"`
+	Description string `json:"description,omitempty"`
+
+	SubscriberCount *int64 `json:"subscriber_count,omitempty"`
+
+	CryptoPostStatistics    *CryptoPostStatistics    `json:"post_statistics,omitempty"`
+	MoniestSubscriptionInfo *MoniestSubscriptionInfo `json:"subscription_info,omitempty"`
+}
+
 type PostDBResponse []db.GetSubscribedActivePostsRow
 type ContentMoniestDBResponse []db.GetMoniestsRow
 
@@ -237,11 +264,11 @@ func NewGetMoniestsResponse(moniests MoniestDBResponse) []User {
 	return response
 }
 
-func NewGetContentMoniestResponse(moniests ContentMoniestDBResponse) []User {
-	response := make([]User, 0, len(moniests))
+func NewGetContentMoniestResponse(moniests ContentMoniestDBResponse) []UserAsContent {
+	response := make([]UserAsContent, 0, len(moniests))
 
 	for _, user := range moniests {
-		response = append(response, User{
+		response = append(response, UserAsContent{
 			Id:                           user.ID,
 			Fullname:                     user.Fullname,
 			Username:                     user.Username,
@@ -253,7 +280,7 @@ func NewGetContentMoniestResponse(moniests ContentMoniestDBResponse) []User {
 			BackgroundPhotoThumbnailLink: user.BackgroundPhotoThumbnailLink.(string),
 			CreatedAt:                    &user.CreatedAt,
 			UpdatedAt:                    &user.UpdatedAt,
-			Moniest: &Moniest{
+			Moniest: &MoniestAsContent{
 				Bio:             user.Bio.String,
 				Description:     user.Description.String,
 				SubscriberCount: &user.UserSubscriptionCount,
