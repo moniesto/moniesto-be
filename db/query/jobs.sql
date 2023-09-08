@@ -1,19 +1,22 @@
 -- name: GetAllActivePosts :many
 SELECT "pc"."id",
     "pc"."moniest_id",
+    "pc"."market_type",
     "pc"."currency",
     "pc"."start_price",
     "pc"."duration",
+    "pc"."take_profit",
+    "pc"."stop",
     "pc"."target1",
     "pc"."target2",
     "pc"."target3",
-    "pc"."stop",
     "pc"."direction",
-    "pc"."score",
+    "pc"."leverage",
     "pc"."finished",
     "pc"."status",
-    "pc"."last_target_hit",
-    "pc"."last_job_timestamp",
+    "pc"."pnl",
+    "pc"."roi",
+    "pc"."last_operated_at",
     "pc"."created_at",
     "pc"."updated_at"
 FROM "post_crypto" AS pc
@@ -22,24 +25,34 @@ ORDER BY "pc"."created_at" ASC;
 
 -- name: UpdateUnfinishedPostStatus :exec
 UPDATE "post_crypto"
-SET "last_target_hit" = $1,
-    "last_job_timestamp" = $2,
+SET "last_operated_at" = $2,
     updated_at = now()
-WHERE "id" = $3;
+WHERE "id" = $1;
 
 -- name: UpdateFinishedPostStatus :exec
 UPDATE "post_crypto"
-SET "status" = $1,
-    "score" = $2,
+SET "status" = $2,
+    "pnl" = $3,
+    "roi" = $4,
     "finished" = TRUE,
     updated_at = now()
-WHERE "id" = $3;
+WHERE "id" = $1;
 
--- name: UpdateMoniestScore :exec
-UPDATE "moniest"
-SET "score" = GREATEST("score" + $1, 0),
-    updated_at = now()
-WHERE "id" = $2;
+-- name: UpdateMoniestPostCryptoStatistics :exec
+UPDATE "moniest_post_crypto_statistics"
+SET "pnl_7days" = $2,
+    "roi_7days" = $3,
+    "win_rate_7days" = $4,
+    "posts_7days" = $5,
+    "pnl_30days" = $6,
+    "roi_30days" = $7,
+    "win_rate_30days" = $8,
+    "posts_30days" = $9,
+    "pnl_total" = $10,
+    "roi_total" = $11,
+    "win_rate_total" = $12,
+    "updated_at" = now()
+WHERE "moniest_id" = $1;
 
 -- name: GetAllPendingPayouts :many
 SELECT "bph"."id",

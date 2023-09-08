@@ -3,17 +3,14 @@ package service
 import (
 	"context"
 	"database/sql"
-	"encoding/json"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
-	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/mailing"
 	"github.com/moniesto/moniesto-be/util/payment/binance"
-	"github.com/moniesto/moniesto-be/util/scoring"
 	"github.com/moniesto/moniesto-be/util/system"
 )
 
@@ -29,6 +26,7 @@ func (service *Service) GetAllActivePosts() ([]db.GetAllActivePostsRow, error) {
 	return posts, err
 }
 
+/*
 func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) error {
 	ctx := context.Background()
 
@@ -104,6 +102,7 @@ func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) err
 
 	return nil
 }
+*/
 
 func (service *Service) GetAllPendingPayouts(ctx *gin.Context) ([]db.GetAllPendingPayoutsRow, error) {
 

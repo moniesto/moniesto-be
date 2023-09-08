@@ -4,6 +4,7 @@ import (
 	"time"
 
 	db "github.com/moniesto/moniesto-be/db/sqlc"
+	"github.com/moniesto/moniesto-be/util"
 )
 
 type CreatePostRequest struct {
@@ -18,28 +19,28 @@ type CreatePostRequest struct {
 	Target3 *float64 `json:"target3"`
 
 	Direction   string `json:"direction" binding:"required"`
-	Leverage    int    `json:"leverage"`
+	Leverage    int32  `json:"leverage"`
 	Description string `json:"description"`
 }
 
-type CalculateApproxScoreResponse struct {
-	Score float64 `json:"score"`
-}
-
 type CreatePostResponse struct {
-	ID         string           `json:"id"`
-	MoniestID  string           `json:"moniest_id"`
-	Currency   string           `json:"currency"`
-	StartPrice float64          `json:"start_price"`
-	Duration   time.Time        `json:"duration"`
-	Target1    float64          `json:"target1"`
-	Target2    float64          `json:"target2"`
-	Target3    float64          `json:"target3"`
-	Stop       float64          `json:"stop"`
-	Direction  db.EntryPosition `json:"direction"`
-	Score      float64          `json:"score"`
-	CreatedAt  time.Time        `json:"created_at"`
-	UpdatedAt  time.Time        `json:"updated_at"`
+	ID         string                  `json:"id"`
+	MoniestID  string                  `json:"moniest_id"`
+	MarketType db.PostCryptoMarketType `json:"market_type"`
+	Currency   string                  `json:"currency"`
+	StartPrice float64                 `json:"start_price"`
+	Duration   time.Time               `json:"duration"`
+	TakeProfit float64                 `json:"take_profit"`
+	Stop       float64                 `json:"stop"`
+	Target1    *float64                `json:"target1,omitempty"`
+	Target2    *float64                `json:"target2,omitempty"`
+	Target3    *float64                `json:"target3,omitempty"`
+	Direction  db.EntryPosition        `json:"direction"`
+	Leverage   int32                   `json:"leverage"`
+	Pnl        float64                 `json:"pnl"`
+	Roi        float64                 `json:"roi"`
+	CreatedAt  time.Time               `json:"created_at"`
+	UpdatedAt  time.Time               `json:"updated_at"`
 
 	Description string `json:"description,omitempty"`
 }
@@ -59,15 +60,19 @@ func NewCreatePostResponse(post db.CreatePostRow, description db.PostCryptoDescr
 	return CreatePostResponse{
 		ID:          post.ID,
 		MoniestID:   post.MoniestID,
+		MarketType:  post.MarketType,
 		Currency:    post.Currency,
 		StartPrice:  post.StartPrice,
 		Duration:    post.Duration,
-		Target1:     post.Target1,
-		Target2:     post.Target2,
-		Target3:     post.Target3,
+		TakeProfit:  post.TakeProfit,
 		Stop:        post.Stop,
+		Target1:     util.SafeSQLNullToFloat(post.Target1),
+		Target2:     util.SafeSQLNullToFloat(post.Target2),
+		Target3:     util.SafeSQLNullToFloat(post.Target3),
 		Direction:   post.Direction,
-		Score:       post.Score,
+		Leverage:    post.Leverage,
+		Pnl:         post.Pnl,
+		Roi:         post.Roi,
 		CreatedAt:   post.CreatedAt,
 		UpdatedAt:   post.UpdatedAt,
 		Description: description.Description,

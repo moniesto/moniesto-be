@@ -42,7 +42,7 @@ func (server *Server) getUserByUsername(ctx *gin.Context) {
 			return
 		}
 
-		// TODO: find a better solution for this problem (update token when username changes)
+		// TODO: find a better solution for this problem (update token when username changes [done: but keeping this for additional check])
 		// if user changed username, but it is not updated on TOKEN
 		if user.ID != own_user_id {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, clientError.GetError(clientError.Account_Authorization_InvalidToken))

@@ -85,11 +85,11 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 		}
 	}
 
-	// all moniests -> deactive(old) high score posts
+	// all moniests -> inactive(old) high pnl posts
 
-	// OPTION 3: sorted by score
-	if sortBy == util.POST_FILTER_SCORE {
-		postsFromDB, err := service.Store.GetDeactivePostsByScore(ctx, db.GetDeactivePostsByScoreParams{
+	// OPTION 3: sorted by pnl
+	if sortBy == util.POST_FILTER_PNL {
+		postsFromDB, err := service.Store.GetDeactivePostsByPNL(ctx, db.GetDeactivePostsByPNLParams{
 			Limit:  int32(limit),
 			Offset: int32(offset),
 		})
@@ -97,7 +97,7 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 			if err == sql.ErrNoRows {
 				return []model.GetContentPostResponse{}, nil
 			}
-			system.LogError("server error on get deactive posts by score", err.Error())
+			system.LogError("server error on get deactive posts by pnl", err.Error())
 			return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPosts_ServerErrorGetPosts)
 		}
 		posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
@@ -117,8 +117,8 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 	return model.NewGetContentPostResponse(posts), nil
 }
 
-func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, limit, offset int) ([]model.GetContentMoniestResponse, error) {
-	// STEP: get all moniests -> highest score first
+func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, limit, offset int) ([]model.User, error) {
+	// STEP: get all moniests -> highest pnl first
 	params := db.GetMoniestsParams{
 		Limit:  int32(limit),
 		Offset: int32(offset),

@@ -125,13 +125,15 @@ func Duration(duration time.Time) error {
 	return nil
 }
 
+// TODO: update this function
+// TakeProfit checks is take profit valid [price > takeProfit > MaxTarget]
 func TakeProfit(price, takeProfit float64, direction db.EntryPosition) error {
 	takeProfitErrorMessage := "take profit is not valid"
 	directionErrorMessage := "direction is not valid"
 
 	switch direction {
 	case db.EntryPositionLong:
-		if (takeProfit <= price) || (takeProfit > price*float64(MaxTargetMultiplierLong)) {
+		if (takeProfit <= price) || (takeProfit > price*float64(MaxTakeProfitMultiplierLong)) {
 			return fmt.Errorf(takeProfitErrorMessage)
 		}
 	case db.EntryPositionShort:
@@ -148,7 +150,6 @@ func TakeProfit(price, takeProfit float64, direction db.EntryPosition) error {
 // Target checks targets are valid [price < target1 < target2 < target3 < takeProfit] => for long | or vice-versa for short
 func Target(price float64, takeProfit float64, target1P, target2P, target3P *float64, direction db.EntryPosition) error {
 	targetErrorMessage := "targets are not valid"
-	directionErrorMessage := "direction is not valid"
 
 	if (target3P != nil) && (target1P == nil || target2P == nil) { // tp3 is not nil, but one of tp1 or tp2 is nil
 		return fmt.Errorf(targetErrorMessage)
@@ -184,11 +185,11 @@ func Target(price float64, takeProfit float64, target1P, target2P, target3P *flo
 				return fmt.Errorf(targetErrorMessage)
 			}
 		case db.EntryPositionShort:
-			if !(takeProfit < target) || !(target < price) || (i != 0 && checkpoint > target) {
+			if !(target < price) || !(takeProfit < target) || (i != 0 && checkpoint > target) {
 				return fmt.Errorf(targetErrorMessage)
 			}
 		default:
-			return fmt.Errorf(directionErrorMessage)
+			return fmt.Errorf(ERROR_DirectionNotValid)
 		}
 
 		checkpoint = target
@@ -198,30 +199,50 @@ func Target(price float64, takeProfit float64, target1P, target2P, target3P *flo
 }
 
 // Stop checks stop is valid [stop < price]
-func Stop(price, stop float64, direction db.EntryPosition) error {
+func Stop(price, stop float64, leverage int32, direction db.EntryPosition) error {
 	error_message := "stop is not valid"
-	direction_error_message := "direction is not valid"
 
 	if stop <= 0 {
 		return fmt.Errorf(error_message)
 	}
 
+	var stopLimitPercentage float64 = float64(100 / leverage)
+
 	switch direction {
 	case db.EntryPositionLong:
-		if !(stop < price) {
+		if !(stop < price) || !(stop > (price - (price * (stopLimitPercentage / 100)))) {
 			return fmt.Errorf(error_message)
 		}
 	case db.EntryPositionShort:
-		if stop <= price || stop > price*float64(MaxStopMultiplierShort) {
+		if stop <= price || stop > price*float64(MaxStopMultiplierShort) || !(stop < (price + (price * (stopLimitPercentage / 100)))) {
 			return fmt.Errorf(error_message)
 		}
 	default:
-		return fmt.Errorf(direction_error_message)
+		return fmt.Errorf(ERROR_DirectionNotValid)
 	}
 
 	return nil
 }
 
+// MarketType checks provided market type is supported or not
+func MarketType(marketType string) error {
+	if contains(supportedMarketTypes, marketType) {
+		return nil
+	}
+
+	return fmt.Errorf("market type is not supported: %s", marketType)
+}
+
+// Leverage checks leverage is valid or not
+func Leverage(leverage int32) error {
+	if leverage >= MinLeverage && leverage <= MaxLeverage {
+		return nil
+	}
+
+	return fmt.Errorf("leverage is not valid: %d", leverage)
+}
+
+// Language checks provided language is supported or not
 func Language(language string) error {
 	if contains(supportedLanguages, language) {
 		return nil
@@ -237,7 +258,6 @@ func BinanceID(binance_id string) error {
 	}
 
 	return fmt.Errorf("binance_id is not valid")
-
 }
 
 func UserIsAdmin(email string) bool {

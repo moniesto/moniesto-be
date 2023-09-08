@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/go-resty/resty/v2"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/system"
-	"github.com/moniesto/moniesto-be/util/validation"
 )
 
 // "https://api3.binance.com/api/v3/ticker/price",
@@ -23,8 +23,8 @@ var futuresApiLinks []string = []string{
 }
 
 var MARKETS map[string][]string = map[string][]string{
-	string(validation.MARKET_TYPE_SPOT):    spotApiLinks,
-	string(validation.MARKET_TYPE_FUTURES): futuresApiLinks,
+	string(db.PostCryptoMarketTypeSpot):    spotApiLinks,
+	string(db.PostCryptoMarketTypeFutures): futuresApiLinks,
 }
 
 var tickerURI = "/ticker/price"

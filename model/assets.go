@@ -19,9 +19,9 @@ type GetValidationConfigsResponse struct {
 	MaxLocationLength            int     `json:"max_location_length"`
 	PasswordLength               int     `json:"password_length"`
 
-	MaxDurationDay          int `json:"max_duration_day"`
-	LongMaxTargetMultiplier int `json:"long_max_target_multiplier"`
-	ShortMaxStopMultiplier  int `json:"short_max_stop_multiplier"`
+	MaxDurationDay                  int `json:"max_duration_day"`
+	LongMaxTakeProfitMultiplierLong int `json:"long_max_take_profit_multiplier"`
+	ShortMaxStopMultiplier          int `json:"short_max_stop_multiplier"`
 }
 
 type GetGeneralInfoResponse struct {

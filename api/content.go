@@ -18,7 +18,7 @@ import (
 // @Produce json
 // @Param subscribed query bool false "default: true"
 // @Param active query bool false "default: true"
-// @Param sortBy query string false "options: [score | created_at] default: score, only affect when subscription & active = false"
+// @Param sortBy query string false "options: [pnl | created_at] default: pnl, only affect when subscription & active = false"
 // @Param limit query int false "default: 10 & max: 50"
 // @Param offset query int false "default: 0"
 // @Success 200 {object} []model.GetContentPostResponse
@@ -29,7 +29,7 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 	var req model.GetContentPostRequest = model.GetContentPostRequest{
 		Subscribed: true,
 		Active:     true,
-		SortBy:     "score",
+		SortBy:     "pnl",
 		Limit:      util.DEFAULT_LIMIT,
 		Offset:     util.DEFAULT_OFFSET,
 	}
@@ -67,7 +67,7 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 // @Produce json
 // @Param limit query int false "default: 10 & max: 50"
 // @Param offset query int false "default: 0"
-// @Success 200 {object} []model.GetContentMoniestResponse
+// @Success 200 {object} []model.User
 // @Failure 406 {object} clientError.ErrorResponse "invalid body"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /content/moniests [get]

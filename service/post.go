@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"unsafe"
@@ -12,7 +13,6 @@ import (
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/scoring"
 	"github.com/moniesto/moniesto-be/util/system"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
@@ -26,6 +26,10 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 
 	createPostParams.MoniestID = moniestID
 
+	fmt.Println("tp1", createPostParams.Target1)
+	fmt.Println("tp2", createPostParams.Target2)
+	fmt.Println("tp3", createPostParams.Target3)
+
 	post, err := service.Store.CreatePost(ctx, createPostParams)
 	if err != nil {
 		system.LogError("server error on create post", err.Error())
@@ -33,17 +37,6 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 	}
 
 	return post, nil
-}
-
-// CalculateApproxScore check post validity and return approx highest score
-func (service *Service) CalculateApproxScore(req model.CreatePostRequest, currency model.Currency) (float64, error) {
-
-	createPostParams, err := service.getValidPost(req, currency)
-	if err != nil {
-		return 0, err
-	}
-
-	return createPostParams.Score, nil
 }
 
 // check post validity and return creating post params
@@ -74,29 +67,43 @@ func (service *Service) getValidPost(req model.CreatePostRequest, currency model
 	}
 
 	// STEP: stop is valid
-	// TODO: update stop by using leverage
-	if err := validation.Stop(currency_price, req.Stop, db.EntryPosition(req.Direction)); err != nil {
+	if err := validation.Stop(currency_price, req.Stop, req.Leverage, db.EntryPosition(req.Direction)); err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidStop)
 	}
 
-	// STEP: get score
-	score := scoring.CalculateApproxScore(req.Duration, currency_price, req.Target3, req.Direction, service.config)
+	// STEP: market type is valid
+	if err := validation.MarketType(req.MarketType); err != nil {
+		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidMarketType)
+	}
+
+	// STEP: leverage is valid
+	if err := validation.Leverage(req.Leverage); err != nil {
+		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidLeverage)
+	}
+
+	// STEP: get max pnl and roi
+	maxPnl, maxRoi, err := core.CalculatePNL_ROI(currency_price, req.TakeProfit, req.Leverage, db.EntryPosition(req.Direction))
+	if err != nil {
+		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.General_CalculatePNLandROI)
+	}
 
 	// STEP: create post
 	createPostParam := db.CreatePostParams{
 		ID: core.CreateID(),
 		// MoniestID:        moniestID,
-		Currency:         currency.Currency,
-		StartPrice:       currency_price,
-		Duration:         req.Duration,
-		Target1:          req.Target1,
-		Target2:          req.Target2,
-		Target3:          req.Target3,
-		Stop:             req.Stop,
-		Direction:        db.EntryPosition(req.Direction),
-		Score:            score,
-		LastTargetHit:    currency_price,
-		LastJobTimestamp: util.DateToTimestamp(util.Now()),
+		MarketType: db.PostCryptoMarketType(req.MarketType),
+		Currency:   currency.Currency,
+		StartPrice: currency_price,
+		Duration:   req.Duration,
+		TakeProfit: req.TakeProfit,
+		Stop:       req.Stop,
+		Target1:    util.SafeFloat64ToSQLNull(req.Target1),
+		Target2:    util.SafeFloat64ToSQLNull(req.Target2),
+		Target3:    util.SafeFloat64ToSQLNull(req.Target3),
+		Direction:  db.EntryPosition(req.Direction),
+		Leverage:   req.Leverage,
+		Pnl:        maxPnl,
+		Roi:        maxRoi,
 	}
 
 	return createPostParam, nil

@@ -80,7 +80,15 @@ SELECT "user"."id",
     "user"."updated_at",
     "moniest"."bio",
     "moniest"."description",
-    "moniest"."score",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
     "moniest_subscription_info"."id" as "moniest_subscription_info_id",
     "moniest_subscription_info"."fee",
     "moniest_subscription_info"."message",
@@ -124,6 +132,7 @@ SELECT "user"."id",
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
     LEFT JOIN "moniest_subscription_info" ON "moniest_subscription_info"."moniest_id" = "moniest"."id"
+    LEFT JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "moniest"."id"
 WHERE "user"."id" = $1
     AND "user"."deleted" = false;
 
@@ -138,7 +147,15 @@ SELECT "user"."id",
     "user"."updated_at",
     "moniest"."bio",
     "moniest"."description",
-    "moniest"."score",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
     "moniest_subscription_info"."id" as "moniest_subscription_info_id",
     "moniest_subscription_info"."fee",
     "moniest_subscription_info"."message",
@@ -186,6 +203,7 @@ SELECT "user"."id",
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
     LEFT JOIN "moniest_subscription_info" ON "moniest_subscription_info"."moniest_id" = "moniest"."id"
+    LEFT JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "moniest"."id"
 WHERE "user"."username" = $1
     AND "user"."deleted" = false;
 
@@ -202,7 +220,15 @@ SELECT "user"."id",
     "user"."updated_at",
     "moniest"."bio",
     "moniest"."description",
-    "moniest"."score",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
     "moniest_subscription_info"."id" as "moniest_subscription_info_id",
     "moniest_subscription_info"."fee",
     "moniest_subscription_info"."message",
@@ -250,6 +276,7 @@ SELECT "user"."id",
 FROM "user"
     LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
     LEFT JOIN "moniest_subscription_info" ON "moniest_subscription_info"."moniest_id" = "moniest"."id"
+    LEFT JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "moniest"."id"
 WHERE "user"."username" = $1
     AND "user"."deleted" = false;
 
@@ -321,18 +348,6 @@ SET email_verified = true,
     updated_at = now()
 WHERE id = $1;
 
--- name: GetActiveUsersVerifiedEmails :many
-SELECT email
-FROM "user"
-WHERE email_verified = true
-    AND deleted = false;
-
--- name: GetInactiveUsersVerifiedEmails :many
-SELECT email
-FROM "user"
-WHERE email_verified = true
-    AND deleted = true;
-
 -- name: GetPasswordByID :one
 SELECT password
 FROM "user"
@@ -372,7 +387,15 @@ SELECT "u"."id",
     "u"."updated_at",
     "m"."bio",
     "m"."description",
-    "m"."score",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
     "msi"."fee",
     "msi"."message",
     "msi"."updated_at" as "moniest_subscription_info_updated_at",
@@ -416,6 +439,7 @@ FROM "moniest" as m
     INNER JOIN "user_subscription" AS us ON "m"."id" = "us"."moniest_id"
     INNER JOIN "user" as u ON "u"."id" = "m"."user_id"
     INNER JOIN "moniest_subscription_info" as msi ON "msi"."moniest_id" = "m"."id"
+    INNER JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "m"."id"
     AND "us"."user_id" = $1
     AND "us"."active" = TRUE
 ORDER BY "us"."created_at" DESC

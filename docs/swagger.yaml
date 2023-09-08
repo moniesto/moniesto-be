@@ -18,6 +18,14 @@ definitions:
     x-enum-varnames:
     - EntryPositionLong
     - EntryPositionShort
+  db.PostCryptoMarketType:
+    enum:
+    - spot
+    - futures
+    type: string
+    x-enum-varnames:
+    - PostCryptoMarketTypeSpot
+    - PostCryptoMarketTypeFutures
   db.PostCryptoStatus:
     enum:
     - pending
@@ -36,11 +44,6 @@ definitions:
     x-enum-varnames:
     - UserLanguageEn
     - UserLanguageTr
-  model.CalculateApproxScoreResponse:
-    properties:
-      score:
-        type: number
-    type: object
   model.ChangePasswordRequest:
     properties:
       new:
@@ -107,7 +110,13 @@ definitions:
         type: string
       duration:
         type: string
+      leverage:
+        type: integer
+      market_type:
+        type: string
       stop:
+        type: number
+      take_profit:
         type: number
       target1:
         type: number
@@ -119,10 +128,9 @@ definitions:
     - currency
     - direction
     - duration
+    - market_type
     - stop
-    - target1
-    - target2
-    - target3
+    - take_profit
     type: object
   model.CreatePostResponse:
     properties:
@@ -138,13 +146,21 @@ definitions:
         type: string
       id:
         type: string
+      leverage:
+        type: integer
+      market_type:
+        $ref: '#/definitions/db.PostCryptoMarketType'
       moniest_id:
         type: string
-      score:
+      pnl:
+        type: number
+      roi:
         type: number
       start_price:
         type: number
       stop:
+        type: number
+      take_profit:
         type: number
       target1:
         type: number
@@ -154,6 +170,27 @@ definitions:
         type: number
       updated_at:
         type: string
+    type: object
+  model.CryptoPostStatistics:
+    properties:
+      pnl_7days:
+        type: number
+      pnl_30days:
+        type: number
+      pnl_total:
+        type: number
+      roi_7days:
+        type: number
+      roi_30days:
+        type: number
+      roi_total:
+        type: number
+      win_rate_7days:
+        type: number
+      win_rate_30days:
+        type: number
+      win_rate_total:
+        type: number
     type: object
   model.Currency:
     properties:
@@ -171,33 +208,6 @@ definitions:
       validation:
         $ref: '#/definitions/model.GetValidationConfigsResponse'
     type: object
-  model.GetContentMoniestResponse:
-    properties:
-      background_photo_link:
-        type: string
-      background_photo_thumbnail_link:
-        type: string
-      created_at:
-        type: string
-      email_verified:
-        type: boolean
-      fullname:
-        type: string
-      id:
-        type: string
-      location:
-        type: string
-      moniest:
-        $ref: '#/definitions/model.contentMoniest'
-      profile_photo_link:
-        type: string
-      profile_photo_thumbnail_link:
-        type: string
-      updated_at:
-        type: string
-      username:
-        type: string
-    type: object
   model.GetContentPostResponse:
     properties:
       created_at:
@@ -214,11 +224,21 @@ definitions:
         type: boolean
       id:
         type: string
+      leverage:
+        type: integer
+      market_type:
+        $ref: '#/definitions/db.PostCryptoMarketType'
+      pnl:
+        type: number
+      roi:
+        type: number
       start_price:
         type: number
       status:
         $ref: '#/definitions/db.PostCryptoStatus'
       stop:
+        type: number
+      take_profit:
         type: number
       target1:
         type: number
@@ -267,7 +287,7 @@ definitions:
     properties:
       email_regex:
         type: string
-      long_max_target_multiplier:
+      long_max_take_profit_multiplier:
         type: integer
       max_bio_lenght:
         type: integer
@@ -317,8 +337,11 @@ definitions:
         type: string
       id:
         type: string
-      score:
-        type: number
+      post_statistics:
+        $ref: '#/definitions/model.CryptoPostStatistics'
+      subscriber_count:
+        description: only filled when getting moniests as contents
+        type: integer
       subscription_info:
         $ref: '#/definitions/model.MoniestSubscriptionInfo'
     type: object
@@ -546,21 +569,6 @@ definitions:
         type: string
     required:
     - token
-    type: object
-  model.contentMoniest:
-    properties:
-      bio:
-        type: string
-      description:
-        type: string
-      id:
-        type: string
-      score:
-        type: number
-      subscriber_count:
-        type: integer
-      subscription_info:
-        $ref: '#/definitions/model.MoniestSubscriptionInfo'
     type: object
 info:
   contact: {}
@@ -1014,7 +1022,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.GetContentMoniestResponse'
+              $ref: '#/definitions/model.User'
             type: array
         "406":
           description: invalid body
@@ -1043,8 +1051,8 @@ paths:
         in: query
         name: active
         type: boolean
-      - description: 'options: [score | created_at] default: score, only affect when
-          subscription & active = false'
+      - description: 'options: [pnl | created_at] default: pnl, only affect when subscription
+          & active = false'
         in: query
         name: sortBy
         type: string
@@ -1226,7 +1234,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: ' +"score" field if fetching own posts'
+          description: OK
           schema:
             items:
               $ref: '#/definitions/model.GetContentPostResponse'
@@ -1514,42 +1522,6 @@ paths:
       security:
       - bearerAuth: []
       summary: Create Post
-      tags:
-      - Post
-  /moniests/posts/approximateScore:
-    post:
-      consumes:
-      - application/json
-      description: Calculate Approximate Score for Post
-      parameters:
-      - description: '`description` is optional'
-        in: body
-        name: CalculateApproxScoreBody
-        required: true
-        schema:
-          $ref: '#/definitions/model.CreatePostRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.CalculateApproxScoreResponse'
-        "400":
-          description: user is not moniest
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-        "406":
-          description: invalid body
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-        "500":
-          description: server error
-          schema:
-            $ref: '#/definitions/clientError.ErrorResponse'
-      security:
-      - bearerAuth: []
-      summary: Calculate Approximate Score for Post
       tags:
       - Post
   /moniests/profile:

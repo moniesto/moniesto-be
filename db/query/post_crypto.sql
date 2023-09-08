@@ -59,22 +59,35 @@ RETURNING id,
 
 -- name: GetMoniestAllPostsByUsername :many
 SELECT "pc"."id",
+    "pc"."market_type",
     "pc"."currency",
     "pc"."start_price",
     "pc"."duration",
+    "pc"."take_profit",
+    "pc"."stop",
     "pc"."target1",
     "pc"."target2",
     "pc"."target3",
-    "pc"."stop",
     "pc"."direction",
+    "pc"."leverage",
     "pc"."finished",
     "pc"."status",
+    "pc"."pnl",
+    "pc"."roi",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
     "m"."bio",
     "m"."description",
-    "m"."score" as "moniest_score",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
     "u"."id" as "user_id",
     "u"."fullname",
     "u"."username",
@@ -119,6 +132,7 @@ SELECT "pc"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "post_crypto" AS pc
     INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "m"."id"
     INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
     AND "u"."username" = $1
     LEFT JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
@@ -127,22 +141,35 @@ LIMIT $2 OFFSET $3;
 
 -- name: GetMoniestActivePostsByUsername :many
 SELECT "pc"."id",
+    "pc"."market_type",
     "pc"."currency",
     "pc"."start_price",
     "pc"."duration",
+    "pc"."take_profit",
+    "pc"."stop",
     "pc"."target1",
     "pc"."target2",
     "pc"."target3",
-    "pc"."stop",
     "pc"."direction",
+    "pc"."leverage",
     "pc"."finished",
     "pc"."status",
+    "pc"."pnl",
+    "pc"."roi",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
     "m"."bio",
     "m"."description",
-    "m"."score" as "moniest_score",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
     "u"."id" as "user_id",
     "u"."fullname",
     "u"."username",
@@ -187,6 +214,7 @@ SELECT "pc"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "post_crypto" AS pc
     INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "m"."id"
     INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
     AND "u"."username" = $1
     AND "pc"."duration" > now()
@@ -197,22 +225,35 @@ LIMIT $2 OFFSET $3;
 
 -- name: GetMoniestDeactivePostsByUsername :many
 SELECT "pc"."id",
+    "pc"."market_type",
     "pc"."currency",
     "pc"."start_price",
     "pc"."duration",
+    "pc"."take_profit",
+    "pc"."stop",
     "pc"."target1",
     "pc"."target2",
     "pc"."target3",
-    "pc"."stop",
     "pc"."direction",
+    "pc"."leverage",
     "pc"."finished",
     "pc"."status",
+    "pc"."pnl",
+    "pc"."roi",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
     "m"."bio",
     "m"."description",
-    "m"."score" as "moniest_score",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
     "u"."id" as "user_id",
     "u"."fullname",
     "u"."username",
@@ -257,6 +298,7 @@ SELECT "pc"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "post_crypto" AS pc
     INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "m"."id"
     INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
     AND "u"."username" = $1
     AND (
@@ -269,23 +311,35 @@ LIMIT $2 OFFSET $3;
 
 -- name: GetOwnAllPostsByUsername :many
 SELECT "pc"."id",
+    "pc"."market_type",
     "pc"."currency",
     "pc"."start_price",
     "pc"."duration",
+    "pc"."take_profit",
+    "pc"."stop",
     "pc"."target1",
     "pc"."target2",
     "pc"."target3",
-    "pc"."stop",
     "pc"."direction",
-    "pc"."score",
+    "pc"."leverage",
     "pc"."finished",
     "pc"."status",
+    "pc"."pnl",
+    "pc"."roi",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
     "m"."bio",
     "m"."description",
-    "m"."score" as "moniest_score",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
     "u"."id" as "user_id",
     "u"."fullname",
     "u"."username",
@@ -330,6 +384,7 @@ SELECT "pc"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "post_crypto" AS pc
     INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "m"."id"
     INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
     AND "u"."username" = $1
     LEFT JOIN "post_crypto_description" as pcd ON "pcd"."post_id" = "pc"."id"
@@ -338,23 +393,35 @@ LIMIT $2 OFFSET $3;
 
 -- name: GetOwnActivePostsByUsername :many
 SELECT "pc"."id",
+    "pc"."market_type",
     "pc"."currency",
     "pc"."start_price",
     "pc"."duration",
+    "pc"."take_profit",
+    "pc"."stop",
     "pc"."target1",
     "pc"."target2",
     "pc"."target3",
-    "pc"."stop",
     "pc"."direction",
-    "pc"."score",
+    "pc"."leverage",
     "pc"."finished",
     "pc"."status",
+    "pc"."pnl",
+    "pc"."roi",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
     "m"."bio",
     "m"."description",
-    "m"."score" as "moniest_score",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
     "u"."id" as "user_id",
     "u"."fullname",
     "u"."username",
@@ -399,6 +466,7 @@ SELECT "pc"."id",
     ) AS "background_photo_thumbnail_link"
 FROM "post_crypto" AS pc
     INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "m"."id"
     INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
     AND "u"."username" = $1
     AND "pc"."duration" > now()

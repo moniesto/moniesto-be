@@ -28,7 +28,7 @@ func CalculateApproxScore(endDate time.Time, startPrice float64, endPrice float6
 
 	var response model.CalculateApproximateScoreResponse
 
-	api_link := config.ScoringServiceURL + calculateApproximateURI
+	api_link := "" + calculateApproximateURI
 
 	resp, err := client.R().SetResult(&response).SetBody(requestBody).Post(api_link)
 
@@ -47,7 +47,7 @@ func CalculateScore(requestBody model.CalculateScoreRequest, config config.Confi
 
 	var response model.CalculateScoreResponse
 
-	api_link := config.ScoringServiceURL + calculateURI
+	api_link := "" + calculateURI
 
 	resp, err := client.R().SetResult(&response).SetBody(requestBody).Post(api_link)
 

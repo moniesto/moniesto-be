@@ -72,7 +72,15 @@ SELECT "u"."id",
     "u"."updated_at",
     "m"."bio",
     "m"."description",
-    "m"."score",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
     "msi"."id" as "moniest_subscription_info_id",
     "msi"."fee",
     "msi"."message",
@@ -118,6 +126,7 @@ FROM "user" as u
     AND "us"."active" = TRUE
     LEFT JOIN "moniest" as m ON "m"."user_id" = "u"."id"
     LEFT JOIN "moniest_subscription_info" as msi ON "msi"."moniest_id" = "m"."id"
+    LEFT JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "m"."id"
 WHERE "us"."moniest_id" = $1
 LIMIT $2 OFFSET $3;
 
