@@ -79,7 +79,7 @@ func SafeFloat64ToSQLNull(num *float64) sql.NullFloat64 {
 
 // SafeSQLNullToFloat converts sql object to float pointer
 func SafeSQLNullToFloat(sqlNull sql.NullFloat64) *float64 {
-	if sqlNull.Valid {
+	if !sqlNull.Valid {
 		return nil
 	}
 

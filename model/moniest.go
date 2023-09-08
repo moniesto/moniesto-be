@@ -28,7 +28,6 @@ type SubscribeMoniestResponse struct {
 }
 
 type Moniest struct {
-	ID          string `json:"id,omitempty"`
 	Bio         string `json:"bio,omitempty"`
 	Description string `json:"description,omitempty"`
 
@@ -130,7 +129,6 @@ func NewCreateMoniestResponse(moniest db.GetMoniestByMoniestIdRow) OwnUser {
 		CreatedAt:                    moniest.CreatedAt,
 		UpdatedAt:                    moniest.UpdatedAt,
 		Moniest: &Moniest{
-			ID:          moniest.MoniestID,
 			Bio:         moniest.Bio.String,
 			Description: moniest.Description.String,
 			MoniestSubscriptionInfo: &MoniestSubscriptionInfo{

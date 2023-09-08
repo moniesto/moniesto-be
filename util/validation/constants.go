@@ -38,6 +38,8 @@ var MaxSubscriptionMonth = 12
 var UsernameRegex = `^[a-z][a-z0-9_]{0,29}$`
 var EmailRegex = `^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`
 
+const InvestmentAmount = 1000
+
 var ERROR_DirectionNotValid = "direction is not valid"
 
 var InvalidUsernames = []string{

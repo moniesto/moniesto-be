@@ -181,11 +181,11 @@ func Target(price float64, takeProfit float64, target1P, target2P, target3P *flo
 
 		switch direction {
 		case db.EntryPositionLong:
-			if !(price < target) || !(target < takeProfit) || (i != 0 && checkpoint < target) {
+			if !(price < target) || !(target < takeProfit) || (i != 0 && !(checkpoint < target)) {
 				return fmt.Errorf(targetErrorMessage)
 			}
 		case db.EntryPositionShort:
-			if !(target < price) || !(takeProfit < target) || (i != 0 && checkpoint > target) {
+			if !(target < price) || !(takeProfit < target) || (i != 0 && !(checkpoint > target)) {
 				return fmt.Errorf(targetErrorMessage)
 			}
 		default:

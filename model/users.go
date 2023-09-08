@@ -72,7 +72,6 @@ func NewGetOwnUserResponseByUsername(user db.GetOwnUserByUsernameRow) (response 
 
 	if user.MoniestID.String != "" {
 		moniest := &Moniest{
-			ID:          user.MoniestID.String,
 			Bio:         user.Bio.String,
 			Description: user.Description.String,
 			CryptoPostStatistics: &CryptoPostStatistics{
@@ -121,7 +120,6 @@ func NewGetOwnUserResponseByID(user db.GetOwnUserByIDRow) (response OwnUser) {
 
 	if user.MoniestID.String != "" {
 		moniest := &Moniest{
-			ID:          user.MoniestID.String,
 			Bio:         user.Bio.String,
 			Description: user.Description.String,
 			CryptoPostStatistics: &CryptoPostStatistics{
@@ -168,7 +166,6 @@ func NewGetUserResponse(user db.GetUserByUsernameRow) (response User) {
 
 	if user.MoniestID.String != "" {
 		moniest := &Moniest{
-			ID:          user.MoniestID.String,
 			Bio:         user.Bio.String,
 			Description: user.Description.String,
 			CryptoPostStatistics: &CryptoPostStatistics{
@@ -218,7 +215,6 @@ func NewGetUsersResponse(users []db.GetUserByUsernameRow) []User {
 
 		if user.MoniestID.String != "" {
 			moniest := &Moniest{
-				ID:          user.MoniestID.String,
 				Bio:         user.Bio.String,
 				Description: user.Description.String,
 				CryptoPostStatistics: &CryptoPostStatistics{

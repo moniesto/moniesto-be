@@ -2,7 +2,6 @@ package service
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"unsafe"
@@ -25,10 +24,6 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 	}
 
 	createPostParams.MoniestID = moniestID
-
-	fmt.Println("tp1", createPostParams.Target1)
-	fmt.Println("tp2", createPostParams.Target2)
-	fmt.Println("tp3", createPostParams.Target3)
 
 	post, err := service.Store.CreatePost(ctx, createPostParams)
 	if err != nil {

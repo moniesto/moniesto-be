@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"time"
 
 	db "github.com/moniesto/moniesto-be/db/sqlc"
@@ -57,6 +58,11 @@ type DescriptionBlock struct {
 }
 
 func NewCreatePostResponse(post db.CreatePostRow, description db.PostCryptoDescription) CreatePostResponse {
+
+	fmt.Println("post.Target1", post.Target1)
+	fmt.Println("post.Target2", post.Target2)
+	fmt.Println("post.Target3", post.Target3)
+
 	return CreatePostResponse{
 		ID:          post.ID,
 		MoniestID:   post.MoniestID,

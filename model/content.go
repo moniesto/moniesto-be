@@ -119,7 +119,6 @@ func NewGetContentPostResponse(posts PostDBResponse) []GetContentPostResponse {
 				BackgroundPhotoLink:          post.BackgroundPhotoLink.(string),
 				BackgroundPhotoThumbnailLink: post.BackgroundPhotoThumbnailLink.(string),
 				Moniest: &Moniest{
-					ID:          post.MoniestID,
 					Bio:         post.Bio.String,
 					Description: post.Description.String,
 					CryptoPostStatistics: &CryptoPostStatistics{
@@ -175,7 +174,6 @@ func NewGetOwnPostResponse(posts OwnPostDBResponse) []GetOwnPostResponse {
 				BackgroundPhotoLink:          post.BackgroundPhotoLink.(string),
 				BackgroundPhotoThumbnailLink: post.BackgroundPhotoThumbnailLink.(string),
 				Moniest: &Moniest{
-					ID:          post.MoniestID,
 					Bio:         post.Bio.String,
 					Description: post.Description.String,
 					CryptoPostStatistics: &CryptoPostStatistics{
@@ -214,7 +212,6 @@ func NewGetMoniestsResponse(moniests MoniestDBResponse) []User {
 			CreatedAt:                    &user.CreatedAt,
 			UpdatedAt:                    &user.UpdatedAt,
 			Moniest: &Moniest{
-				ID:          user.MoniestID,
 				Bio:         user.Bio.String,
 				Description: user.Description.String,
 				MoniestSubscriptionInfo: &MoniestSubscriptionInfo{
@@ -257,7 +254,6 @@ func NewGetContentMoniestResponse(moniests ContentMoniestDBResponse) []User {
 			CreatedAt:                    &user.CreatedAt,
 			UpdatedAt:                    &user.UpdatedAt,
 			Moniest: &Moniest{
-				ID:              user.MoniestID,
 				Bio:             user.Bio.String,
 				Description:     user.Description.String,
 				SubscriberCount: &user.UserSubscriptionCount,
