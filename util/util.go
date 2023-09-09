@@ -1,6 +1,7 @@
 package util
 
 import (
+	"database/sql"
 	"math"
 	"time"
 )
@@ -14,16 +15,16 @@ const (
 )
 
 var (
-	POST_FILTER_SCORE      = "score"
+	POST_FILTER_PNL        = "pnl"
 	POST_FILTER_CREATED_AT = "created_at"
 )
 
 var PostSortingTypes []string = []string{
 	POST_FILTER_CREATED_AT,
-	POST_FILTER_SCORE,
+	POST_FILTER_PNL,
 }
 
-var defaultSortingType string = PostSortingTypes[1] // score
+var defaultSortingType string = PostSortingTypes[1] // pnl
 
 func SafeLimit(limit int) int {
 	if limit > MAX_LIMIT {
@@ -62,6 +63,27 @@ func SafeSearchText(searchText string) string {
 	}
 
 	return searchText
+}
+
+// SafeFloat64ToSQLNull converts float pointer to sql object if valid
+func SafeFloat64ToSQLNull(num *float64) sql.NullFloat64 {
+	value := sql.NullFloat64{}
+
+	if num != nil {
+		value.Float64 = *num
+		value.Valid = true
+	}
+
+	return value
+}
+
+// SafeSQLNullToFloat converts sql object to float pointer
+func SafeSQLNullToFloat(sqlNull sql.NullFloat64) *float64 {
+	if !sqlNull.Valid {
+		return nil
+	}
+
+	return &sqlNull.Float64
 }
 
 func DateToTimestamp(date time.Time) int64 {

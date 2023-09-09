@@ -47,7 +47,7 @@ func (server *Server) createPost(ctx *gin.Context) {
 		return
 	}
 
-	// STEP: user is moniest
+	// STEP: user is moniest => get moniest data
 	moniest, err := server.service.GetMoniestByUserID(ctx, user_id)
 	if err != nil {
 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
@@ -55,7 +55,7 @@ func (server *Server) createPost(ctx *gin.Context) {
 	}
 
 	// STEP: get currency
-	currency, err := server.service.GetCurrency(req.Currency)
+	currency, err := server.service.GetCurrency(req.Currency, req.MarketType)
 	if err != nil {
 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
@@ -102,7 +102,7 @@ func (server *Server) createPost(ctx *gin.Context) {
 // @Param active query bool false "default: false, true: only live(active), false: all posts"
 // @Param limit query int false "default: 10 & max: 50"
 // @Param offset query int false "default: 0"
-// @Success 200 {object} []model.GetContentPostResponse " +"score" field if fetching own posts"
+// @Success 200 {object} []model.GetContentPostResponse
 // @Failure 403 {object} clientError.ErrorResponse "forbidden access (when not subscribed, but asks for active posts)"
 // @Failure 404 {object} clientError.ErrorResponse "no moniest with this username"
 // @Failure 406 {object} clientError.ErrorResponse "invalid params"
@@ -167,60 +167,4 @@ func (server *Server) getMoniestPosts(ctx *gin.Context) {
 
 		ctx.JSON(http.StatusOK, posts)
 	}
-}
-
-// @Summary Calculate Approximate Score for Post
-// @Description Calculate Approximate Score for Post
-// @Security bearerAuth
-// @Tags Post
-// @Accept json
-// @Produce json
-// @Param CalculateApproxScoreBody body model.CreatePostRequest true "`description` is optional"
-// @Success 200 {object} model.CalculateApproxScoreResponse
-// @Failure 400 {object} clientError.ErrorResponse "user is not moniest"
-// @Failure 406 {object} clientError.ErrorResponse "invalid body"
-// @Failure 500 {object} clientError.ErrorResponse "server error"
-// @Router /moniests/posts/approximateScore [post]
-func (server *Server) calculateApproximateScore(ctx *gin.Context) {
-	var req model.CreatePostRequest
-
-	// STEP: bind/validation
-	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Post_CreatePost_InvalidBody))
-		return
-	}
-
-	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	user_id := authPayload.User.ID
-
-	// STEP: check user is moniest
-	userIsMoniest, err := server.service.CheckUserIsMoniestByUserID(ctx, user_id)
-	if err != nil {
-		ctx.AbortWithStatusJSON(clientError.ParseError(err))
-		return
-	}
-	if !userIsMoniest {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, clientError.GetError(clientError.General_UserNotMoniest))
-		return
-	}
-
-	// STEP: get currency
-	currency, err := server.service.GetCurrency(req.Currency)
-	if err != nil {
-		ctx.AbortWithStatusJSON(clientError.ParseError(err))
-		return
-	}
-
-	// STEP: calculate score
-	score, err := server.service.CalculateApproxScore(req, currency)
-	if err != nil {
-		ctx.AbortWithStatusJSON(clientError.ParseError(err))
-		return
-	}
-
-	res := model.CalculateApproxScoreResponse{
-		Score: score,
-	}
-
-	ctx.JSON(http.StatusOK, res)
 }

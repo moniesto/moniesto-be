@@ -31,7 +31,7 @@ func (server *Server) UpdatePostsStatusManual(ctx *gin.Context) {
 	}
 
 	if validation.UserIsAdmin(user.Email) {
-		server.UpdatePostStatus()
+		// server.UpdatePostStatus() // TODO: update
 		ctx.Status(http.StatusOK)
 	} else {
 		ctx.Status(http.StatusForbidden)

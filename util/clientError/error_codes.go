@@ -12,6 +12,7 @@ const (
 	General_ServerErrorCheckMoniestByUserID       = "General_ServerErrorCheckMoniestByUserID"
 	General_ServerErrorGettingUserLanguageByEmail = "General_ServerErrorGettingUserLanguageByEmail"
 	General_ServerErrorUserLanguageNotFound       = "General_ServerErrorUserLanguageNotFound"
+	General_CalculatePNLandROI                    = "General_CalculatePNLandROI"
 
 	Account_Authorization_NotProvidedHeader = "Account_Authorization_NotProvidedHeader"
 	Account_Authorization_InvalidHeader     = "Account_Authorization_InvalidHeader"
@@ -149,6 +150,8 @@ const (
 	Moniest_CreatePayoutInfo_InvalidBinanceID    = "Moniest_CreatePayoutInfo_InvalidBinanceID"
 	Moniest_CreatePayoutInfo_ServerErrorOnCreate = "Moniest_CreatePayoutInfo_ServerErrorOnCreate"
 
+	Moniest_CreatePostStatistics_ServerErrorOnCreate = "Moniest_CreatePostStatistics_ServerErrorOnCreate"
+
 	Moniest_SubscribeCheck_ServerErrorCheck = "Moniest_SubscribeCheck_ServerErrorCheck"
 
 	Moniest_GetSubscriber_InvalidParam              = "Moniest_GetSubscriber_InvalidParam"
@@ -165,7 +168,10 @@ const (
 	Post_CreatePost_InvalidDuration              = "Post_CreatePost_InvalidDuration"
 	Post_CreatePost_InvalidCurrencyPrice         = "Post_CreatePost_InvalidCurrencyPrice"
 	Post_CreatePost_InvalidTargets               = "Post_CreatePost_InvalidTargets"
+	Post_CreatePost_InvalidTakeProfit            = "Post_CreatePost_InvalidTakeProfit"
 	Post_CreatePost_InvalidStop                  = "Post_CreatePost_InvalidStop"
+	Post_CreatePost_InvalidMarketType            = "Post_CreatePost_InvalidMarketType"
+	Post_CreatePost_InvalidLeverage              = "Post_CreatePost_InvalidLeverage"
 	Post_CreatePost_ServerErrorCreatePost        = "Post_CreatePost_ServerErrorCreatePost"
 	Post_CreatePost_ServerErrorCreateDescription = "Post_CreatePost_ServerErrorCreateDescription"
 	Post_CreatePost_ServerErrorPostPhotoUpload   = "Post_CreatePost_ServerErrorPostPhotoUpload"
@@ -211,6 +217,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	General_ServerErrorCheckMoniestByUserID:       "Server error on checking user is moniest by user ID",
 	General_ServerErrorGettingUserLanguageByEmail: "Server error on getting user language by email",
 	General_ServerErrorUserLanguageNotFound:       "User language not found",
+	General_CalculatePNLandROI:                    "Error while calculating pnl and roi",
 
 	Account_Authorization_NotProvidedHeader: "Authorization Header is not provided",
 	Account_Authorization_InvalidHeader:     "Authorization Header is invalid",
@@ -347,6 +354,8 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_CreatePayoutInfo_InvalidBinanceID:    "Binance ID is not valid",
 	Moniest_CreatePayoutInfo_ServerErrorOnCreate: "Server error on create payout info",
 
+	Moniest_CreatePostStatistics_ServerErrorOnCreate: "Server error on create post statistics",
+
 	Moniest_SubscribeCheck_ServerErrorCheck: "Server error on checking moniest subscribe status",
 
 	Moniest_GetSubscriber_InvalidParam:              "Get subscribers invalid params",
@@ -363,7 +372,10 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Post_CreatePost_InvalidDuration:              "Duration is invalid",
 	Post_CreatePost_InvalidCurrencyPrice:         "Currency price is invalid",
 	Post_CreatePost_InvalidTargets:               "Targets are invalid",
+	Post_CreatePost_InvalidTakeProfit:            "Take Profit is invalid",
 	Post_CreatePost_InvalidStop:                  "Stop is invalid",
+	Post_CreatePost_InvalidMarketType:            "Market type is invalid. Supported market types: [spot, futures]",
+	Post_CreatePost_InvalidLeverage:              "Leverage is not valid",
 	Post_CreatePost_ServerErrorCreatePost:        "Server error on creating post",
 	Post_CreatePost_ServerErrorCreateDescription: "Server error on creating description",
 	Post_CreatePost_ServerErrorPostPhotoUpload:   "Server error on uploading post photos (maybe invalid format)",

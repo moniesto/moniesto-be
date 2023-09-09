@@ -716,7 +716,71 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.GetContentMoniestResponse"
+                                "$ref": "#/definitions/model.UserAsContent"
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/content/moniests/search": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Search Moniest by their fullname \u0026 username",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Content"
+                ],
+                "summary": "Search Moniest",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "length min:1 max:30",
+                        "name": "searchText",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "default: 10 \u0026 max: 50",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "default: 0",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.User"
                             }
                         }
                     },
@@ -768,7 +832,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "options: [score | created_at] default: score, only affect when subscription \u0026 active = false",
+                        "description": "options: [pnl | created_at] default: pnl, only affect when subscription \u0026 active = false",
                         "name": "sortBy",
                         "in": "query"
                     },
@@ -833,6 +897,13 @@ const docTemplate = `{
                         "type": "string",
                         "description": "name",
                         "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "market_type",
+                        "name": "market_type",
                         "in": "query",
                         "required": true
                     }
@@ -1047,7 +1118,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": " +\"score\" field if fetching own posts",
+                        "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -1493,63 +1564,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/moniests/posts/approximateScore": {
-            "post": {
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
-                "description": "Calculate Approximate Score for Post",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Post"
-                ],
-                "summary": "Calculate Approximate Score for Post",
-                "parameters": [
-                    {
-                        "description": "` + "`" + `description` + "`" + ` is optional",
-                        "name": "CalculateApproxScoreBody",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.CreatePostRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.CalculateApproxScoreResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "user is not moniest",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    },
-                    "406": {
-                        "description": "invalid body",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "server error",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/moniests/profile": {
             "patch": {
                 "security": [
@@ -1914,6 +1928,17 @@ const docTemplate = `{
                 "EntryPositionShort"
             ]
         },
+        "db.PostCryptoMarketType": {
+            "type": "string",
+            "enum": [
+                "spot",
+                "futures"
+            ],
+            "x-enum-varnames": [
+                "PostCryptoMarketTypeSpot",
+                "PostCryptoMarketTypeFutures"
+            ]
+        },
         "db.PostCryptoStatus": {
             "type": "string",
             "enum": [
@@ -1937,14 +1962,6 @@ const docTemplate = `{
                 "UserLanguageEn",
                 "UserLanguageTr"
             ]
-        },
-        "model.CalculateApproxScoreResponse": {
-            "type": "object",
-            "properties": {
-                "score": {
-                    "type": "number"
-                }
-            }
         },
         "model.ChangePasswordRequest": {
             "type": "object",
@@ -2036,10 +2053,9 @@ const docTemplate = `{
                 "currency",
                 "direction",
                 "duration",
+                "market_type",
                 "stop",
-                "target1",
-                "target2",
-                "target3"
+                "take_profit"
             ],
             "properties": {
                 "currency": {
@@ -2054,7 +2070,16 @@ const docTemplate = `{
                 "duration": {
                     "type": "string"
                 },
+                "leverage": {
+                    "type": "integer"
+                },
+                "market_type": {
+                    "type": "string"
+                },
                 "stop": {
+                    "type": "number"
+                },
+                "take_profit": {
                     "type": "number"
                 },
                 "target1": {
@@ -2089,16 +2114,28 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "leverage": {
+                    "type": "integer"
+                },
+                "market_type": {
+                    "$ref": "#/definitions/db.PostCryptoMarketType"
+                },
                 "moniest_id": {
                     "type": "string"
                 },
-                "score": {
+                "pnl": {
+                    "type": "number"
+                },
+                "roi": {
                     "type": "number"
                 },
                 "start_price": {
                     "type": "number"
                 },
                 "stop": {
+                    "type": "number"
+                },
+                "take_profit": {
                     "type": "number"
                 },
                 "target1": {
@@ -2112,6 +2149,38 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "model.CryptoPostStatistics": {
+            "type": "object",
+            "properties": {
+                "pnl_30days": {
+                    "type": "number"
+                },
+                "pnl_7days": {
+                    "type": "number"
+                },
+                "pnl_total": {
+                    "type": "number"
+                },
+                "roi_30days": {
+                    "type": "number"
+                },
+                "roi_7days": {
+                    "type": "number"
+                },
+                "roi_total": {
+                    "type": "number"
+                },
+                "win_rate_30days": {
+                    "type": "number"
+                },
+                "win_rate_7days": {
+                    "type": "number"
+                },
+                "win_rate_total": {
+                    "type": "number"
                 }
             }
         },
@@ -2140,47 +2209,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.GetContentMoniestResponse": {
-            "type": "object",
-            "properties": {
-                "background_photo_link": {
-                    "type": "string"
-                },
-                "background_photo_thumbnail_link": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "email_verified": {
-                    "type": "boolean"
-                },
-                "fullname": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "moniest": {
-                    "$ref": "#/definitions/model.contentMoniest"
-                },
-                "profile_photo_link": {
-                    "type": "string"
-                },
-                "profile_photo_thumbnail_link": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
         "model.GetContentPostResponse": {
             "type": "object",
             "properties": {
@@ -2205,6 +2233,18 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "leverage": {
+                    "type": "integer"
+                },
+                "market_type": {
+                    "$ref": "#/definitions/db.PostCryptoMarketType"
+                },
+                "pnl": {
+                    "type": "number"
+                },
+                "roi": {
+                    "type": "number"
+                },
                 "start_price": {
                     "type": "number"
                 },
@@ -2212,6 +2252,9 @@ const docTemplate = `{
                     "$ref": "#/definitions/db.PostCryptoStatus"
                 },
                 "stop": {
+                    "type": "number"
+                },
+                "take_profit": {
                     "type": "number"
                 },
                 "target1": {
@@ -2288,7 +2331,7 @@ const docTemplate = `{
                 "email_regex": {
                     "type": "string"
                 },
-                "long_max_target_multiplier": {
+                "long_max_take_profit_multiplier": {
                     "type": "integer"
                 },
                 "max_bio_lenght": {
@@ -2360,11 +2403,28 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "id": {
+                "post_statistics": {
+                    "$ref": "#/definitions/model.CryptoPostStatistics"
+                },
+                "subscription_info": {
+                    "$ref": "#/definitions/model.MoniestSubscriptionInfo"
+                }
+            }
+        },
+        "model.MoniestAsContent": {
+            "type": "object",
+            "properties": {
+                "bio": {
                     "type": "string"
                 },
-                "score": {
-                    "type": "number"
+                "description": {
+                    "type": "string"
+                },
+                "post_statistics": {
+                    "$ref": "#/definitions/model.CryptoPostStatistics"
+                },
+                "subscriber_count": {
+                    "type": "integer"
                 },
                 "subscription_info": {
                     "$ref": "#/definitions/model.MoniestSubscriptionInfo"
@@ -2669,6 +2729,47 @@ const docTemplate = `{
                 }
             }
         },
+        "model.UserAsContent": {
+            "type": "object",
+            "properties": {
+                "background_photo_link": {
+                    "type": "string"
+                },
+                "background_photo_thumbnail_link": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email_verified": {
+                    "type": "boolean"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "moniest": {
+                    "$ref": "#/definitions/model.MoniestAsContent"
+                },
+                "profile_photo_link": {
+                    "type": "string"
+                },
+                "profile_photo_thumbnail_link": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "model.VerifyEmailRequest": {
             "type": "object",
             "required": [
@@ -2711,29 +2812,6 @@ const docTemplate = `{
             "properties": {
                 "token": {
                     "type": "string"
-                }
-            }
-        },
-        "model.contentMoniest": {
-            "type": "object",
-            "properties": {
-                "bio": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "score": {
-                    "type": "number"
-                },
-                "subscriber_count": {
-                    "type": "integer"
-                },
-                "subscription_info": {
-                    "$ref": "#/definitions/model.MoniestSubscriptionInfo"
                 }
             }
         }

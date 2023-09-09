@@ -2,6 +2,8 @@ CREATE TYPE "user_language" AS ENUM ('en', 'tr');
 
 CREATE TYPE "image_type" AS ENUM ('profile_photo', 'background_photo');
 
+CREATE TYPE "post_crypto_market_type" AS ENUM ('spot', 'futures');
+
 CREATE TYPE "entry_position" AS ENUM ('long', 'short');
 
 CREATE TYPE "post_crypto_status" AS ENUM ('pending', 'fail', 'success');
@@ -53,8 +55,25 @@ CREATE TABLE "moniest" (
     "user_id" varchar UNIQUE NOT NULL,
     "bio" varchar,
     "description" text,
-    "score" float NOT NULL DEFAULT 0,
     "deleted" boolean NOT NULL DEFAULT false,
+    "created_at" timestamp NOT NULL DEFAULT (now()),
+    "updated_at" timestamp NOT NULL DEFAULT (now())
+);
+
+CREATE TABLE "moniest_post_crypto_statistics" (
+    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+    "moniest_id" varchar NOT NULL,
+    "pnl_7days" float,
+    "roi_7days" float,
+    "win_rate_7days" float,
+    "posts_7days" varchar [],
+    "pnl_30days" float,
+    "roi_30days" float,
+    "win_rate_30days" float,
+    "posts_30days" varchar [],
+    "pnl_total" float,
+    "roi_total" float,
+    "win_rate_total" float,
     "created_at" timestamp NOT NULL DEFAULT (now()),
     "updated_at" timestamp NOT NULL DEFAULT (now())
 );
@@ -104,19 +123,22 @@ CREATE TABLE "user_subscription_history" (
 CREATE TABLE "post_crypto" (
     "id" varchar UNIQUE PRIMARY KEY NOT NULL,
     "moniest_id" varchar NOT NULL,
+    "market_type" post_crypto_market_type NOT NULL,
     "currency" varchar NOT NULL,
     "start_price" float NOT NULL,
     "duration" timestamp NOT NULL,
-    "target1" float NOT NULL,
-    "target2" float NOT NULL,
-    "target3" float NOT NULL,
+    "take_profit" float NOT NULL,
     "stop" float NOT NULL,
+    "target1" float,
+    "target2" float,
+    "target3" float,
     "direction" entry_position NOT NULL,
-    "score" float NOT NULL DEFAULT 0,
+    "leverage" int NOT NULL,
     "finished" boolean NOT NULL DEFAULT false,
     "status" post_crypto_status NOT NULL DEFAULT 'pending',
-    "last_target_hit" float NOT NULL,
-    "last_job_timestamp" bigint NOT NULL,
+    "pnl" float NOT NULL,
+    "roi" float NOT NULL,
+    "last_operated_at" timestamp NOT NULL DEFAULT (now()),
     "deleted" boolean NOT NULL DEFAULT false,
     "created_at" timestamp NOT NULL DEFAULT (now()),
     "updated_at" timestamp NOT NULL DEFAULT (now())
@@ -210,6 +232,30 @@ CREATE UNIQUE INDEX ON "image" ("user_id", "type");
 
 CREATE UNIQUE INDEX ON "moniest" ("user_id");
 
+CREATE UNIQUE INDEX ON "moniest_post_crypto_statistics" ("moniest_id");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("pnl_7days");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("roi_7days");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("win_rate_7days");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("posts_7days");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("pnl_30days");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("roi_30days");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("win_rate_30days");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("posts_30days");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("pnl_total");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("roi_total");
+
+CREATE INDEX ON "moniest_post_crypto_statistics" ("win_rate_total");
+
 CREATE UNIQUE INDEX ON "moniest_payout_info" ("moniest_id", "source");
 
 CREATE INDEX ON "moniest_subscription_info" ("moniest_id");
@@ -219,6 +265,14 @@ CREATE UNIQUE INDEX ON "user_subscription" ("user_id", "moniest_id");
 CREATE UNIQUE INDEX ON "user_subscription_history" ("user_id", "moniest_id", "transaction_id");
 
 CREATE INDEX ON "post_crypto" ("moniest_id");
+
+CREATE INDEX ON "post_crypto" ("finished");
+
+CREATE INDEX ON "post_crypto" ("duration");
+
+CREATE INDEX ON "post_crypto" ("created_at");
+
+CREATE INDEX ON "post_crypto" ("last_operated_at");
 
 CREATE INDEX ON "post_crypto_description" ("post_id");
 
@@ -240,6 +294,8 @@ COMMENT ON TABLE "user" IS 'Stores user data';
 COMMENT ON TABLE "image" IS 'Stores image data';
 
 COMMENT ON TABLE "moniest" IS 'Stores moniest data';
+
+COMMENT ON TABLE "moniest_post_crypto_statistics" IS 'Stores moniest crypto statistics info';
 
 COMMENT ON TABLE "moniest_payout_info" IS 'Stores moniest payout info';
 
@@ -270,6 +326,9 @@ ALTER TABLE "moniest"
 ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 ALTER TABLE "moniest_subscription_info"
+ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
+
+ALTER TABLE "moniest_post_crypto_statistics"
 ADD FOREIGN KEY ("moniest_id") REFERENCES "moniest" ("id");
 
 ALTER TABLE "moniest_payout_info"

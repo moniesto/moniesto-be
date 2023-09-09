@@ -54,7 +54,7 @@ build:
 run:
 	go run cmd/main.go
 
-run-live:
+nodeman:
 	nodemon --exec go run cmd/main.go --signal SIGTERM
 
 test:

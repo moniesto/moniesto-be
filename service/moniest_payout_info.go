@@ -28,7 +28,7 @@ func (service *Service) CreatePayoutInfo(ctx *gin.Context, moniest_id string, re
 
 	payout_info, err := service.Store.CreateMoniestPayoutInfo(ctx, params)
 	if err != nil {
-		return db.MoniestPayoutInfo{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_CreatePayoutInfo_ServerErrorOnCreate)
+		return db.MoniestPayoutInfo{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_CreatePayoutInfo_ServerErrorOnCreate)
 	}
 
 	return payout_info, nil

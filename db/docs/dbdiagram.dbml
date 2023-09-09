@@ -50,8 +50,7 @@
     user_id varchar [not null, unique]
     bio varchar
     description text
-    score float [not null, default: 0]
-    
+
     deleted boolean [not null, default: false]
     
     created_at timestamp [not null, default: `now()`]
@@ -62,6 +61,43 @@
     }
     
     Note: 'Stores moniest data'
+  }
+
+  Table moniest_post_crypto_statistics as MPCS {
+    id varchar [not null, pk, unique]
+    moniest_id varchar [not null]
+
+    pnl_7days float
+    roi_7days float
+    win_rate_7days float
+    posts_7days varchar[]
+    pnl_30days float
+    roi_30days float
+    win_rate_30days float
+    posts_30days varchar[]
+    pnl_total float
+    roi_total float
+    win_rate_total float
+  
+    created_at timestamp [not null, default: `now()`]
+    updated_at timestamp [not null, default: `now()`]
+
+    indexes {
+      (moniest_id) [unique]
+      pnl_7days
+      roi_7days
+      win_rate_7days
+      posts_7days
+      pnl_30days
+      roi_30days
+      win_rate_30days
+      posts_30days
+      pnl_total
+      roi_total
+      win_rate_total
+    }
+
+    Note: 'Stores moniest crypto statistics info'
   }
 
   Table moniest_payout_info as MPI {
@@ -138,20 +174,31 @@
   Table post_crypto as PC {
     id varchar [not null, pk, unique]
     moniest_id varchar [not null]
+
+    market_type post_crypto_market_type [not null]
+
     currency varchar [not null]
     start_price float [not null]
     duration timestamp [not null]
-    target1 float [not null]
-    target2 float [not null]
-    target3 float [not null]
+
+    take_profit float [not null]
     stop float [not null]
+
+    target1 float
+    target2 float
+    target3 float
+
     direction entry_position [not null]
-    score float [not null, default: 0]
+    leverage int [not null]
+
     finished boolean [not null, default: false]
     status post_crypto_status [not null, default: "pending"]
-    last_target_hit float [not null]
-    last_job_timestamp bigint [not null]
-    
+
+    pnl float [not null]
+    roi float [not null]
+
+    last_operated_at timestamp [not null, default: `now()`]
+
     deleted boolean [not null, default: false]
     
     created_at timestamp [not null, default: `now()`]
@@ -159,6 +206,10 @@
     
     indexes {
       moniest_id
+      finished
+      duration
+      created_at
+      last_operated_at
     }
     
     Note: 'Stores crypto posts data'
@@ -289,6 +340,7 @@
   Ref: I.user_id > U.id
   Ref: U.id - M.user_id 
   Ref: M.id - MSI.moniest_id
+  Ref: MPCS.moniest_id > M.id
   Ref: MPI.moniest_id > M.id
   Ref: BPT.user_id > U.id
   Ref: BPT.moniest_id > M.id
@@ -304,7 +356,6 @@
   Ref: PCD.post_id > PC.id
   Ref: F.user_id > U.id
 
-
   // Enums
   Enum user_language {
     en
@@ -314,6 +365,11 @@
   Enum image_type {
     profile_photo
     background_photo
+  }
+
+  Enum post_crypto_market_type {
+    spot
+    futures
   }
 
   Enum entry_position {

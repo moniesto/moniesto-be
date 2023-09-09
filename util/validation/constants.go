@@ -14,6 +14,11 @@ var supportedLanguages = []string{
 	string(db.UserLanguageTr),
 }
 
+var supportedMarketTypes = []string{
+	string(db.PostCryptoMarketTypeSpot),
+	string(db.PostCryptoMarketTypeFutures),
+}
+
 var ValidPasswordLength = 6
 var MaxBioLength = 150
 var MaxDescriptionLength = 5000
@@ -22,13 +27,20 @@ var MaxFullnameLength = 50
 var MaxLocationLength = 30
 
 var MaxDurationDay = 90
-var MaxTargetMultiplierLong = 100
+var MaxTakeProfitMultiplierLong = 10
 var MaxStopMultiplierShort = 2
+
+var MinLeverage int32 = 1
+var MaxLeverage int32 = 20
 
 var MaxSubscriptionMonth = 12
 
 var UsernameRegex = `^[a-z][a-z0-9_]{0,29}$`
 var EmailRegex = `^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`
+
+const InvestmentAmount = 1000
+
+var ERROR_DirectionNotValid = "direction is not valid"
 
 var InvalidUsernames = []string{
 	"",

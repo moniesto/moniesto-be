@@ -15,6 +15,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param name query string true "name"
+// @Param market_type query string true "market_type"
 // @Success 200 {object} []model.Currency
 // @Failure 406 {object} clientError.ErrorResponse "invalid name"
 // @Failure 500 {object} clientError.ErrorResponse "server error & crypto api error"
@@ -29,7 +30,7 @@ func (server *Server) getCurrencies(ctx *gin.Context) {
 	}
 
 	// STEP: get currencies with name
-	currencies, err := server.service.GetCurrenciesWithName(req.Name)
+	currencies, err := server.service.GetCurrenciesWithName(req.Name, req.MarketType)
 	if err != nil {
 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return

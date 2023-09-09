@@ -32,18 +32,18 @@ func (service *Service) GetErrorCodes() clientError.ErrorMessagesType {
 func (service *Service) GetValidationConfigs() model.GetValidationConfigsResponse {
 
 	validation_configs := model.GetValidationConfigsResponse{
-		EmailRegex:                   validation.EmailRegex,
-		UsernameRegex:                validation.UsernameRegex,
-		MinFee:                       service.config.MinFee,
-		MaxBioLenght:                 validation.MaxBioLength,
-		MaxDescriptionLength:         validation.MaxDescriptionLength,
-		MaxSubscriptionMessageLength: validation.MaxSubscriptionMessageLength,
-		MaxFullnameLength:            validation.MaxFullnameLength,
-		MaxLocationLength:            validation.MaxLocationLength,
-		PasswordLength:               validation.ValidPasswordLength,
-		MaxDurationDay:               validation.MaxDurationDay,
-		LongMaxTargetMultiplier:      validation.MaxTargetMultiplierLong,
-		ShortMaxStopMultiplier:       validation.MaxStopMultiplierShort,
+		EmailRegex:                      validation.EmailRegex,
+		UsernameRegex:                   validation.UsernameRegex,
+		MinFee:                          service.config.MinFee,
+		MaxBioLenght:                    validation.MaxBioLength,
+		MaxDescriptionLength:            validation.MaxDescriptionLength,
+		MaxSubscriptionMessageLength:    validation.MaxSubscriptionMessageLength,
+		MaxFullnameLength:               validation.MaxFullnameLength,
+		MaxLocationLength:               validation.MaxLocationLength,
+		PasswordLength:                  validation.ValidPasswordLength,
+		MaxDurationDay:                  validation.MaxDurationDay,
+		LongMaxTakeProfitMultiplierLong: validation.MaxTakeProfitMultiplierLong,
+		ShortMaxStopMultiplier:          validation.MaxStopMultiplierShort,
 	}
 
 	return validation_configs

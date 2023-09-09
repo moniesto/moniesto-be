@@ -28,11 +28,22 @@ type SubscribeMoniestResponse struct {
 }
 
 type Moniest struct {
-	ID                      string                   `json:"id,omitempty"`
 	Bio                     string                   `json:"bio,omitempty"`
 	Description             string                   `json:"description,omitempty"`
-	Score                   float64                  `json:"score"`
+	CryptoPostStatistics    *CryptoPostStatistics    `json:"post_statistics,omitempty"`
 	MoniestSubscriptionInfo *MoniestSubscriptionInfo `json:"subscription_info,omitempty"`
+}
+
+type CryptoPostStatistics struct {
+	Pnl7days      float64 `json:"pnl_7days"`
+	Roi7days      float64 `json:"roi_7days"`
+	WinRate7days  float64 `json:"win_rate_7days"`
+	Pnl30days     float64 `json:"pnl_30days"`
+	Roi30days     float64 `json:"roi_30days"`
+	WinRate30days float64 `json:"win_rate_30days"`
+	PnlTotal      float64 `json:"pnl_total"`
+	RoiTotal      float64 `json:"roi_total"`
+	WinRateTotal  float64 `json:"win_rate_total"`
 }
 
 type MoniestSubscriptionInfo struct {
@@ -115,14 +126,23 @@ func NewCreateMoniestResponse(moniest db.GetMoniestByMoniestIdRow) OwnUser {
 		CreatedAt:                    moniest.CreatedAt,
 		UpdatedAt:                    moniest.UpdatedAt,
 		Moniest: &Moniest{
-			ID:          moniest.MoniestID,
 			Bio:         moniest.Bio.String,
 			Description: moniest.Description.String,
-			Score:       moniest.Score,
 			MoniestSubscriptionInfo: &MoniestSubscriptionInfo{
 				Fee:       moniest.Fee,
 				Message:   moniest.Message.String,
 				UpdatedAt: moniest.MoniestSubscriptionInfoUpdatedAt,
+			},
+			CryptoPostStatistics: &CryptoPostStatistics{
+				Pnl7days:      moniest.Pnl7days.Float64,
+				Roi7days:      moniest.Roi7days.Float64,
+				WinRate7days:  moniest.WinRate7days.Float64,
+				Pnl30days:     moniest.Pnl30days.Float64,
+				Roi30days:     moniest.Roi30days.Float64,
+				WinRate30days: moniest.WinRate30days.Float64,
+				PnlTotal:      moniest.PnlTotal.Float64,
+				RoiTotal:      moniest.RoiTotal.Float64,
+				WinRateTotal:  moniest.WinRateTotal.Float64,
 			},
 		},
 	}

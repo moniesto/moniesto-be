@@ -72,10 +72,19 @@ func NewGetOwnUserResponseByUsername(user db.GetOwnUserByUsernameRow) (response 
 
 	if user.MoniestID.String != "" {
 		moniest := &Moniest{
-			ID:          user.MoniestID.String,
 			Bio:         user.Bio.String,
 			Description: user.Description.String,
-			Score:       user.Score.Float64,
+			CryptoPostStatistics: &CryptoPostStatistics{
+				Pnl7days:      user.Pnl7days.Float64,
+				Roi7days:      user.Roi7days.Float64,
+				WinRate7days:  user.WinRate7days.Float64,
+				Pnl30days:     user.Pnl30days.Float64,
+				Roi30days:     user.Roi30days.Float64,
+				WinRate30days: user.WinRate30days.Float64,
+				PnlTotal:      user.PnlTotal.Float64,
+				RoiTotal:      user.RoiTotal.Float64,
+				WinRateTotal:  user.WinRateTotal.Float64,
+			},
 		}
 
 		if user.MoniestSubscriptionInfoID.Valid {
@@ -111,10 +120,19 @@ func NewGetOwnUserResponseByID(user db.GetOwnUserByIDRow) (response OwnUser) {
 
 	if user.MoniestID.String != "" {
 		moniest := &Moniest{
-			ID:          user.MoniestID.String,
 			Bio:         user.Bio.String,
 			Description: user.Description.String,
-			Score:       user.Score.Float64,
+			CryptoPostStatistics: &CryptoPostStatistics{
+				Pnl7days:      user.Pnl7days.Float64,
+				Roi7days:      user.Roi7days.Float64,
+				WinRate7days:  user.WinRate7days.Float64,
+				Pnl30days:     user.Pnl30days.Float64,
+				Roi30days:     user.Roi30days.Float64,
+				WinRate30days: user.WinRate30days.Float64,
+				PnlTotal:      user.PnlTotal.Float64,
+				RoiTotal:      user.RoiTotal.Float64,
+				WinRateTotal:  user.WinRateTotal.Float64,
+			},
 		}
 
 		if user.MoniestSubscriptionInfoID.Valid {
@@ -148,10 +166,19 @@ func NewGetUserResponse(user db.GetUserByUsernameRow) (response User) {
 
 	if user.MoniestID.String != "" {
 		moniest := &Moniest{
-			ID:          user.MoniestID.String,
 			Bio:         user.Bio.String,
 			Description: user.Description.String,
-			Score:       user.Score.Float64,
+			CryptoPostStatistics: &CryptoPostStatistics{
+				Pnl7days:      user.Pnl7days.Float64,
+				Roi7days:      user.Roi7days.Float64,
+				WinRate7days:  user.WinRate7days.Float64,
+				Pnl30days:     user.Pnl30days.Float64,
+				Roi30days:     user.Roi30days.Float64,
+				WinRate30days: user.WinRate30days.Float64,
+				PnlTotal:      user.PnlTotal.Float64,
+				RoiTotal:      user.RoiTotal.Float64,
+				WinRateTotal:  user.WinRateTotal.Float64,
+			},
 		}
 
 		if user.MoniestSubscriptionInfoID.Valid {
@@ -188,10 +215,19 @@ func NewGetUsersResponse(users []db.GetUserByUsernameRow) []User {
 
 		if user.MoniestID.String != "" {
 			moniest := &Moniest{
-				ID:          user.MoniestID.String,
 				Bio:         user.Bio.String,
 				Description: user.Description.String,
-				Score:       user.Score.Float64,
+				CryptoPostStatistics: &CryptoPostStatistics{
+					Pnl7days:      user.Pnl7days.Float64,
+					Roi7days:      user.Roi7days.Float64,
+					WinRate7days:  user.WinRate7days.Float64,
+					Pnl30days:     user.Pnl30days.Float64,
+					Roi30days:     user.Roi30days.Float64,
+					WinRate30days: user.WinRate30days.Float64,
+					PnlTotal:      user.PnlTotal.Float64,
+					RoiTotal:      user.RoiTotal.Float64,
+					WinRateTotal:  user.WinRateTotal.Float64,
+				},
 			}
 
 			if user.MoniestSubscriptionInfoID.Valid {

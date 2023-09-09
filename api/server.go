@@ -70,7 +70,6 @@ func (server *Server) setupRouter() {
 	{
 		moniestsRouters.POST("", server.createMoniest)
 		moniestsRouters.POST("/posts", server.createPost)
-		moniestsRouters.POST("/posts/approximateScore", server.calculateApproximateScore)
 		moniestsRouters.PATCH("/profile", server.updateMoniestProfile)
 		moniestsRouters.GET("/payout", server.getMoniestPayoutInfo)
 		moniestsRouters.PATCH("/payout", server.updateMoniestPayoutInfo)
@@ -156,7 +155,7 @@ func (server *Server) setupCRONJobs() {
 	job := cron.New()
 
 	// JOB: updating post status
-	job.AddFunc(util.JOB_TYPE_EVERY_1AM, server.UpdatePostStatus)
+	// job.AddFunc(util.JOB_TYPE_EVERY_1AM, server.UpdatePostStatus)
 
 	// JOB: payout to moniest
 	// job.AddFunc(util.JOB_TYPE_EVERY_MINUTE, server.PayoutToMoniest)

@@ -8,6 +8,7 @@ import (
 	"github.com/moniesto/moniesto-be/util/system"
 )
 
+/*
 func (server *Server) UpdatePostStatus() {
 	system.Log("JOB TRIGGER: Update Post Status")
 
@@ -22,12 +23,13 @@ func (server *Server) UpdatePostStatus() {
 	for i, post := range activePosts {
 		system.Log(fmt.Sprintf("post start: %d id: %s\n", i, post.ID))
 
-		err := server.service.UpdatePostStatus(post)
+		err := server.service.UpdatePostStatus(post) // TODO: update
 		if err != nil {
 			system.LogError(fmt.Sprintf("JOB ERROR: POST STATUS => %s", err))
 		}
 	}
 }
+*/
 
 func (server *Server) PayoutToMoniest() {
 	system.Log("JOB TRIGGER: Payout To Moniest")
