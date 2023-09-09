@@ -716,7 +716,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.User"
+                                "$ref": "#/definitions/model.UserAsContent"
                             }
                         }
                     },
@@ -897,6 +897,13 @@ const docTemplate = `{
                         "type": "string",
                         "description": "name",
                         "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "market_type",
+                        "name": "market_type",
                         "in": "query",
                         "required": true
                     }
@@ -2404,6 +2411,26 @@ const docTemplate = `{
                 }
             }
         },
+        "model.MoniestAsContent": {
+            "type": "object",
+            "properties": {
+                "bio": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "post_statistics": {
+                    "$ref": "#/definitions/model.CryptoPostStatistics"
+                },
+                "subscriber_count": {
+                    "type": "integer"
+                },
+                "subscription_info": {
+                    "$ref": "#/definitions/model.MoniestSubscriptionInfo"
+                }
+            }
+        },
         "model.MoniestStatResponse": {
             "type": "object",
             "properties": {
@@ -2687,6 +2714,47 @@ const docTemplate = `{
                 },
                 "moniest": {
                     "$ref": "#/definitions/model.Moniest"
+                },
+                "profile_photo_link": {
+                    "type": "string"
+                },
+                "profile_photo_thumbnail_link": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserAsContent": {
+            "type": "object",
+            "properties": {
+                "background_photo_link": {
+                    "type": "string"
+                },
+                "background_photo_thumbnail_link": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email_verified": {
+                    "type": "boolean"
+                },
+                "fullname": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "moniest": {
+                    "$ref": "#/definitions/model.MoniestAsContent"
                 },
                 "profile_photo_link": {
                     "type": "string"

@@ -340,6 +340,19 @@ definitions:
       subscription_info:
         $ref: '#/definitions/model.MoniestSubscriptionInfo'
     type: object
+  model.MoniestAsContent:
+    properties:
+      bio:
+        type: string
+      description:
+        type: string
+      post_statistics:
+        $ref: '#/definitions/model.CryptoPostStatistics'
+      subscriber_count:
+        type: integer
+      subscription_info:
+        $ref: '#/definitions/model.MoniestSubscriptionInfo'
+    type: object
   model.MoniestStatResponse:
     properties:
       post_count:
@@ -527,6 +540,33 @@ definitions:
         type: string
       moniest:
         $ref: '#/definitions/model.Moniest'
+      profile_photo_link:
+        type: string
+      profile_photo_thumbnail_link:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+  model.UserAsContent:
+    properties:
+      background_photo_link:
+        type: string
+      background_photo_thumbnail_link:
+        type: string
+      created_at:
+        type: string
+      email_verified:
+        type: boolean
+      fullname:
+        type: string
+      id:
+        type: string
+      location:
+        type: string
+      moniest:
+        $ref: '#/definitions/model.MoniestAsContent'
       profile_photo_link:
         type: string
       profile_photo_thumbnail_link:
@@ -1017,7 +1057,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.User'
+              $ref: '#/definitions/model.UserAsContent'
             type: array
         "406":
           description: invalid body
@@ -1131,6 +1171,11 @@ paths:
       - description: name
         in: query
         name: name
+        required: true
+        type: string
+      - description: market_type
+        in: query
+        name: market_type
         required: true
         type: string
       produces:

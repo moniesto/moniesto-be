@@ -67,7 +67,7 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 // @Produce json
 // @Param limit query int false "default: 10 & max: 50"
 // @Param offset query int false "default: 0"
-// @Success 200 {object} []model.User
+// @Success 200 {object} []model.UserAsContent
 // @Failure 406 {object} clientError.ErrorResponse "invalid body"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /content/moniests [get]
