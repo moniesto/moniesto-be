@@ -80,7 +80,7 @@ func NewRegisterResponse(token string, user db.LoginUserByEmailRow) (response Re
 	response = RegisterResponse{
 		Token: token,
 		User: OwnUser{
-			// Id:                           user.ID, // TODO: remove after confirmation
+			Id:                           user.ID,
 			Fullname:                     user.Fullname,
 			Username:                     user.Username,
 			Email:                        user.Email,
@@ -98,7 +98,6 @@ func NewRegisterResponse(token string, user db.LoginUserByEmailRow) (response Re
 
 	if user.MoniestID.String != "" {
 		moniest := &Moniest{
-			// ID:          user.MoniestID.String, // TODO: remove after confirmation
 			Bio:         user.Bio.String,
 			Description: user.Description.String,
 		}
