@@ -44,7 +44,7 @@ DROP TYPE IF EXISTS "binance_payment_status";
 
 DROP TYPE IF EXISTS "post_crypto_status";
 
-DROP TYPE IF EXISTS "entry_position";
+DROP TYPE IF EXISTS "direction";
 
 DROP TYPE IF EXISTS "post_crypto_market_type";
 

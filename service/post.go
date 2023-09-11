@@ -52,17 +52,17 @@ func (service *Service) getValidPost(req model.CreatePostRequest, currency model
 	}
 
 	// STEP: take profit is valid
-	if err := validation.TakeProfit(currency_price, req.TakeProfit, db.EntryPosition(req.Direction)); err != nil {
+	if err := validation.TakeProfit(currency_price, req.TakeProfit, db.Direction(req.Direction)); err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidTakeProfit)
 	}
 
 	// STEP: targets are valid
-	if err := validation.Target(currency_price, req.TakeProfit, req.Target1, req.Target2, req.Target3, db.EntryPosition(req.Direction)); err != nil {
+	if err := validation.Target(currency_price, req.TakeProfit, req.Target1, req.Target2, req.Target3, db.Direction(req.Direction)); err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidTargets)
 	}
 
 	// STEP: stop is valid
-	if err := validation.Stop(currency_price, req.Stop, req.Leverage, db.EntryPosition(req.Direction)); err != nil {
+	if err := validation.Stop(currency_price, req.Stop, req.Leverage, db.Direction(req.Direction)); err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Post_CreatePost_InvalidStop)
 	}
 
@@ -77,7 +77,7 @@ func (service *Service) getValidPost(req model.CreatePostRequest, currency model
 	}
 
 	// STEP: get max pnl and roi
-	maxPnl, maxRoi, err := core.CalculatePNL_ROI(currency_price, req.TakeProfit, req.Leverage, db.EntryPosition(req.Direction))
+	maxPnl, maxRoi, err := core.CalculatePNL_ROI(currency_price, req.TakeProfit, req.Leverage, db.Direction(req.Direction))
 	if err != nil {
 		return db.CreatePostParams{}, clientError.CreateError(http.StatusNotAcceptable, clientError.General_CalculatePNLandROI)
 	}
@@ -95,7 +95,7 @@ func (service *Service) getValidPost(req model.CreatePostRequest, currency model
 		Target1:    util.SafeFloat64ToSQLNull(req.Target1),
 		Target2:    util.SafeFloat64ToSQLNull(req.Target2),
 		Target3:    util.SafeFloat64ToSQLNull(req.Target3),
-		Direction:  db.EntryPosition(req.Direction),
+		Direction:  db.Direction(req.Direction),
 		Leverage:   req.Leverage,
 		Pnl:        maxPnl,
 		Roi:        maxRoi,

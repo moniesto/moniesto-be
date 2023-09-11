@@ -9,12 +9,12 @@ import (
 )
 
 // CalculatePNL_ROI calculated the profit or loss (PNL) and ROI based on the [startPrice, lastPrice, leverage, direction]
-func CalculatePNL_ROI(startPrice, lastPrice float64, leverage int32, direction db.EntryPosition) (pnl float64, roi float64, err error) {
+func CalculatePNL_ROI(startPrice, lastPrice float64, leverage int32, direction db.Direction) (pnl float64, roi float64, err error) {
 	// Calculate the profit or loss (PNL) based on the trade direction
 	switch direction {
-	case db.EntryPositionLong:
+	case db.DirectionLong:
 		pnl = (lastPrice - startPrice) * float64(leverage) * (validation.InvestmentAmount / startPrice)
-	case db.EntryPositionShort:
+	case db.DirectionShort:
 		pnl = (startPrice - lastPrice) * float64(leverage) * (validation.InvestmentAmount / startPrice)
 	default:
 		return 0, 0, fmt.Errorf(validation.ERROR_DirectionNotValid)

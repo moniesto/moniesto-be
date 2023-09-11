@@ -10,14 +10,14 @@ definitions:
       error_code:
         type: string
     type: object
-  db.EntryPosition:
+  db.Direction:
     enum:
     - long
     - short
     type: string
     x-enum-varnames:
-    - EntryPositionLong
-    - EntryPositionShort
+    - DirectionLong
+    - DirectionShort
   db.PostCryptoMarketType:
     enum:
     - spot
@@ -141,7 +141,7 @@ definitions:
       description:
         type: string
       direction:
-        $ref: '#/definitions/db.EntryPosition'
+        $ref: '#/definitions/db.Direction'
       duration:
         type: string
       id:
@@ -217,7 +217,7 @@ definitions:
       description:
         type: string
       direction:
-        $ref: '#/definitions/db.EntryPosition'
+        $ref: '#/definitions/db.Direction'
       duration:
         type: string
       finished:

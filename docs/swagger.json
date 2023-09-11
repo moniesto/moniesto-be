@@ -1905,15 +1905,15 @@
                 }
             }
         },
-        "db.EntryPosition": {
+        "db.Direction": {
             "type": "string",
             "enum": [
                 "long",
                 "short"
             ],
             "x-enum-varnames": [
-                "EntryPositionLong",
-                "EntryPositionShort"
+                "DirectionLong",
+                "DirectionShort"
             ]
         },
         "db.PostCryptoMarketType": {
@@ -2094,7 +2094,7 @@
                     "type": "string"
                 },
                 "direction": {
-                    "$ref": "#/definitions/db.EntryPosition"
+                    "$ref": "#/definitions/db.Direction"
                 },
                 "duration": {
                     "type": "string"
@@ -2210,7 +2210,7 @@
                     "type": "string"
                 },
                 "direction": {
-                    "$ref": "#/definitions/db.EntryPosition"
+                    "$ref": "#/definitions/db.Direction"
                 },
                 "duration": {
                     "type": "string"

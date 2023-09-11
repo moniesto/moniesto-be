@@ -188,7 +188,7 @@
     target2 float
     target3 float
 
-    direction entry_position [not null]
+    direction direction [not null]
     leverage int [not null]
 
     finished boolean [not null, default: false]
@@ -372,7 +372,7 @@
     futures
   }
 
-  Enum entry_position {
+  Enum direction {
     long
     short
   }

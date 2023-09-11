@@ -140,46 +140,46 @@ func (ns NullBinancePayoutStatus) Value() (driver.Value, error) {
 	return string(ns.BinancePayoutStatus), nil
 }
 
-type EntryPosition string
+type Direction string
 
 const (
-	EntryPositionLong  EntryPosition = "long"
-	EntryPositionShort EntryPosition = "short"
+	DirectionLong  Direction = "long"
+	DirectionShort Direction = "short"
 )
 
-func (e *EntryPosition) Scan(src interface{}) error {
+func (e *Direction) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = EntryPosition(s)
+		*e = Direction(s)
 	case string:
-		*e = EntryPosition(s)
+		*e = Direction(s)
 	default:
-		return fmt.Errorf("unsupported scan type for EntryPosition: %T", src)
+		return fmt.Errorf("unsupported scan type for Direction: %T", src)
 	}
 	return nil
 }
 
-type NullEntryPosition struct {
-	EntryPosition EntryPosition `json:"entry_position"`
-	Valid         bool          `json:"valid"` // Valid is true if EntryPosition is not NULL
+type NullDirection struct {
+	Direction Direction `json:"direction"`
+	Valid     bool      `json:"valid"` // Valid is true if Direction is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullEntryPosition) Scan(value interface{}) error {
+func (ns *NullDirection) Scan(value interface{}) error {
 	if value == nil {
-		ns.EntryPosition, ns.Valid = "", false
+		ns.Direction, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.EntryPosition.Scan(value)
+	return ns.Direction.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullEntryPosition) Value() (driver.Value, error) {
+func (ns NullDirection) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return string(ns.EntryPosition), nil
+	return string(ns.Direction), nil
 }
 
 type ImageType string
@@ -586,7 +586,7 @@ type PostCrypto struct {
 	Target1        sql.NullFloat64      `json:"target1"`
 	Target2        sql.NullFloat64      `json:"target2"`
 	Target3        sql.NullFloat64      `json:"target3"`
-	Direction      EntryPosition        `json:"direction"`
+	Direction      Direction            `json:"direction"`
 	Leverage       int32                `json:"leverage"`
 	Finished       bool                 `json:"finished"`
 	Status         PostCryptoStatus     `json:"status"`

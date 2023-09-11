@@ -35,7 +35,7 @@ type CreatePostResponse struct {
 	Target1    *float64                `json:"target1,omitempty"`
 	Target2    *float64                `json:"target2,omitempty"`
 	Target3    *float64                `json:"target3,omitempty"`
-	Direction  db.EntryPosition        `json:"direction"`
+	Direction  db.Direction            `json:"direction"`
 	Leverage   int32                   `json:"leverage"`
 	Pnl        float64                 `json:"pnl"`
 	Roi        float64                 `json:"roi"`

@@ -1917,15 +1917,15 @@ const docTemplate = `{
                 }
             }
         },
-        "db.EntryPosition": {
+        "db.Direction": {
             "type": "string",
             "enum": [
                 "long",
                 "short"
             ],
             "x-enum-varnames": [
-                "EntryPositionLong",
-                "EntryPositionShort"
+                "DirectionLong",
+                "DirectionShort"
             ]
         },
         "db.PostCryptoMarketType": {
@@ -2106,7 +2106,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "direction": {
-                    "$ref": "#/definitions/db.EntryPosition"
+                    "$ref": "#/definitions/db.Direction"
                 },
                 "duration": {
                     "type": "string"
@@ -2222,7 +2222,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "direction": {
-                    "$ref": "#/definitions/db.EntryPosition"
+                    "$ref": "#/definitions/db.Direction"
                 },
                 "duration": {
                     "type": "string"

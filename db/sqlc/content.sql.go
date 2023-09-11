@@ -114,7 +114,7 @@ type GetDeactivePostsByCreatedAtRow struct {
 	Target1                      sql.NullFloat64      `json:"target1"`
 	Target2                      sql.NullFloat64      `json:"target2"`
 	Target3                      sql.NullFloat64      `json:"target3"`
-	Direction                    EntryPosition        `json:"direction"`
+	Direction                    Direction            `json:"direction"`
 	Leverage                     int32                `json:"leverage"`
 	Finished                     bool                 `json:"finished"`
 	Status                       PostCryptoStatus     `json:"status"`
@@ -313,7 +313,7 @@ type GetDeactivePostsByPNLRow struct {
 	Target1                      sql.NullFloat64      `json:"target1"`
 	Target2                      sql.NullFloat64      `json:"target2"`
 	Target3                      sql.NullFloat64      `json:"target3"`
-	Direction                    EntryPosition        `json:"direction"`
+	Direction                    Direction            `json:"direction"`
 	Leverage                     int32                `json:"leverage"`
 	Finished                     bool                 `json:"finished"`
 	Status                       PostCryptoStatus     `json:"status"`
@@ -674,7 +674,7 @@ type GetSubscribedActivePostsRow struct {
 	Target1                      sql.NullFloat64      `json:"target1"`
 	Target2                      sql.NullFloat64      `json:"target2"`
 	Target3                      sql.NullFloat64      `json:"target3"`
-	Direction                    EntryPosition        `json:"direction"`
+	Direction                    Direction            `json:"direction"`
 	Leverage                     int32                `json:"leverage"`
 	Finished                     bool                 `json:"finished"`
 	Status                       PostCryptoStatus     `json:"status"`
@@ -958,7 +958,7 @@ type GetSubscribedActivePostsWithOwnRow struct {
 	Target1                      sql.NullFloat64      `json:"target1"`
 	Target2                      sql.NullFloat64      `json:"target2"`
 	Target3                      sql.NullFloat64      `json:"target3"`
-	Direction                    EntryPosition        `json:"direction"`
+	Direction                    Direction            `json:"direction"`
 	Leverage                     int32                `json:"leverage"`
 	Finished                     bool                 `json:"finished"`
 	Status                       PostCryptoStatus     `json:"status"`
@@ -1159,7 +1159,7 @@ type GetSubscribedDeactivePostsRow struct {
 	Target1                      sql.NullFloat64      `json:"target1"`
 	Target2                      sql.NullFloat64      `json:"target2"`
 	Target3                      sql.NullFloat64      `json:"target3"`
-	Direction                    EntryPosition        `json:"direction"`
+	Direction                    Direction            `json:"direction"`
 	Leverage                     int32                `json:"leverage"`
 	Finished                     bool                 `json:"finished"`
 	Status                       PostCryptoStatus     `json:"status"`
@@ -1447,7 +1447,7 @@ type GetSubscribedDeactivePostsWithOwnRow struct {
 	Target1                      sql.NullFloat64      `json:"target1"`
 	Target2                      sql.NullFloat64      `json:"target2"`
 	Target3                      sql.NullFloat64      `json:"target3"`
-	Direction                    EntryPosition        `json:"direction"`
+	Direction                    Direction            `json:"direction"`
 	Leverage                     int32                `json:"leverage"`
 	Finished                     bool                 `json:"finished"`
 	Status                       PostCryptoStatus     `json:"status"`

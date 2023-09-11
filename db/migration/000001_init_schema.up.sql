@@ -4,7 +4,7 @@ CREATE TYPE "image_type" AS ENUM ('profile_photo', 'background_photo');
 
 CREATE TYPE "post_crypto_market_type" AS ENUM ('spot', 'futures');
 
-CREATE TYPE "entry_position" AS ENUM ('long', 'short');
+CREATE TYPE "direction" AS ENUM ('long', 'short');
 
 CREATE TYPE "post_crypto_status" AS ENUM ('pending', 'fail', 'success');
 
@@ -132,7 +132,7 @@ CREATE TABLE "post_crypto" (
     "target1" float,
     "target2" float,
     "target3" float,
-    "direction" entry_position NOT NULL,
+    "direction" direction NOT NULL,
     "leverage" int NOT NULL,
     "finished" boolean NOT NULL DEFAULT false,
     "status" post_crypto_status NOT NULL DEFAULT 'pending',
