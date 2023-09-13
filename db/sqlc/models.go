@@ -592,7 +592,8 @@ type PostCrypto struct {
 	Status         PostCryptoStatus     `json:"status"`
 	Pnl            float64              `json:"pnl"`
 	Roi            float64              `json:"roi"`
-	LastOperatedAt time.Time            `json:"last_operated_at"`
+	LastOperatedAt int64                `json:"last_operated_at"`
+	HitPrice       sql.NullFloat64      `json:"hit_price"`
 	Deleted        bool                 `json:"deleted"`
 	CreatedAt      time.Time            `json:"created_at"`
 	UpdatedAt      time.Time            `json:"updated_at"`

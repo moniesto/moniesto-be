@@ -4,30 +4,9 @@ import (
 	"fmt"
 
 	"github.com/go-resty/resty/v2"
-	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/system"
 )
-
-// "https://api3.binance.com/api/v3/ticker/price",
-
-var spotApiLinks []string = []string{
-	"https://api3.binance.com/api/v3",
-	"https://api2.binance.com/api/v3",
-	"https://api1.binance.com/api/v3",
-	"https://api.binance.com/api/v3",
-}
-
-var futuresApiLinks []string = []string{
-	"https://fapi.binance.com/fapi/v1",
-}
-
-var MARKETS map[string][]string = map[string][]string{
-	string(db.PostCryptoMarketTypeSpot):    spotApiLinks,
-	string(db.PostCryptoMarketTypeFutures): futuresApiLinks,
-}
-
-var tickerURI = "/ticker/price"
 
 // GetCurrencies get all currencies from the crypto API
 func GetCurrencies(marketType string) (model.GetCurrenciesAPIResponse, error) {
@@ -37,7 +16,7 @@ func GetCurrencies(marketType string) (model.GetCurrenciesAPIResponse, error) {
 
 	apiLinks, ok := MARKETS[marketType]
 	if !ok {
-		return model.GetCurrenciesAPIResponse{}, fmt.Errorf("market is not support: %s", marketType)
+		return model.GetCurrenciesAPIResponse{}, fmt.Errorf("market type is not supported: %s", marketType)
 	}
 
 	link_number := 0
@@ -71,7 +50,7 @@ func GetCurrency(name string, marketType string) (model.GetCurrencyAPIResponse, 
 
 	apiLinks, ok := MARKETS[marketType]
 	if !ok {
-		return model.GetCurrencyAPIResponse{}, fmt.Errorf("market type is not support: %s", marketType)
+		return model.GetCurrencyAPIResponse{}, fmt.Errorf("market type is not supported: %s", marketType)
 	}
 
 	link_number := 0

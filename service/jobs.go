@@ -9,6 +9,7 @@ import (
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/util"
+	"github.com/moniesto/moniesto-be/util/analyzer"
 	"github.com/moniesto/moniesto-be/util/mailing"
 	"github.com/moniesto/moniesto-be/util/payment/binance"
 	"github.com/moniesto/moniesto-be/util/system"
@@ -26,83 +27,83 @@ func (service *Service) GetAllActivePosts() ([]db.GetAllActivePostsRow, error) {
 	return posts, err
 }
 
-/*
-func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) error {
+func (service *Service) UpdatePostStatus(activePost db.GetAllActivePostsRow) (db.PostCryptoStatus, error) {
 	ctx := context.Background()
 
-	req := model.CalculateScoreRequest{
-		Parity:               activePost.Currency,
-		StartPrice:           activePost.StartPrice,
-		StartDate:            util.DateToTimestamp(activePost.CreatedAt),
-		EndDate:              util.DateToTimestamp(activePost.Duration),
-		Target1:              activePost.Target1,
-		Target2:              activePost.Target2,
-		Target3:              activePost.Target3,
-		Stop:                 activePost.Stop,
-		Direction:            string(activePost.Direction),
-		LastTargetHit:        activePost.LastTargetHit,
-		LastCronJobTimeStamp: activePost.LastJobTimestamp,
-	}
+	// STEP: get earliest date [set as last date for analyze]
+	now := util.Now()
+	tradeEnd_UTC := util.EarliestDate(now, activePost.Duration)
+	tradeEnd_UTC_TS := util.DateToTimestamp(tradeEnd_UTC)
 
-	response, err := scoring.CalculateScore(req, service.config)
+	// STEP: get analyze data
+	status, hitPrice, hitDate, err := analyzer.Analyze(activePost.Currency, activePost.TakeProfit, activePost.Stop, activePost.LastOperatedAt, tradeEnd_UTC_TS, activePost.Direction)
 	if err != nil {
-		return err
+		return db.PostCryptoStatusFail, fmt.Errorf("error while analyzing active post: %s", err.Error())
 	}
 
-	b, err := json.Marshal(response)
+	switch status {
+	// STEP: hit to -> take profit
+	case db.PostCryptoStatusSuccess:
+		return db.PostCryptoStatusSuccess, service.UpdateFinishedPostStatus(&ctx, activePost, status, activePost.TakeProfit, hitPrice, hitDate)
+
+	// STEP: hit to -> stop
+	case db.PostCryptoStatusFail:
+		return db.PostCryptoStatusFail, service.UpdateFinishedPostStatus(&ctx, activePost, status, activePost.Stop, hitPrice, hitDate)
+
+	// STEP: no hit, still pending
+	case db.PostCryptoStatusPending:
+		// STEP: duration is over but no hit
+		if activePost.Duration.Before(now) {
+			system.Log("no hit & duration is over for post:", activePost.ID)
+			return db.PostCryptoStatusFail, service.UpdateFinishedPostStatus(&ctx, activePost, db.PostCryptoStatusFail, hitPrice, hitPrice, hitDate)
+		}
+
+		// STEP: still active post
+		return db.PostCryptoStatusPending, service.UpdateUnFinishedPostStatus(&ctx, activePost, hitDate)
+
+	default:
+		return db.PostCryptoStatusFail, fmt.Errorf("unexpected status: %s", status)
+	}
+}
+
+func (service *Service) UpdateFinishedPostStatus(ctx *context.Context, activePost db.GetAllActivePostsRow, status db.PostCryptoStatus, lastPrice, hitPrice float64, hitDate int64) error {
+	pnl, roi, err := core.CalculatePNL_ROI(activePost.StartPrice, lastPrice, activePost.Leverage, activePost.Direction)
 	if err != nil {
-		system.LogError("Update Post status - error while marshall", err)
-		return err
+		return fmt.Errorf("error while calculating pnl and roi: %s", err.Error())
 	}
-	system.Log("scoring response", string(b))
 
-	// STEP: post is finished case
-	if response.Finished {
-		// STEP: update post status
-		status := ""
+	params := db.UpdateFinishedPostStatusParams{
+		ID:             activePost.ID,
+		Status:         status,
+		Pnl:            pnl,
+		Roi:            roi,
+		HitPrice:       sql.NullFloat64{Valid: true, Float64: hitPrice},
+		LastOperatedAt: hitDate,
+	}
 
-		if response.Success {
-			status = string(db.PostCryptoStatusSuccess)
-		} else {
-			status = string(db.PostCryptoStatusFail)
-		}
+	err = service.Store.UpdateFinishedPostStatus(*ctx, params)
+	if err != nil {
+		return fmt.Errorf("error while updating post status: %s", err.Error())
+	}
 
-		params := db.UpdateFinishedPostStatusParams{
-			ID:     activePost.ID,
-			Status: db.PostCryptoStatus(status),
-			Score:  response.Score,
-		}
-		err := service.Store.UpdateFinishedPostStatus(ctx, params)
-		if err != nil {
-			return err
-		}
+	system.Log("post", activePost.ID, "status:", status, "pnl", pnl, "roi(%)", roi)
 
-		// STEP: update moniest score
-		moniestParams := db.UpdateMoniestScoreParams{
-			ID:    activePost.MoniestID,
-			Score: response.Score,
-		}
+	return nil
+}
 
-		err = service.Store.UpdateMoniestScore(ctx, moniestParams)
-		if err != nil {
-			return err
-		}
+func (service *Service) UpdateUnFinishedPostStatus(ctx *context.Context, activePost db.GetAllActivePostsRow, hitDate int64) error {
+	params := db.UpdateUnfinishedPostStatusParams{
+		ID:             activePost.ID,
+		LastOperatedAt: hitDate,
+	}
 
-	} else { // STEP: post is not finished
-		params := db.UpdateUnfinishedPostStatusParams{
-			ID:               activePost.ID,
-			LastTargetHit:    response.LastTargetHit,
-			LastJobTimestamp: response.LastCronJobTimeStamp,
-		}
-		err := service.Store.UpdateUnfinishedPostStatus(ctx, params)
-		if err != nil {
-			return err
-		}
+	err := service.Store.UpdateUnfinishedPostStatus(*ctx, params)
+	if err != nil {
+		return fmt.Errorf("error while updating post status: %s", err.Error())
 	}
 
 	return nil
 }
-*/
 
 func (service *Service) GetAllPendingPayouts(ctx *gin.Context) ([]db.GetAllPendingPayoutsRow, error) {
 

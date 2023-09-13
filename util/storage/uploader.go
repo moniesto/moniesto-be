@@ -11,15 +11,15 @@ type Uploader interface {
 	UploadPostDescriptionPhoto(*gin.Context, string) (model.PostPhoto, error)
 }
 
-var profilePhotoFolderName string = "Photo/ProfilePhotos"
-var profilePhotoThumbnailFolderName string = "Photo/ProfilePhotosThumbnail"
-var backgroundPhotoFolderName string = "Photo/BackgroundPhotos"
-var backgroundPhotoThumbnailFolderName string = "Photo/BackgroundPhotosThumbnail"
+const profilePhotoFolderName string = "Photo/ProfilePhotos"
+const profilePhotoThumbnailFolderName string = "Photo/ProfilePhotosThumbnail"
+const backgroundPhotoFolderName string = "Photo/BackgroundPhotos"
+const backgroundPhotoThumbnailFolderName string = "Photo/BackgroundPhotosThumbnail"
 
-var postDescriptionPhotoFolderName string = "Photo/PostPhotos"
+const postDescriptionPhotoFolderName string = "Photo/PostPhotos"
 
-var profilePhotoHeight = "500"
-var backgroundPhotoHeight = "800"
+const profilePhotoHeight = "500"
+const backgroundPhotoHeight = "800"
 
-var profilePhotothumnbnailHeight = "100"
-var backgroundPhotothumnbnailHeight = "100"
+const profilePhotothumnbnailHeight = "100"
+const backgroundPhotothumnbnailHeight = "100"

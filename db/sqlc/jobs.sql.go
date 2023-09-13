@@ -110,7 +110,7 @@ type GetAllActivePostsRow struct {
 	Status         PostCryptoStatus     `json:"status"`
 	Pnl            float64              `json:"pnl"`
 	Roi            float64              `json:"roi"`
-	LastOperatedAt time.Time            `json:"last_operated_at"`
+	LastOperatedAt int64                `json:"last_operated_at"`
 	CreatedAt      time.Time            `json:"created_at"`
 	UpdatedAt      time.Time            `json:"updated_at"`
 }
@@ -401,16 +401,20 @@ UPDATE "post_crypto"
 SET "status" = $2,
     "pnl" = $3,
     "roi" = $4,
+    "hit_price" = $5,
+    "last_operated_at" = $6,
     "finished" = TRUE,
     updated_at = now()
 WHERE "id" = $1
 `
 
 type UpdateFinishedPostStatusParams struct {
-	ID     string           `json:"id"`
-	Status PostCryptoStatus `json:"status"`
-	Pnl    float64          `json:"pnl"`
-	Roi    float64          `json:"roi"`
+	ID             string           `json:"id"`
+	Status         PostCryptoStatus `json:"status"`
+	Pnl            float64          `json:"pnl"`
+	Roi            float64          `json:"roi"`
+	HitPrice       sql.NullFloat64  `json:"hit_price"`
+	LastOperatedAt int64            `json:"last_operated_at"`
 }
 
 func (q *Queries) UpdateFinishedPostStatus(ctx context.Context, arg UpdateFinishedPostStatusParams) error {
@@ -419,6 +423,8 @@ func (q *Queries) UpdateFinishedPostStatus(ctx context.Context, arg UpdateFinish
 		arg.Status,
 		arg.Pnl,
 		arg.Roi,
+		arg.HitPrice,
+		arg.LastOperatedAt,
 	)
 	return err
 }
@@ -481,8 +487,8 @@ WHERE "id" = $1
 `
 
 type UpdateUnfinishedPostStatusParams struct {
-	ID             string    `json:"id"`
-	LastOperatedAt time.Time `json:"last_operated_at"`
+	ID             string `json:"id"`
+	LastOperatedAt int64  `json:"last_operated_at"`
 }
 
 func (q *Queries) UpdateUnfinishedPostStatus(ctx context.Context, arg UpdateUnfinishedPostStatusParams) error {

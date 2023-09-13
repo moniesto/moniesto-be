@@ -197,7 +197,8 @@
     pnl float [not null]
     roi float [not null]
 
-    last_operated_at timestamp [not null, default: `now()`]
+    last_operated_at bigint [not null]
+    hit_price float
 
     deleted boolean [not null, default: false]
     

@@ -34,6 +34,8 @@ UPDATE "post_crypto"
 SET "status" = $2,
     "pnl" = $3,
     "roi" = $4,
+    "hit_price" = $5,
+    "last_operated_at" = $6,
     "finished" = TRUE,
     updated_at = now()
 WHERE "id" = $1;

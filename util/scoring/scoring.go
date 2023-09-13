@@ -11,8 +11,8 @@ import (
 	"github.com/moniesto/moniesto-be/util/system"
 )
 
-var calculateApproximateURI = "/calculateApproximateScore"
-var calculateURI = "/calculateScore"
+const calculateApproximateURI = "/calculateApproximateScore"
+const calculateURI = "/calculateScore"
 
 // CalculateApproxScore calculates the approximately score of the post
 func CalculateApproxScore(endDate time.Time, startPrice float64, endPrice float64, direction string, config config.Config) float64 {

@@ -19,28 +19,28 @@ var supportedMarketTypes = []string{
 	string(db.PostCryptoMarketTypeFutures),
 }
 
-var ValidPasswordLength = 6
-var MaxBioLength = 150
-var MaxDescriptionLength = 5000
-var MaxSubscriptionMessageLength = 150
-var MaxFullnameLength = 50
-var MaxLocationLength = 30
+const ValidPasswordLength = 6
+const MaxBioLength = 150
+const MaxDescriptionLength = 5000
+const MaxSubscriptionMessageLength = 150
+const MaxFullnameLength = 50
+const MaxLocationLength = 30
 
-var MaxDurationDay = 90
-var MaxTakeProfitMultiplierLong = 10
-var MaxStopMultiplierShort = 2
+const MaxDurationDay = 90
+const MaxTakeProfitMultiplierLong = 10
+const MaxStopMultiplierShort = 2
 
-var MinLeverage int32 = 1
-var MaxLeverage int32 = 20
+const MinLeverage int32 = 1
+const MaxLeverage int32 = 20
 
-var MaxSubscriptionMonth = 12
+const MaxSubscriptionMonth = 12
 
-var UsernameRegex = `^[a-z][a-z0-9_]{0,29}$`
-var EmailRegex = `^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`
+const UsernameRegex = `^[a-z][a-z0-9_]{0,29}$`
+const EmailRegex = `^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`
 
 const InvestmentAmount = 1000
 
-var ERROR_DirectionNotValid = "direction is not valid"
+const ERROR_DirectionNotValid = "direction is not valid"
 
 var InvalidUsernames = []string{
 	"",

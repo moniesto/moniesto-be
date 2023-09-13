@@ -48,7 +48,7 @@ VALUES (
         $13,
         $14,
         $15,
-        now(),
+        $16,
         now(),
         now()
     )
@@ -72,21 +72,22 @@ RETURNING id,
 `
 
 type CreatePostParams struct {
-	ID         string               `json:"id"`
-	MoniestID  string               `json:"moniest_id"`
-	MarketType PostCryptoMarketType `json:"market_type"`
-	Currency   string               `json:"currency"`
-	StartPrice float64              `json:"start_price"`
-	Duration   time.Time            `json:"duration"`
-	TakeProfit float64              `json:"take_profit"`
-	Stop       float64              `json:"stop"`
-	Target1    sql.NullFloat64      `json:"target1"`
-	Target2    sql.NullFloat64      `json:"target2"`
-	Target3    sql.NullFloat64      `json:"target3"`
-	Direction  Direction            `json:"direction"`
-	Leverage   int32                `json:"leverage"`
-	Pnl        float64              `json:"pnl"`
-	Roi        float64              `json:"roi"`
+	ID             string               `json:"id"`
+	MoniestID      string               `json:"moniest_id"`
+	MarketType     PostCryptoMarketType `json:"market_type"`
+	Currency       string               `json:"currency"`
+	StartPrice     float64              `json:"start_price"`
+	Duration       time.Time            `json:"duration"`
+	TakeProfit     float64              `json:"take_profit"`
+	Stop           float64              `json:"stop"`
+	Target1        sql.NullFloat64      `json:"target1"`
+	Target2        sql.NullFloat64      `json:"target2"`
+	Target3        sql.NullFloat64      `json:"target3"`
+	Direction      Direction            `json:"direction"`
+	Leverage       int32                `json:"leverage"`
+	Pnl            float64              `json:"pnl"`
+	Roi            float64              `json:"roi"`
+	LastOperatedAt int64                `json:"last_operated_at"`
 }
 
 type CreatePostRow struct {
@@ -126,6 +127,7 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) (CreateP
 		arg.Leverage,
 		arg.Pnl,
 		arg.Roi,
+		arg.LastOperatedAt,
 	)
 	var i CreatePostRow
 	err := row.Scan(

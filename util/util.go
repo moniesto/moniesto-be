@@ -90,6 +90,17 @@ func DateToTimestamp(date time.Time) int64 {
 	return date.UnixNano() / int64(time.Millisecond)
 }
 
+func TimestampToDate(timestamp int64) time.Time {
+	return time.Unix(timestamp/1000, 0)
+}
+
+func EarliestDate(date1 time.Time, date2 time.Time) time.Time {
+	if date1.Before(date2) {
+		return date1
+	}
+	return date2
+}
+
 func RoundAmountDown(fee float64) float64 {
 	return (math.Floor(fee*100) / 100)
 }

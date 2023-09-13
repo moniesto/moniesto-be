@@ -19,12 +19,4 @@ type GetCurrencyAPIResponse struct {
 
 type GetHistoryDataAPIResponse [][]interface{}
 
-type History struct {
-	OpenTime   int64
-	OpenPrice  string
-	HighPrice  string
-	LowPrice   string
-	ClosePrice string
-	Volume     string
-	CloseTime  int64
-}
+type History []any

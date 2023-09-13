@@ -124,7 +124,6 @@ func (server *Server) setupRouter() {
 	adminRouters := router.Group("/admin").Use(authMiddleware(server.tokenMaker))
 	{
 		adminRouters.POST("/update_posts_status", server.UpdatePostsStatusManual)
-		//	adminRouters.POST("/send-email/test", server.SendEmailTest)
 	}
 
 	// Payment routes
@@ -155,7 +154,7 @@ func (server *Server) setupCRONJobs() {
 	job := cron.New()
 
 	// JOB: updating post status
-	// job.AddFunc(util.JOB_TYPE_EVERY_1AM, server.UpdatePostStatus)
+	job.AddFunc(util.JOB_TYPE_EVERY_30_MINUTES, server.Analyzer)
 
 	// JOB: payout to moniest
 	// job.AddFunc(util.JOB_TYPE_EVERY_MINUTE, server.PayoutToMoniest)
