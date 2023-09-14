@@ -139,6 +139,7 @@ CREATE TABLE "post_crypto" (
   "pnl" float NOT NULL,
   "roi" float NOT NULL,
   "last_operated_at" bigint NOT NULL,
+  "finished_at" timestamp DEFAULT (now()),
   "hit_price" float,
   "deleted" boolean NOT NULL DEFAULT false,
   "created_at" timestamp NOT NULL DEFAULT (now()),
