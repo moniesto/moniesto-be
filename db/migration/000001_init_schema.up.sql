@@ -11,11 +11,11 @@ CREATE TYPE "post_crypto_status" AS ENUM ('pending', 'fail', 'success');
 CREATE TYPE "binance_payment_status" AS ENUM ('pending', 'fail', 'success');
 
 CREATE TYPE "binance_payout_status" AS ENUM (
-    'pending',
-    'fail',
-    'success',
-    'refund',
-    'refund_fail'
+  'pending',
+  'fail',
+  'success',
+  'refund',
+  'refund_fail'
 );
 
 CREATE TYPE "binance_payment_date_type" AS ENUM ('MONTH');
@@ -25,205 +25,205 @@ CREATE TYPE "payout_source" AS ENUM ('BINANCE');
 CREATE TYPE "payout_type" AS ENUM ('BINANCE_ID');
 
 CREATE TABLE "user" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "fullname" varchar NOT NULL,
-    "username" varchar UNIQUE NOT NULL,
-    "email" varchar UNIQUE NOT NULL,
-    "email_verified" boolean NOT NULL DEFAULT false,
-    "password" varchar NOT NULL,
-    "location" varchar,
-    "login_count" integer NOT NULL DEFAULT 1,
-    "language" user_language NOT NULL DEFAULT 'en',
-    "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now()),
-    "last_login" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "fullname" varchar NOT NULL,
+  "username" varchar UNIQUE NOT NULL,
+  "email" varchar UNIQUE NOT NULL,
+  "email_verified" boolean NOT NULL DEFAULT false,
+  "password" varchar NOT NULL,
+  "location" varchar,
+  "login_count" integer NOT NULL DEFAULT 1,
+  "language" user_language NOT NULL DEFAULT 'en',
+  "deleted" boolean NOT NULL DEFAULT false,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now()),
+  "last_login" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "image" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "user_id" varchar NOT NULL,
-    "link" varchar NOT NULL,
-    "thumbnail_link" varchar NOT NULL,
-    "type" image_type NOT NULL,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "user_id" varchar NOT NULL,
+  "link" varchar NOT NULL,
+  "thumbnail_link" varchar NOT NULL,
+  "type" image_type NOT NULL,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "moniest" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "user_id" varchar UNIQUE NOT NULL,
-    "bio" varchar,
-    "description" text,
-    "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "user_id" varchar UNIQUE NOT NULL,
+  "bio" varchar,
+  "description" text,
+  "deleted" boolean NOT NULL DEFAULT false,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "moniest_post_crypto_statistics" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "moniest_id" varchar NOT NULL,
-    "pnl_7days" float,
-    "roi_7days" float,
-    "win_rate_7days" float,
-    "posts_7days" varchar [],
-    "pnl_30days" float,
-    "roi_30days" float,
-    "win_rate_30days" float,
-    "posts_30days" varchar [],
-    "pnl_total" float,
-    "roi_total" float,
-    "win_rate_total" float,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "moniest_id" varchar NOT NULL,
+  "pnl_7days" float,
+  "roi_7days" float,
+  "win_rate_7days" float,
+  "posts_7days" varchar [],
+  "pnl_30days" float,
+  "roi_30days" float,
+  "win_rate_30days" float,
+  "posts_30days" varchar [],
+  "pnl_total" float,
+  "roi_total" float,
+  "win_rate_total" float,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "moniest_payout_info" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "moniest_id" varchar NOT NULL,
-    "source" payout_source NOT NULL DEFAULT 'BINANCE',
-    "type" payout_type NOT NULL DEFAULT 'BINANCE_ID',
-    "value" varchar NOT NULL,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "moniest_id" varchar NOT NULL,
+  "source" payout_source NOT NULL DEFAULT 'BINANCE',
+  "type" payout_type NOT NULL DEFAULT 'BINANCE_ID',
+  "value" varchar NOT NULL,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "moniest_subscription_info" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "moniest_id" varchar UNIQUE NOT NULL,
-    "fee" float NOT NULL DEFAULT 5,
-    "message" varchar,
-    "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "moniest_id" varchar UNIQUE NOT NULL,
+  "fee" float NOT NULL DEFAULT 5,
+  "message" varchar,
+  "deleted" boolean NOT NULL DEFAULT false,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "user_subscription" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "user_id" varchar NOT NULL,
-    "moniest_id" varchar NOT NULL,
-    "active" boolean NOT NULL DEFAULT true,
-    "latest_transaction_id" varchar,
-    "subscription_start_date" timestamp NOT NULL DEFAULT (now()),
-    "subscription_end_date" timestamp NOT NULL DEFAULT (now()),
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "user_id" varchar NOT NULL,
+  "moniest_id" varchar NOT NULL,
+  "active" boolean NOT NULL DEFAULT true,
+  "latest_transaction_id" varchar,
+  "subscription_start_date" timestamp NOT NULL DEFAULT (now()),
+  "subscription_end_date" timestamp NOT NULL DEFAULT (now()),
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "user_subscription_history" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "user_id" varchar NOT NULL,
-    "moniest_id" varchar NOT NULL,
-    "transaction_id" varchar,
-    "subscription_start_date" timestamp NOT NULL DEFAULT (now()),
-    "subscription_end_date" timestamp NOT NULL DEFAULT (now()),
-    "created_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "user_id" varchar NOT NULL,
+  "moniest_id" varchar NOT NULL,
+  "transaction_id" varchar,
+  "subscription_start_date" timestamp NOT NULL DEFAULT (now()),
+  "subscription_end_date" timestamp NOT NULL DEFAULT (now()),
+  "created_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "post_crypto" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "moniest_id" varchar NOT NULL,
-    "market_type" post_crypto_market_type NOT NULL,
-    "currency" varchar NOT NULL,
-    "start_price" float NOT NULL,
-    "duration" timestamp NOT NULL,
-    "take_profit" float NOT NULL,
-    "stop" float NOT NULL,
-    "target1" float,
-    "target2" float,
-    "target3" float,
-    "direction" direction NOT NULL,
-    "leverage" int NOT NULL,
-    "finished" boolean NOT NULL DEFAULT false,
-    "status" post_crypto_status NOT NULL DEFAULT 'pending',
-    "pnl" float NOT NULL,
-    "roi" float NOT NULL,
-    "last_operated_at" bigint NOT NULL,
-    "finished_at" timestamp DEFAULT (now()),
-    "hit_price" float,
-    "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "moniest_id" varchar NOT NULL,
+  "market_type" post_crypto_market_type NOT NULL,
+  "currency" varchar NOT NULL,
+  "start_price" float NOT NULL,
+  "duration" timestamp NOT NULL,
+  "take_profit" float NOT NULL,
+  "stop" float NOT NULL,
+  "target1" float,
+  "target2" float,
+  "target3" float,
+  "direction" direction NOT NULL,
+  "leverage" int NOT NULL,
+  "finished" boolean NOT NULL DEFAULT false,
+  "status" post_crypto_status NOT NULL DEFAULT 'pending',
+  "pnl" float NOT NULL,
+  "roi" float NOT NULL,
+  "last_operated_at" bigint NOT NULL,
+  "finished_at" timestamp,
+  "hit_price" float,
+  "deleted" boolean NOT NULL DEFAULT false,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "post_crypto_description" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "post_id" varchar UNIQUE NOT NULL,
-    "description" text NOT NULL,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "post_id" varchar UNIQUE NOT NULL,
+  "description" text NOT NULL,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "password_reset_token" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "user_id" varchar NOT NULL,
-    "token" varchar UNIQUE NOT NULL,
-    "token_expiry" timestamp NOT NULL,
-    "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "user_id" varchar NOT NULL,
+  "token" varchar UNIQUE NOT NULL,
+  "token_expiry" timestamp NOT NULL,
+  "deleted" boolean NOT NULL DEFAULT false,
+  "created_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "email_verification_token" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "user_id" varchar NOT NULL,
-    "token" varchar UNIQUE NOT NULL,
-    "token_expiry" timestamp NOT NULL,
-    "redirect_url" varchar NOT NULL,
-    "deleted" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "user_id" varchar NOT NULL,
+  "token" varchar UNIQUE NOT NULL,
+  "token_expiry" timestamp NOT NULL,
+  "redirect_url" varchar NOT NULL,
+  "deleted" boolean NOT NULL DEFAULT false,
+  "created_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "feedback" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "user_id" varchar,
-    "type" varchar,
-    "message" varchar NOT NULL,
-    "solved" boolean NOT NULL DEFAULT false,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "solved_at" timestamp
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "user_id" varchar,
+  "type" varchar,
+  "message" varchar NOT NULL,
+  "solved" boolean NOT NULL DEFAULT false,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "solved_at" timestamp
 );
 
 CREATE TABLE "binance_payment_transaction" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "qrcode_link" text NOT NULL,
-    "checkout_link" text NOT NULL,
-    "deep_link" text NOT NULL,
-    "universal_link" text NOT NULL,
-    "status" binance_payment_status NOT NULL DEFAULT 'pending',
-    "user_id" varchar NOT NULL,
-    "moniest_id" varchar NOT NULL,
-    "date_type" binance_payment_date_type NOT NULL DEFAULT 'MONTH',
-    "date_value" integer NOT NULL,
-    "moniest_fee" float NOT NULL,
-    "amount" float NOT NULL,
-    "webhook_url" text NOT NULL,
-    "payer_id" varchar,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "qrcode_link" text NOT NULL,
+  "checkout_link" text NOT NULL,
+  "deep_link" text NOT NULL,
+  "universal_link" text NOT NULL,
+  "status" binance_payment_status NOT NULL DEFAULT 'pending',
+  "user_id" varchar NOT NULL,
+  "moniest_id" varchar NOT NULL,
+  "date_type" binance_payment_date_type NOT NULL DEFAULT 'MONTH',
+  "date_value" integer NOT NULL,
+  "moniest_fee" float NOT NULL,
+  "amount" float NOT NULL,
+  "webhook_url" text NOT NULL,
+  "payer_id" varchar,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "binance_payout_history" (
-    "id" varchar UNIQUE PRIMARY KEY NOT NULL,
-    "transaction_id" varchar NOT NULL,
-    "user_id" varchar NOT NULL,
-    "moniest_id" varchar NOT NULL,
-    "payer_id" varchar NOT NULL,
-    "total_amount" float NOT NULL,
-    "amount" float NOT NULL,
-    "date_type" binance_payment_date_type NOT NULL DEFAULT 'MONTH',
-    "date_value" integer NOT NULL,
-    "date_index" integer NOT NULL,
-    "payout_date" timestamp NOT NULL,
-    "payout_year" integer NOT NULL,
-    "payout_month" integer NOT NULL,
-    "payout_day" integer NOT NULL,
-    "status" binance_payout_status NOT NULL DEFAULT 'pending',
-    "operation_fee_percentage" float,
-    "payout_done_at" timestamp,
-    "payout_request_id" varchar,
-    "failure_message" text,
-    "created_at" timestamp NOT NULL DEFAULT (now()),
-    "updated_at" timestamp NOT NULL DEFAULT (now())
+  "id" varchar UNIQUE PRIMARY KEY NOT NULL,
+  "transaction_id" varchar NOT NULL,
+  "user_id" varchar NOT NULL,
+  "moniest_id" varchar NOT NULL,
+  "payer_id" varchar NOT NULL,
+  "total_amount" float NOT NULL,
+  "amount" float NOT NULL,
+  "date_type" binance_payment_date_type NOT NULL DEFAULT 'MONTH',
+  "date_value" integer NOT NULL,
+  "date_index" integer NOT NULL,
+  "payout_date" timestamp NOT NULL,
+  "payout_year" integer NOT NULL,
+  "payout_month" integer NOT NULL,
+  "payout_day" integer NOT NULL,
+  "status" binance_payout_status NOT NULL DEFAULT 'pending',
+  "operation_fee_percentage" float,
+  "payout_done_at" timestamp,
+  "payout_request_id" varchar,
+  "failure_message" text,
+  "created_at" timestamp NOT NULL DEFAULT (now()),
+  "updated_at" timestamp NOT NULL DEFAULT (now())
 );
 
 CREATE UNIQUE INDEX ON "user" ("username");
@@ -283,12 +283,12 @@ CREATE UNIQUE INDEX ON "password_reset_token" ("user_id", "token");
 CREATE UNIQUE INDEX ON "email_verification_token" ("user_id", "token");
 
 CREATE UNIQUE INDEX ON "binance_payout_history" (
-    "transaction_id",
-    "user_id",
-    "moniest_id",
-    "payout_year",
-    "payout_month",
-    "payout_day"
+  "transaction_id",
+  "user_id",
+  "moniest_id",
+  "payout_year",
+  "payout_month",
+  "payout_day"
 );
 
 COMMENT ON TABLE "user" IS 'Stores user data';

@@ -198,7 +198,7 @@
     roi float [not null]
 
     last_operated_at bigint [not null]
-    finished_at timestamp [default: `now()`]
+    finished_at timestamp
     hit_price float
 
     deleted boolean [not null, default: false]
