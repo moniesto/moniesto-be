@@ -9,7 +9,7 @@ import (
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
-// @Summary Update Posts status
+// @Summary Update Posts status manually
 // @Description Can update the status of the posts manually
 // @Security bearerAuth
 // @Tags Admin
@@ -32,6 +32,34 @@ func (server *Server) UpdatePostsStatusManual(ctx *gin.Context) {
 
 	if validation.UserIsAdmin(user.Email) {
 		server.Analyzer()
+		ctx.Status(http.StatusOK)
+	} else {
+		ctx.Status(http.StatusForbidden)
+	}
+}
+
+// @Summary Update Moniest Post Crypto Statistics manually
+// @Description Can update the Moniest Post Crypto Statistics manually
+// @Security bearerAuth
+// @Tags Admin
+// @Success 200
+// @Failure 403
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /admin/update_moniest_post_crypto_statistics [post]
+func (server *Server) UpdateMoniestPostCryptoStatisticsManual(ctx *gin.Context) {
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: get user
+	user, err := server.service.GetOwnUserByID(ctx, user_id)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	if validation.UserIsAdmin(user.Email) {
+		server.UpdateMoniestPostCryptoStatistics()
 		ctx.Status(http.StatusOK)
 	} else {
 		ctx.Status(http.StatusForbidden)

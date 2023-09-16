@@ -5,12 +5,18 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
+	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/system"
 )
 
 func (server *Server) Analyzer() {
 	system.Log("JOB TRIGGER: Update Post Status")
+	defer system.Timer("Analyzer")()
 
+	ctx := gin.Context{}
+
+	// STEP: get active posts
 	activePosts, err := server.service.GetAllActivePosts()
 	if err != nil {
 		system.LogError("JOB ERROR: POST STATUS => db error while getting active posts")
@@ -19,18 +25,46 @@ func (server *Server) Analyzer() {
 
 	system.Log("# Active posts", len(activePosts))
 
+	moniestIDs := []string{}
+
+	// STEP: update active posts' status
 	for i, post := range activePosts {
 		system.Log(fmt.Sprintf("post start: %d id: %s\n", i, post.ID))
 
-		_, err := server.service.UpdatePostStatus(post)
+		status, err := server.service.UpdatePostStatus(post)
 		if err != nil {
 			system.LogError(fmt.Sprintf("JOB ERROR: POST STATUS => %s", err))
 		}
+
+		if status == db.PostCryptoStatusFail || status == db.PostCryptoStatusSuccess {
+			if !util.Contains(moniestIDs, post.MoniestID) {
+				moniestIDs = append(moniestIDs, post.MoniestID)
+			}
+		}
+	}
+
+	// STEP: update moniests' post crypto statistics that are finished [fail | success]
+	err = server.service.UpdateMoniestsPostCryptoStatistics(&ctx, moniestIDs)
+	if err != nil {
+		system.LogError("JOB ERROR: UPDATE MONIEST POST STATISTICS", err.Error())
+	}
+}
+
+func (server *Server) UpdateMoniestPostCryptoStatistics() {
+	system.Log("JOB TRIGGER: Update Post Status")
+	defer system.Timer("Updating All Moniests Post Crypto Statistics")()
+
+	ctx := gin.Context{}
+
+	err := server.service.UpdateAllMoniestsPostCryptoStatistics(&ctx)
+	if err != nil {
+		system.LogError("JOB ERROR: UPDATE ALL MONIESTS POST STATISTICS", err.Error())
 	}
 }
 
 func (server *Server) PayoutToMoniest() {
 	system.Log("JOB TRIGGER: Payout To Moniest")
+	defer system.Timer("Payout to Moniest")()
 
 	ctx := gin.Context{}
 
@@ -50,6 +84,7 @@ func (server *Server) PayoutToMoniest() {
 
 func (server *Server) DetectExpiredActiveSubscriptions() {
 	system.Log("JOB TRIGGER: Detect Expired Active Subscriptions")
+	defer system.Timer("Detect Expired Active Subscriptions")()
 
 	ctx := gin.Context{}
 
@@ -67,12 +102,11 @@ func (server *Server) DetectExpiredActiveSubscriptions() {
 			system.LogError(fmt.Sprintf("JOB ERROR: EXPIRED SUBSCRIPTIONS => %s, user subsription ID: %s", err, expiredSubscription.ID))
 		}
 	}
-
-	// TODO: send email to expired subscriptions [users]
 }
 
 func (server *Server) DetectExpiredPendingTransaction() {
 	system.Log("JOB TRIGGER: Detect Expired Pending Transaction")
+	defer system.Timer("Detect Expired Pending Transaction")()
 
 	ctx := context.Background()
 
@@ -89,5 +123,4 @@ func (server *Server) DetectExpiredPendingTransaction() {
 			system.LogError(fmt.Sprintf("JOB ERROR: EXPIRED PENDING BINANCE TRANSACTIONS => %s", err))
 		}
 	}
-
 }

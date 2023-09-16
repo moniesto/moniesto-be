@@ -46,7 +46,7 @@ func Email(email string) (string, error) {
 func Username(username string) error {
 	// IMPLEMENTATION 1
 	/*
-		if len(username) == 0 || strings.Contains(username, " ") || contains(InvalidUsernames, username) {
+		if len(username) == 0 || strings.util.Contains(username, " ") || util.Contains(InvalidUsernames, username) {
 			return fmt.Errorf("username is not valid %s", username)
 		}
 
@@ -54,7 +54,7 @@ func Username(username string) error {
 	*/
 
 	usernameRegex := regexp.MustCompile(UsernameRegex)
-	if !usernameRegex.MatchString(username) || contains(InvalidUsernames, username) {
+	if !usernameRegex.MatchString(username) || util.Contains(InvalidUsernames, username) {
 		return fmt.Errorf("username is not valid %s", username)
 	}
 
@@ -125,7 +125,6 @@ func Duration(duration time.Time) error {
 	return nil
 }
 
-// TODO: update this function
 // TakeProfit checks is take profit valid [price > takeProfit > MaxTarget]
 func TakeProfit(price, takeProfit float64, direction db.Direction) error {
 	takeProfitErrorMessage := "take profit is not valid"
@@ -226,7 +225,7 @@ func Stop(price, stop float64, leverage int32, direction db.Direction) error {
 
 // MarketType checks provided market type is supported or not
 func MarketType(marketType string) error {
-	if contains(supportedMarketTypes, marketType) {
+	if util.Contains(supportedMarketTypes, marketType) {
 		return nil
 	}
 
@@ -244,7 +243,7 @@ func Leverage(leverage int32) error {
 
 // Language checks provided language is supported or not
 func Language(language string) error {
-	if contains(supportedLanguages, language) {
+	if util.Contains(supportedLanguages, language) {
 		return nil
 	}
 
@@ -261,22 +260,12 @@ func BinanceID(binance_id string) error {
 }
 
 func UserIsAdmin(email string) bool {
-	return contains(adminEmails, strings.ToLower(email))
+	return util.Contains(adminEmails, strings.ToLower(email))
 }
 
 func SubscriptionDateValue(number_of_months int) bool {
 	if number_of_months >= 1 && number_of_months <= MaxSubscriptionMonth {
 		return true
-	}
-
-	return false
-}
-
-func contains(s []string, str string) bool {
-	for _, v := range s {
-		if v == str {
-			return true
-		}
 	}
 
 	return false

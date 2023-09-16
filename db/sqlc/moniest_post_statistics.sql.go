@@ -100,3 +100,352 @@ func (q *Queries) CreateMoniestPostCryptoStatistics(ctx context.Context, arg Cre
 	)
 	return i, err
 }
+
+const updateAllMoniestsPostCryptoStatistics_30days = `-- name: UpdateAllMoniestsPostCryptoStatistics_30days :exec
+UPDATE moniest_post_crypto_statistics AS mpcs
+SET pnl_30days = COALESCE(
+        (
+            SELECT ROUND(SUM(pnl)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+                AND pc.finished_at >= NOW() - INTERVAL '30 days'
+        ),
+        0
+    ),
+    roi_30days = COALESCE(
+        (
+            SELECT ROUND(AVG(roi)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+                AND pc.finished_at >= NOW() - INTERVAL '30 days'
+        ),
+        0
+    ),
+    win_rate_30days = COALESCE(
+        (
+            SELECT ROUND(
+                    (
+                        (
+                            SUM(
+                                CASE
+                                    WHEN pc.status = 'success' THEN 1
+                                    ELSE 0
+                                END
+                            )::float / COUNT(*)
+                        ) * 100
+                    )::numeric,
+                    2
+                )
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+                AND pc.finished_at >= NOW() - INTERVAL '30 days'
+        ),
+        0
+    ),
+    posts_30days = COALESCE(
+        (
+            SELECT ARRAY_AGG(id)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+                AND pc.finished_at >= NOW() - INTERVAL '30 days'
+        ),
+        '{}'
+    ),
+    updated_at = now()
+`
+
+func (q *Queries) UpdateAllMoniestsPostCryptoStatistics_30days(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, updateAllMoniestsPostCryptoStatistics_30days)
+	return err
+}
+
+const updateAllMoniestsPostCryptoStatistics_7days = `-- name: UpdateAllMoniestsPostCryptoStatistics_7days :exec
+UPDATE moniest_post_crypto_statistics AS mpcs
+SET pnl_7days = COALESCE(
+        (
+            SELECT ROUND(SUM(pnl)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = TRUE
+                AND pc.finished_at >= NOW() - INTERVAL '7 days'
+        ),
+        0
+    ),
+    roi_7days = COALESCE(
+        (
+            SELECT ROUND(AVG(roi)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = TRUE
+                AND pc.finished_at >= NOW() - INTERVAL '7 days'
+        ),
+        0
+    ),
+    win_rate_7days = COALESCE(
+        (
+            SELECT ROUND(
+                    (
+                        (
+                            SUM(
+                                CASE
+                                    WHEN pc.status = 'success' THEN 1
+                                    ELSE 0
+                                END
+                            )::float / COUNT(*)
+                        ) * 100
+                    )::numeric,
+                    2
+                )
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = TRUE
+                AND pc.finished_at >= NOW() - INTERVAL '7 days'
+        ),
+        0
+    ),
+    posts_7days = COALESCE(
+        (
+            SELECT ARRAY_AGG(id)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = TRUE
+                AND pc.finished_at >= NOW() - INTERVAL '7 days'
+        ),
+        '{}'
+    ),
+    updated_at = now()
+`
+
+func (q *Queries) UpdateAllMoniestsPostCryptoStatistics_7days(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, updateAllMoniestsPostCryptoStatistics_7days)
+	return err
+}
+
+const updateAllMoniestsPostCryptoStatistics_total = `-- name: UpdateAllMoniestsPostCryptoStatistics_total :exec
+UPDATE moniest_post_crypto_statistics AS mpcs
+SET pnl_total = COALESCE(
+        (
+            SELECT ROUND(SUM(pnl)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+        ),
+        0
+    ),
+    roi_total = COALESCE(
+        (
+            SELECT ROUND(AVG(roi)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+        ),
+        0
+    ),
+    win_rate_total = COALESCE(
+        (
+            SELECT ROUND(
+                    (
+                        (
+                            SUM(
+                                CASE
+                                    WHEN pc.status = 'success' THEN 1
+                                    ELSE 0
+                                END
+                            )::float / COUNT(*)
+                        ) * 100
+                    )::numeric,
+                    2
+                )
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+        ),
+        0
+    ),
+    updated_at = now()
+`
+
+func (q *Queries) UpdateAllMoniestsPostCryptoStatistics_total(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, updateAllMoniestsPostCryptoStatistics_total)
+	return err
+}
+
+const updateMoniestsPostCryptoStatistics_30days = `-- name: UpdateMoniestsPostCryptoStatistics_30days :exec
+UPDATE moniest_post_crypto_statistics AS mpcs
+SET pnl_30days = COALESCE(
+        (
+            SELECT ROUND(SUM(pnl)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+                AND pc.finished_at >= NOW() - INTERVAL '30 days'
+        ),
+        0
+    ),
+    roi_30days = COALESCE(
+        (
+            SELECT ROUND(AVG(roi)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+                AND pc.finished_at >= NOW() - INTERVAL '30 days'
+        ),
+        0
+    ),
+    win_rate_30days = COALESCE(
+        (
+            SELECT ROUND(
+                    (
+                        (
+                            SUM(
+                                CASE
+                                    WHEN pc.status = 'success' THEN 1
+                                    ELSE 0
+                                END
+                            )::float / COUNT(*)
+                        ) * 100
+                    )::numeric,
+                    2
+                )
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+                AND pc.finished_at >= NOW() - INTERVAL '30 days'
+        ),
+        0
+    ),
+    posts_30days = COALESCE(
+        (
+            SELECT ARRAY_AGG(id)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+                AND pc.finished_at >= NOW() - INTERVAL '30 days'
+        ),
+        '{}'
+    ),
+    updated_at = now()
+WHERE "mpcs"."moniest_id" = ANY($1::varchar [])
+`
+
+func (q *Queries) UpdateMoniestsPostCryptoStatistics_30days(ctx context.Context, dollar_1 []string) error {
+	_, err := q.db.ExecContext(ctx, updateMoniestsPostCryptoStatistics_30days, pq.Array(dollar_1))
+	return err
+}
+
+const updateMoniestsPostCryptoStatistics_7days = `-- name: UpdateMoniestsPostCryptoStatistics_7days :exec
+UPDATE moniest_post_crypto_statistics AS mpcs
+SET pnl_7days = COALESCE(
+        (
+            SELECT ROUND(SUM(pnl)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = TRUE
+                AND pc.finished_at >= NOW() - INTERVAL '7 days'
+        ),
+        0
+    ),
+    roi_7days = COALESCE(
+        (
+            SELECT ROUND(AVG(roi)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = TRUE
+                AND pc.finished_at >= NOW() - INTERVAL '7 days'
+        ),
+        0
+    ),
+    win_rate_7days = COALESCE(
+        (
+            SELECT ROUND(
+                    (
+                        (
+                            SUM(
+                                CASE
+                                    WHEN pc.status = 'success' THEN 1
+                                    ELSE 0
+                                END
+                            )::float / COUNT(*)
+                        ) * 100
+                    )::numeric,
+                    2
+                )
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = TRUE
+                AND pc.finished_at >= NOW() - INTERVAL '7 days'
+        ),
+        0
+    ),
+    posts_7days = COALESCE(
+        (
+            SELECT ARRAY_AGG(id)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = TRUE
+                AND pc.finished_at >= NOW() - INTERVAL '7 days'
+        ),
+        '{}'
+    ),
+    updated_at = now()
+WHERE "mpcs"."moniest_id" = ANY($1::varchar [])
+`
+
+func (q *Queries) UpdateMoniestsPostCryptoStatistics_7days(ctx context.Context, dollar_1 []string) error {
+	_, err := q.db.ExecContext(ctx, updateMoniestsPostCryptoStatistics_7days, pq.Array(dollar_1))
+	return err
+}
+
+const updateMoniestsPostCryptoStatistics_total = `-- name: UpdateMoniestsPostCryptoStatistics_total :exec
+UPDATE moniest_post_crypto_statistics AS mpcs
+SET pnl_total = COALESCE(
+        (
+            SELECT ROUND(SUM(pnl)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+        ),
+        0
+    ),
+    roi_total = COALESCE(
+        (
+            SELECT ROUND(AVG(roi)::numeric, 2)
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+        ),
+        0
+    ),
+    win_rate_total = COALESCE(
+        (
+            SELECT ROUND(
+                    (
+                        (
+                            SUM(
+                                CASE
+                                    WHEN pc.status = 'success' THEN 1
+                                    ELSE 0
+                                END
+                            )::float / COUNT(*)
+                        ) * 100
+                    )::numeric,
+                    2
+                )
+            FROM post_crypto AS pc
+            WHERE pc.moniest_id = mpcs.moniest_id
+                AND pc.finished = true
+        ),
+        0
+    ),
+    updated_at = now()
+WHERE "mpcs"."moniest_id" = ANY($1::varchar [])
+`
+
+func (q *Queries) UpdateMoniestsPostCryptoStatistics_total(ctx context.Context, dollar_1 []string) error {
+	_, err := q.db.ExecContext(ctx, updateMoniestsPostCryptoStatistics_total, pq.Array(dollar_1))
+	return err
+}

@@ -71,7 +71,6 @@ func (service *Service) UpdateSubsriptionInfo(ctx *gin.Context, moniest_id strin
 			return db.MoniestSubscriptionInfo{}, clientError.CreateError(http.StatusNotAcceptable, clientError.Moniest_UpdateMoniest_InvalidFee)
 		} else {
 			subscriptionUpdateInfoParams.Fee = req.MoniestSubscriptionInfo.Fee
-			// PAYMENT FUTURE TODO: send payment update request
 		}
 	}
 

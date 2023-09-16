@@ -9,8 +9,6 @@ import (
 	"context"
 	"database/sql"
 	"time"
-
-	"github.com/lib/pq"
 )
 
 const createUserSubscriptionHistory = `-- name: CreateUserSubscriptionHistory :one
@@ -426,56 +424,6 @@ func (q *Queries) UpdateFinishedPostStatus(ctx context.Context, arg UpdateFinish
 		arg.Roi,
 		arg.HitPrice,
 		arg.LastOperatedAt,
-	)
-	return err
-}
-
-const updateMoniestPostCryptoStatistics = `-- name: UpdateMoniestPostCryptoStatistics :exec
-UPDATE "moniest_post_crypto_statistics"
-SET "pnl_7days" = $2,
-    "roi_7days" = $3,
-    "win_rate_7days" = $4,
-    "posts_7days" = $5,
-    "pnl_30days" = $6,
-    "roi_30days" = $7,
-    "win_rate_30days" = $8,
-    "posts_30days" = $9,
-    "pnl_total" = $10,
-    "roi_total" = $11,
-    "win_rate_total" = $12,
-    "updated_at" = now()
-WHERE "moniest_id" = $1
-`
-
-type UpdateMoniestPostCryptoStatisticsParams struct {
-	MoniestID     string          `json:"moniest_id"`
-	Pnl7days      sql.NullFloat64 `json:"pnl_7days"`
-	Roi7days      sql.NullFloat64 `json:"roi_7days"`
-	WinRate7days  sql.NullFloat64 `json:"win_rate_7days"`
-	Posts7days    []string        `json:"posts_7days"`
-	Pnl30days     sql.NullFloat64 `json:"pnl_30days"`
-	Roi30days     sql.NullFloat64 `json:"roi_30days"`
-	WinRate30days sql.NullFloat64 `json:"win_rate_30days"`
-	Posts30days   []string        `json:"posts_30days"`
-	PnlTotal      sql.NullFloat64 `json:"pnl_total"`
-	RoiTotal      sql.NullFloat64 `json:"roi_total"`
-	WinRateTotal  sql.NullFloat64 `json:"win_rate_total"`
-}
-
-func (q *Queries) UpdateMoniestPostCryptoStatistics(ctx context.Context, arg UpdateMoniestPostCryptoStatisticsParams) error {
-	_, err := q.db.ExecContext(ctx, updateMoniestPostCryptoStatistics,
-		arg.MoniestID,
-		arg.Pnl7days,
-		arg.Roi7days,
-		arg.WinRate7days,
-		pq.Array(arg.Posts7days),
-		arg.Pnl30days,
-		arg.Roi30days,
-		arg.WinRate30days,
-		pq.Array(arg.Posts30days),
-		arg.PnlTotal,
-		arg.RoiTotal,
-		arg.WinRateTotal,
 	)
 	return err
 }

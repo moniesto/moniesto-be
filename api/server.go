@@ -9,7 +9,7 @@ import (
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util"
 
-	"github.com/robfig/cron"
+	"github.com/robfig/cron/v3"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -124,6 +124,7 @@ func (server *Server) setupRouter() {
 	adminRouters := router.Group("/admin").Use(authMiddleware(server.tokenMaker))
 	{
 		adminRouters.POST("/update_posts_status", server.UpdatePostsStatusManual)
+		adminRouters.POST("/update_moniest_post_crypto_statistics", server.UpdateMoniestPostCryptoStatisticsManual)
 	}
 
 	// Payment routes
@@ -154,10 +155,12 @@ func (server *Server) setupCRONJobs() {
 	job := cron.New()
 
 	// JOB: updating post status
-	job.AddFunc(util.JOB_TYPE_EVERY_30_MINUTES, server.Analyzer)
+	job.AddFunc(util.JOB_TYPE_EVERY_30TH_MINUTE, server.Analyzer)
+
+	// JOB: updating all moniests' post statistics
+	job.AddFunc(util.JOB_TYPE_EVERY_5TH_MINUTE_OF_HOUR, server.UpdateMoniestPostCryptoStatistics)
 
 	// JOB: payout to moniest
-	// job.AddFunc(util.JOB_TYPE_EVERY_MINUTE, server.PayoutToMoniest)
 	job.AddFunc(util.JOB_TYPE_EVERY_12AM, server.PayoutToMoniest)
 
 	// JOB: looking at the all transactions in pending state, and update if more than 10 minutes

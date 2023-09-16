@@ -41,22 +41,6 @@ SET "status" = $2,
     updated_at = now()
 WHERE "id" = $1;
 
--- name: UpdateMoniestPostCryptoStatistics :exec
-UPDATE "moniest_post_crypto_statistics"
-SET "pnl_7days" = $2,
-    "roi_7days" = $3,
-    "win_rate_7days" = $4,
-    "posts_7days" = $5,
-    "pnl_30days" = $6,
-    "roi_30days" = $7,
-    "win_rate_30days" = $8,
-    "posts_30days" = $9,
-    "pnl_total" = $10,
-    "roi_total" = $11,
-    "win_rate_total" = $12,
-    "updated_at" = now()
-WHERE "moniest_id" = $1;
-
 -- name: GetAllPendingPayouts :many
 SELECT "bph"."id",
     "bph"."transaction_id",

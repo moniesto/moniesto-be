@@ -101,6 +101,16 @@ func EarliestDate(date1 time.Time, date2 time.Time) time.Time {
 	return date2
 }
 
+func Contains[T comparable](slice []T, element T) bool {
+	for _, e := range slice {
+		if e == element {
+			return true
+		}
+	}
+
+	return false
+}
+
 func RoundAmountDown(fee float64) float64 {
 	return (math.Floor(fee*100) / 100)
 }

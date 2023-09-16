@@ -93,11 +93,6 @@ func (service *Service) UnsubscribeMoniest(ctx *gin.Context, moniestID string, u
 		return db.UserSubscription{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Unsubscribe_ServerErrorUnsubscribe)
 	}
 
-	// STEP: stop subscription on payment
-	// PAYMENT FUTURE TODO: unsubscribe from moniest
-	// payout to user by payerID
-	// add db if payment failed
-
 	return subscription, nil
 }
 

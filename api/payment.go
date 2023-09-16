@@ -14,9 +14,6 @@ import (
 func (server *Server) TriggerBinanceTransactionWebhook(ctx *gin.Context) {
 	var req binance.WebhookRequest
 
-	// TODO: remove log
-	// system.LogErrorBody("binance trigger webhook", ctx)
-
 	system.Log("binance transaction webhook trigger")
 
 	// STEP: bind/validation

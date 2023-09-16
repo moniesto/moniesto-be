@@ -182,7 +182,7 @@ func (server *Server) sendVerificationEmail(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 
 	// STEP: send verification email -> dont wait for the response
-	go mailing.SendEmailVerificationEmail(user.Email, server.config, user.Fullname, email_verification_token.Token, user.Language) // TODO: update langauge
+	go mailing.SendEmailVerificationEmail(user.Email, server.config, user.Fullname, email_verification_token.Token, user.Language)
 
 	// // STEP: send verification email -> wait for the response
 	// err = mailing.SendEmailVerificationEmail(user.Email, server.config, user.Fullname, email_verification_token.Token)

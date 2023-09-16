@@ -2,6 +2,7 @@ package service
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -34,4 +35,54 @@ func (service *Service) CreateMoniestPostCryptoStatistics(ctx *gin.Context, moni
 	}
 
 	return postStatistics, nil
+}
+
+// UpdateAllMoniestsPostCryptoStatistics updates post crypto statistics for all moniests
+func (service *Service) UpdateAllMoniestsPostCryptoStatistics(ctx *gin.Context) error {
+	// STEP: 7 days
+	err := service.Store.UpdateAllMoniestsPostCryptoStatistics_7days(ctx)
+	if err != nil {
+		return fmt.Errorf("error while updating all moniests post crypto statistics [7 days]: %s", err.Error())
+	}
+
+	// STEP: 30 days
+	err = service.Store.UpdateAllMoniestsPostCryptoStatistics_30days(ctx)
+	if err != nil {
+		return fmt.Errorf("error while updating all moniests post crypto statistics [30 days]: %s", err.Error())
+	}
+
+	// STEP: total
+	err = service.Store.UpdateAllMoniestsPostCryptoStatistics_total(ctx)
+	if err != nil {
+		return fmt.Errorf("error while updating all moniests post crypto statistics [total]: %s", err.Error())
+	}
+
+	return nil
+}
+
+// UpdateMoniestsPostCryptoStatistics updates post crypto statistics for specific moniests
+func (service *Service) UpdateMoniestsPostCryptoStatistics(ctx *gin.Context, moniest_ids []string) error {
+	if len(moniest_ids) == 0 {
+		return nil
+	}
+
+	// 7 days
+	err := service.Store.UpdateMoniestsPostCryptoStatistics_7days(ctx, moniest_ids)
+	if err != nil {
+		return fmt.Errorf("error while updating moniests post crypto statistics [7 days]: %s, moniestIDs: %+q", err.Error(), moniest_ids)
+	}
+
+	// STEP: 30 days
+	err = service.Store.UpdateMoniestsPostCryptoStatistics_30days(ctx, moniest_ids)
+	if err != nil {
+		return fmt.Errorf("error while updating moniests post crypto statistics [30 days]: %s, moniestIDs: %+q", err.Error(), moniest_ids)
+	}
+
+	// STEP: total
+	err = service.Store.UpdateMoniestsPostCryptoStatistics_total(ctx, moniest_ids)
+	if err != nil {
+		return fmt.Errorf("error while updating moniests post crypto statistics [total]: %s, moniestIDs: %+q", err.Error(), moniest_ids)
+	}
+
+	return nil
 }
