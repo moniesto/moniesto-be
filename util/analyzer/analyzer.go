@@ -25,6 +25,7 @@ func Analyze(symbol string, takeProfit, stopPrice float64, tradeStart_UTC_TS, tr
 		count += 1
 		system.Log("chunk no: ", count)
 
+		// STEP: get histories of symbol between currentTime - tradeEnd_UTC_TS
 		histories, err := crypto.GetHistories(symbol, string(db.PostCryptoMarketTypeSpot), crypto.INTERVAL_1second, currentTime, tradeEnd_UTC_TS, limit)
 		if err != nil {
 			system.LogError("error happened while getting history", err.Error())
@@ -34,7 +35,7 @@ func Analyze(symbol string, takeProfit, stopPrice float64, tradeStart_UTC_TS, tr
 		// STEP: no new history data found
 		if len(histories) == 0 {
 			system.Log("stop: 0 history")
-			return db.PostCryptoStatusPending, lastClosePrice, lastCloseDate_UTC_TS, nil
+			return db.PostCryptoStatusPending, lastClosePrice, lastCloseDate_UTC_TS, fmt.Errorf("no history found for %s, trade start: %d trade end: %d", symbol, currentTime, tradeEnd_UTC_TS)
 		}
 
 		for _, history := range histories {
