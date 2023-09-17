@@ -558,6 +558,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/update_moniest_post_crypto_statistics": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Can update the Moniest Post Crypto Statistics manually",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Update Moniest Post Crypto Statistics manually",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/update_posts_status": {
             "post": {
                 "security": [
@@ -569,7 +597,7 @@ const docTemplate = `{
                 "tags": [
                     "Admin"
                 ],
-                "summary": "Update Posts status",
+                "summary": "Update Posts status manually",
                 "responses": {
                     "200": {
                         "description": "OK"

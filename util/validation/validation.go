@@ -205,7 +205,7 @@ func Stop(price, stop float64, leverage int32, direction db.Direction) error {
 		return fmt.Errorf(error_message)
 	}
 
-	var stopLimitPercentage float64 = float64(100 / leverage)
+	var stopLimitPercentage float64 = float64(100 / float64(leverage))
 
 	switch direction {
 	case db.DirectionLong:

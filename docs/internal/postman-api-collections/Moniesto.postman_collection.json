@@ -19,7 +19,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n \"identifier\": \"parvvazov@gmail.com\",\r\n \"password\": \"123456\"\r\n}\r\n",
+									"raw": "{\r\n    \"identifier\": \"parvvazov@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -55,7 +55,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n \"fullname\": \"Parvin Eyvazov\",\r\n \"username\": \"parvvazov\",\r\n \"email\": \"parvvazov@gmail.com\",\r\n \"password\": \"123456\",\r\n \"language\": \"tr\"\r\n}",
+									"raw": "{\r\n \"fullname\": \"Parvin Eyvazov\",\r\n \"username\": \"parvvaz\",\r\n \"email\": \"pervin.eyvazov1999@gmail.com\",\r\n \"password\": \"123456\",\r\n \"language\": \"tr\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -441,7 +441,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiZWNiNDViLTNhOTEtNGJjNS1hMGUzLWFlZGYzODRiYTdlYiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIyOjM2LjgwMDQ2OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMjozNi44MDA0NjlaIn0.wpcnG4cjUafsk0xMW7yPtTB4vamCl4zqPZ0xL-vNX_8",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc5ZWM2YzdhLTBmNjgtNGNhNS1hOTFjLWVkMTU1YTBlMGFlNyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YxIiwiaWQiOiI3YzFjZjJmMS00N2M0LTQyM2MtYWZlOC05ZmIxN2ExNzM0MjYifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0xNlQxNzo0MDo0Mi4zNDU5NzFaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMTdUMTc6NDA6NDIuMzQ1OTcxWiJ9.2Ynvlg0flqkqRGNVLpz7yWW0BB_MPgtJLqOTKvZTs2I",
 										"type": "text"
 									}
 								],
@@ -708,13 +708,13 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRkZWVkMzA1LTVmMTMtNGI5ZC1hNjdlLTY3NTdjZGYwYjVjNSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjMxOjQ1LjE5ODU1MloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDozMTo0NS4xOTg1NTJaIn0.-Cfj6wnkwgdC-C5f8qBsMo0chX3VnIRdJEkXrC8uAxY",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc5ZWM2YzdhLTBmNjgtNGNhNS1hOTFjLWVkMTU1YTBlMGFlNyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YxIiwiaWQiOiI3YzFjZjJmMS00N2M0LTQyM2MtYWZlOC05ZmIxN2ExNzM0MjYifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0xNlQxNzo0MDo0Mi4zNDU5NzFaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMTdUMTc6NDA6NDIuMzQ1OTcxWiJ9.2Ynvlg0flqkqRGNVLpz7yWW0BB_MPgtJLqOTKvZTs2I",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"market_type\": \"spot\",\r\n    \"currency\": \"BTCUSDT\",\r\n    \"duration\": \"2023-09-11T23:33:47.479Z\",\r\n    \"target1\": 23000,\r\n    \"target2\": 22000,\r\n    \"target3\": 21500,\r\n    \"take_profit\": 21000,\r\n    \"stop\": 27000,\r\n    \"direction\": \"short\",\r\n    \"leverage\": 100\r\n}",
+									"raw": "{\r\n    \"market_type\": \"futures\",\r\n    \"currency\": \"BTCUSDT\",\r\n    \"duration\": \"2023-09-18T23:33:47.479Z\",\r\n    \"target1\": 23000,\r\n    \"target2\": 22000,\r\n    \"target3\": 21500,\r\n    \"take_profit\": 19000,\r\n    \"stop\": 27000,\r\n    \"direction\": \"short\",\r\n    \"leverage\": 1\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -741,18 +741,18 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjNDhlYTYzLWIyOTEtNGJkOC1hMjRkLTdmYzQ2NTZhMjgzMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDIwOjQ2OjM5LjA2NDIwMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQyMDo0NjozOS4wNjQyMDFaIn0.7wqlsC_6ZGsMrf0nF2iZbOwrWaUAv0zOulXR6oI9pMY",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA5OTdlNWMyLTFmZjctNGJhYy05YTdhLWNkNzRjY2E3MjkwMCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImQzN2FlZDMyLWZlYzItNDdiOS04OWFhLTM5NTI5YTM3ZDgxNSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE2VDE3OjUwOjU3LjE1MDM0NFoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xN1QxNzo1MDo1Ny4xNTAzNDRaIn0.fePbYdjIEOULqt9A34nJDvQ-sQeGGIRabq5tM6V31pY",
 										"type": "text"
 									}
 								],
 								"url": {
-									"raw": "{{be-host}}/moniests/eyvzov/posts",
+									"raw": "{{be-host}}/moniests/parvvazov/posts",
 									"host": [
 										"{{be-host}}"
 									],
 									"path": [
 										"moniests",
-										"eyvzov",
+										"parvvazov",
 										"posts"
 									]
 								}
@@ -897,7 +897,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjNDhlYTYzLWIyOTEtNGJkOC1hMjRkLTdmYzQ2NTZhMjgzMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDIwOjQ2OjM5LjA2NDIwMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQyMDo0NjozOS4wNjQyMDFaIn0.7wqlsC_6ZGsMrf0nF2iZbOwrWaUAv0zOulXR6oI9pMY",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA5OTdlNWMyLTFmZjctNGJhYy05YTdhLWNkNzRjY2E3MjkwMCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImQzN2FlZDMyLWZlYzItNDdiOS04OWFhLTM5NTI5YTM3ZDgxNSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE2VDE3OjUwOjU3LjE1MDM0NFoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xN1QxNzo1MDo1Ny4xNTAzNDRaIn0.fePbYdjIEOULqt9A34nJDvQ-sQeGGIRabq5tM6V31pY",
 										"type": "text"
 									}
 								],
@@ -1135,12 +1135,12 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc5MTc5YjUzLWM2NjItNDgyNi04MDc0LWM0NWM5ZDUwOTExMCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJybzMzIiwiaWQiOiIwMWE5ODg0Yi0yMDc2LTRmYmEtOTBiOC0yYTBjNDM4ODVkYjcifSwiaXNzdWVkX2F0IjoiMjAyMy0wOC0zMVQwMDoxNTo0NC45Njg4Njc2WiIsImV4cGlyZWRfYXQiOiIyMDIzLTA5LTAxVDAwOjE1OjQ0Ljk2ODg2NzZaIn0.xdaOrxw6rpEFBYFQW9Z5tPa_MvtjJi9KyMiBH4io2ys",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4YzgxOTZkLWE4NTAtNDUxZS1iNWFjLWQ0ZDU1ZmMyNDM1YSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA5VDIwOjUzOjI2LjA0NzcyMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xMFQyMDo1MzoyNi4wNDc3MjFaIn0.d_ymm4bVStwoBO_pQAyUFbDaTQTmUY71xb8od5DIVmI",
 										"type": "text"
 									}
 								],
 								"url": {
-									"raw": "{{be-host}}/crypto/currencies?name=a&market_type=futures",
+									"raw": "{{be-host}}/crypto/currencies?name=BTCUSDT_230929&market_type=futures",
 									"host": [
 										"{{be-host}}"
 									],
@@ -1151,7 +1151,7 @@
 									"query": [
 										{
 											"key": "name",
-											"value": "a"
+											"value": "BTCUSDT_230929"
 										},
 										{
 											"key": "market_type",
@@ -1211,7 +1211,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYxNjA2Zjc2LTE5NWUtNDAyYi05OGFjLTBlMjhjNWRjYzg0ZiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2diIsImlkIjoiODM0YWFiNDItNzQyYy00ZGE3LWEzMmQtNzVlNzI4NGQ3NTllIn0sImlzc3VlZF9hdCI6IjIwMjMtMDktMDNUMTI6MTI6MjAuNjI2MDgwNDI2WiIsImV4cGlyZWRfYXQiOiIyMDIzLTA5LTA0VDEyOjEyOjIwLjYyNjA4MDYxMVoifQ.tWMh_NoSTaUFR65wKWuCnfYx4cQZBA1XalUhmuErC3s",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5NDU4MmJmLTUwNWYtNGQ2NS04MTJiLTc5OGNjOWRkMjE4YiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2aW4iLCJpZCI6IjJiN2U0NDI5LTlmY2EtNDBmYS1hMzFmLWQzNmZlZjY5MzU5YSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE2VDE4OjI5OjE0Ljk0NzkzNzgxOVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xN1QxODoyOToxNC45NDc5MzgwMTlaIn0.pPpSLtxgrjsvm0PRl6-teHMUcS3tlCgtnIcGbU0MF0Q",
 										"type": "text"
 									}
 								],
@@ -1229,25 +1229,24 @@
 							"response": []
 						},
 						{
-							"name": "Email test",
+							"name": "Update Moniest Post Crypto Statistics",
 							"request": {
 								"method": "POST",
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ0NGNmMDkyLTNkNWEtNDE5Ni05YzUyLTg4MmNlNmZhNjVjNiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJybzEiLCJpZCI6IjFlYTRmMjc4LTc5MzEtNGE1Ny05ZTQyLTE3ZjAzODhkYmViMSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA4LTI3VDIwOjMzOjU3Ljc5MzIxNDVaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDgtMjhUMjA6MzM6NTcuNzkzMjE0NVoifQ.rJZAHPvEkBi3N9JXTVCYBrdcVqducSV-XjfmVSkBzzM",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhOTNmODQxLTgzY2EtNDdiOS04NjAwLTNkN2MwYjAzZDQ5YyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6IiwiaWQiOiIwODIyZTdlZS01NWEwLTRmMmYtYjI5OS1iMWJiMGI5YTY4NTEifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0xNlQxNzo0Mjo1NS43NDQ0MzNaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMTdUMTc6NDI6NTUuNzQ0NDMzWiJ9.OEs19oisQeFndKbbqYFcyCS0ne8f6qoHYkLSWllGI9Q",
 										"type": "text"
 									}
 								],
 								"url": {
-									"raw": "{{be-host}}/admin/send-email/test",
+									"raw": "{{be-host}}/admin/update_moniest_post_crypto_statistics",
 									"host": [
 										"{{be-host}}"
 									],
 									"path": [
 										"admin",
-										"send-email",
-										"test"
+										"update_moniest_post_crypto_statistics"
 									]
 								}
 							},

@@ -959,6 +959,23 @@ paths:
       summary: Check Username
       tags:
       - Account
+  /admin/update_moniest_post_crypto_statistics:
+    post:
+      description: Can update the Moniest Post Crypto Statistics manually
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: Forbidden
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Update Moniest Post Crypto Statistics manually
+      tags:
+      - Admin
   /admin/update_posts_status:
     post:
       description: Can update the status of the posts manually
@@ -973,7 +990,7 @@ paths:
             $ref: '#/definitions/clientError.ErrorResponse'
       security:
       - bearerAuth: []
-      summary: Update Posts status
+      summary: Update Posts status manually
       tags:
       - Admin
   /assets/configs:
