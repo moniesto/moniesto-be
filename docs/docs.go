@@ -1592,6 +1592,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/moniests/posts/calculate-pnl-roi": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Calculate PNL and ROI based on the start price, target price, leverage, direction",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Calculate PNL and ROI",
+                "parameters": [
+                    {
+                        "description": "all required",
+                        "name": "CalculatePnlRoiBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CalculatePnlRoiRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.CalculatePnlRoiResponse"
+                        }
+                    },
+                    "406": {
+                        "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/moniests/profile": {
             "patch": {
                 "security": [
@@ -1990,6 +2041,34 @@ const docTemplate = `{
                 "UserLanguageEn",
                 "UserLanguageTr"
             ]
+        },
+        "model.CalculatePnlRoiRequest": {
+            "type": "object",
+            "properties": {
+                "direction": {
+                    "$ref": "#/definitions/db.Direction"
+                },
+                "leverage": {
+                    "type": "integer"
+                },
+                "start_price": {
+                    "type": "number"
+                },
+                "take_profit": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.CalculatePnlRoiResponse": {
+            "type": "object",
+            "properties": {
+                "pnl": {
+                    "type": "number"
+                },
+                "roi": {
+                    "type": "number"
+                }
+            }
         },
         "model.ChangePasswordRequest": {
             "type": "object",

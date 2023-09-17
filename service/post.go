@@ -34,6 +34,19 @@ func (service *Service) CreatePost(req model.CreatePostRequest, currency model.C
 	return post, nil
 }
 
+func (service *Service) CalculatePnlRoi(req model.CalculatePnlRoiRequest) (model.CalculatePnlRoiResponse, error) {
+	// STEP: get pnl and roi
+	pnl, roi, err := core.CalculatePNL_ROI(req.StartPrice, req.TakeProfit, req.Leverage, db.Direction(req.Direction))
+	if err != nil {
+		return model.CalculatePnlRoiResponse{}, clientError.CreateError(http.StatusNotAcceptable, clientError.General_CalculatePNLandROI)
+	}
+
+	return model.CalculatePnlRoiResponse{
+		Pnl: pnl,
+		Roi: roi,
+	}, nil
+}
+
 // check post validity and return creating post params
 func (service *Service) getValidPost(req model.CreatePostRequest, currency model.Currency) (db.CreatePostParams, error) {
 	// STEP: set duration to UTC format (GMT+0)

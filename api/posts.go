@@ -168,3 +168,32 @@ func (server *Server) getMoniestPosts(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, posts)
 	}
 }
+
+// @Summary Calculate PNL and ROI
+// @Description Calculate PNL and ROI based on the start price, target price, leverage, direction
+// @Security bearerAuth
+// @Tags Post
+// @Accept json
+// @Produce json
+// @Param CalculatePnlRoiBody body model.CalculatePnlRoiRequest true "all required"
+// @Success 200 {object} model.CalculatePnlRoiResponse
+// @Failure 406 {object} clientError.ErrorResponse "invalid body"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /moniests/posts/calculate-pnl-roi [post]
+func (server *Server) calculatePnlRoi(ctx *gin.Context) {
+	var req model.CalculatePnlRoiRequest
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Post_CreatePost_InvalidBody))
+		return
+	}
+
+	response, err := server.service.CalculatePnlRoi(req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response)
+}

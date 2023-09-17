@@ -44,6 +44,24 @@ definitions:
     x-enum-varnames:
     - UserLanguageEn
     - UserLanguageTr
+  model.CalculatePnlRoiRequest:
+    properties:
+      direction:
+        $ref: '#/definitions/db.Direction'
+      leverage:
+        type: integer
+      start_price:
+        type: number
+      take_profit:
+        type: number
+    type: object
+  model.CalculatePnlRoiResponse:
+    properties:
+      pnl:
+        type: number
+      roi:
+        type: number
+    type: object
   model.ChangePasswordRequest:
     properties:
       new:
@@ -1620,6 +1638,39 @@ paths:
       security:
       - bearerAuth: []
       summary: Create Post
+      tags:
+      - Post
+  /moniests/posts/calculate-pnl-roi:
+    post:
+      consumes:
+      - application/json
+      description: Calculate PNL and ROI based on the start price, target price, leverage,
+        direction
+      parameters:
+      - description: all required
+        in: body
+        name: CalculatePnlRoiBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.CalculatePnlRoiRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CalculatePnlRoiResponse'
+        "406":
+          description: invalid body
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Calculate PNL and ROI
       tags:
       - Post
   /moniests/profile:

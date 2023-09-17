@@ -45,6 +45,18 @@ type CreatePostResponse struct {
 	Description string `json:"description,omitempty"`
 }
 
+type CalculatePnlRoiRequest struct {
+	StartPrice float64      `json:"start_price"`
+	TakeProfit float64      `json:"take_profit"`
+	Direction  db.Direction `json:"direction"`
+	Leverage   int32        `json:"leverage"`
+}
+
+type CalculatePnlRoiResponse struct {
+	Pnl float64 `json:"pnl"`
+	Roi float64 `json:"roi"`
+}
+
 type PostDescriptionType struct {
 	Time   int64              `json:"time"`
 	Blocks []DescriptionBlock `json:"blocks"`

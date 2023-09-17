@@ -735,6 +735,40 @@
 							"response": []
 						},
 						{
+							"name": "Calculate PNL and ROI",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRhOTVlOTNiLWI0NGEtNDdhMy1iZTY3LTM4ZmRmNmFhNTM1OCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImQzN2FlZDMyLWZlYzItNDdiOS04OWFhLTM5NTI5YTM3ZDgxNSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE3VDE5OjIzOjMwLjM5NzE0OFoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xOFQxOToyMzozMC4zOTcxNDlaIn0.YcAE2CerdRMRWQTEVQe7NhaQxkdXgsynlv-V1qHlTdw",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"take_profit\": 62000,\r\n    \"start_price\": 1000,\r\n    \"direction\": \"long\",\r\n    \"leverage\": 125\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{be-host}}/moniests/posts/calculate-pnl-roi",
+									"host": [
+										"{{be-host}}"
+									],
+									"path": [
+										"moniests",
+										"posts",
+										"calculate-pnl-roi"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Get Moniest Posts",
 							"request": {
 								"method": "GET",

@@ -70,6 +70,7 @@ func (server *Server) setupRouter() {
 	{
 		moniestsRouters.POST("", server.createMoniest)
 		moniestsRouters.POST("/posts", server.createPost)
+		moniestsRouters.POST("/posts/calculate-pnl-roi", server.calculatePnlRoi)
 		moniestsRouters.PATCH("/profile", server.updateMoniestProfile)
 		moniestsRouters.GET("/payout", server.getMoniestPayoutInfo)
 		moniestsRouters.PATCH("/payout", server.updateMoniestPayoutInfo)
