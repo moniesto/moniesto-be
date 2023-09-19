@@ -20,3 +20,12 @@ type GetCurrencyAPIResponse struct {
 type GetHistoryDataAPIResponse [][]interface{}
 
 type History []any
+
+type GetExchangeInfoResponse struct {
+	Symbols []Symbol `json:"symbols"`
+}
+
+type Symbol struct {
+	Symbol string `json:"symbol"`
+	Status string `json:"status"` // TRADING | BREAK
+}

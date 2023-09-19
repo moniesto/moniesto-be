@@ -19,6 +19,7 @@ var MARKETS map[string][]string = map[string][]string{
 }
 
 const tickerURI = "/ticker/price"
+const exchangeInfoURI = "/exchangeInfo"
 const historyURI = "/klines"
 
 const INTERVAL_1second = "1s"
