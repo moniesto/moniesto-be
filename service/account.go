@@ -74,7 +74,7 @@ func (service *Service) CreateUser(ctx *gin.Context, registerRequest model.Regis
 		ID:       core.CreateID(),
 		Fullname: registerRequest.Fullname,
 		Username: registerRequest.Username,
-		Email:    registerRequest.Email,
+		Email:    validEmail,
 		Password: hashedPassword,
 		Language: db.UserLanguage(registerRequest.Language),
 	}

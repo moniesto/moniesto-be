@@ -2,7 +2,9 @@ package util
 
 import (
 	"database/sql"
+	"fmt"
 	"math"
+	"strings"
 	"time"
 )
 
@@ -109,6 +111,32 @@ func Contains[T comparable](slice []T, element T) bool {
 	}
 
 	return false
+}
+
+// emailWithoutLocal returns email without local(part after + sign) part
+func EmailWithoutLocal(email string) (string, error) {
+	// Split the email address at the "@" symbol to separate the local part and domain part
+	parts := strings.Split(email, "@")
+
+	if len(parts) != 2 {
+		return "", fmt.Errorf("invalid email address")
+	}
+
+	localPart := parts[0]
+	domain := parts[1]
+
+	// Find the position of the "+" symbol in the local part
+	plusIndex := strings.Index(localPart, "+")
+
+	if plusIndex != -1 {
+		// Remove everything from the "+" symbol to the end of the local part
+		localPart = localPart[:plusIndex]
+	}
+
+	// Reconstruct the email address
+	cleanedEmail := localPart + "@" + domain
+
+	return cleanedEmail, nil
 }
 
 func RoundAmountDown(fee float64) float64 {

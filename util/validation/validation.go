@@ -39,7 +39,13 @@ func Email(email string) (string, error) {
 		return "", fmt.Errorf("email is not valid %s", email)
 	}
 
-	return email, nil
+	// STEP: email without local part
+	cleanedEmail, err := util.EmailWithoutLocal(email)
+	if err != nil {
+		return "", fmt.Errorf("email is not valid %s", email)
+	}
+
+	return cleanedEmail, nil
 }
 
 // Username checks the username is valid
