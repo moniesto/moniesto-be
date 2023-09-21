@@ -41,7 +41,7 @@ type MoniestAsContent struct {
 	Bio         string `json:"bio,omitempty"`
 	Description string `json:"description,omitempty"`
 
-	SubscriberCount *int64 `json:"subscriber_count,omitempty"`
+	SubscriberCount int64 `json:"subscriber_count"`
 
 	CryptoPostStatistics    *CryptoPostStatistics    `json:"post_statistics,omitempty"`
 	MoniestSubscriptionInfo *MoniestSubscriptionInfo `json:"subscription_info,omitempty"`
@@ -284,7 +284,7 @@ func NewGetContentMoniestResponse(moniests ContentMoniestDBResponse) []UserAsCon
 			Moniest: &MoniestAsContent{
 				Bio:             user.Bio.String,
 				Description:     user.Description.String,
-				SubscriberCount: &user.UserSubscriptionCount,
+				SubscriberCount: user.UserSubscriptionCount,
 				MoniestSubscriptionInfo: &MoniestSubscriptionInfo{
 					Fee:       user.Fee,
 					Message:   user.Message.String,
