@@ -120,7 +120,7 @@ SELECT COUNT(*) AS num_payouts,
     SUM(
         CASE
             WHEN status = 'success' THEN amount * (
-                1 - (COALESCE(operation_fee_percentage, 18) / 100)
+                1 - (COALESCE(operation_fee_percentage, $1) / 100)
             ) -- Apply the cut percentage
             ELSE 0
         END
@@ -154,7 +154,7 @@ SELECT COUNT(*) AS num_payouts,
     SUM(
         CASE
             WHEN status = 'pending' THEN amount * (
-                1 - (COALESCE(operation_fee_percentage, 18) / 100)
+                1 - (COALESCE(operation_fee_percentage, $1) / 100)
             ) -- Apply the cut percentage
             ELSE 0
         END
@@ -175,7 +175,7 @@ SELECT COUNT(*) AS num_payouts,
     SUM(
         CASE
             WHEN status = 'refund' THEN amount * (
-                1 - (COALESCE(operation_fee_percentage, 18) / 100)
+                1 - (COALESCE(operation_fee_percentage, $1) / 100)
             ) -- Apply the cut percentage
             ELSE 0
         END

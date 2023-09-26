@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 )
 
 const paymentMetrics = `-- name: PaymentMetrics :many
@@ -109,7 +110,7 @@ SELECT COUNT(*) AS num_payouts,
     SUM(
         CASE
             WHEN status = 'success' THEN amount * (
-                1 - (COALESCE(operation_fee_percentage, 18) / 100)
+                1 - (COALESCE(operation_fee_percentage, $1) / 100)
             ) -- Apply the cut percentage
             ELSE 0
         END
@@ -143,7 +144,7 @@ SELECT COUNT(*) AS num_payouts,
     SUM(
         CASE
             WHEN status = 'pending' THEN amount * (
-                1 - (COALESCE(operation_fee_percentage, 18) / 100)
+                1 - (COALESCE(operation_fee_percentage, $1) / 100)
             ) -- Apply the cut percentage
             ELSE 0
         END
@@ -164,7 +165,7 @@ SELECT COUNT(*) AS num_payouts,
     SUM(
         CASE
             WHEN status = 'refund' THEN amount * (
-                1 - (COALESCE(operation_fee_percentage, 18) / 100)
+                1 - (COALESCE(operation_fee_percentage, $1) / 100)
             ) -- Apply the cut percentage
             ELSE 0
         END
@@ -205,8 +206,8 @@ type PayoutMetricsRow struct {
 	RefundFailPayoutsAmount      float64 `json:"refund_fail_payouts_amount"`
 }
 
-func (q *Queries) PayoutMetrics(ctx context.Context) ([]PayoutMetricsRow, error) {
-	rows, err := q.db.QueryContext(ctx, payoutMetrics)
+func (q *Queries) PayoutMetrics(ctx context.Context, operationFeePercentage sql.NullFloat64) ([]PayoutMetricsRow, error) {
+	rows, err := q.db.QueryContext(ctx, payoutMetrics, operationFeePercentage)
 	if err != nil {
 		return nil, err
 	}

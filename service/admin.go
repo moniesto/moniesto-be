@@ -1,6 +1,7 @@
 package service
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,7 +29,7 @@ func (service *Service) Metrics(ctx *gin.Context) (model.MetricsResponse, error)
 		return model.MetricsResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.Admin_GetMetrics_ServerErrorPaymentMetrics)
 	}
 
-	payoutMetrics, err := service.Store.PayoutMetrics(ctx)
+	payoutMetrics, err := service.Store.PayoutMetrics(ctx, sql.NullFloat64{Valid: true, Float64: service.config.OperationFeePercentage})
 	if err != nil || len(payoutMetrics) == 0 {
 		system.LogError("payout metrics error", err)
 		return model.MetricsResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.Admin_GetMetrics_ServerErrorPayoutMetrics)
