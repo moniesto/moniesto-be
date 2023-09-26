@@ -3,6 +3,8 @@ package clientError
 type ErrorMessagesType map[string]string
 
 const (
+	General_Maintenance = "General_Maintenance"
+
 	General_UserNotMoniest                        = "General_UserNotMoniest"
 	General_UserNotFoundByID                      = "General_UserNotFoundByID"
 	General_UserNotFoundByUsername                = "General_UserNotFoundByUsername"
@@ -13,6 +15,7 @@ const (
 	General_ServerErrorGettingUserLanguageByEmail = "General_ServerErrorGettingUserLanguageByEmail"
 	General_ServerErrorUserLanguageNotFound       = "General_ServerErrorUserLanguageNotFound"
 	General_CalculatePNLandROI                    = "General_CalculatePNLandROI"
+	General_Not_Admin                             = "General_Not_Admin"
 
 	Account_Authorization_NotProvidedHeader = "Account_Authorization_NotProvidedHeader"
 	Account_Authorization_InvalidHeader     = "Account_Authorization_InvalidHeader"
@@ -205,9 +208,16 @@ const (
 	Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail    = "Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail"
 
 	Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo = "Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo"
+
+	Admin_GetMetrics_ServerErrorUserMetrics    = "Admin_GetMetrics_ServerErrorUserMetrics"
+	Admin_GetMetrics_ServerErrorPostMetrics    = "Admin_GetMetrics_ServerErrorPostMetrics"
+	Admin_GetMetrics_ServerErrorPaymentMetrics = "Admin_GetMetrics_ServerErrorPaymentMetrics"
+	Admin_GetMetrics_ServerErrorPayoutMetrics  = "Admin_GetMetrics_ServerErrorPayoutMetrics"
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
+	General_Maintenance: "Server is in maintenance mode",
+
 	General_UserNotMoniest:                        "User is not moniest",
 	General_UserNotFoundByID:                      "User not found with this user ID",
 	General_UserNotFoundByUsername:                "User not found with this username",
@@ -218,6 +228,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	General_ServerErrorGettingUserLanguageByEmail: "Server error on getting user language by email",
 	General_ServerErrorUserLanguageNotFound:       "User language not found",
 	General_CalculatePNLandROI:                    "Error while calculating pnl and roi",
+	General_Not_Admin:                             "Not admin",
 
 	Account_Authorization_NotProvidedHeader: "Authorization Header is not provided",
 	Account_Authorization_InvalidHeader:     "Authorization Header is invalid",
@@ -409,4 +420,9 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Payment_CheckBinanceTransaction_ServerErrorUpdateStatusFail:    "Server error on updating transaction status [fail case]",
 
 	Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo: "Server error on getting user subscription info",
+
+	Admin_GetMetrics_ServerErrorUserMetrics:    "Server error on getting user metrics",
+	Admin_GetMetrics_ServerErrorPostMetrics:    "Server error on getting post metrics",
+	Admin_GetMetrics_ServerErrorPaymentMetrics: "Server error on getting payment metrics",
+	Admin_GetMetrics_ServerErrorPayoutMetrics:  "Server error on getting payout metrics",
 }
