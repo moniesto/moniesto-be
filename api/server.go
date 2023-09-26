@@ -124,8 +124,9 @@ func (server *Server) setupRouter() {
 	// Admin routes
 	adminRouters := router.Group("/admin").Use(authMiddleware(server.tokenMaker))
 	{
-		adminRouters.POST("/update_posts_status", server.UpdatePostsStatusManual)
-		adminRouters.POST("/update_moniest_post_crypto_statistics", server.UpdateMoniestPostCryptoStatisticsManual)
+		adminRouters.POST("/update_posts_status", server.ADMIN_UpdatePostsStatusManual)
+		adminRouters.POST("/update_moniest_post_crypto_statistics", server.ADMIN_UpdateMoniestPostCryptoStatisticsManual)
+		adminRouters.GET("/metrics", server.ADMIN_Metrics)
 	}
 
 	// Payment routes

@@ -558,6 +558,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/metrics": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get Metrics of user, post, payments, payouts",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get Metrics",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.MetricsResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/update_moniest_post_crypto_statistics": {
             "post": {
                 "security": [
@@ -2007,6 +2038,85 @@ const docTemplate = `{
                 "DirectionShort"
             ]
         },
+        "db.PaymentMetricsRow": {
+            "type": "object",
+            "properties": {
+                "fail_payment_amount": {
+                    "type": "integer"
+                },
+                "num_fail_payment": {
+                    "type": "integer"
+                },
+                "num_pending_payment": {
+                    "type": "integer"
+                },
+                "num_success_payment": {
+                    "type": "integer"
+                },
+                "pending_payment_amount": {
+                    "type": "integer"
+                },
+                "success_payment_amount": {
+                    "type": "integer"
+                }
+            }
+        },
+        "db.PayoutMetricsRow": {
+            "type": "object",
+            "properties": {
+                "fail_payouts_amount": {
+                    "type": "integer"
+                },
+                "num_fail_payouts": {
+                    "type": "integer"
+                },
+                "num_payouts": {
+                    "type": "integer"
+                },
+                "num_pending_payouts": {
+                    "type": "integer"
+                },
+                "num_refund_fail_payouts": {
+                    "type": "integer"
+                },
+                "num_refund_payouts": {
+                    "type": "integer"
+                },
+                "num_success_payouts": {
+                    "type": "integer"
+                },
+                "num_unique_moniests": {
+                    "type": "integer"
+                },
+                "num_unique_transactions": {
+                    "type": "integer"
+                },
+                "num_unique_users": {
+                    "type": "integer"
+                },
+                "pending_payouts_amount": {
+                    "type": "integer"
+                },
+                "pending_payouts_amount_after_cut": {
+                    "type": "integer"
+                },
+                "refund_fail_payouts_amount": {
+                    "type": "integer"
+                },
+                "refund_payouts_amount": {
+                    "type": "integer"
+                },
+                "refund_payouts_amount_after_cut": {
+                    "type": "integer"
+                },
+                "success_payouts_amount": {
+                    "type": "integer"
+                },
+                "success_payouts_amount_after_cut": {
+                    "type": "integer"
+                }
+            }
+        },
         "db.PostCryptoMarketType": {
             "type": "string",
             "enum": [
@@ -2031,6 +2141,38 @@ const docTemplate = `{
                 "PostCryptoStatusSuccess"
             ]
         },
+        "db.PostMetricsRow": {
+            "type": "object",
+            "properties": {
+                "num_fail_posts": {
+                    "type": "integer"
+                },
+                "num_finished_posts": {
+                    "type": "integer"
+                },
+                "num_futures_posts": {
+                    "type": "integer"
+                },
+                "num_pending_posts": {
+                    "type": "integer"
+                },
+                "num_spot_posts": {
+                    "type": "integer"
+                },
+                "num_success_posts": {
+                    "type": "integer"
+                },
+                "num_total_posts": {
+                    "type": "integer"
+                },
+                "num_unfinished_posts": {
+                    "type": "integer"
+                },
+                "num_unique_moniests": {
+                    "type": "integer"
+                }
+            }
+        },
         "db.UserLanguage": {
             "type": "string",
             "enum": [
@@ -2041,6 +2183,20 @@ const docTemplate = `{
                 "UserLanguageEn",
                 "UserLanguageTr"
             ]
+        },
+        "db.UserMetricsRow": {
+            "type": "object",
+            "properties": {
+                "num_active_subscriptions": {
+                    "type": "integer"
+                },
+                "num_moniests": {
+                    "type": "integer"
+                },
+                "num_users": {
+                    "type": "integer"
+                }
+            }
         },
         "model.CalculatePnlRoiRequest": {
             "type": "object",
@@ -2498,6 +2654,23 @@ const docTemplate = `{
                 },
                 "user": {
                     "$ref": "#/definitions/model.OwnUser"
+                }
+            }
+        },
+        "model.MetricsResponse": {
+            "type": "object",
+            "properties": {
+                "payment_metrics": {
+                    "$ref": "#/definitions/db.PaymentMetricsRow"
+                },
+                "payout_metrics": {
+                    "$ref": "#/definitions/db.PayoutMetricsRow"
+                },
+                "post_metrics": {
+                    "$ref": "#/definitions/db.PostMetricsRow"
+                },
+                "user_metrics": {
+                    "$ref": "#/definitions/db.UserMetricsRow"
                 }
             }
         },

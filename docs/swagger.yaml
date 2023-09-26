@@ -18,6 +18,58 @@ definitions:
     x-enum-varnames:
     - DirectionLong
     - DirectionShort
+  db.PaymentMetricsRow:
+    properties:
+      fail_payment_amount:
+        type: integer
+      num_fail_payment:
+        type: integer
+      num_pending_payment:
+        type: integer
+      num_success_payment:
+        type: integer
+      pending_payment_amount:
+        type: integer
+      success_payment_amount:
+        type: integer
+    type: object
+  db.PayoutMetricsRow:
+    properties:
+      fail_payouts_amount:
+        type: integer
+      num_fail_payouts:
+        type: integer
+      num_payouts:
+        type: integer
+      num_pending_payouts:
+        type: integer
+      num_refund_fail_payouts:
+        type: integer
+      num_refund_payouts:
+        type: integer
+      num_success_payouts:
+        type: integer
+      num_unique_moniests:
+        type: integer
+      num_unique_transactions:
+        type: integer
+      num_unique_users:
+        type: integer
+      pending_payouts_amount:
+        type: integer
+      pending_payouts_amount_after_cut:
+        type: integer
+      refund_fail_payouts_amount:
+        type: integer
+      refund_payouts_amount:
+        type: integer
+      refund_payouts_amount_after_cut:
+        type: integer
+      success_payouts_amount:
+        type: integer
+      success_payouts_amount_after_cut:
+        type: integer
+    type: object
   db.PostCryptoMarketType:
     enum:
     - spot
@@ -36,6 +88,27 @@ definitions:
     - PostCryptoStatusPending
     - PostCryptoStatusFail
     - PostCryptoStatusSuccess
+  db.PostMetricsRow:
+    properties:
+      num_fail_posts:
+        type: integer
+      num_finished_posts:
+        type: integer
+      num_futures_posts:
+        type: integer
+      num_pending_posts:
+        type: integer
+      num_spot_posts:
+        type: integer
+      num_success_posts:
+        type: integer
+      num_total_posts:
+        type: integer
+      num_unfinished_posts:
+        type: integer
+      num_unique_moniests:
+        type: integer
+    type: object
   db.UserLanguage:
     enum:
     - en
@@ -44,6 +117,15 @@ definitions:
     x-enum-varnames:
     - UserLanguageEn
     - UserLanguageTr
+  db.UserMetricsRow:
+    properties:
+      num_active_subscriptions:
+        type: integer
+      num_moniests:
+        type: integer
+      num_users:
+        type: integer
+    type: object
   model.CalculatePnlRoiRequest:
     properties:
       direction:
@@ -346,6 +428,17 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/model.OwnUser'
+    type: object
+  model.MetricsResponse:
+    properties:
+      payment_metrics:
+        $ref: '#/definitions/db.PaymentMetricsRow'
+      payout_metrics:
+        $ref: '#/definitions/db.PayoutMetricsRow'
+      post_metrics:
+        $ref: '#/definitions/db.PostMetricsRow'
+      user_metrics:
+        $ref: '#/definitions/db.UserMetricsRow'
     type: object
   model.Moniest:
     properties:
@@ -977,6 +1070,25 @@ paths:
       summary: Check Username
       tags:
       - Account
+  /admin/metrics:
+    get:
+      description: Get Metrics of user, post, payments, payouts
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MetricsResponse'
+        "403":
+          description: Forbidden
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get Metrics
+      tags:
+      - Admin
   /admin/update_moniest_post_crypto_statistics:
     post:
       description: Can update the Moniest Post Crypto Statistics manually

@@ -17,25 +17,14 @@ import (
 // @Failure 403
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /admin/update_posts_status [post]
-func (server *Server) UpdatePostsStatusManual(ctx *gin.Context) {
-
-	// STEP: get user id from token
-	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	user_id := authPayload.User.ID
-
-	// STEP: get user
-	user, err := server.service.GetOwnUserByID(ctx, user_id)
-	if err != nil {
-		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+func (server *Server) ADMIN_UpdatePostsStatusManual(ctx *gin.Context) {
+	isAdmin := server.isAdmin(ctx)
+	if !isAdmin {
 		return
 	}
 
-	if validation.UserIsAdmin(user.Email) {
-		server.Analyzer()
-		ctx.Status(http.StatusOK)
-	} else {
-		ctx.Status(http.StatusForbidden)
-	}
+	server.Analyzer()
+	ctx.Status(http.StatusOK)
 }
 
 // @Summary Update Moniest Post Crypto Statistics manually
@@ -46,24 +35,37 @@ func (server *Server) UpdatePostsStatusManual(ctx *gin.Context) {
 // @Failure 403
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /admin/update_moniest_post_crypto_statistics [post]
-func (server *Server) UpdateMoniestPostCryptoStatisticsManual(ctx *gin.Context) {
-	// STEP: get user id from token
-	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	user_id := authPayload.User.ID
+func (server *Server) ADMIN_UpdateMoniestPostCryptoStatisticsManual(ctx *gin.Context) {
+	isAdmin := server.isAdmin(ctx)
+	if !isAdmin {
+		return
+	}
 
-	// STEP: get user
-	user, err := server.service.GetOwnUserByID(ctx, user_id)
+	server.UpdateMoniestPostCryptoStatistics()
+	ctx.Status(http.StatusOK)
+}
+
+// @Summary Get Metrics
+// @Description Get Metrics of user, post, payments, payouts
+// @Security bearerAuth
+// @Tags Admin
+// @Success 200 {object} model.MetricsResponse
+// @Failure 403
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /admin/metrics [get]
+func (server *Server) ADMIN_Metrics(ctx *gin.Context) {
+	isAdmin := server.isAdmin(ctx)
+	if !isAdmin {
+		return
+	}
+
+	metrics, err := server.service.Metrics(ctx)
 	if err != nil {
 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
 	}
 
-	if validation.UserIsAdmin(user.Email) {
-		server.UpdateMoniestPostCryptoStatistics()
-		ctx.Status(http.StatusOK)
-	} else {
-		ctx.Status(http.StatusForbidden)
-	}
+	ctx.JSON(http.StatusOK, metrics)
 }
 
 func (server *Server) SendEmailTest(ctx *gin.Context) {
@@ -78,4 +80,24 @@ func (server *Server) SendEmailTest(ctx *gin.Context) {
 
 	// mailing.SendEmailVerificationEmail("parvvazov@gmail.com", server.config, "Parvin Eyvazov", "token1", model.LANGUAGE_TURKISH)
 
+}
+
+func (server *Server) isAdmin(ctx *gin.Context) bool {
+	// STEP: get user id from token
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	user_id := authPayload.User.ID
+
+	// STEP: get user
+	user, err := server.service.GetOwnUserByID(ctx, user_id)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return false
+	}
+
+	if validation.UserIsAdmin(user.Email) {
+		return true
+	}
+
+	ctx.AbortWithStatusJSON(clientError.ParseError(clientError.CreateError(http.StatusForbidden, clientError.General_Not_Admin)))
+	return false
 }
