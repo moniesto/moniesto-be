@@ -72,7 +72,7 @@ SELECT SUM(
             WHEN status = 'success' THEN amount
             ELSE 0
         END
-    ) AS success_payment_amount,
+    )::double precision AS success_payment_amount,
     SUM(
         CASE
             WHEN status = 'fail' THEN 1
@@ -84,7 +84,7 @@ SELECT SUM(
             WHEN status = 'fail' THEN amount
             ELSE 0
         END
-    ) AS fail_payment_amount,
+    )::double precision AS fail_payment_amount,
     SUM(
         CASE
             WHEN status = 'pending' THEN 1
@@ -96,7 +96,7 @@ SELECT SUM(
             WHEN status = 'pending' THEN amount
             ELSE 0
         END
-    ) AS pending_payment_amount
+    )::double precision AS pending_payment_amount
 FROM binance_payment_transaction;
 
 -- name: PayoutMetrics :many
@@ -116,7 +116,7 @@ SELECT COUNT(*) AS num_payouts,
             WHEN status = 'success' THEN amount
             ELSE 0
         END
-    ) AS success_payouts_amount,
+    )::double precision AS success_payouts_amount,
     SUM(
         CASE
             WHEN status = 'success' THEN amount * (
@@ -124,7 +124,7 @@ SELECT COUNT(*) AS num_payouts,
             ) -- Apply the cut percentage
             ELSE 0
         END
-    ) AS success_payouts_amount_after_cut,
+    )::double precision AS success_payouts_amount_after_cut,
     -- fail payouts
     SUM(
         CASE
@@ -137,7 +137,7 @@ SELECT COUNT(*) AS num_payouts,
             WHEN status = 'fail' THEN amount
             ELSE 0
         END
-    ) AS fail_payouts_amount,
+    )::double precision AS fail_payouts_amount,
     -- pending payouts
     SUM(
         CASE
@@ -150,7 +150,7 @@ SELECT COUNT(*) AS num_payouts,
             WHEN status = 'pending' THEN amount
             ELSE 0
         END
-    ) AS pending_payouts_amount,
+    )::double precision AS pending_payouts_amount,
     SUM(
         CASE
             WHEN status = 'pending' THEN amount * (
@@ -158,7 +158,7 @@ SELECT COUNT(*) AS num_payouts,
             ) -- Apply the cut percentage
             ELSE 0
         END
-    ) AS pending_payouts_amount_after_cut,
+    )::double precision AS pending_payouts_amount_after_cut,
     -- redund payouts
     SUM(
         CASE
@@ -171,7 +171,7 @@ SELECT COUNT(*) AS num_payouts,
             WHEN status = 'refund' THEN amount
             ELSE 0
         END
-    ) AS refund_payouts_amount,
+    )::double precision AS refund_payouts_amount,
     SUM(
         CASE
             WHEN status = 'refund' THEN amount * (
@@ -179,7 +179,7 @@ SELECT COUNT(*) AS num_payouts,
             ) -- Apply the cut percentage
             ELSE 0
         END
-    ) AS refund_payouts_amount_after_cut,
+    )::double precision AS refund_payouts_amount_after_cut,
     -- redund fail payouts
     SUM(
         CASE
@@ -192,5 +192,5 @@ SELECT COUNT(*) AS num_payouts,
             WHEN status = 'refund_fail' THEN amount
             ELSE 0
         END
-    ) AS refund_fail_payouts_amount
+    )::double precision AS refund_fail_payouts_amount
 FROM binance_payout_history;

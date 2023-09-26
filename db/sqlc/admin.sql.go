@@ -21,7 +21,7 @@ SELECT SUM(
             WHEN status = 'success' THEN amount
             ELSE 0
         END
-    ) AS success_payment_amount,
+    )::double precision AS success_payment_amount,
     SUM(
         CASE
             WHEN status = 'fail' THEN 1
@@ -33,7 +33,7 @@ SELECT SUM(
             WHEN status = 'fail' THEN amount
             ELSE 0
         END
-    ) AS fail_payment_amount,
+    )::double precision AS fail_payment_amount,
     SUM(
         CASE
             WHEN status = 'pending' THEN 1
@@ -45,17 +45,17 @@ SELECT SUM(
             WHEN status = 'pending' THEN amount
             ELSE 0
         END
-    ) AS pending_payment_amount
+    )::double precision AS pending_payment_amount
 FROM binance_payment_transaction
 `
 
 type PaymentMetricsRow struct {
-	NumSuccessPayment    int64 `json:"num_success_payment"`
-	SuccessPaymentAmount int64 `json:"success_payment_amount"`
-	NumFailPayment       int64 `json:"num_fail_payment"`
-	FailPaymentAmount    int64 `json:"fail_payment_amount"`
-	NumPendingPayment    int64 `json:"num_pending_payment"`
-	PendingPaymentAmount int64 `json:"pending_payment_amount"`
+	NumSuccessPayment    int64   `json:"num_success_payment"`
+	SuccessPaymentAmount float64 `json:"success_payment_amount"`
+	NumFailPayment       int64   `json:"num_fail_payment"`
+	FailPaymentAmount    float64 `json:"fail_payment_amount"`
+	NumPendingPayment    int64   `json:"num_pending_payment"`
+	PendingPaymentAmount float64 `json:"pending_payment_amount"`
 }
 
 func (q *Queries) PaymentMetrics(ctx context.Context) ([]PaymentMetricsRow, error) {
@@ -105,7 +105,7 @@ SELECT COUNT(*) AS num_payouts,
             WHEN status = 'success' THEN amount
             ELSE 0
         END
-    ) AS success_payouts_amount,
+    )::double precision AS success_payouts_amount,
     SUM(
         CASE
             WHEN status = 'success' THEN amount * (
@@ -113,7 +113,7 @@ SELECT COUNT(*) AS num_payouts,
             ) -- Apply the cut percentage
             ELSE 0
         END
-    ) AS success_payouts_amount_after_cut,
+    )::double precision AS success_payouts_amount_after_cut,
     -- fail payouts
     SUM(
         CASE
@@ -126,7 +126,7 @@ SELECT COUNT(*) AS num_payouts,
             WHEN status = 'fail' THEN amount
             ELSE 0
         END
-    ) AS fail_payouts_amount,
+    )::double precision AS fail_payouts_amount,
     -- pending payouts
     SUM(
         CASE
@@ -139,7 +139,7 @@ SELECT COUNT(*) AS num_payouts,
             WHEN status = 'pending' THEN amount
             ELSE 0
         END
-    ) AS pending_payouts_amount,
+    )::double precision AS pending_payouts_amount,
     SUM(
         CASE
             WHEN status = 'pending' THEN amount * (
@@ -147,7 +147,7 @@ SELECT COUNT(*) AS num_payouts,
             ) -- Apply the cut percentage
             ELSE 0
         END
-    ) AS pending_payouts_amount_after_cut,
+    )::double precision AS pending_payouts_amount_after_cut,
     -- redund payouts
     SUM(
         CASE
@@ -160,7 +160,7 @@ SELECT COUNT(*) AS num_payouts,
             WHEN status = 'refund' THEN amount
             ELSE 0
         END
-    ) AS refund_payouts_amount,
+    )::double precision AS refund_payouts_amount,
     SUM(
         CASE
             WHEN status = 'refund' THEN amount * (
@@ -168,7 +168,7 @@ SELECT COUNT(*) AS num_payouts,
             ) -- Apply the cut percentage
             ELSE 0
         END
-    ) AS refund_payouts_amount_after_cut,
+    )::double precision AS refund_payouts_amount_after_cut,
     -- redund fail payouts
     SUM(
         CASE
@@ -181,28 +181,28 @@ SELECT COUNT(*) AS num_payouts,
             WHEN status = 'refund_fail' THEN amount
             ELSE 0
         END
-    ) AS refund_fail_payouts_amount
+    )::double precision AS refund_fail_payouts_amount
 FROM binance_payout_history
 `
 
 type PayoutMetricsRow struct {
-	NumPayouts                   int64 `json:"num_payouts"`
-	NumUniqueUsers               int64 `json:"num_unique_users"`
-	NumUniqueMoniests            int64 `json:"num_unique_moniests"`
-	NumUniqueTransactions        int64 `json:"num_unique_transactions"`
-	NumSuccessPayouts            int64 `json:"num_success_payouts"`
-	SuccessPayoutsAmount         int64 `json:"success_payouts_amount"`
-	SuccessPayoutsAmountAfterCut int64 `json:"success_payouts_amount_after_cut"`
-	NumFailPayouts               int64 `json:"num_fail_payouts"`
-	FailPayoutsAmount            int64 `json:"fail_payouts_amount"`
-	NumPendingPayouts            int64 `json:"num_pending_payouts"`
-	PendingPayoutsAmount         int64 `json:"pending_payouts_amount"`
-	PendingPayoutsAmountAfterCut int64 `json:"pending_payouts_amount_after_cut"`
-	NumRefundPayouts             int64 `json:"num_refund_payouts"`
-	RefundPayoutsAmount          int64 `json:"refund_payouts_amount"`
-	RefundPayoutsAmountAfterCut  int64 `json:"refund_payouts_amount_after_cut"`
-	NumRefundFailPayouts         int64 `json:"num_refund_fail_payouts"`
-	RefundFailPayoutsAmount      int64 `json:"refund_fail_payouts_amount"`
+	NumPayouts                   int64   `json:"num_payouts"`
+	NumUniqueUsers               int64   `json:"num_unique_users"`
+	NumUniqueMoniests            int64   `json:"num_unique_moniests"`
+	NumUniqueTransactions        int64   `json:"num_unique_transactions"`
+	NumSuccessPayouts            int64   `json:"num_success_payouts"`
+	SuccessPayoutsAmount         float64 `json:"success_payouts_amount"`
+	SuccessPayoutsAmountAfterCut float64 `json:"success_payouts_amount_after_cut"`
+	NumFailPayouts               int64   `json:"num_fail_payouts"`
+	FailPayoutsAmount            float64 `json:"fail_payouts_amount"`
+	NumPendingPayouts            int64   `json:"num_pending_payouts"`
+	PendingPayoutsAmount         float64 `json:"pending_payouts_amount"`
+	PendingPayoutsAmountAfterCut float64 `json:"pending_payouts_amount_after_cut"`
+	NumRefundPayouts             int64   `json:"num_refund_payouts"`
+	RefundPayoutsAmount          float64 `json:"refund_payouts_amount"`
+	RefundPayoutsAmountAfterCut  float64 `json:"refund_payouts_amount_after_cut"`
+	NumRefundFailPayouts         int64   `json:"num_refund_fail_payouts"`
+	RefundFailPayoutsAmount      float64 `json:"refund_fail_payouts_amount"`
 }
 
 func (q *Queries) PayoutMetrics(ctx context.Context) ([]PayoutMetricsRow, error) {
