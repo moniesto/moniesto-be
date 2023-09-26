@@ -21,7 +21,7 @@ definitions:
   db.PaymentMetricsRow:
     properties:
       fail_payment_amount:
-        type: integer
+        type: number
       num_fail_payment:
         type: integer
       num_pending_payment:
@@ -29,14 +29,14 @@ definitions:
       num_success_payment:
         type: integer
       pending_payment_amount:
-        type: integer
+        type: number
       success_payment_amount:
-        type: integer
+        type: number
     type: object
   db.PayoutMetricsRow:
     properties:
       fail_payouts_amount:
-        type: integer
+        type: number
       num_fail_payouts:
         type: integer
       num_payouts:
@@ -56,19 +56,19 @@ definitions:
       num_unique_users:
         type: integer
       pending_payouts_amount:
-        type: integer
+        type: number
       pending_payouts_amount_after_cut:
-        type: integer
+        type: number
       refund_fail_payouts_amount:
-        type: integer
+        type: number
       refund_payouts_amount:
-        type: integer
+        type: number
       refund_payouts_amount_after_cut:
-        type: integer
+        type: number
       success_payouts_amount:
-        type: integer
+        type: number
       success_payouts_amount_after_cut:
-        type: integer
+        type: number
     type: object
   db.PostCryptoMarketType:
     enum:
@@ -299,6 +299,15 @@ definitions:
       price:
         type: string
     type: object
+  model.FinancialMetrics:
+    properties:
+      estimated_profit:
+        type: number
+      payments:
+        type: number
+      profit:
+        type: number
+    type: object
   model.GetConfigsResponse:
     properties:
       error_codes:
@@ -431,6 +440,8 @@ definitions:
     type: object
   model.MetricsResponse:
     properties:
+      financial_metrics:
+        $ref: '#/definitions/model.FinancialMetrics'
       payment_metrics:
         $ref: '#/definitions/db.PaymentMetricsRow'
       payout_metrics:

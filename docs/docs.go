@@ -2042,7 +2042,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "fail_payment_amount": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "num_fail_payment": {
                     "type": "integer"
@@ -2054,10 +2054,10 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "pending_payment_amount": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "success_payment_amount": {
-                    "type": "integer"
+                    "type": "number"
                 }
             }
         },
@@ -2065,7 +2065,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "fail_payouts_amount": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "num_fail_payouts": {
                     "type": "integer"
@@ -2095,25 +2095,25 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "pending_payouts_amount": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "pending_payouts_amount_after_cut": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "refund_fail_payouts_amount": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "refund_payouts_amount": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "refund_payouts_amount_after_cut": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "success_payouts_amount": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "success_payouts_amount_after_cut": {
-                    "type": "integer"
+                    "type": "number"
                 }
             }
         },
@@ -2458,6 +2458,20 @@ const docTemplate = `{
                 }
             }
         },
+        "model.FinancialMetrics": {
+            "type": "object",
+            "properties": {
+                "estimated_profit": {
+                    "type": "number"
+                },
+                "payments": {
+                    "type": "number"
+                },
+                "profit": {
+                    "type": "number"
+                }
+            }
+        },
         "model.GetConfigsResponse": {
             "type": "object",
             "properties": {
@@ -2660,6 +2674,9 @@ const docTemplate = `{
         "model.MetricsResponse": {
             "type": "object",
             "properties": {
+                "financial_metrics": {
+                    "$ref": "#/definitions/model.FinancialMetrics"
+                },
                 "payment_metrics": {
                     "$ref": "#/definitions/db.PaymentMetricsRow"
                 },

@@ -1,1317 +1,1101 @@
 {
-	"info": {
-		"_postman_id": "8a4ee439-4bf2-42e2-ac82-dfb971c5a75e",
-		"name": "Moniesto",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "12879359"
-	},
-	"item": [
-		{
-			"name": "Core Back-End",
-			"item": [
-				{
-					"name": "Account",
-					"item": [
-						{
-							"name": "Login",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"identifier\": \"parvvazov@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/account/login",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"account",
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Register",
-							"protocolProfileBehavior": {
-								"disabledSystemHeaders": {}
-							},
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/csv",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"fullname\": \"Parvin Eyvazov\",\r\n \"username\": \"parvvaz\",\r\n \"email\": \"pervin.eyvazov1999@gmail.com\",\r\n \"password\": \"123456\",\r\n \"language\": \"tr\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/account/register",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"account",
-										"register"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Check Username",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{be-host}}/account/usernames/parvvazov/check",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"account",
-										"usernames",
-										"parvvazov",
-										"check"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Password: Send Password Reset Token",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"email\": \"pervin.eyvazov1999@gmail.com\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/account/password/send_email",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"account",
-										"password",
-										"send_email"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Password: Verify Token",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"token\": \"WTJFeE5EVXdOVGd0T0RoalpTMDBORE5tTFRnNFptTXROek01TVdNMk5tWmhNemc1TFdRd05ERmhOak0yTFdGbE1ERXROR0kwTlMwNU1HSmlMV1kyTmpOallXVTRZek0yWVE9PQ==\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/account/password/verify_token",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"account",
-										"password",
-										"verify_token"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Password: Verify Token & Change Password",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"token\": \"WTJFeE5EVXdOVGd0T0RoalpTMDBORE5tTFRnNFptTXROek01TVdNMk5tWmhNemc1TFdRd05ERmhOak0yTFdGbE1ERXROR0kwTlMwNU1HSmlMV1kyTmpOallXVTRZek0yWVE9PQ==\",\r\n \"new\": \"testtest1\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/account/password/change_password",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"account",
-										"password",
-										"change_password"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Password: Change Password [Auth]",
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MWY0ZTc2LTg4NmQtNDNmOC1hODNjLWIzOGVmMTFjOGVjMCIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6ImE0YjEyODdkLTIzZWEtNDUyNC1hNmMzLTIzMTU1ZTNmNzRiNiJ9LCJpc3N1ZWRfYXQiOiIyMDIyLTExLTA1VDAwOjA1OjQzLjU2OTY5MDQrMDM6MDAiLCJleHBpcmVkX2F0IjoiMjAyMi0xMS0wNVQwMDoyMDo0My41Njk2OTA0KzAzOjAwIn0.6cqMiYcQMPe8OaUtqblPzQq2QIq17Qf9wwohAK-c9uI",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"old\": \"testtest\",\r\n \"new\": \"testtest1\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/account/password",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"account",
-										"password"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Change Username",
-							"request": {
-								"method": "PATCH",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIzNzVhNjM4LWI1OTctNDM1Mi05Nzc4LTk5NjFmNGY4ZTc0MyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIwOjA2LjExNTI1OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMDowNi4xMTUyNTlaIn0.HGascxl38gskVpInXhfQIWeFrbL5KkhHGD0ugQ88i58",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"new\":\"eyvzov\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/account/username",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"account",
-										"username"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Send Email Verification email",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcyMmExNGQ5LWQyZjYtNDRlNS04YzlmLWRlM2Y5ZTY0MmZjMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIwOjM2LjEyMTk0NloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMDozNi4xMjE5NDZaIn0.yHeochWhZBemzR0JOXOTl0G9ILY8Ukk77R7OjkfUVLo",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"redirect_url\": \"https://www.moniesto.com/bemoniest\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/account/email/send_verification_email",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"account",
-										"email",
-										"send_verification_email"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Verify Email",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"token\": \"WkdRNE5qWmlNbVV0TXpnNE5TMDBORGM0TFRoak56SXRZMlU0TWpGbVpqRTNNV0k1TFdNMk1EYzROakk1TFdVd1pESXROR1ZoTmkwNFpqWmpMVEV6WXpBNE1UTXdNR1ExWmc9PQ==\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/account/email/verify_email",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"account",
-										"email",
-										"verify_email"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Users",
-					"item": [
-						{
-							"name": "Get by Username",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiZWNiNDViLTNhOTEtNGJjNS1hMGUzLWFlZGYzODRiYTdlYiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIyOjM2LjgwMDQ2OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMjozNi44MDA0NjlaIn0.wpcnG4cjUafsk0xMW7yPtTB4vamCl4zqPZ0xL-vNX_8",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/users/eyvzov",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"users",
-										"eyvzov"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update Profile",
-							"request": {
-								"method": "PATCH",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiZWNiNDViLTNhOTEtNGJjNS1hMGUzLWFlZGYzODRiYTdlYiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIyOjM2LjgwMDQ2OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMjozNi44MDA0NjlaIn0.wpcnG4cjUafsk0xMW7yPtTB4vamCl4zqPZ0xL-vNX_8",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"fullname\": \"Parvin Eyvazov\",\r\n    \"language\": \"en\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/users/profile",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"users",
-										"profile"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Subscriptions",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiZWNiNDViLTNhOTEtNGJjNS1hMGUzLWFlZGYzODRiYTdlYiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIyOjM2LjgwMDQ2OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMjozNi44MDA0NjlaIn0.wpcnG4cjUafsk0xMW7yPtTB4vamCl4zqPZ0xL-vNX_8",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/users/eyvzov/subscriptions?limit=10&offset=0",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"users",
-										"eyvzov",
-										"subscriptions"
-									],
-									"query": [
-										{
-											"key": "limit",
-											"value": "10"
-										},
-										{
-											"key": "offset",
-											"value": "0"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Summary Stats",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiZWNiNDViLTNhOTEtNGJjNS1hMGUzLWFlZGYzODRiYTdlYiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIyOjM2LjgwMDQ2OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMjozNi44MDA0NjlaIn0.wpcnG4cjUafsk0xMW7yPtTB4vamCl4zqPZ0xL-vNX_8",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/users/eyvzov/summary-stats",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"users",
-										"eyvzov",
-										"summary-stats"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Moniests",
-					"item": [
-						{
-							"name": "Be Moniest",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc5ZWM2YzdhLTBmNjgtNGNhNS1hOTFjLWVkMTU1YTBlMGFlNyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YxIiwiaWQiOiI3YzFjZjJmMS00N2M0LTQyM2MtYWZlOC05ZmIxN2ExNzM0MjYifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0xNlQxNzo0MDo0Mi4zNDU5NzFaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMTdUMTc6NDA6NDIuMzQ1OTcxWiJ9.2Ynvlg0flqkqRGNVLpz7yWW0BB_MPgtJLqOTKvZTs2I",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"bio\": \"this is my bio but nio\",\r\n \"binance_id\": \"499573502\",\r\n \"description\": \"this is interesting desc\",\r\n \"fee\": 100,\r\n \"message\": \"sub me\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/moniests",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update Moniest Profile",
-							"request": {
-								"method": "PATCH",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRkZWVkMzA1LTVmMTMtNGI5ZC1hNjdlLTY3NTdjZGYwYjVjNSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjMxOjQ1LjE5ODU1MloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDozMTo0NS4xOTg1NTJaIn0.-Cfj6wnkwgdC-C5f8qBsMo0chX3VnIRdJEkXrC8uAxY",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"bio\": \"this is another bio, but why?\",\r\n \"description\": \"this is another interesting desc2\",\r\n \"subscription_info\": {\r\n  \"fee\": 100,\r\n  \"message\": \"my sub message\"\r\n }\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/moniests/profile",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests",
-										"profile"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update Moniest Payout Info",
-							"request": {
-								"method": "PATCH",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRkZWVkMzA1LTVmMTMtNGI5ZC1hNjdlLTY3NTdjZGYwYjVjNSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjMxOjQ1LjE5ODU1MloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDozMTo0NS4xOTg1NTJaIn0.-Cfj6wnkwgdC-C5f8qBsMo0chX3VnIRdJEkXrC8uAxY",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"binance_id\": \"499573502\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/moniests/payout",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests",
-										"payout"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Moniest Payout Info",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRkZWVkMzA1LTVmMTMtNGI5ZC1hNjdlLTY3NTdjZGYwYjVjNSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjMxOjQ1LjE5ODU1MloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDozMTo0NS4xOTg1NTJaIn0.-Cfj6wnkwgdC-C5f8qBsMo0chX3VnIRdJEkXrC8uAxY",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/moniests/payout",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests",
-										"payout"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Subscribe",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFmYjVjN2E0LTU1MzgtNGQ1OC04NGNiLThhM2RkYzZjMGJlZCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjlmNjk1YTkyLTVmYzYtNDU5Ny1hNjZkLTUzNmYxZDNlOWY4NyJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA4LTI3VDE2OjI2OjA4Ljk4NTcwMjlaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDgtMjhUMTY6MjY6MDguOTg1NzAyOVoifQ.pPDG4vO1oRD5XvP2PWNJIpOOYbU_77bx2ctRWXWH8bM",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"number_of_months\": 5,\r\n \"returnURL\": \"https://moniesto.com/parvvazov/returnURL\",\r\n \"cancelURL\": \"https://moniesto.com/parvvazov/cancelURL\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/moniests/parro1/subscribe",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests",
-										"parro1",
-										"subscribe"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Unsubscribe",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFmYjVjN2E0LTU1MzgtNGQ1OC04NGNiLThhM2RkYzZjMGJlZCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjlmNjk1YTkyLTVmYzYtNDU5Ny1hNjZkLTUzNmYxZDNlOWY4NyJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA4LTI3VDE2OjI2OjA4Ljk4NTcwMjlaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDgtMjhUMTY6MjY6MDguOTg1NzAyOVoifQ.pPDG4vO1oRD5XvP2PWNJIpOOYbU_77bx2ctRWXWH8bM",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/moniests/parro1/unsubscribe",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests",
-										"parro1",
-										"unsubscribe"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Subscribe check",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRkZWVkMzA1LTVmMTMtNGI5ZC1hNjdlLTY3NTdjZGYwYjVjNSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjMxOjQ1LjE5ODU1MloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDozMTo0NS4xOTg1NTJaIn0.-Cfj6wnkwgdC-C5f8qBsMo0chX3VnIRdJEkXrC8uAxY",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/moniests/parvvazov1/subscription-info",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests",
-										"parvvazov1",
-										"subscription-info"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Subscribers",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJmMDUxZjkyLTE1MmQtNGU5MS1hZmE0LTZkMDkxMzM2OWQxYSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjE4YzA3ZjJkLTk0YzUtNGU2OS04NTYyLTY3MDFlNmMwMWE5YyJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAzLTA5VDAyOjIxOjExLjM2Njc3MTkrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMy0xMFQwMjoyMToxMS4zNjY3NzE5KzA0OjAwIn0.UQhw5fvXmyY-WXbZ0UnXkitxDSovcn34E2xWYrNTPlI",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/moniests/parvvazov/subscribers?limit=1&offset=0",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests",
-										"parvvazov",
-										"subscribers"
-									],
-									"query": [
-										{
-											"key": "limit",
-											"value": "1"
-										},
-										{
-											"key": "offset",
-											"value": "0"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Posts",
-					"item": [
-						{
-							"name": "Create Post",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc5ZWM2YzdhLTBmNjgtNGNhNS1hOTFjLWVkMTU1YTBlMGFlNyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YxIiwiaWQiOiI3YzFjZjJmMS00N2M0LTQyM2MtYWZlOC05ZmIxN2ExNzM0MjYifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0xNlQxNzo0MDo0Mi4zNDU5NzFaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMTdUMTc6NDA6NDIuMzQ1OTcxWiJ9.2Ynvlg0flqkqRGNVLpz7yWW0BB_MPgtJLqOTKvZTs2I",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"market_type\": \"futures\",\r\n    \"currency\": \"BTCUSDT\",\r\n    \"duration\": \"2023-09-18T23:33:47.479Z\",\r\n    \"target1\": 23000,\r\n    \"target2\": 22000,\r\n    \"target3\": 21500,\r\n    \"take_profit\": 19000,\r\n    \"stop\": 27000,\r\n    \"direction\": \"short\",\r\n    \"leverage\": 1\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/moniests/posts",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests",
-										"posts"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Calculate PNL and ROI",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRhOTVlOTNiLWI0NGEtNDdhMy1iZTY3LTM4ZmRmNmFhNTM1OCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImQzN2FlZDMyLWZlYzItNDdiOS04OWFhLTM5NTI5YTM3ZDgxNSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE3VDE5OjIzOjMwLjM5NzE0OFoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xOFQxOToyMzozMC4zOTcxNDlaIn0.YcAE2CerdRMRWQTEVQe7NhaQxkdXgsynlv-V1qHlTdw",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"take_profit\": 62000,\r\n    \"start_price\": 1000,\r\n    \"direction\": \"long\",\r\n    \"leverage\": 125\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/moniests/posts/calculate-pnl-roi",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests",
-										"posts",
-										"calculate-pnl-roi"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Moniest Posts",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA5OTdlNWMyLTFmZjctNGJhYy05YTdhLWNkNzRjY2E3MjkwMCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImQzN2FlZDMyLWZlYzItNDdiOS04OWFhLTM5NTI5YTM3ZDgxNSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE2VDE3OjUwOjU3LjE1MDM0NFoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xN1QxNzo1MDo1Ny4xNTAzNDRaIn0.fePbYdjIEOULqt9A34nJDvQ-sQeGGIRabq5tM6V31pY",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/moniests/parvvazov/posts",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"moniests",
-										"parvvazov",
-										"posts"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Content",
-					"item": [
-						{
-							"name": "Post: Sub Active",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjNDhlYTYzLWIyOTEtNGJkOC1hMjRkLTdmYzQ2NTZhMjgzMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDIwOjQ2OjM5LjA2NDIwMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQyMDo0NjozOS4wNjQyMDFaIn0.7wqlsC_6ZGsMrf0nF2iZbOwrWaUAv0zOulXR6oI9pMY",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/content/posts?subscribed=true&active=true&limit=5&offset=0",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"content",
-										"posts"
-									],
-									"query": [
-										{
-											"key": "subscribed",
-											"value": "true"
-										},
-										{
-											"key": "active",
-											"value": "true"
-										},
-										{
-											"key": "limit",
-											"value": "5"
-										},
-										{
-											"key": "offset",
-											"value": "0"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Post: Subs Inactive",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjNDhlYTYzLWIyOTEtNGJkOC1hMjRkLTdmYzQ2NTZhMjgzMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDIwOjQ2OjM5LjA2NDIwMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQyMDo0NjozOS4wNjQyMDFaIn0.7wqlsC_6ZGsMrf0nF2iZbOwrWaUAv0zOulXR6oI9pMY",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/content/posts?subscribed=true&active=false&limit=5&offset=0",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"content",
-										"posts"
-									],
-									"query": [
-										{
-											"key": "subscribed",
-											"value": "true"
-										},
-										{
-											"key": "active",
-											"value": "false"
-										},
-										{
-											"key": "limit",
-											"value": "5"
-										},
-										{
-											"key": "offset",
-											"value": "0"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Post: All Inactive",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjNDhlYTYzLWIyOTEtNGJkOC1hMjRkLTdmYzQ2NTZhMjgzMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDIwOjQ2OjM5LjA2NDIwMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQyMDo0NjozOS4wNjQyMDFaIn0.7wqlsC_6ZGsMrf0nF2iZbOwrWaUAv0zOulXR6oI9pMY",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/content/posts?subscribed=false&limit=10&offset=0&sortBy=created_at",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"content",
-										"posts"
-									],
-									"query": [
-										{
-											"key": "subscribed",
-											"value": "false"
-										},
-										{
-											"key": "limit",
-											"value": "10"
-										},
-										{
-											"key": "offset",
-											"value": "0"
-										},
-										{
-											"key": "sortBy",
-											"value": "created_at"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Moniest",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA5OTdlNWMyLTFmZjctNGJhYy05YTdhLWNkNzRjY2E3MjkwMCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImQzN2FlZDMyLWZlYzItNDdiOS04OWFhLTM5NTI5YTM3ZDgxNSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE2VDE3OjUwOjU3LjE1MDM0NFoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xN1QxNzo1MDo1Ny4xNTAzNDRaIn0.fePbYdjIEOULqt9A34nJDvQ-sQeGGIRabq5tM6V31pY",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/content/moniests?limit=10&offset=0",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"content",
-										"moniests"
-									],
-									"query": [
-										{
-											"key": "limit",
-											"value": "10"
-										},
-										{
-											"key": "offset",
-											"value": "0"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Search Moniest",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjNDhlYTYzLWIyOTEtNGJkOC1hMjRkLTdmYzQ2NTZhMjgzMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDIwOjQ2OjM5LjA2NDIwMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQyMDo0NjozOS4wNjQyMDFaIn0.7wqlsC_6ZGsMrf0nF2iZbOwrWaUAv0zOulXR6oI9pMY",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/content/moniests/search?searchText=zov",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"content",
-										"moniests",
-										"search"
-									],
-									"query": [
-										{
-											"key": "searchText",
-											"value": "zov"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Assets",
-					"item": [
-						{
-							"name": "Get All Configs",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{be-host}}/assets/configs",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"assets",
-										"configs"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Error Codes",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{be-host}}/assets/error-codes",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"assets",
-										"error-codes"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Validation Configs",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{be-host}}/assets/validations",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"assets",
-										"validations"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get General Info Configs",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{be-host}}/assets/general-info",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"assets",
-										"general-info"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Crypto",
-					"item": [
-						{
-							"name": "[binance] Binance ticker prices",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "https://api2.binance.com/api/v3/ticker/price",
-									"protocol": "https",
-									"host": [
-										"api2",
-										"binance",
-										"com"
-									],
-									"path": [
-										"api",
-										"v3",
-										"ticker",
-										"price"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "[binance] Binance ticker prices [filter]",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "https://data.binance.vision/data/spot/daily/klines/ETHUSDT",
-									"protocol": "https",
-									"host": [
-										"data",
-										"binance",
-										"vision"
-									],
-									"path": [
-										"data",
-										"spot",
-										"daily",
-										"klines",
-										"ETHUSDT"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "[binance] Get History Data",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "https://api2.binance.com/api/v3/klines?startTime=1638144000000&endTime=1672531200000&limit=1000&interval=1s&symbol=BTCUSDT",
-									"protocol": "https",
-									"host": [
-										"api2",
-										"binance",
-										"com"
-									],
-									"path": [
-										"api",
-										"v3",
-										"klines"
-									],
-									"query": [
-										{
-											"key": "startTime",
-											"value": "1638144000000"
-										},
-										{
-											"key": "endTime",
-											"value": "1672531200000"
-										},
-										{
-											"key": "limit",
-											"value": "1000"
-										},
-										{
-											"key": "interval",
-											"value": "1s"
-										},
-										{
-											"key": "symbol",
-											"value": "BTCUSDT"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "[local] Get Currencies",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4YzgxOTZkLWE4NTAtNDUxZS1iNWFjLWQ0ZDU1ZmMyNDM1YSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA5VDIwOjUzOjI2LjA0NzcyMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xMFQyMDo1MzoyNi4wNDc3MjFaIn0.d_ymm4bVStwoBO_pQAyUFbDaTQTmUY71xb8od5DIVmI",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/crypto/currencies?name=BTCUSDT_230929&market_type=futures",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"crypto",
-										"currencies"
-									],
-									"query": [
-										{
-											"key": "name",
-											"value": "BTCUSDT_230929"
-										},
-										{
-											"key": "market_type",
-											"value": "futures"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Feedback",
-					"item": [
-						{
-							"name": "Add Feedback",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzYWUxMDk5LTI2ZjgtNGJiOC05Zjg4LTQ5NWY1MGYxM2M1MSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjFiYTA3ZmJmLWZjN2QtNDM0NC1hOTU1LTA4ZWE2OTk4Y2I5MSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAyLTE0VDAxOjExOjQwLjAyOTc3NzcrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMi0xNVQwMToxMTo0MC4wMjk3Nzc3KzA0OjAwIn0.NOyou7XUzGSxSwbpLUWxxVAzKThHwmyYulCfeZMASy8",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n \"message\": \"hate this app\",\r\n \"type\":\"other\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{be-host}}/feedback",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"feedback"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Admin",
-					"item": [
-						{
-							"name": "Update Post Status",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5NDU4MmJmLTUwNWYtNGQ2NS04MTJiLTc5OGNjOWRkMjE4YiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2aW4iLCJpZCI6IjJiN2U0NDI5LTlmY2EtNDBmYS1hMzFmLWQzNmZlZjY5MzU5YSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE2VDE4OjI5OjE0Ljk0NzkzNzgxOVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xN1QxODoyOToxNC45NDc5MzgwMTlaIn0.pPpSLtxgrjsvm0PRl6-teHMUcS3tlCgtnIcGbU0MF0Q",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/admin/update_posts_status",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"admin",
-										"update_posts_status"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update Moniest Post Crypto Statistics",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhOTNmODQxLTgzY2EtNDdiOS04NjAwLTNkN2MwYjAzZDQ5YyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6IiwiaWQiOiIwODIyZTdlZS01NWEwLTRmMmYtYjI5OS1iMWJiMGI5YTY4NTEifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0xNlQxNzo0Mjo1NS43NDQ0MzNaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMTdUMTc6NDI6NTUuNzQ0NDMzWiJ9.OEs19oisQeFndKbbqYFcyCS0ne8f6qoHYkLSWllGI9Q",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/admin/update_moniest_post_crypto_statistics",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"admin",
-										"update_moniest_post_crypto_statistics"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Health Check",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZTMyMWRjLTg3MzMtNDYwYi1hNGRiLTdjNTBjNDlmZjYxZiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6ImRkMmI5OWZkLTM0NDMtNGY5Ni1hMTc2LWM2YjY3YTkwMzBhYiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA2LTI1VDE5OjM4OjI0LjM0NzAzNzU0MVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wNi0yNlQxOTozODoyNC4zNDcwMzc2NjFaIn0.kW47xNKpbckYFEK-ZLTmLH0l23Rftl1N8vlcHF07ffA",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{be-host}}/health",
-									"host": [
-										"{{be-host}}"
-									],
-									"path": [
-										"health"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				}
-			]
-		}
-	]
+  "info": {
+    "_postman_id": "8a4ee439-4bf2-42e2-ac82-dfb971c5a75e",
+    "name": "Moniesto",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12879359"
+  },
+  "item": [
+    {
+      "name": "Core Back-End",
+      "item": [
+        {
+          "name": "Account",
+          "item": [
+            {
+              "name": "Login",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"identifier\": \"pervin.eyvazov1999@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/account/login",
+                  "host": ["{{be-host}}"],
+                  "path": ["account", "login"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Register",
+              "protocolProfileBehavior": {
+                "disabledSystemHeaders": {}
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/csv",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"fullname\": \"Parvin Eyvazov\",\r\n \"username\": \"davut1\",\r\n \"email\": \"pervin.eyvazov1999@gmail.com\",\r\n \"password\": \"123456\",\r\n \"language\": \"tr\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/account/register",
+                  "host": ["{{be-host}}"],
+                  "path": ["account", "register"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Check Username",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{be-host}}/account/usernames/parvvazov/check",
+                  "host": ["{{be-host}}"],
+                  "path": ["account", "usernames", "parvvazov", "check"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Password: Send Password Reset Token",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"email\": \"pervin.eyvazov1999@gmail.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/account/password/send_email",
+                  "host": ["{{be-host}}"],
+                  "path": ["account", "password", "send_email"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Password: Verify Token",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"token\": \"WTJFeE5EVXdOVGd0T0RoalpTMDBORE5tTFRnNFptTXROek01TVdNMk5tWmhNemc1TFdRd05ERmhOak0yTFdGbE1ERXROR0kwTlMwNU1HSmlMV1kyTmpOallXVTRZek0yWVE9PQ==\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/account/password/verify_token",
+                  "host": ["{{be-host}}"],
+                  "path": ["account", "password", "verify_token"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Password: Verify Token & Change Password",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"token\": \"WTJFeE5EVXdOVGd0T0RoalpTMDBORE5tTFRnNFptTXROek01TVdNMk5tWmhNemc1TFdRd05ERmhOak0yTFdGbE1ERXROR0kwTlMwNU1HSmlMV1kyTmpOallXVTRZek0yWVE9PQ==\",\r\n \"new\": \"testtest1\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/account/password/change_password",
+                  "host": ["{{be-host}}"],
+                  "path": ["account", "password", "change_password"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Password: Change Password [Auth]",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MWY0ZTc2LTg4NmQtNDNmOC1hODNjLWIzOGVmMTFjOGVjMCIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6ImE0YjEyODdkLTIzZWEtNDUyNC1hNmMzLTIzMTU1ZTNmNzRiNiJ9LCJpc3N1ZWRfYXQiOiIyMDIyLTExLTA1VDAwOjA1OjQzLjU2OTY5MDQrMDM6MDAiLCJleHBpcmVkX2F0IjoiMjAyMi0xMS0wNVQwMDoyMDo0My41Njk2OTA0KzAzOjAwIn0.6cqMiYcQMPe8OaUtqblPzQq2QIq17Qf9wwohAK-c9uI",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"old\": \"testtest\",\r\n \"new\": \"testtest1\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/account/password",
+                  "host": ["{{be-host}}"],
+                  "path": ["account", "password"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change Username",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIzNzVhNjM4LWI1OTctNDM1Mi05Nzc4LTk5NjFmNGY4ZTc0MyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIwOjA2LjExNTI1OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMDowNi4xMTUyNTlaIn0.HGascxl38gskVpInXhfQIWeFrbL5KkhHGD0ugQ88i58",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"new\":\"eyvzov\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/account/username",
+                  "host": ["{{be-host}}"],
+                  "path": ["account", "username"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Send Email Verification email",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcyMmExNGQ5LWQyZjYtNDRlNS04YzlmLWRlM2Y5ZTY0MmZjMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIwOjM2LjEyMTk0NloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMDozNi4xMjE5NDZaIn0.yHeochWhZBemzR0JOXOTl0G9ILY8Ukk77R7OjkfUVLo",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"redirect_url\": \"https://www.moniesto.com/bemoniest\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/account/email/send_verification_email",
+                  "host": ["{{be-host}}"],
+                  "path": ["account", "email", "send_verification_email"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Verify Email",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"token\": \"WkdRNE5qWmlNbVV0TXpnNE5TMDBORGM0TFRoak56SXRZMlU0TWpGbVpqRTNNV0k1TFdNMk1EYzROakk1TFdVd1pESXROR1ZoTmkwNFpqWmpMVEV6WXpBNE1UTXdNR1ExWmc9PQ==\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/account/email/verify_email",
+                  "host": ["{{be-host}}"],
+                  "path": ["account", "email", "verify_email"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Users",
+          "item": [
+            {
+              "name": "Get by Username",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiZWNiNDViLTNhOTEtNGJjNS1hMGUzLWFlZGYzODRiYTdlYiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIyOjM2LjgwMDQ2OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMjozNi44MDA0NjlaIn0.wpcnG4cjUafsk0xMW7yPtTB4vamCl4zqPZ0xL-vNX_8",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/users/eyvzov",
+                  "host": ["{{be-host}}"],
+                  "path": ["users", "eyvzov"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Profile",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiZWNiNDViLTNhOTEtNGJjNS1hMGUzLWFlZGYzODRiYTdlYiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIyOjM2LjgwMDQ2OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMjozNi44MDA0NjlaIn0.wpcnG4cjUafsk0xMW7yPtTB4vamCl4zqPZ0xL-vNX_8",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"fullname\": \"Parvin Eyvazov\",\r\n    \"language\": \"en\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/users/profile",
+                  "host": ["{{be-host}}"],
+                  "path": ["users", "profile"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Subscriptions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiZWNiNDViLTNhOTEtNGJjNS1hMGUzLWFlZGYzODRiYTdlYiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIyOjM2LjgwMDQ2OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMjozNi44MDA0NjlaIn0.wpcnG4cjUafsk0xMW7yPtTB4vamCl4zqPZ0xL-vNX_8",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/users/eyvzov/subscriptions?limit=10&offset=0",
+                  "host": ["{{be-host}}"],
+                  "path": ["users", "eyvzov", "subscriptions"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Summary Stats",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiZWNiNDViLTNhOTEtNGJjNS1hMGUzLWFlZGYzODRiYTdlYiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjIyOjM2LjgwMDQ2OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDoyMjozNi44MDA0NjlaIn0.wpcnG4cjUafsk0xMW7yPtTB4vamCl4zqPZ0xL-vNX_8",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/users/eyvzov/summary-stats",
+                  "host": ["{{be-host}}"],
+                  "path": ["users", "eyvzov", "summary-stats"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Moniests",
+          "item": [
+            {
+              "name": "Be Moniest",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc5ZWM2YzdhLTBmNjgtNGNhNS1hOTFjLWVkMTU1YTBlMGFlNyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YxIiwiaWQiOiI3YzFjZjJmMS00N2M0LTQyM2MtYWZlOC05ZmIxN2ExNzM0MjYifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0xNlQxNzo0MDo0Mi4zNDU5NzFaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMTdUMTc6NDA6NDIuMzQ1OTcxWiJ9.2Ynvlg0flqkqRGNVLpz7yWW0BB_MPgtJLqOTKvZTs2I",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"bio\": \"this is my bio but nio\",\r\n \"binance_id\": \"499573502\",\r\n \"description\": \"this is interesting desc\",\r\n \"fee\": 100,\r\n \"message\": \"sub me\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/moniests",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Moniest Profile",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRkZWVkMzA1LTVmMTMtNGI5ZC1hNjdlLTY3NTdjZGYwYjVjNSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjMxOjQ1LjE5ODU1MloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDozMTo0NS4xOTg1NTJaIn0.-Cfj6wnkwgdC-C5f8qBsMo0chX3VnIRdJEkXrC8uAxY",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"bio\": \"this is another bio, but why?\",\r\n \"description\": \"this is another interesting desc2\",\r\n \"subscription_info\": {\r\n  \"fee\": 100,\r\n  \"message\": \"my sub message\"\r\n }\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/moniests/profile",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests", "profile"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Moniest Payout Info",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRkZWVkMzA1LTVmMTMtNGI5ZC1hNjdlLTY3NTdjZGYwYjVjNSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjMxOjQ1LjE5ODU1MloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDozMTo0NS4xOTg1NTJaIn0.-Cfj6wnkwgdC-C5f8qBsMo0chX3VnIRdJEkXrC8uAxY",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"binance_id\": \"499573502\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/moniests/payout",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests", "payout"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Moniest Payout Info",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRkZWVkMzA1LTVmMTMtNGI5ZC1hNjdlLTY3NTdjZGYwYjVjNSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjMxOjQ1LjE5ODU1MloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDozMTo0NS4xOTg1NTJaIn0.-Cfj6wnkwgdC-C5f8qBsMo0chX3VnIRdJEkXrC8uAxY",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/moniests/payout",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests", "payout"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Subscribe",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMzNjNhNjJmLWQzNDctNDM3Ny1iMDk3LTFjZWQxNWY5ZWZiNyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YyIiwiaWQiOiI3MGU4NmQ0OC1mNzQ2LTQ3YmEtODk1OS03MDkxOTRhYTJhZGIifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0yMVQyMToyNzo1MC40NzU4MzlaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMjJUMjE6Mjc6NTAuNDc1ODM5WiJ9.Hckvaj34nFpFiXe-K2UkDvZAnlWJ42Qo6B5QqiK2Au4",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"number_of_months\": 5,\r\n \"returnURL\": \"https://moniesto.com/parvvazov/returnURL\",\r\n \"cancelURL\": \"https://moniesto.com/parvvazov/cancelURL\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/moniests/parvvazov/subscribe",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests", "parvvazov", "subscribe"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Unsubscribe",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFmYjVjN2E0LTU1MzgtNGQ1OC04NGNiLThhM2RkYzZjMGJlZCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjlmNjk1YTkyLTVmYzYtNDU5Ny1hNjZkLTUzNmYxZDNlOWY4NyJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA4LTI3VDE2OjI2OjA4Ljk4NTcwMjlaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDgtMjhUMTY6MjY6MDguOTg1NzAyOVoifQ.pPDG4vO1oRD5XvP2PWNJIpOOYbU_77bx2ctRWXWH8bM",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/moniests/parro1/unsubscribe",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests", "parro1", "unsubscribe"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Subscribe check",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRkZWVkMzA1LTVmMTMtNGI5ZC1hNjdlLTY3NTdjZGYwYjVjNSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDEwOjMxOjQ1LjE5ODU1MloiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQxMDozMTo0NS4xOTg1NTJaIn0.-Cfj6wnkwgdC-C5f8qBsMo0chX3VnIRdJEkXrC8uAxY",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/moniests/parvvazov1/subscription-info",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests", "parvvazov1", "subscription-info"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Subscribers",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJmMDUxZjkyLTE1MmQtNGU5MS1hZmE0LTZkMDkxMzM2OWQxYSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjE4YzA3ZjJkLTk0YzUtNGU2OS04NTYyLTY3MDFlNmMwMWE5YyJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAzLTA5VDAyOjIxOjExLjM2Njc3MTkrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMy0xMFQwMjoyMToxMS4zNjY3NzE5KzA0OjAwIn0.UQhw5fvXmyY-WXbZ0UnXkitxDSovcn34E2xWYrNTPlI",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/moniests/parvvazov/subscribers?limit=1&offset=0",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests", "parvvazov", "subscribers"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "1"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Posts",
+          "item": [
+            {
+              "name": "Create Post",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRmOWMyYjY1LWNkZjAtNGM5OC1hMmViLTMyNTNiZTJlZDFjNSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImQzN2FlZDMyLWZlYzItNDdiOS04OWFhLTM5NTI5YTM3ZDgxNSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE5VDIwOjUxOjEzLjY1MDEyOVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0yMFQyMDo1MToxMy42NTAxMjlaIn0._FRQVBz0B7nKlwrmAvsV4ebUnHxVwEx3cHwFbSBBfxI",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"market_type\": \"spot\",\r\n    \"currency\": \"GASBTC\",\r\n    \"duration\": \"2023-09-21T23:33:47.479Z\",\r\n    \"target1\": 0.0002,\r\n    \"target2\": 0.0003,\r\n    \"target3\": 0.0004,\r\n    \"take_profit\": 0.0005,\r\n    \"stop\":  0.00009,\r\n    \"direction\": \"long\",\r\n    \"leverage\": 2\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/moniests/posts",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests", "posts"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Calculate PNL and ROI",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRhOTVlOTNiLWI0NGEtNDdhMy1iZTY3LTM4ZmRmNmFhNTM1OCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImQzN2FlZDMyLWZlYzItNDdiOS04OWFhLTM5NTI5YTM3ZDgxNSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE3VDE5OjIzOjMwLjM5NzE0OFoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xOFQxOToyMzozMC4zOTcxNDlaIn0.YcAE2CerdRMRWQTEVQe7NhaQxkdXgsynlv-V1qHlTdw",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"take_profit\": 62000,\r\n    \"start_price\": 1000,\r\n    \"direction\": \"long\",\r\n    \"leverage\": 125\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/moniests/posts/calculate-pnl-roi",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests", "posts", "calculate-pnl-roi"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Moniest Posts",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA5OTdlNWMyLTFmZjctNGJhYy05YTdhLWNkNzRjY2E3MjkwMCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6ImQzN2FlZDMyLWZlYzItNDdiOS04OWFhLTM5NTI5YTM3ZDgxNSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE2VDE3OjUwOjU3LjE1MDM0NFoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0xN1QxNzo1MDo1Ny4xNTAzNDRaIn0.fePbYdjIEOULqt9A34nJDvQ-sQeGGIRabq5tM6V31pY",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/moniests/parvvazov/posts",
+                  "host": ["{{be-host}}"],
+                  "path": ["moniests", "parvvazov", "posts"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Content",
+          "item": [
+            {
+              "name": "Post: Sub Active",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjNDhlYTYzLWIyOTEtNGJkOC1hMjRkLTdmYzQ2NTZhMjgzMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDIwOjQ2OjM5LjA2NDIwMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQyMDo0NjozOS4wNjQyMDFaIn0.7wqlsC_6ZGsMrf0nF2iZbOwrWaUAv0zOulXR6oI9pMY",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/content/posts?subscribed=true&active=true&limit=5&offset=0",
+                  "host": ["{{be-host}}"],
+                  "path": ["content", "posts"],
+                  "query": [
+                    {
+                      "key": "subscribed",
+                      "value": "true"
+                    },
+                    {
+                      "key": "active",
+                      "value": "true"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Post: Subs Inactive",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjNDhlYTYzLWIyOTEtNGJkOC1hMjRkLTdmYzQ2NTZhMjgzMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDIwOjQ2OjM5LjA2NDIwMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQyMDo0NjozOS4wNjQyMDFaIn0.7wqlsC_6ZGsMrf0nF2iZbOwrWaUAv0zOulXR6oI9pMY",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/content/posts?subscribed=true&active=false&limit=5&offset=0",
+                  "host": ["{{be-host}}"],
+                  "path": ["content", "posts"],
+                  "query": [
+                    {
+                      "key": "subscribed",
+                      "value": "true"
+                    },
+                    {
+                      "key": "active",
+                      "value": "false"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Post: All Inactive",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjNDhlYTYzLWIyOTEtNGJkOC1hMjRkLTdmYzQ2NTZhMjgzMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDIwOjQ2OjM5LjA2NDIwMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQyMDo0NjozOS4wNjQyMDFaIn0.7wqlsC_6ZGsMrf0nF2iZbOwrWaUAv0zOulXR6oI9pMY",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/content/posts?subscribed=false&limit=10&offset=0&sortBy=created_at",
+                  "host": ["{{be-host}}"],
+                  "path": ["content", "posts"],
+                  "query": [
+                    {
+                      "key": "subscribed",
+                      "value": "false"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "created_at"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Moniest",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMzNjNhNjJmLWQzNDctNDM3Ny1iMDk3LTFjZWQxNWY5ZWZiNyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YyIiwiaWQiOiI3MGU4NmQ0OC1mNzQ2LTQ3YmEtODk1OS03MDkxOTRhYTJhZGIifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0yMVQyMToyNzo1MC40NzU4MzlaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMjJUMjE6Mjc6NTAuNDc1ODM5WiJ9.Hckvaj34nFpFiXe-K2UkDvZAnlWJ42Qo6B5QqiK2Au4",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/content/moniests?limit=10&offset=0",
+                  "host": ["{{be-host}}"],
+                  "path": ["content", "moniests"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Search Moniest",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjNDhlYTYzLWIyOTEtNGJkOC1hMjRkLTdmYzQ2NTZhMjgzMSIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6IjI0OGI3NWQwLTcxMDAtNDA4ZS1hMDQwLTk3NTg0ZGMzMTQ3MiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTA4VDIwOjQ2OjM5LjA2NDIwMVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0wOVQyMDo0NjozOS4wNjQyMDFaIn0.7wqlsC_6ZGsMrf0nF2iZbOwrWaUAv0zOulXR6oI9pMY",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/content/moniests/search?searchText=zov",
+                  "host": ["{{be-host}}"],
+                  "path": ["content", "moniests", "search"],
+                  "query": [
+                    {
+                      "key": "searchText",
+                      "value": "zov"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Assets",
+          "item": [
+            {
+              "name": "Get All Configs",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{be-host}}/assets/configs",
+                  "host": ["{{be-host}}"],
+                  "path": ["assets", "configs"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Error Codes",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{be-host}}/assets/error-codes",
+                  "host": ["{{be-host}}"],
+                  "path": ["assets", "error-codes"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Validation Configs",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{be-host}}/assets/validations",
+                  "host": ["{{be-host}}"],
+                  "path": ["assets", "validations"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get General Info Configs",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{be-host}}/assets/general-info",
+                  "host": ["{{be-host}}"],
+                  "path": ["assets", "general-info"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Crypto",
+          "item": [
+            {
+              "name": "[binance] Binance ticker prices",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://api2.binance.com/api/v3/ticker/price",
+                  "protocol": "https",
+                  "host": ["api2", "binance", "com"],
+                  "path": ["api", "v3", "ticker", "price"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "[binance] Binance ticker prices [filter]",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://data.binance.vision/data/spot/daily/klines/ETHUSDT",
+                  "protocol": "https",
+                  "host": ["data", "binance", "vision"],
+                  "path": ["data", "spot", "daily", "klines", "ETHUSDT"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "[binance] Get History Data",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://api2.binance.com/api/v3/klines?startTime=1638144000000&endTime=1672531200000&limit=1000&interval=1s&symbol=BTCUSDT",
+                  "protocol": "https",
+                  "host": ["api2", "binance", "com"],
+                  "path": ["api", "v3", "klines"],
+                  "query": [
+                    {
+                      "key": "startTime",
+                      "value": "1638144000000"
+                    },
+                    {
+                      "key": "endTime",
+                      "value": "1672531200000"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "1000"
+                    },
+                    {
+                      "key": "interval",
+                      "value": "1s"
+                    },
+                    {
+                      "key": "symbol",
+                      "value": "BTCUSDT"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "[local] Get Currencies",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlYTJiZGQwLTdkZDktNGRiNi1iOWIzLTkyYWMxOTBlZGE2YSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6IiwiaWQiOiIwODIyZTdlZS01NWEwLTRmMmYtYjI5OS1iMWJiMGI5YTY4NTEifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0xOVQyMDozNzo0OC40OTM4MjVaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMjBUMjA6Mzc6NDguNDkzODI1WiJ9.FqDgSI1KE2QOHnJzW19S075LdJ42X8eMGRAkUygM8mU",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/crypto/currencies?name=a&market_type=spot",
+                  "host": ["{{be-host}}"],
+                  "path": ["crypto", "currencies"],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "a"
+                    },
+                    {
+                      "key": "market_type",
+                      "value": "spot"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Feedback",
+          "item": [
+            {
+              "name": "Add Feedback",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzYWUxMDk5LTI2ZjgtNGJiOC05Zjg4LTQ5NWY1MGYxM2M1MSIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6b3YiLCJpZCI6IjFiYTA3ZmJmLWZjN2QtNDM0NC1hOTU1LTA4ZWE2OTk4Y2I5MSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTAyLTE0VDAxOjExOjQwLjAyOTc3NzcrMDQ6MDAiLCJleHBpcmVkX2F0IjoiMjAyMy0wMi0xNVQwMToxMTo0MC4wMjk3Nzc3KzA0OjAwIn0.NOyou7XUzGSxSwbpLUWxxVAzKThHwmyYulCfeZMASy8",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n \"message\": \"hate this app\",\r\n \"type\":\"other\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{be-host}}/feedback",
+                  "host": ["{{be-host}}"],
+                  "path": ["feedback"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Admin",
+          "item": [
+            {
+              "name": "Update Post Status",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4ZWQ0N2FlLWFiYzItNGZlNS04NTQ3LTJiNzBmNmNjZjVkOCIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2aW4iLCJpZCI6IjJiN2U0NDI5LTlmY2EtNDBmYS1hMzFmLWQzNmZlZjY5MzU5YSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTE5VDIyOjM5OjQ5Ljg0MzU1NDE4OVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0yMFQyMjozOTo0OS44NDM1NTQzOVoifQ.PtHAvnRMYS1MhM_hITnntMHZ03bkUAGXjQmf9LxL8vs",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/admin/update_posts_status",
+                  "host": ["{{be-host}}"],
+                  "path": ["admin", "update_posts_status"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Metrics",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM4NTM0ZTA1LTUzZTYtNDBjMi1iODVjLWFkZGZjZjk4MjNkZiIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2aW4iLCJpZCI6IjJiN2U0NDI5LTlmY2EtNDBmYS1hMzFmLWQzNmZlZjY5MzU5YSJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA5LTI2VDIyOjE5OjAxLjU0MTA1NDYzNFoiLCJleHBpcmVkX2F0IjoiMjAyMy0wOS0yN1QyMjoxOTowMS41NDEwNTQ4MjRaIn0.TaC5ijPlzZ06q_Jzo5AHZ0hw-WGORJ4-07pe2US5RAI",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/admin/metrics",
+                  "host": ["{{be-host}}"],
+                  "path": ["admin", "metrics"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Moniest Post Crypto Statistics",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhOTNmODQxLTgzY2EtNDdiOS04NjAwLTNkN2MwYjAzZDQ5YyIsInVzZXIiOnsidXNlcm5hbWUiOiJwYXJ2dmF6IiwiaWQiOiIwODIyZTdlZS01NWEwLTRmMmYtYjI5OS1iMWJiMGI5YTY4NTEifSwiaXNzdWVkX2F0IjoiMjAyMy0wOS0xNlQxNzo0Mjo1NS43NDQ0MzNaIiwiZXhwaXJlZF9hdCI6IjIwMjMtMDktMTdUMTc6NDI6NTUuNzQ0NDMzWiJ9.OEs19oisQeFndKbbqYFcyCS0ne8f6qoHYkLSWllGI9Q",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/admin/update_moniest_post_crypto_statistics",
+                  "host": ["{{be-host}}"],
+                  "path": ["admin", "update_moniest_post_crypto_statistics"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Health Check",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZTMyMWRjLTg3MzMtNDYwYi1hNGRiLTdjNTBjNDlmZjYxZiIsInVzZXIiOnsidXNlcm5hbWUiOiJleXZ6b3YiLCJpZCI6ImRkMmI5OWZkLTM0NDMtNGY5Ni1hMTc2LWM2YjY3YTkwMzBhYiJ9LCJpc3N1ZWRfYXQiOiIyMDIzLTA2LTI1VDE5OjM4OjI0LjM0NzAzNzU0MVoiLCJleHBpcmVkX2F0IjoiMjAyMy0wNi0yNlQxOTozODoyNC4zNDcwMzc2NjFaIn0.kW47xNKpbckYFEK-ZLTmLH0l23Rftl1N8vlcHF07ffA",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{be-host}}/health",
+                  "host": ["{{be-host}}"],
+                  "path": ["health"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
