@@ -16,6 +16,17 @@ const (
 	authorizationPayloadValidityKey = "authorization_payload_validity"
 )
 
+func interceptor(maintenanceMode bool) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		if maintenanceMode {
+			ctx.AbortWithStatusJSON(http.StatusServiceUnavailable, clientError.GetError(clientError.General_Maintenance))
+			return
+		}
+
+		ctx.Next()
+	}
+}
+
 func authMiddlewareOptional(token token.Maker) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		authorizationHeader := ctx.GetHeader(authorizationHeaderKey)

@@ -19,6 +19,7 @@ type Config struct {
 	SmtpPort      string `mapstructure:"SMTP_PORT"`
 
 	// APP LOGIC CONFIG
+	MaintenanceMode                    bool          `mapstructure:"MAINTENANCE_MODE"`
 	AccessTokenDuration                time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	AccessTokenDurationTest            time.Duration `mapstructure:"ACCESS_TOKEN_DURATION_TEST"`
 	ClientURL                          string        `mapstructure:"CLIENT_URL"`
