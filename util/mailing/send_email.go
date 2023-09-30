@@ -29,7 +29,7 @@ func send(toEmails []string, fromEmail, fromPassword, smtpHost, smtpPort, templa
 		}
 
 		if err != nil {
-			system.Log(fmt.Sprintf("Sending Email: Attempt %d failed with error: %v\n", i+1, err))
+			system.Log(fmt.Sprintf("Sending Email: Attempt %d failed with error: %v\n", i+1, err.Error()))
 			time.Sleep(time.Second) // Add a delay between attempts
 		}
 	}

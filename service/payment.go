@@ -2,7 +2,6 @@ package service
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -14,6 +13,7 @@ import (
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/mailing"
+	"github.com/moniesto/moniesto-be/util/message"
 	"github.com/moniesto/moniesto-be/util/payment/binance"
 	"github.com/moniesto/moniesto-be/util/system"
 )
@@ -21,7 +21,12 @@ import (
 func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req model.SubscribeMoniestRequest, moniest db.GetMoniestByUsernameRow, userID string) (db.BinancePaymentTransaction, error) {
 
 	// STEP: create order in binance and get payment links
-	product_name := getProductName(req, moniest)
+	product_name, err := service.getProductName(ctx, req, moniest, userID)
+	if err != nil {
+		system.LogError("Server error on getting product name", err.Error())
+		return db.BinancePaymentTransaction{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Subscribe_ServerErrorGetProductName)
+	}
+
 	// amount := core.GetTotalAmount(req.NumberOfMonths, moniest.Fee)
 	amount := 0.00000001 // TODO: update to real amount
 	transactionID := core.CreatePlainID()
@@ -246,8 +251,20 @@ func (service *Service) CheckPendingPaymentTransaction(ctx *gin.Context, moniest
 }
 
 // HELPER functions
-func getProductName(req model.SubscribeMoniestRequest, moniest db.GetMoniestByUsernameRow) string {
-	return fmt.Sprintf("You are subscribing to %s at a monthly fee of $%.2f for %d months.", moniest.Fullname, util.RoundAmountDown(moniest.Fee), req.NumberOfMonths)
+
+// getProductName returns the product name based on the language of the user
+func (service *Service) getProductName(ctx *gin.Context, req model.SubscribeMoniestRequest, moniest db.GetMoniestByUsernameRow, userID string) (string, error) {
+	user, err := service.GetOwnUserByID(ctx, userID)
+	if err != nil {
+		system.LogError("getting product name - getting user error", err.Error())
+	}
+
+	msg, err := message.GetMessage(user.Language, message.ProductName, moniest.Fullname, util.RoundAmountDown(moniest.Fee), req.NumberOfMonths)
+	if err != err {
+		return "", err
+	}
+
+	return msg, nil
 }
 
 func updateNavigateURLs(transactionID, returnURL, cancelURL string) (string, string) {

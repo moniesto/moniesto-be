@@ -28,7 +28,7 @@ func SendNewPostEmail(to string, config config.Config, fullname_user, fullname_m
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)
 	if err != nil {
-		system.LogError("Server error on sending new post email", err)
+		system.LogError("Server error on sending new post email", err.Error())
 		return err
 	}
 

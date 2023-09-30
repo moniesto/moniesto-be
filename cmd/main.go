@@ -24,7 +24,7 @@ func main() {
 	// get config files
 	config, err := config.LoadConfig(".")
 	if err != nil {
-		log.Fatal("error while reading config file:", err)
+		log.Fatal("error while reading config file:", err.Error())
 	}
 
 	initializeSwaggerMeta(&config)
@@ -32,7 +32,7 @@ func main() {
 	// connect to db
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
-		log.Fatal("cannot connect to db:", err)
+		log.Fatal("cannot connect to db:", err.Error())
 	}
 
 	// run db migration
@@ -44,19 +44,19 @@ func main() {
 	// get storage instance
 	storage, err := storage.NewCloudinaryUploader(config.CloudinaryURL)
 	if err != nil {
-		log.Fatal("cannot create storage instance:", err)
+		log.Fatal("cannot create storage instance:", err.Error())
 	}
 
 	// get service
 	service, err := service.NewService(store, config, storage)
 	if err != nil {
-		log.Fatal("cannot create service", err)
+		log.Fatal("cannot create service", err.Error())
 	}
 
 	// get server
 	server, err := api.NewServer(config, service)
 	if err != nil {
-		log.Fatal("cannot create server: ", err)
+		log.Fatal("cannot create server: ", err.Error())
 	}
 
 	// start CRON service
@@ -65,18 +65,18 @@ func main() {
 	// start server
 	err = server.Start(config.ServerAddress)
 	if err != nil {
-		log.Fatal("cannot start server:", err)
+		log.Fatal("cannot start server:", err.Error())
 	}
 }
 
 func runDBMigration(migrationURL, dbSource string) {
 	migaration, err := migrate.New(migrationURL, dbSource)
 	if err != nil {
-		log.Fatal("cannot create a new migrate instance:", err)
+		log.Fatal("cannot create a new migrate instance:", err.Error())
 	}
 
 	if err := migaration.Up(); err != nil && err != migrate.ErrNoChange {
-		log.Fatal("failed to run migrate up:", err)
+		log.Fatal("failed to run migrate up:", err.Error())
 	}
 
 	log.Println("db migrated successfully")

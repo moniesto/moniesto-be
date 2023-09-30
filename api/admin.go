@@ -82,6 +82,9 @@ func (server *Server) SendEmailTest(ctx *gin.Context) {
 
 }
 
+func (server *Server) ADMIN_Test(ctx *gin.Context) {
+}
+
 func (server *Server) isAdmin(ctx *gin.Context) bool {
 	// STEP: get user id from token
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)

@@ -42,7 +42,7 @@ func SendUnsubscribeEmail(to string, config config.Config, fullname_user, fullna
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)
 	if err != nil {
-		system.LogError("Server error on sending ubsubscribe email", err)
+		system.LogError("Server error on sending ubsubscribe email", err.Error())
 		return err
 	}
 

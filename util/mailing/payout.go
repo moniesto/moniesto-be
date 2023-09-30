@@ -40,7 +40,7 @@ func SendPayoutEmail(to string, config config.Config, fullname_user, username, f
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)
 	if err != nil {
-		system.LogError("Server error on sending payout email", err)
+		system.LogError("Server error on sending payout email", err.Error())
 		return err
 	}
 

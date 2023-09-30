@@ -136,6 +136,7 @@ const (
 	Moniest_Subscribe_ServerErrorGetSubscription          = "Moniest_Subscribe_ServerErrorGetSubscription"
 	Moniest_Subscribe_AlreadySubscribed                   = "Moniest_Subscribe_AlreadySubscribed"
 	Moniest_Subscribe_ServerErrorCreateBinanceOrder       = "Moniest_Subscribe_ServerErrorCreateBinanceOrder"
+	Moniest_Subscribe_ServerErrorGetProductName           = "Moniest_Subscribe_ServerErrorGetProductName"
 	Moniest_Subscribe_ServerErrorCreateBinanceTransaction = "Moniest_Subscribe_ServerErrorCreateBinanceTransaction"
 	Moniest_Subscribe_ServerErrorActivateSubscription     = "Moniest_Subscribe_ServerErrorActivateSubscription"
 	Moniest_Subscribe_ServerErrorCreateSubscriptionDB     = "Moniest_Subscribe_ServerErrorCreateSubscriptionDB"
@@ -349,6 +350,7 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Moniest_Subscribe_ServerErrorGetSubscription:      "Server error on getting subscription",
 	Moniest_Subscribe_AlreadySubscribed:               "Already subscribed to moniest",
 	Moniest_Subscribe_ServerErrorCreateBinanceOrder:   "Server error on creating binance payment link",
+	Moniest_Subscribe_ServerErrorGetProductName:       "Server error on getting product name",
 	Moniest_Subscribe_ServerErrorActivateSubscription: "Server error on activating subscription",
 	Moniest_Subscribe_ServerErrorCreateSubscriptionDB: "Server error on creating subscription on DB",
 
