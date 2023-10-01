@@ -757,7 +757,7 @@ GROUP BY "u"."id",
     "m"."id",
     "msi"."id",
     "mpcs"."id"
-ORDER BY "mpcs"."pnl_7days" DESC,
+ORDER BY "mpcs"."pnl_30days" DESC,
     "u"."created_at"
 LIMIT $1 OFFSET $2;
 
