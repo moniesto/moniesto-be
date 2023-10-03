@@ -42,8 +42,8 @@ func NewServer(config config.Config, service *service.Service) (*Server, error) 
 func (server *Server) setupRouter() {
 	router := gin.Default()
 
-	router.Use(interceptor(server.config.MaintenanceMode))
 	router.Use(CORSMiddleware())
+	router.Use(interceptor(server.config.MaintenanceMode))
 
 	// Account routes
 	accountRouters := router.Group("/account")

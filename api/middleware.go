@@ -18,12 +18,6 @@ const (
 
 func interceptor(maintenanceMode bool) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		// Skip maintenance mode check for OPTIONS requests
-		if ctx.Request.Method == "OPTIONS" {
-			ctx.Next()
-			return
-		}
-
 		if maintenanceMode {
 			ctx.JSON(http.StatusServiceUnavailable, clientError.GetError(clientError.General_Maintenance))
 			ctx.Abort()
