@@ -25,7 +25,8 @@ func interceptor(maintenanceMode bool) gin.HandlerFunc {
 		}
 
 		if maintenanceMode {
-			ctx.AbortWithStatusJSON(http.StatusServiceUnavailable, clientError.GetError(clientError.General_Maintenance))
+			ctx.JSON(http.StatusServiceUnavailable, clientError.GetError(clientError.General_Maintenance))
+			ctx.Abort()
 			return
 		}
 
