@@ -10,8 +10,6 @@ import (
 	"github.com/moniesto/moniesto-be/util"
 
 	"github.com/robfig/cron/v3"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // Server serves HTTP requests
@@ -150,7 +148,7 @@ func (server *Server) setupRouter() {
 	}
 
 	// Swagger docs
-	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	server.router = router
 }
