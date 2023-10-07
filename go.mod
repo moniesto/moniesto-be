@@ -31,6 +31,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/rogpeppe/go-internal v1.8.0 // indirect
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
@@ -65,8 +66,6 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.4
-	github.com/swaggo/files v1.0.0
-	github.com/swaggo/gin-swagger v1.5.3
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/crypto v0.13.0
 	golang.org/x/net v0.15.0 // indirect
