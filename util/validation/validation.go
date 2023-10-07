@@ -112,16 +112,12 @@ func hasMoreDecimals(num float64, allowedDecimals int) bool {
 // func hasMoreDecimals(num float64, allowedDecimals int) bool {
 // 	// STEP: calculate the multiplier based on the allowed decimals
 // 	multiplier := math.Pow(10, float64(allowedDecimals))
-// 	// fmt.Println("multiplier", multiplier)
 
 // 	// STEP: multiply by the multiplier to shift decimals to the left
 // 	shifted := num * multiplier
-// 	// fmt.Println("shifted", shifted)
 
 // 	// STEP: check if the decimal part is greater than 0
-// 	fmt.Println("math.Floor(shifted)", shifted, math.Floor(shifted), shifted-math.Floor(shifted))
 // 	decimalPart := shifted - math.Floor(1*shifted)
-// 	fmt.Println("decimalPart", decimalPart)
 
 // 	return decimalPart > 0
 // }
