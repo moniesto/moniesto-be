@@ -28,6 +28,7 @@ type Config struct {
 	EmailVerificationTokenDuration     time.Duration `mapstructure:"EMAIL_VERIFICATION_TOKEN_DURATION"`
 	EmailVerificationTokenDurationTest time.Duration `mapstructure:"EMAIL_VERIFICATION_TOKEN_DURATION_TEST"`
 	MinFee                             float64       `mapstructure:"MIN_FEE"`
+	MaxFee                             float64       `mapstructure:"MAX_FEE"`
 	OperationFeePercentage             float64       `mapstructure:"OPERATION_FEE_PERCENTAGE"`
 
 	// CREDENTIALS

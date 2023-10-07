@@ -2620,10 +2620,16 @@ const docTemplate = `{
                 "max_duration_day": {
                     "type": "integer"
                 },
+                "max_fee": {
+                    "type": "number"
+                },
                 "max_fullname_length": {
                     "type": "integer"
                 },
                 "max_location_length": {
+                    "type": "integer"
+                },
+                "max_password_length": {
                     "type": "integer"
                 },
                 "max_subscription_message_length": {
@@ -2632,7 +2638,7 @@ const docTemplate = `{
                 "min_fee": {
                     "type": "number"
                 },
-                "password_length": {
+                "min_password_length": {
                     "type": "integer"
                 },
                 "short_max_stop_multiplier": {

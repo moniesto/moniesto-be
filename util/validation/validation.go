@@ -13,8 +13,8 @@ import (
 
 // Password checks the password is valid
 func Password(password string) error {
-	if len(password) < ValidPasswordLength {
-		return fmt.Errorf("length of password is less than %d", ValidPasswordLength)
+	if len(password) < MinPasswordLength || len(password) > MaxPasswordLength {
+		return fmt.Errorf("length of password is less than %d or more than %d", MinPasswordLength, MaxPasswordLength)
 	}
 
 	return nil
@@ -85,7 +85,7 @@ func Fullname(fullname string) error {
 
 // Fee checks the fee is valid
 func Fee(fee float64, config config.Config) error {
-	if fee < config.MinFee {
+	if fee < config.MinFee || fee > config.MaxFee {
 		return fmt.Errorf("fee is not valid %f", fee)
 	}
 
