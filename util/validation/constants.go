@@ -19,6 +19,7 @@ var supportedMarketTypes = []string{
 	string(db.PostCryptoMarketTypeFutures),
 }
 
+const MaxFeeDecimal = 2
 const MinPasswordLength = 6
 const MaxPasswordLength = 30
 const MaxBioLength = 150

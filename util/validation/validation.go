@@ -3,6 +3,7 @@ package validation
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -85,12 +86,45 @@ func Fullname(fullname string) error {
 
 // Fee checks the fee is valid
 func Fee(fee float64, config config.Config) error {
-	if fee < config.MinFee || fee > config.MaxFee {
+	if fee < config.MinFee || fee > config.MaxFee || hasMoreDecimals(fee, MaxFeeDecimal) {
 		return fmt.Errorf("fee is not valid %f", fee)
 	}
 
 	return nil
 }
+
+func hasMoreDecimals(num float64, allowedDecimals int) bool {
+	// STEP: convert the float to a string
+	strNum := strconv.FormatFloat(num, 'f', -1, 64)
+
+	// STEP: split the string into integer and decimal parts
+	parts := strings.Split(strNum, ".")
+
+	// STEP: check if there is a decimal part and more than allowedDecimals
+	if len(parts) > 1 {
+		return len(parts[1]) > allowedDecimals
+	}
+
+	return false
+}
+
+// this function return unexpected result for cases 5.99, 5.1, 6.99 and etc.
+// func hasMoreDecimals(num float64, allowedDecimals int) bool {
+// 	// STEP: calculate the multiplier based on the allowed decimals
+// 	multiplier := math.Pow(10, float64(allowedDecimals))
+// 	// fmt.Println("multiplier", multiplier)
+
+// 	// STEP: multiply by the multiplier to shift decimals to the left
+// 	shifted := num * multiplier
+// 	// fmt.Println("shifted", shifted)
+
+// 	// STEP: check if the decimal part is greater than 0
+// 	fmt.Println("math.Floor(shifted)", shifted, math.Floor(shifted), shifted-math.Floor(shifted))
+// 	decimalPart := shifted - math.Floor(1*shifted)
+// 	fmt.Println("decimalPart", decimalPart)
+
+// 	return decimalPart > 0
+// }
 
 // Bio checks the bio is valid
 func Bio(bio string, config config.Config) error {
