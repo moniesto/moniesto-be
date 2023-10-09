@@ -2038,6 +2038,37 @@ const docTemplate = `{
                 "DirectionShort"
             ]
         },
+        "db.FeedbackMetricsRow": {
+            "type": "object",
+            "properties": {
+                "num_all_feedbacks": {},
+                "num_solved_feedbacks": {},
+                "num_unsolved_feedbacks": {}
+            }
+        },
+        "db.GetFeedbacksRow": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "solved": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "db.PaymentMetricsRow": {
             "type": "object",
             "properties": {
@@ -2458,6 +2489,20 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Feedback": {
+            "type": "object",
+            "properties": {
+                "feedbacks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/db.GetFeedbacksRow"
+                    }
+                },
+                "metrics": {
+                    "$ref": "#/definitions/db.FeedbackMetricsRow"
+                }
+            }
+        },
         "model.FinancialMetrics": {
             "type": "object",
             "properties": {
@@ -2680,6 +2725,9 @@ const docTemplate = `{
         "model.MetricsResponse": {
             "type": "object",
             "properties": {
+                "feedback": {
+                    "$ref": "#/definitions/model.Feedback"
+                },
                 "financial_metrics": {
                     "$ref": "#/definitions/model.FinancialMetrics"
                 },

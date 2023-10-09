@@ -18,6 +18,27 @@ definitions:
     x-enum-varnames:
     - DirectionLong
     - DirectionShort
+  db.FeedbackMetricsRow:
+    properties:
+      num_all_feedbacks: {}
+      num_solved_feedbacks: {}
+      num_unsolved_feedbacks: {}
+    type: object
+  db.GetFeedbacksRow:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      message:
+        type: string
+      solved:
+        type: boolean
+      type:
+        type: string
+      user_id:
+        type: string
+    type: object
   db.PaymentMetricsRow:
     properties:
       fail_payment_amount:
@@ -299,6 +320,15 @@ definitions:
       price:
         type: string
     type: object
+  model.Feedback:
+    properties:
+      feedbacks:
+        items:
+          $ref: '#/definitions/db.GetFeedbacksRow'
+        type: array
+      metrics:
+        $ref: '#/definitions/db.FeedbackMetricsRow'
+    type: object
   model.FinancialMetrics:
     properties:
       estimated_profit:
@@ -444,6 +474,8 @@ definitions:
     type: object
   model.MetricsResponse:
     properties:
+      feedback:
+        $ref: '#/definitions/model.Feedback'
       financial_metrics:
         $ref: '#/definitions/model.FinancialMetrics'
       payment_metrics:

@@ -8,7 +8,109 @@ package db
 import (
 	"context"
 	"database/sql"
+	"time"
 )
+
+const feedbackMetrics = `-- name: FeedbackMetrics :many
+SELECT COALESCE(COUNT(*), 0) AS num_all_feedbacks,
+    COALESCE(
+        SUM(
+            CASE
+                WHEN solved = true THEN 1
+                ELSE 0
+            END
+        ),
+        0
+    ) AS num_solved_feedbacks,
+    COALESCE(
+        SUM(
+            CASE
+                WHEN solved = false THEN 1
+                ELSE 0
+            END
+        ),
+        0
+    ) AS num_unsolved_feedbacks
+FROM feedback
+`
+
+type FeedbackMetricsRow struct {
+	NumAllFeedbacks      interface{} `json:"num_all_feedbacks"`
+	NumSolvedFeedbacks   interface{} `json:"num_solved_feedbacks"`
+	NumUnsolvedFeedbacks interface{} `json:"num_unsolved_feedbacks"`
+}
+
+func (q *Queries) FeedbackMetrics(ctx context.Context) ([]FeedbackMetricsRow, error) {
+	rows, err := q.db.QueryContext(ctx, feedbackMetrics)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []FeedbackMetricsRow{}
+	for rows.Next() {
+		var i FeedbackMetricsRow
+		if err := rows.Scan(&i.NumAllFeedbacks, &i.NumSolvedFeedbacks, &i.NumUnsolvedFeedbacks); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getFeedbacks = `-- name: GetFeedbacks :many
+SELECT id,
+    COALESCE(user_id, '') AS user_id,
+    COALESCE(type, '') AS type,
+    message,
+    solved,
+    created_at
+FROM feedback
+`
+
+type GetFeedbacksRow struct {
+	ID        string    `json:"id"`
+	UserID    string    `json:"user_id"`
+	Type      string    `json:"type"`
+	Message   string    `json:"message"`
+	Solved    bool      `json:"solved"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+func (q *Queries) GetFeedbacks(ctx context.Context) ([]GetFeedbacksRow, error) {
+	rows, err := q.db.QueryContext(ctx, getFeedbacks)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetFeedbacksRow{}
+	for rows.Next() {
+		var i GetFeedbacksRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Type,
+			&i.Message,
+			&i.Solved,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
 
 const paymentMetrics = `-- name: PaymentMetrics :many
 SELECT SUM(

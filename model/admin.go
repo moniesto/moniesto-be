@@ -1,13 +1,21 @@
 package model
 
-import db "github.com/moniesto/moniesto-be/db/sqlc"
+import (
+	db "github.com/moniesto/moniesto-be/db/sqlc"
+)
 
 type MetricsResponse struct {
 	UserMetrics      db.UserMetricsRow    `json:"user_metrics"`
 	PostMetrics      db.PostMetricsRow    `json:"post_metrics"`
 	PaymentMetrics   db.PaymentMetricsRow `json:"payment_metrics"`
 	PayoutMetrics    db.PayoutMetricsRow  `json:"payout_metrics"`
+	Feedback         Feedback             `json:"feedback"`
 	FinancialMetrics FinancialMetrics     `json:"financial_metrics"`
+}
+
+type Feedback struct {
+	Metrics   db.FeedbackMetricsRow `json:"metrics"`
+	Feedbacks []db.GetFeedbacksRow  `json:"feedbacks"`
 }
 
 type FinancialMetrics struct {
@@ -20,13 +28,19 @@ func NewMetricsResponse(
 	userMetrics db.UserMetricsRow,
 	postMetrics db.PostMetricsRow,
 	paymentMetrics db.PaymentMetricsRow,
-	payoutMetrics db.PayoutMetricsRow) MetricsResponse {
+	payoutMetrics db.PayoutMetricsRow,
+	feedbackMetrics db.FeedbackMetricsRow,
+	feedbacks []db.GetFeedbacksRow) MetricsResponse {
 
 	return MetricsResponse{
 		UserMetrics:    userMetrics,
 		PostMetrics:    postMetrics,
 		PaymentMetrics: paymentMetrics,
 		PayoutMetrics:  payoutMetrics,
+		Feedback: Feedback{
+			Metrics:   feedbackMetrics,
+			Feedbacks: feedbacks,
+		},
 		FinancialMetrics: FinancialMetrics{
 			Payments: paymentMetrics.SuccessPaymentAmount,
 			Profit: (payoutMetrics.SuccessPayoutsAmount - payoutMetrics.SuccessPayoutsAmountAfterCut) +

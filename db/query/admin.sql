@@ -194,3 +194,34 @@ SELECT COUNT(*) AS num_payouts,
         END
     )::double precision AS refund_fail_payouts_amount
 FROM binance_payout_history;
+
+-- name: FeedbackMetrics :many
+SELECT COALESCE(COUNT(*), 0) AS num_all_feedbacks,
+    COALESCE(
+        SUM(
+            CASE
+                WHEN solved = true THEN 1
+                ELSE 0
+            END
+        ),
+        0
+    ) AS num_solved_feedbacks,
+    COALESCE(
+        SUM(
+            CASE
+                WHEN solved = false THEN 1
+                ELSE 0
+            END
+        ),
+        0
+    ) AS num_unsolved_feedbacks
+FROM feedback;
+
+-- name: GetFeedbacks :many
+SELECT id,
+    COALESCE(user_id, '') AS user_id,
+    COALESCE(type, '') AS type,
+    message,
+    solved,
+    created_at
+FROM feedback;

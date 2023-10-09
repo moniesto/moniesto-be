@@ -210,10 +210,12 @@ const (
 
 	Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo = "Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo"
 
-	Admin_GetMetrics_ServerErrorUserMetrics    = "Admin_GetMetrics_ServerErrorUserMetrics"
-	Admin_GetMetrics_ServerErrorPostMetrics    = "Admin_GetMetrics_ServerErrorPostMetrics"
-	Admin_GetMetrics_ServerErrorPaymentMetrics = "Admin_GetMetrics_ServerErrorPaymentMetrics"
-	Admin_GetMetrics_ServerErrorPayoutMetrics  = "Admin_GetMetrics_ServerErrorPayoutMetrics"
+	Admin_GetMetrics_ServerErrorUserMetrics     = "Admin_GetMetrics_ServerErrorUserMetrics"
+	Admin_GetMetrics_ServerErrorPostMetrics     = "Admin_GetMetrics_ServerErrorPostMetrics"
+	Admin_GetMetrics_ServerErrorPaymentMetrics  = "Admin_GetMetrics_ServerErrorPaymentMetrics"
+	Admin_GetMetrics_ServerErrorPayoutMetrics   = "Admin_GetMetrics_ServerErrorPayoutMetrics"
+	Admin_GetMetrics_ServerErrorFeedbackMetrics = "Admin_GetMetrics_ServerErrorFeedbackMetrics"
+	Admin_GetMetrics_ServerErrorGetFeedbacks    = "Admin_GetMetrics_ServerErrorGetFeedbacks"
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
@@ -423,8 +425,10 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 
 	Moniest_GetUserSubscriptionInfo_ServerErrorGetSubscriptionInfo: "Server error on getting user subscription info",
 
-	Admin_GetMetrics_ServerErrorUserMetrics:    "Server error on getting user metrics",
-	Admin_GetMetrics_ServerErrorPostMetrics:    "Server error on getting post metrics",
-	Admin_GetMetrics_ServerErrorPaymentMetrics: "Server error on getting payment metrics",
-	Admin_GetMetrics_ServerErrorPayoutMetrics:  "Server error on getting payout metrics",
+	Admin_GetMetrics_ServerErrorUserMetrics:     "Server error on getting user metrics",
+	Admin_GetMetrics_ServerErrorPostMetrics:     "Server error on getting post metrics",
+	Admin_GetMetrics_ServerErrorPaymentMetrics:  "Server error on getting payment metrics",
+	Admin_GetMetrics_ServerErrorPayoutMetrics:   "Server error on getting payout metrics",
+	Admin_GetMetrics_ServerErrorFeedbackMetrics: "Server error on getting feedback metrics",
+	Admin_GetMetrics_ServerErrorGetFeedbacks:    "Server error on getting feedbacks",
 }

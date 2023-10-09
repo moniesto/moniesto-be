@@ -35,5 +35,17 @@ func (service *Service) Metrics(ctx *gin.Context) (model.MetricsResponse, error)
 		return model.MetricsResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.Admin_GetMetrics_ServerErrorPayoutMetrics)
 	}
 
-	return model.NewMetricsResponse(userMetrics[0], postMetrics[0], paymentMetrics[0], payoutMetrics[0]), nil
+	feedbackMetrics, err := service.Store.FeedbackMetrics(ctx)
+	if err != nil || len(feedbackMetrics) == 0 {
+		system.LogError("feedback metrics error", err.Error())
+		return model.MetricsResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.Admin_GetMetrics_ServerErrorFeedbackMetrics)
+	}
+
+	feedbacks, err := service.Store.GetFeedbacks(ctx)
+	if err != nil {
+		system.LogError("get feedbacks error", err.Error())
+		return model.MetricsResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.Admin_GetMetrics_ServerErrorGetFeedbacks)
+	}
+
+	return model.NewMetricsResponse(userMetrics[0], postMetrics[0], paymentMetrics[0], payoutMetrics[0], feedbackMetrics[0], feedbacks), nil
 }
