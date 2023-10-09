@@ -246,7 +246,6 @@ UNION ALL
     FROM "post_crypto" AS pc
         INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
         AND "m"."user_id" = $1
-        AND "us"."active" = TRUE
         AND "pc"."duration" > now()
         AND "pc"."finished" = FALSE
         INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
@@ -508,7 +507,6 @@ UNION ALL
     FROM "post_crypto" AS pc
         INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
         AND "m"."user_id" = $1
-        AND "us"."active" = TRUE
         AND (
             "pc"."duration" < now()
             OR "pc"."finished" = TRUE
