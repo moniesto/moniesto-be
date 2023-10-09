@@ -74,6 +74,7 @@ SELECT "pc"."id",
 FROM "post_crypto" AS pc
     INNER JOIN "user_subscription" AS us ON "pc"."moniest_id" = "us"."moniest_id"
     AND "us"."user_id" = $1
+    AND "us"."active" = TRUE
     AND "pc"."duration" > now()
     AND "pc"."finished" = FALSE
     INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
@@ -160,6 +161,7 @@ LIMIT $2 OFFSET $3;
     FROM "post_crypto" AS pc
         INNER JOIN "user_subscription" AS us ON "pc"."moniest_id" = "us"."moniest_id"
         AND "us"."user_id" = $1
+        AND "us"."active" = TRUE
         AND "pc"."duration" > now()
         AND "pc"."finished" = FALSE
         INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
@@ -244,6 +246,7 @@ UNION ALL
     FROM "post_crypto" AS pc
         INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
         AND "m"."user_id" = $1
+        AND "us"."active" = TRUE
         AND "pc"."duration" > now()
         AND "pc"."finished" = FALSE
         INNER JOIN "user" as u ON "m"."user_id" = "u"."id"
@@ -329,6 +332,7 @@ SELECT "pc"."id",
 FROM "post_crypto" AS pc
     INNER JOIN "user_subscription" AS us ON "pc"."moniest_id" = "us"."moniest_id"
     AND "us"."user_id" = $1
+    AND "us"."active" = TRUE
     AND (
         "pc"."duration" < now()
         OR "pc"."finished" = TRUE
@@ -417,6 +421,7 @@ LIMIT $2 OFFSET $3;
     FROM "post_crypto" AS pc
         INNER JOIN "user_subscription" AS us ON "pc"."moniest_id" = "us"."moniest_id"
         AND "us"."user_id" = $1
+        AND "us"."active" = TRUE
         AND (
             "pc"."duration" < now()
             OR "pc"."finished" = TRUE
@@ -503,6 +508,7 @@ UNION ALL
     FROM "post_crypto" AS pc
         INNER JOIN "moniest" as m ON "pc"."moniest_id" = "m"."id"
         AND "m"."user_id" = $1
+        AND "us"."active" = TRUE
         AND (
             "pc"."duration" < now()
             OR "pc"."finished" = TRUE
