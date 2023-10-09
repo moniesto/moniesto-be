@@ -1119,7 +1119,7 @@ paths:
       - Account
   /admin/metrics:
     get:
-      description: Get Metrics of user, post, payments, payouts
+      description: Get Metrics of user, post, payments, payouts, feedbacks
       responses:
         "200":
           description: OK

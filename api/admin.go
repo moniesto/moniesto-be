@@ -46,7 +46,7 @@ func (server *Server) ADMIN_UpdateMoniestPostCryptoStatisticsManual(ctx *gin.Con
 }
 
 // @Summary Get Metrics
-// @Description Get Metrics of user, post, payments, payouts
+// @Description Get Metrics of user, post, payments, payouts, feedbacks
 // @Security bearerAuth
 // @Tags Admin
 // @Success 200 {object} model.MetricsResponse

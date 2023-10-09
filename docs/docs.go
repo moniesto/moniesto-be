@@ -565,7 +565,7 @@ const docTemplate = `{
                         "bearerAuth": []
                     }
                 ],
-                "description": "Get Metrics of user, post, payments, payouts",
+                "description": "Get Metrics of user, post, payments, payouts, feedbacks",
                 "tags": [
                     "Admin"
                 ],
