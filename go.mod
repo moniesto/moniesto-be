@@ -66,6 +66,8 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.4
+	github.com/swaggo/files v1.0.1
+	github.com/swaggo/gin-swagger v1.6.0
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/crypto v0.13.0
 	golang.org/x/net v0.15.0 // indirect

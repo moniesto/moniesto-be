@@ -27,8 +27,7 @@ func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req mo
 		return db.BinancePaymentTransaction{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Subscribe_ServerErrorGetProductName)
 	}
 
-	// amount := core.GetTotalAmount(req.NumberOfMonths, moniest.Fee)
-	amount := 0.00000001 // TODO: update to real amount
+	amount := core.GetTotalAmount(req.NumberOfMonths, moniest.Fee, &service.config)
 	transactionID := core.CreatePlainID()
 	webhookURL := createWebhookURL(ctx, transactionID)
 	req.ReturnURL, req.CancelURL = updateNavigateURLs(transactionID, req.ReturnURL, req.CancelURL) // add transactionID to urls

@@ -10,6 +10,8 @@ import (
 	"github.com/moniesto/moniesto-be/util"
 
 	"github.com/robfig/cron/v3"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // Server serves HTTP requests
@@ -38,6 +40,11 @@ func NewServer(config config.Config, service *service.Service) (*Server, error) 
 }
 
 func (server *Server) setupRouter() {
+	// set gin to release mode on prod
+	if server.config.IsProd() {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	router := gin.Default()
 
 	router.Use(CORSMiddleware())
@@ -147,8 +154,10 @@ func (server *Server) setupRouter() {
 		healthRouters.GET("/", server.HealthCheck)
 	}
 
-	// Swagger docs
-	// router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// Swagger docs [not available on prod]
+	if !server.config.IsProd() {
+		router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 
 	server.router = router
 }

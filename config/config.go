@@ -19,6 +19,7 @@ type Config struct {
 	SmtpPort      string `mapstructure:"SMTP_PORT"`
 
 	// APP LOGIC CONFIG
+	AppEnv                             string        `mapstructure:"APP_ENV"`
 	MaintenanceMode                    bool          `mapstructure:"MAINTENANCE_MODE"`
 	AccessTokenDuration                time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	AccessTokenDurationTest            time.Duration `mapstructure:"ACCESS_TOKEN_DURATION_TEST"`
@@ -37,8 +38,6 @@ type Config struct {
 	NoReplyEmail    string `mapstructure:"NO_REPLY_EMAIL"`
 	NoReplyPassword string `mapstructure:"NO_REPLY_PASSWORD"`
 	CloudinaryURL   string `mapstructure:"CLOUDINARY_URL"`
-	StripePublicKey string `mapstructure:"STRIPE_PUBLIC_KEY"`
-	StripeSecretKey string `mapstructure:"STRIPE_SECRET_KEY"`
 
 	BinanceApiKey    string `mapstructure:"BINANCE_API_KEY"`
 	BinanceSecretKey string `mapstructure:"BINANCE_SECRET_KEY"`
@@ -58,5 +57,17 @@ func LoadConfig(path string) (config Config, err error) {
 	}
 
 	err = viper.Unmarshal(&config)
+	if err != nil {
+		return Config{}, err
+	}
+
+	// check configs is valid
+	err = config.Valid()
+	if err != nil {
+		return Config{}, err
+	}
+
+	config.Enhance()
+
 	return
 }

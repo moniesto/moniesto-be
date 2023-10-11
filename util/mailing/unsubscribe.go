@@ -37,7 +37,7 @@ func SendUnsubscribeEmail(to string, config config.Config, fullname_user, fullna
 		RemainingMonth:         remainingMonth,
 		OperationFeePercentage: operationFeePercentage,
 		OperationFee:           core.GetAmountOfCommission((subscriptionFee * float64(remainingMonth)), operationFeePercentage),
-		Amount:                 core.GetAmountAfterCommission(totalAmount, operationFeePercentage),
+		Amount:                 core.GetAmountAfterCommission(totalAmount, operationFeePercentage, &config),
 	}
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)

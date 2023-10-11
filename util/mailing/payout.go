@@ -35,7 +35,7 @@ func SendPayoutEmail(to string, config config.Config, fullname_user, username, f
 		SubscribedFee:          subscribedFee,
 		OperationFeePercentage: operationFeePercentage,
 		OperationFee:           core.GetAmountOfCommission(subscribedFee, operationFeePercentage),
-		Amount:                 core.GetAmountAfterCommission(subscribedFee, operationFeePercentage),
+		Amount:                 core.GetAmountAfterCommission(subscribedFee, operationFeePercentage, &config),
 	}
 
 	err = send([]string{to}, config.NoReplyEmail, config.NoReplyPassword, config.SmtpHost, config.SmtpPort, template.Path, template.Subject, data)

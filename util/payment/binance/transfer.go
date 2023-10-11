@@ -13,8 +13,7 @@ func CreateTransfer(config config.Config, amount, operationFeePercentage float64
 
 	request_id := core.CreatePlainID()
 	merchant_send_id := core.CreatePlainID()
-	// updatedAmount := core.GetAmountAfterCommission(amount, operationFeePercentage)
-	updatedAmount := 0.0000001 // TODO: update to real amount
+	updatedAmount := core.GetAmountAfterCommission(amount, operationFeePercentage, &config)
 
 	body := CreateTransferRequest{
 		RequestID:   request_id,
