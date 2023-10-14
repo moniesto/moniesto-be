@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -84,11 +83,6 @@ func (server *Server) SendEmailTest(ctx *gin.Context) {
 }
 
 func (server *Server) ADMIN_Test(ctx *gin.Context) {
-	if server.config.IsLocal() {
-		fmt.Println("LOCAL", "https://moniesto-test-be-1.onrender.com"+"/webhooks/binance/transactions")
-	}
-
-	fmt.Println("PROD", "https://"+ctx.Request.Host+"/webhooks/binance/transactions")
 }
 
 func (server *Server) isAdmin(ctx *gin.Context) bool {
