@@ -84,7 +84,12 @@ func (server *Server) SendEmailTest(ctx *gin.Context) {
 }
 
 func (server *Server) ADMIN_Test(ctx *gin.Context) {
-	fmt.Println("ctx.Request.Host", ctx.Request.Host)
+	scheme := "http"
+	if ctx.Request.TLS != nil {
+		scheme = "https"
+	}
+
+	fmt.Println("ctx.Request.Host", scheme+"://"+ctx.Request.Host)
 }
 
 func (server *Server) isAdmin(ctx *gin.Context) bool {
