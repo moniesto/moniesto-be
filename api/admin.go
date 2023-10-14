@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -83,6 +84,7 @@ func (server *Server) SendEmailTest(ctx *gin.Context) {
 }
 
 func (server *Server) ADMIN_Test(ctx *gin.Context) {
+	fmt.Println("ctx.Request.Host", ctx.Request.Host)
 }
 
 func (server *Server) isAdmin(ctx *gin.Context) bool {

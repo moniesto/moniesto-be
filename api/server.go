@@ -133,7 +133,7 @@ func (server *Server) setupRouter() {
 		adminRouters.POST("/update_posts_status", server.ADMIN_UpdatePostsStatusManual)
 		adminRouters.POST("/update_moniest_post_crypto_statistics", server.ADMIN_UpdateMoniestPostCryptoStatisticsManual)
 		adminRouters.GET("/metrics", server.ADMIN_Metrics)
-		// adminRouters.GET("/test", server.ADMIN_Test)
+		adminRouters.GET("/test", server.ADMIN_Test)
 	}
 
 	// Payment routes
