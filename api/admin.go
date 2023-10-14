@@ -84,12 +84,11 @@ func (server *Server) SendEmailTest(ctx *gin.Context) {
 }
 
 func (server *Server) ADMIN_Test(ctx *gin.Context) {
-	scheme := "http"
-	if ctx.Request.TLS != nil {
-		scheme = "https"
+	if server.config.IsLocal() {
+		fmt.Println("LOCAL", "https://moniesto-test-be-1.onrender.com"+"/webhooks/binance/transactions")
 	}
 
-	fmt.Println("ctx.Request.Host", scheme+"://"+ctx.Request.Host)
+	fmt.Println("PROD", "https://"+ctx.Request.Host+"/webhooks/binance/transactions")
 }
 
 func (server *Server) isAdmin(ctx *gin.Context) bool {

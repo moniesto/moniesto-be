@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/config"
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
@@ -29,7 +30,7 @@ func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req mo
 
 	amount := core.GetTotalAmount(req.NumberOfMonths, moniest.Fee, &service.config)
 	transactionID := core.CreatePlainID()
-	webhookURL := createWebhookURL(ctx, transactionID)
+	webhookURL := createWebhookURL(ctx, transactionID, &service.config)
 	req.ReturnURL, req.CancelURL = updateNavigateURLs(transactionID, req.ReturnURL, req.CancelURL) // add transactionID to urls
 
 	orderData, err := binance.CreateOrder(ctx, service.config, transactionID, amount, product_name, req.ReturnURL, req.CancelURL, webhookURL)
@@ -276,9 +277,11 @@ func updateNavigateURLs(transactionID, returnURL, cancelURL string) (string, str
 		cancelURL + "?transactionID=" + transactionID // cancel url with transactionID
 }
 
-func createWebhookURL(ctx *gin.Context, transactionID string) string {
+// createWebhookURL creates a webhook url from the host [host should always be https]
+func createWebhookURL(ctx *gin.Context, transactionID string, config *config.Config) string {
+	if config.IsLocal() {
+		return "https://moniesto-test-be-1.onrender.com" + "/webhooks/binance/transactions" // TODO: update this with ALPHA url
+	}
 
-	return "https://moniesto-test-be-1.onrender.com" + "/webhooks/binance/transactions" // + transactionID
-	// TODO: make it host
-	// return ctx.Request.Host + "/webhooks/binance/transactions/" + transactionID
+	return "https://" + ctx.Request.Host + "/webhooks/binance/transactions"
 }

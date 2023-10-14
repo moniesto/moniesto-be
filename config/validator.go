@@ -19,6 +19,10 @@ func (config *Config) IsProd() bool {
 	return config.AppEnv == string(AppEnvProd)
 }
 
+func (config *Config) IsLocal() bool {
+	return config.AppEnv == string(AppEnvLocal)
+}
+
 func (config *Config) Enhance() {
 
 	// update the token key based on the env
