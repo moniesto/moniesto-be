@@ -13,6 +13,7 @@ INSERT INTO "binance_payment_transaction" (
         moniest_fee,
         amount,
         webhook_url,
+        request,
         created_at,
         updated_at
     )
@@ -30,6 +31,7 @@ VALUES (
         $11,
         $12,
         $13,
+        $14,
         now(),
         now()
     )
@@ -59,6 +61,7 @@ WHERE id = $1;
 UPDATE "binance_payment_transaction"
 SET "status" = $2,
     "payer_id" = $3,
+    "response" = $4,
     updated_at = now()
 WHERE id = $1
 RETURNING *;

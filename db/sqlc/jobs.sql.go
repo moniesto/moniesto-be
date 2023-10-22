@@ -292,7 +292,7 @@ func (q *Queries) GetExpiredActiveSubscriptions(ctx context.Context) ([]UserSubs
 }
 
 const getExpiredPendingBinanceTransactions = `-- name: GetExpiredPendingBinanceTransactions :many
-SELECT id, qrcode_link, checkout_link, deep_link, universal_link, status, user_id, moniest_id, date_type, date_value, moniest_fee, amount, webhook_url, payer_id, created_at, updated_at
+SELECT id, qrcode_link, checkout_link, deep_link, universal_link, status, user_id, moniest_id, date_type, date_value, moniest_fee, amount, webhook_url, payer_id, created_at, updated_at, request, response
 FROM binance_payment_transaction
 WHERE status = 'pending'
     AND "created_at" + INTERVAL '5 minutes' <= NOW()
@@ -324,6 +324,8 @@ func (q *Queries) GetExpiredPendingBinanceTransactions(ctx context.Context) ([]B
 			&i.PayerID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Request,
+			&i.Response,
 		); err != nil {
 			return nil, err
 		}
@@ -345,6 +347,8 @@ SET "status" = $2,
     "payout_done_at" = $4,
     "failure_message" = $5,
     payout_request_id = $6,
+    "request" = $7,
+    "response" = $8,
     updated_at = now()
 WHERE "id" = $1
 `
@@ -356,6 +360,8 @@ type UpdateBinancePayoutHistoryPayoutParams struct {
 	PayoutDoneAt           sql.NullTime        `json:"payout_done_at"`
 	FailureMessage         sql.NullString      `json:"failure_message"`
 	PayoutRequestID        sql.NullString      `json:"payout_request_id"`
+	Request                sql.NullString      `json:"request"`
+	Response               sql.NullString      `json:"response"`
 }
 
 func (q *Queries) UpdateBinancePayoutHistoryPayout(ctx context.Context, arg UpdateBinancePayoutHistoryPayoutParams) error {
@@ -366,6 +372,8 @@ func (q *Queries) UpdateBinancePayoutHistoryPayout(ctx context.Context, arg Upda
 		arg.PayoutDoneAt,
 		arg.FailureMessage,
 		arg.PayoutRequestID,
+		arg.Request,
+		arg.Response,
 	)
 	return err
 }

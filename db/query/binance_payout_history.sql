@@ -70,5 +70,7 @@ ORDER BY date_index ASC;
 UPDATE "binance_payout_history"
 SET "status" = $2,
     "failure_message" = $3,
+    "request" = $4,
+    "response" = $5,
     updated_at = now()
 WHERE id = $1;

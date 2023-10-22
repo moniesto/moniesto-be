@@ -2,10 +2,13 @@ package util
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"math"
 	"strings"
 	"time"
+
+	"github.com/moniesto/moniesto-be/util/system"
 )
 
 const (
@@ -149,4 +152,14 @@ func RoundAmountUp(fee float64) float64 {
 
 func Now() time.Time {
 	return time.Now().UTC()
+}
+
+func StructToJSON(data any) string {
+	str, err := json.Marshal(data)
+	if err != nil {
+		system.LogError("struct to json error", err.Error())
+		return fmt.Sprintf("struct to json error: %s", err.Error())
+	}
+
+	return string(str)
 }

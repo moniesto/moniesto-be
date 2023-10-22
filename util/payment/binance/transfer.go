@@ -8,7 +8,7 @@ import (
 	"github.com/moniesto/moniesto-be/core"
 )
 
-func CreateTransfer(config config.Config, amount, operationFeePercentage float64, transferType, receiveType, receiveValue, remark string) (string, TransferResponse, error) {
+func CreateTransfer(config config.Config, amount, operationFeePercentage float64, transferType, receiveType, receiveValue, remark string) (CreateTransferRequest, CreateTransferResponse, TransferResponse, error) {
 	uri := BASE_URL + CREATE_PAYOUT_PATH
 
 	request_id := core.CreatePlainID()
@@ -36,27 +36,27 @@ func CreateTransfer(config config.Config, amount, operationFeePercentage float64
 
 	req, err := requestWithBinanceHeader(body, config)
 	if err != nil {
-		return request_id, TransferResponse{}, err
+		return body, CreateTransferResponse{}, TransferResponse{}, err
 	}
 
 	resp, err := req.SetBody(body).Post(uri)
 	if err != nil {
-		return request_id, TransferResponse{}, fmt.Errorf("error while sending request")
+		return body, CreateTransferResponse{}, TransferResponse{}, fmt.Errorf("error while sending request")
 	}
 
 	responseBody := CreateTransferResponse{}
 	err = json.Unmarshal(resp.Body(), &responseBody)
 	if err != nil {
-		return request_id, TransferResponse{}, fmt.Errorf("error while marshall response body")
+		return body, responseBody, TransferResponse{}, fmt.Errorf("error while marshall response body")
 	}
 
 	if responseBody.Status == BINANCE_REQUEST_STATUS_FAIL {
-		return request_id, TransferResponse{}, fmt.Errorf("error while creating payout: %s", responseBody.ErrorMessage)
+		return body, responseBody, TransferResponse{}, fmt.Errorf("error while creating payout: %s", responseBody.ErrorMessage)
 	}
 
 	if responseBody.Status == BINANCE_REQUEST_STATUS_SUCCESS {
-		return request_id, responseBody.Data, nil
+		return body, responseBody, responseBody.Data, nil
 	}
 
-	return request_id, TransferResponse{}, fmt.Errorf("[unkwown status] error while creating payout: %s", responseBody.ErrorMessage)
+	return body, responseBody, TransferResponse{}, fmt.Errorf("[unkwown status] error while creating payout: %s", responseBody.ErrorMessage)
 }

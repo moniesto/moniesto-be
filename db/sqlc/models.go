@@ -451,6 +451,8 @@ type BinancePaymentTransaction struct {
 	PayerID       sql.NullString         `json:"payer_id"`
 	CreatedAt     time.Time              `json:"created_at"`
 	UpdatedAt     time.Time              `json:"updated_at"`
+	Request       sql.NullString         `json:"request"`
+	Response      sql.NullString         `json:"response"`
 }
 
 // Stores binance payout info and history
@@ -476,6 +478,8 @@ type BinancePayoutHistory struct {
 	FailureMessage         sql.NullString         `json:"failure_message"`
 	CreatedAt              time.Time              `json:"created_at"`
 	UpdatedAt              time.Time              `json:"updated_at"`
+	Request                sql.NullString         `json:"request"`
+	Response               sql.NullString         `json:"response"`
 }
 
 // Stores email verification token for verifying account
