@@ -50,7 +50,7 @@ VALUES (
         now(),
         now()
     )
-RETURNING id, transaction_id, user_id, moniest_id, payer_id, total_amount, amount, date_type, date_value, date_index, payout_date, payout_year, payout_month, payout_day, status, operation_fee_percentage, payout_done_at, payout_request_id, failure_message, created_at, updated_at
+RETURNING id, transaction_id, user_id, moniest_id, payer_id, total_amount, amount, date_type, date_value, date_index, payout_date, payout_year, payout_month, payout_day, status, operation_fee_percentage, payout_done_at, payout_request_id, failure_message, created_at, updated_at, request, response
 `
 
 type CreateBinancePayoutHistoryParams struct {
@@ -112,6 +112,8 @@ func (q *Queries) CreateBinancePayoutHistory(ctx context.Context, arg CreateBina
 		&i.FailureMessage,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Request,
+		&i.Response,
 	)
 	return i, err
 }
@@ -219,6 +221,8 @@ const updateBinancePayoutHistoryRefund = `-- name: UpdateBinancePayoutHistoryRef
 UPDATE "binance_payout_history"
 SET "status" = $2,
     "failure_message" = $3,
+    "request" = $4,
+    "response" = $5,
     updated_at = now()
 WHERE id = $1
 `
@@ -227,9 +231,17 @@ type UpdateBinancePayoutHistoryRefundParams struct {
 	ID             string              `json:"id"`
 	Status         BinancePayoutStatus `json:"status"`
 	FailureMessage sql.NullString      `json:"failure_message"`
+	Request        sql.NullString      `json:"request"`
+	Response       sql.NullString      `json:"response"`
 }
 
 func (q *Queries) UpdateBinancePayoutHistoryRefund(ctx context.Context, arg UpdateBinancePayoutHistoryRefundParams) error {
-	_, err := q.db.ExecContext(ctx, updateBinancePayoutHistoryRefund, arg.ID, arg.Status, arg.FailureMessage)
+	_, err := q.db.ExecContext(ctx, updateBinancePayoutHistoryRefund,
+		arg.ID,
+		arg.Status,
+		arg.FailureMessage,
+		arg.Request,
+		arg.Response,
+	)
 	return err
 }

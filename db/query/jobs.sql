@@ -74,6 +74,8 @@ SET "status" = $2,
     "payout_done_at" = $4,
     "failure_message" = $5,
     payout_request_id = $6,
+    "request" = $7,
+    "response" = $8,
     updated_at = now()
 WHERE "id" = $1;
 

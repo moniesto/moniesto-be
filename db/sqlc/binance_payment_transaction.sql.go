@@ -87,6 +87,7 @@ INSERT INTO "binance_payment_transaction" (
         moniest_fee,
         amount,
         webhook_url,
+        request,
         created_at,
         updated_at
     )
@@ -104,10 +105,11 @@ VALUES (
         $11,
         $12,
         $13,
+        $14,
         now(),
         now()
     )
-RETURNING id, qrcode_link, checkout_link, deep_link, universal_link, status, user_id, moniest_id, date_type, date_value, moniest_fee, amount, webhook_url, payer_id, created_at, updated_at
+RETURNING id, qrcode_link, checkout_link, deep_link, universal_link, status, user_id, moniest_id, date_type, date_value, moniest_fee, amount, webhook_url, payer_id, created_at, updated_at, request, response
 `
 
 type CreateBinancePaymentTransactionsParams struct {
@@ -124,6 +126,7 @@ type CreateBinancePaymentTransactionsParams struct {
 	MoniestFee    float64                `json:"moniest_fee"`
 	Amount        float64                `json:"amount"`
 	WebhookUrl    string                 `json:"webhook_url"`
+	Request       sql.NullString         `json:"request"`
 }
 
 func (q *Queries) CreateBinancePaymentTransactions(ctx context.Context, arg CreateBinancePaymentTransactionsParams) (BinancePaymentTransaction, error) {
@@ -141,6 +144,7 @@ func (q *Queries) CreateBinancePaymentTransactions(ctx context.Context, arg Crea
 		arg.MoniestFee,
 		arg.Amount,
 		arg.WebhookUrl,
+		arg.Request,
 	)
 	var i BinancePaymentTransaction
 	err := row.Scan(
@@ -160,6 +164,8 @@ func (q *Queries) CreateBinancePaymentTransactions(ctx context.Context, arg Crea
 		&i.PayerID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Request,
+		&i.Response,
 	)
 	return i, err
 }
@@ -185,9 +191,28 @@ FROM "binance_payment_transaction"
 WHERE id = $1
 `
 
-func (q *Queries) GetBinancePaymentTransaction(ctx context.Context, id string) (BinancePaymentTransaction, error) {
+type GetBinancePaymentTransactionRow struct {
+	ID            string                 `json:"id"`
+	QrcodeLink    string                 `json:"qrcode_link"`
+	CheckoutLink  string                 `json:"checkout_link"`
+	DeepLink      string                 `json:"deep_link"`
+	UniversalLink string                 `json:"universal_link"`
+	Status        BinancePaymentStatus   `json:"status"`
+	UserID        string                 `json:"user_id"`
+	MoniestID     string                 `json:"moniest_id"`
+	DateType      BinancePaymentDateType `json:"date_type"`
+	DateValue     int32                  `json:"date_value"`
+	MoniestFee    float64                `json:"moniest_fee"`
+	Amount        float64                `json:"amount"`
+	WebhookUrl    string                 `json:"webhook_url"`
+	PayerID       sql.NullString         `json:"payer_id"`
+	CreatedAt     time.Time              `json:"created_at"`
+	UpdatedAt     time.Time              `json:"updated_at"`
+}
+
+func (q *Queries) GetBinancePaymentTransaction(ctx context.Context, id string) (GetBinancePaymentTransactionRow, error) {
 	row := q.db.QueryRowContext(ctx, getBinancePaymentTransaction, id)
-	var i BinancePaymentTransaction
+	var i GetBinancePaymentTransactionRow
 	err := row.Scan(
 		&i.ID,
 		&i.QrcodeLink,
@@ -213,19 +238,26 @@ const updateBinancePaymentTransactionStatus = `-- name: UpdateBinancePaymentTran
 UPDATE "binance_payment_transaction"
 SET "status" = $2,
     "payer_id" = $3,
+    "response" = $4,
     updated_at = now()
 WHERE id = $1
-RETURNING id, qrcode_link, checkout_link, deep_link, universal_link, status, user_id, moniest_id, date_type, date_value, moniest_fee, amount, webhook_url, payer_id, created_at, updated_at
+RETURNING id, qrcode_link, checkout_link, deep_link, universal_link, status, user_id, moniest_id, date_type, date_value, moniest_fee, amount, webhook_url, payer_id, created_at, updated_at, request, response
 `
 
 type UpdateBinancePaymentTransactionStatusParams struct {
-	ID      string               `json:"id"`
-	Status  BinancePaymentStatus `json:"status"`
-	PayerID sql.NullString       `json:"payer_id"`
+	ID       string               `json:"id"`
+	Status   BinancePaymentStatus `json:"status"`
+	PayerID  sql.NullString       `json:"payer_id"`
+	Response sql.NullString       `json:"response"`
 }
 
 func (q *Queries) UpdateBinancePaymentTransactionStatus(ctx context.Context, arg UpdateBinancePaymentTransactionStatusParams) (BinancePaymentTransaction, error) {
-	row := q.db.QueryRowContext(ctx, updateBinancePaymentTransactionStatus, arg.ID, arg.Status, arg.PayerID)
+	row := q.db.QueryRowContext(ctx, updateBinancePaymentTransactionStatus,
+		arg.ID,
+		arg.Status,
+		arg.PayerID,
+		arg.Response,
+	)
 	var i BinancePaymentTransaction
 	err := row.Scan(
 		&i.ID,
@@ -244,6 +276,8 @@ func (q *Queries) UpdateBinancePaymentTransactionStatus(ctx context.Context, arg
 		&i.PayerID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Request,
+		&i.Response,
 	)
 	return i, err
 }

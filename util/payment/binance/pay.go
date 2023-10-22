@@ -10,7 +10,7 @@ import (
 	"github.com/moniesto/moniesto-be/util"
 )
 
-func CreateOrder(ctx *gin.Context, config config.Config, transactionID string, amount float64, productName, returnURL, cancelURL, webhookURL string) (OrderData, error) {
+func CreateOrder(ctx *gin.Context, config config.Config, transactionID string, amount float64, productName, returnURL, cancelURL, webhookURL string) (CreateOrderRequest, OrderData, error) {
 
 	uri := BASE_URL + CREATE_ORDER_PATH
 
@@ -35,24 +35,24 @@ func CreateOrder(ctx *gin.Context, config config.Config, transactionID string, a
 
 	req, err := requestWithBinanceHeader(body, config)
 	if err != nil {
-		return OrderData{}, err
+		return CreateOrderRequest{}, OrderData{}, err
 	}
 
 	resp, err := req.SetBody(body).Post(uri)
 	if err != nil {
-		return OrderData{}, fmt.Errorf("error while sending request")
+		return CreateOrderRequest{}, OrderData{}, fmt.Errorf("error while sending request")
 	}
 
 	responseBody := CreateOrderResponse{}
 
 	err = json.Unmarshal(resp.Body(), &responseBody)
 	if err != nil {
-		return OrderData{}, fmt.Errorf("error while marshall response body")
+		return CreateOrderRequest{}, OrderData{}, fmt.Errorf("error while marshall response body")
 	}
 
 	if responseBody.Status == BINANCE_REQUEST_STATUS_FAIL {
-		return OrderData{}, fmt.Errorf("error while creating order: %s", responseBody.ErrorMessage)
+		return CreateOrderRequest{}, OrderData{}, fmt.Errorf("error while creating order: %s", responseBody.ErrorMessage)
 	}
 
-	return responseBody.Data, nil
+	return body, responseBody.Data, nil
 }

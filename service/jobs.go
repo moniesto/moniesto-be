@@ -125,7 +125,7 @@ func (service *Service) PayoutToMoniest(ctx *gin.Context, payoutData db.GetAllPe
 	}
 
 	// STEP: make payout to moniest
-	requestID, _, err := binance.CreateTransfer(service.config, payoutData.Amount, operationFeePercentage, binance.BINANCE_TRANSFER_TYPE_MERCHANT_PAYMENT, string(payoutData.MoniestPayoutType), payoutData.MoniestPayoutValue, binance.BINANCE_TRANSFER_REMARK_PAYOUT)
+	requestBody, responseBody, _, err := binance.CreateTransfer(service.config, payoutData.Amount, operationFeePercentage, binance.BINANCE_TRANSFER_TYPE_MERCHANT_PAYMENT, string(payoutData.MoniestPayoutType), payoutData.MoniestPayoutValue, binance.BINANCE_TRANSFER_REMARK_PAYOUT)
 	if err != nil {
 		err1 := service.Store.UpdateBinancePayoutHistoryPayout(ctx, db.UpdateBinancePayoutHistoryPayoutParams{
 			ID:     payoutData.ID,
@@ -140,7 +140,15 @@ func (service *Service) PayoutToMoniest(ctx *gin.Context, payoutData db.GetAllPe
 			},
 			PayoutRequestID: sql.NullString{
 				Valid:  true,
-				String: requestID,
+				String: requestBody.RequestID,
+			},
+			Request: sql.NullString{
+				Valid:  true,
+				String: util.StructToJSON(requestBody),
+			},
+			Response: sql.NullString{
+				Valid:  true,
+				String: util.StructToJSON(responseBody),
 			},
 		})
 
@@ -164,7 +172,15 @@ func (service *Service) PayoutToMoniest(ctx *gin.Context, payoutData db.GetAllPe
 		},
 		PayoutRequestID: sql.NullString{
 			Valid:  true,
-			String: requestID,
+			String: requestBody.RequestID,
+		},
+		Request: sql.NullString{
+			Valid:  true,
+			String: util.StructToJSON(requestBody),
+		},
+		Response: sql.NullString{
+			Valid:  true,
+			String: util.StructToJSON(responseBody),
 		},
 	})
 	if err != nil {

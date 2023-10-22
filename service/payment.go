@@ -33,7 +33,7 @@ func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req mo
 	webhookURL := createWebhookURL(ctx, transactionID, &service.config)
 	req.ReturnURL, req.CancelURL = updateNavigateURLs(transactionID, req.ReturnURL, req.CancelURL) // add transactionID to urls
 
-	orderData, err := binance.CreateOrder(ctx, service.config, transactionID, amount, product_name, req.ReturnURL, req.CancelURL, webhookURL)
+	requestBody, orderData, err := binance.CreateOrder(ctx, service.config, transactionID, amount, product_name, req.ReturnURL, req.CancelURL, webhookURL)
 	if err != nil {
 		system.LogError("create order error", err.Error())
 		return db.BinancePaymentTransaction{}, clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Subscribe_ServerErrorCreateBinanceOrder)
@@ -54,6 +54,10 @@ func (service *Service) CreateBinancePaymentTransaction(ctx *gin.Context, req mo
 		MoniestFee:    moniest.Fee,
 		Amount:        amount,
 		WebhookUrl:    webhookURL,
+		Request: sql.NullString{
+			Valid:  true,
+			String: util.StructToJSON(requestBody),
+		},
 	}
 
 	binancePaymentTransaction, err := service.Store.CreateBinancePaymentTransactions(ctx, paymentTransactionParams)
@@ -139,9 +143,10 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 
 		// STEP: update transaction status
 		param := db.UpdateBinancePaymentTransactionStatusParams{
-			ID:      transactionID,
-			Status:  db.BinancePaymentStatusSuccess,
-			PayerID: sql.NullString{Valid: true, String: orderData.PaymentInfo.PayerId},
+			ID:       transactionID,
+			Status:   db.BinancePaymentStatusSuccess,
+			PayerID:  sql.NullString{Valid: true, String: orderData.PaymentInfo.PayerId},
+			Response: sql.NullString{Valid: true, String: util.StructToJSON(orderData)},
 		}
 
 		updatedBinancePaymentTransaction, err := service.Store.UpdateBinancePaymentTransactionStatus(ctx, param)
@@ -190,8 +195,9 @@ func (service *Service) CheckPaymentTransactionStatus(ctx *gin.Context, transact
 
 	// STEP: payment failed cases [rest of them]
 	param := db.UpdateBinancePaymentTransactionStatusParams{
-		ID:     transactionID,
-		Status: db.BinancePaymentStatusFail,
+		ID:       transactionID,
+		Status:   db.BinancePaymentStatusFail,
+		Response: sql.NullString{Valid: true, String: util.StructToJSON(orderData)},
 	}
 	updatedBinancePaymentTransaction, err := service.Store.UpdateBinancePaymentTransactionStatus(ctx, param)
 	if err != nil {

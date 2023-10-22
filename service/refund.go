@@ -47,7 +47,7 @@ func (service *Service) RefundToUser(ctx *gin.Context, transactionID, moniestID,
 
 	// STEP: refund
 	payer_id := binancePayoutHistories[0].PayerID
-	_, _, err = binance.CreateTransfer(
+	requestBody, responseBody, _, err := binance.CreateTransfer(
 		service.config,
 		amount,
 		service.config.OperationFeePercentage,
@@ -59,13 +59,13 @@ func (service *Service) RefundToUser(ctx *gin.Context, transactionID, moniestID,
 	if err != nil {
 		errMsg := err.Error()
 		// STEP: update status of payout histories as refund_fail
-		service.UpdateBinancePayoutHistoriesRefund(ctx, binancePayoutHistories, db.BinancePayoutStatusRefundFail, &errMsg)
+		service.UpdateBinancePayoutHistoriesRefund(ctx, binancePayoutHistories, db.BinancePayoutStatusRefundFail, &errMsg, requestBody, responseBody)
 
 		return clientError.CreateError(http.StatusInternalServerError, clientError.Moniest_Unsubscribe_ServerErrorRefund)
 	}
 
 	// STEP: update status of payout histories as refund
-	service.UpdateBinancePayoutHistoriesRefund(ctx, binancePayoutHistories, db.BinancePayoutStatusRefund, nil)
+	service.UpdateBinancePayoutHistoriesRefund(ctx, binancePayoutHistories, db.BinancePayoutStatusRefund, nil, requestBody, responseBody)
 
 	service.sendUnsubscribeEmail(ctx, transactionID, userID, moniestID, len(binancePayoutHistories), amount)
 
@@ -93,19 +93,27 @@ func (service *Service) sendUnsubscribeEmail(ctx *gin.Context, transactionID, us
 	}
 }
 
-func (service *Service) UpdateBinancePayoutHistoriesRefund(ctx *gin.Context, payoutHistories []db.GetBinancePayoutHistoriesRow, status db.BinancePayoutStatus, failureMessage *string) {
+func (service *Service) UpdateBinancePayoutHistoriesRefund(ctx *gin.Context, payoutHistories []db.GetBinancePayoutHistoriesRow, status db.BinancePayoutStatus, failureMessage *string, requestBody binance.CreateTransferRequest, responseBody binance.CreateTransferResponse) {
 	for _, payoutHistory := range payoutHistories {
-		err := service.UpdateBinancePayoutHistoryRefund(ctx, payoutHistory.ID, status, failureMessage)
+		err := service.UpdateBinancePayoutHistoryRefund(ctx, payoutHistory.ID, status, failureMessage, requestBody, responseBody)
 		if err != nil {
 			system.LogError("error while updating binance payout history [refund]", err.Error(), "| payout id:", payoutHistory.ID)
 		}
 	}
 }
 
-func (service *Service) UpdateBinancePayoutHistoryRefund(ctx *gin.Context, id string, status db.BinancePayoutStatus, failureMessage *string) error {
+func (service *Service) UpdateBinancePayoutHistoryRefund(ctx *gin.Context, id string, status db.BinancePayoutStatus, failureMessage *string, requestBody binance.CreateTransferRequest, responseBody binance.CreateTransferResponse) error {
 	params := db.UpdateBinancePayoutHistoryRefundParams{
 		ID:     id,
 		Status: status,
+		Request: sql.NullString{
+			Valid:  true,
+			String: util.StructToJSON(requestBody),
+		},
+		Response: sql.NullString{
+			Valid:  true,
+			String: util.StructToJSON(responseBody),
+		},
 	}
 
 	if failureMessage != nil {
