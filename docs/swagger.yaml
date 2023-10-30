@@ -1126,7 +1126,9 @@ paths:
           schema:
             $ref: '#/definitions/model.MetricsResponse'
         "403":
-          description: Forbidden
+          description: not admin
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
@@ -1136,6 +1138,28 @@ paths:
       summary: Get Metrics
       tags:
       - Admin
+  /admin/run/:runner:
+    post:
+      description: Running key operations [`post-analyzer`, `moniest-analyzer`, `payout`,
+        `detect-expired-pending-transaction`, `detect-expired-active-subscriptions`]
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: not admin
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: runner type not found
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Runner
+      tags:
+      - Admin
   /admin/update_moniest_post_crypto_statistics:
     post:
       description: Can update the Moniest Post Crypto Statistics manually
@@ -1143,7 +1167,9 @@ paths:
         "200":
           description: OK
         "403":
-          description: Forbidden
+          description: not admin
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:
@@ -1160,7 +1186,9 @@ paths:
         "200":
           description: OK
         "403":
-          description: Forbidden
+          description: not admin
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
         "500":
           description: server error
           schema:

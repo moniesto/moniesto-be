@@ -578,7 +578,44 @@ const docTemplate = `{
                         }
                     },
                     "403": {
-                        "description": "Forbidden"
+                        "description": "not admin",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/run/:runner": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Running key operations [` + "`" + `post-analyzer` + "`" + `, ` + "`" + `moniest-analyzer` + "`" + `, ` + "`" + `payout` + "`" + `, ` + "`" + `detect-expired-pending-transaction` + "`" + `, ` + "`" + `detect-expired-active-subscriptions` + "`" + `]",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Runner",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "not admin",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "runner type not found"
                     },
                     "500": {
                         "description": "server error",
@@ -606,7 +643,10 @@ const docTemplate = `{
                         "description": "OK"
                     },
                     "403": {
-                        "description": "Forbidden"
+                        "description": "not admin",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
                     },
                     "500": {
                         "description": "server error",
@@ -634,7 +674,10 @@ const docTemplate = `{
                         "description": "OK"
                     },
                     "403": {
-                        "description": "Forbidden"
+                        "description": "not admin",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
                     },
                     "500": {
                         "description": "server error",

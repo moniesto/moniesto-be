@@ -16,7 +16,7 @@ import (
 // @Security bearerAuth
 // @Tags Admin
 // @Success 200
-// @Failure 403
+// @Failure 403 {object} clientError.ErrorResponse "not admin"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /admin/update_posts_status [post]
 func (server *Server) ADMIN_UpdatePostsStatusManual(ctx *gin.Context) {
@@ -33,7 +33,7 @@ func (server *Server) ADMIN_UpdatePostsStatusManual(ctx *gin.Context) {
 // @Security bearerAuth
 // @Tags Admin
 // @Success 200
-// @Failure 403
+// @Failure 403 {object} clientError.ErrorResponse "not admin"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /admin/update_moniest_post_crypto_statistics [post]
 func (server *Server) ADMIN_UpdateMoniestPostCryptoStatisticsManual(ctx *gin.Context) {
@@ -50,7 +50,7 @@ func (server *Server) ADMIN_UpdateMoniestPostCryptoStatisticsManual(ctx *gin.Con
 // @Security bearerAuth
 // @Tags Admin
 // @Success 200 {object} model.MetricsResponse
-// @Failure 403
+// @Failure 403 {object} clientError.ErrorResponse "not admin"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /admin/metrics [get]
 func (server *Server) ADMIN_Metrics(ctx *gin.Context) {
@@ -67,6 +67,15 @@ func (server *Server) ADMIN_Metrics(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, metrics)
 }
 
+// @Summary Runner
+// @Description Running key operations [`post-analyzer`, `moniest-analyzer`, `payout`, `detect-expired-pending-transaction`, `detect-expired-active-subscriptions`]
+// @Security bearerAuth
+// @Tags Admin
+// @Success 200
+// @Failure 403 {object} clientError.ErrorResponse "not admin"
+// @Failure 404 "runner type not found"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /admin/run/:runner [post]
 func (server *Server) ADMIN_Runner(ctx *gin.Context) {
 	if !server.isAdmin(ctx) {
 		return
