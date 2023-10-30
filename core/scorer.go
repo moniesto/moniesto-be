@@ -23,5 +23,7 @@ func CalculatePNL_ROI(startPrice, lastPrice float64, leverage int32, direction d
 	// Calculate the return on investment (ROI)
 	roi = (pnl / validation.InvestmentAmount / float64(leverage)) * 100
 
+	roi = roi * float64(leverage)
+
 	return util.RoundAmountDown(pnl), util.RoundAmountDown(roi), nil
 }
