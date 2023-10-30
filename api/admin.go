@@ -1,7 +1,9 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/token"
@@ -18,8 +20,7 @@ import (
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /admin/update_posts_status [post]
 func (server *Server) ADMIN_UpdatePostsStatusManual(ctx *gin.Context) {
-	isAdmin := server.isAdmin(ctx)
-	if !isAdmin {
+	if !server.isAdmin(ctx) {
 		return
 	}
 
@@ -36,8 +37,7 @@ func (server *Server) ADMIN_UpdatePostsStatusManual(ctx *gin.Context) {
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /admin/update_moniest_post_crypto_statistics [post]
 func (server *Server) ADMIN_UpdateMoniestPostCryptoStatisticsManual(ctx *gin.Context) {
-	isAdmin := server.isAdmin(ctx)
-	if !isAdmin {
+	if !server.isAdmin(ctx) {
 		return
 	}
 
@@ -54,8 +54,7 @@ func (server *Server) ADMIN_UpdateMoniestPostCryptoStatisticsManual(ctx *gin.Con
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /admin/metrics [get]
 func (server *Server) ADMIN_Metrics(ctx *gin.Context) {
-	isAdmin := server.isAdmin(ctx)
-	if !isAdmin {
+	if !server.isAdmin(ctx) {
 		return
 	}
 
@@ -66,6 +65,38 @@ func (server *Server) ADMIN_Metrics(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, metrics)
+}
+
+func (server *Server) ADMIN_Runner(ctx *gin.Context) {
+	if !server.isAdmin(ctx) {
+		return
+	}
+
+	// STEP: get username from param
+	runnerType := ctx.Param("runner")
+
+	runnerTypes := map[string]func(){
+		"post-analyzer":                       server.Analyzer,
+		"moniest-analyzer":                    server.UpdateMoniestPostCryptoStatistics,
+		"payout":                              server.PayoutToMoniest,
+		"detect-expired-pending-transaction":  server.DetectExpiredPendingTransaction,
+		"detect-expired-active-subscriptions": server.DetectExpiredActiveSubscriptions,
+	}
+
+	// STEP: get value based on key
+	runner, exists := runnerTypes[runnerType]
+	if !exists {
+		allTypes := []string{}
+		for k := range runnerTypes {
+			allTypes = append(allTypes, k)
+		}
+
+		ctx.AbortWithStatusJSON(http.StatusNotFound, fmt.Sprintf("invalid runner type '%s'. Available runner types: %s", runnerType, strings.Join(allTypes, ", ")))
+		return
+	}
+
+	runner()
+	ctx.Status(http.StatusOK)
 }
 
 func (server *Server) SendEmailTest(ctx *gin.Context) {
