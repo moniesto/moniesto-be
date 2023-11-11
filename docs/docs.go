@@ -574,7 +574,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.MetricsResponse"
+                            "$ref": "#/definitions/model.ADMIN_MetricsResponse"
                         }
                     },
                     "403": {
@@ -2272,6 +2272,29 @@ const docTemplate = `{
                 }
             }
         },
+        "model.ADMIN_MetricsResponse": {
+            "type": "object",
+            "properties": {
+                "feedback": {
+                    "$ref": "#/definitions/model.Feedback"
+                },
+                "financial_metrics": {
+                    "$ref": "#/definitions/model.FinancialMetrics"
+                },
+                "payment_metrics": {
+                    "$ref": "#/definitions/db.PaymentMetricsRow"
+                },
+                "payout_metrics": {
+                    "$ref": "#/definitions/db.PayoutMetricsRow"
+                },
+                "post_metrics": {
+                    "$ref": "#/definitions/db.PostMetricsRow"
+                },
+                "user_metrics": {
+                    "$ref": "#/definitions/db.UserMetricsRow"
+                }
+            }
+        },
         "model.CalculatePnlRoiRequest": {
             "type": "object",
             "properties": {
@@ -2762,29 +2785,6 @@ const docTemplate = `{
                 },
                 "user": {
                     "$ref": "#/definitions/model.OwnUser"
-                }
-            }
-        },
-        "model.MetricsResponse": {
-            "type": "object",
-            "properties": {
-                "feedback": {
-                    "$ref": "#/definitions/model.Feedback"
-                },
-                "financial_metrics": {
-                    "$ref": "#/definitions/model.FinancialMetrics"
-                },
-                "payment_metrics": {
-                    "$ref": "#/definitions/db.PaymentMetricsRow"
-                },
-                "payout_metrics": {
-                    "$ref": "#/definitions/db.PayoutMetricsRow"
-                },
-                "post_metrics": {
-                    "$ref": "#/definitions/db.PostMetricsRow"
-                },
-                "user_metrics": {
-                    "$ref": "#/definitions/db.UserMetricsRow"
                 }
             }
         },

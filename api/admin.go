@@ -49,7 +49,7 @@ func (server *Server) ADMIN_UpdateMoniestPostCryptoStatisticsManual(ctx *gin.Con
 // @Description Get Metrics of user, post, payments, payouts, feedbacks
 // @Security bearerAuth
 // @Tags Admin
-// @Success 200 {object} model.MetricsResponse
+// @Success 200 {object} model.ADMIN_MetricsResponse
 // @Failure 403 {object} clientError.ErrorResponse "not admin"
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /admin/metrics [get]
@@ -58,7 +58,7 @@ func (server *Server) ADMIN_Metrics(ctx *gin.Context) {
 		return
 	}
 
-	metrics, err := server.service.Metrics(ctx)
+	metrics, err := server.service.ADMIN_Metrics(ctx)
 	if err != nil {
 		ctx.AbortWithStatusJSON(clientError.ParseError(err))
 		return
@@ -120,11 +120,24 @@ func (server *Server) SendEmailTest(ctx *gin.Context) {
 
 	// mailing.SendEmailVerificationEmail("parvvazov@gmail.com", server.config, "Parvin Eyvazov", "token1", model.LANGUAGE_TURKISH)
 
+	print("aa")
 }
+
+// func (server *Server) ADMIN_Data(ctx *gin.Context) {
+// 	if !server.isAdmin(ctx) {
+// 		return
+// 	}
+
+// 	// STEP: get username from param
+// 	dataType := ctx.Param("data_type")
+
+// 	data, err := server.service.ADMIN_Data(ctx, dataType)
+// }
 
 func (server *Server) ADMIN_Test(ctx *gin.Context) {
 }
 
+// helper functions
 func (server *Server) isAdmin(ctx *gin.Context) bool {
 	// STEP: get user id from token
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)

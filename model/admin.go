@@ -4,7 +4,7 @@ import (
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 )
 
-type MetricsResponse struct {
+type ADMIN_MetricsResponse struct {
 	UserMetrics      db.UserMetricsRow    `json:"user_metrics"`
 	PostMetrics      db.PostMetricsRow    `json:"post_metrics"`
 	PaymentMetrics   db.PaymentMetricsRow `json:"payment_metrics"`
@@ -24,15 +24,15 @@ type FinancialMetrics struct {
 	EstimatedProfit float64 `json:"estimated_profit"`
 }
 
-func NewMetricsResponse(
+func NewADMIN_MetricsResponse(
 	userMetrics db.UserMetricsRow,
 	postMetrics db.PostMetricsRow,
 	paymentMetrics db.PaymentMetricsRow,
 	payoutMetrics db.PayoutMetricsRow,
 	feedbackMetrics db.FeedbackMetricsRow,
-	feedbacks []db.GetFeedbacksRow) MetricsResponse {
+	feedbacks []db.GetFeedbacksRow) ADMIN_MetricsResponse {
 
-	return MetricsResponse{
+	return ADMIN_MetricsResponse{
 		UserMetrics:    userMetrics,
 		PostMetrics:    postMetrics,
 		PaymentMetrics: paymentMetrics,
