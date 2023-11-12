@@ -216,6 +216,8 @@ const (
 	Admin_GetMetrics_ServerErrorPayoutMetrics   = "Admin_GetMetrics_ServerErrorPayoutMetrics"
 	Admin_GetMetrics_ServerErrorFeedbackMetrics = "Admin_GetMetrics_ServerErrorFeedbackMetrics"
 	Admin_GetMetrics_ServerErrorGetFeedbacks    = "Admin_GetMetrics_ServerErrorGetFeedbacks"
+	Admin_GetData_InvalidParam                  = "Admin_GetData_InvalidParam"
+	Admin_GetData_ServerErrorGetData            = "Admin_GetData_ServerErrorGetData"
 )
 
 var errorMessages ErrorMessagesType = ErrorMessagesType{
@@ -431,4 +433,6 @@ var errorMessages ErrorMessagesType = ErrorMessagesType{
 	Admin_GetMetrics_ServerErrorPayoutMetrics:   "Server error on getting payout metrics",
 	Admin_GetMetrics_ServerErrorFeedbackMetrics: "Server error on getting feedback metrics",
 	Admin_GetMetrics_ServerErrorGetFeedbacks:    "Server error on getting feedbacks",
+	Admin_GetData_InvalidParam:                  "Get data request param is invalid",
+	Admin_GetData_ServerErrorGetData:            "Server error on getting data",
 }

@@ -546,6 +546,69 @@
                 }
             }
         },
+        "/admin/data/:data_type": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Data types [`users`]",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get Data",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "default: 10 \u0026 max: 50",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "default: 0",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "response for data_type: 'users'",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.OwnUser"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "not admin",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "data type not found"
+                    },
+                    "406": {
+                        "description": "invalid body",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/metrics": {
             "get": {
                 "security": [
@@ -604,68 +667,6 @@
                     },
                     "404": {
                         "description": "runner type not found"
-                    },
-                    "500": {
-                        "description": "server error",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/admin/update_moniest_post_crypto_statistics": {
-            "post": {
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
-                "description": "Can update the Moniest Post Crypto Statistics manually",
-                "tags": [
-                    "Admin"
-                ],
-                "summary": "Update Moniest Post Crypto Statistics manually",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "403": {
-                        "description": "not admin",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "server error",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/admin/update_posts_status": {
-            "post": {
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
-                "description": "Can update the status of the posts manually",
-                "tags": [
-                    "Admin"
-                ],
-                "summary": "Update Posts status manually",
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    },
-                    "403": {
-                        "description": "not admin",
-                        "schema": {
-                            "$ref": "#/definitions/clientError.ErrorResponse"
-                        }
                     },
                     "500": {
                         "description": "server error",

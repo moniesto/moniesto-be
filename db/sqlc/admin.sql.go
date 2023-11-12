@@ -11,6 +11,166 @@ import (
 	"time"
 )
 
+const aDMIN_GetAllUsers = `-- name: ADMIN_GetAllUsers :many
+SELECT "user"."id",
+    "moniest"."id" as "moniest_id",
+    "user"."fullname",
+    "user"."username",
+    "user"."email",
+    "user"."email_verified",
+    "user"."language",
+    "user"."location",
+    "user"."created_at",
+    "user"."updated_at",
+    "moniest"."bio",
+    "moniest"."description",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
+    "moniest_subscription_info"."id" as "moniest_subscription_info_id",
+    "moniest_subscription_info"."fee",
+    "moniest_subscription_info"."message",
+    "moniest_subscription_info"."updated_at" as "moniest_subscription_info_updated_at",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "user"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "user"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE (
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "user"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE (
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "user"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "user"
+    LEFT JOIN "moniest" ON "moniest"."user_id" = "user"."id"
+    LEFT JOIN "moniest_subscription_info" ON "moniest_subscription_info"."moniest_id" = "moniest"."id"
+    LEFT JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "moniest"."id"
+ORDER BY "user"."created_at" DESC
+LIMIT $1 OFFSET $2
+`
+
+type ADMIN_GetAllUsersParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+type ADMIN_GetAllUsersRow struct {
+	ID                               string          `json:"id"`
+	MoniestID                        sql.NullString  `json:"moniest_id"`
+	Fullname                         string          `json:"fullname"`
+	Username                         string          `json:"username"`
+	Email                            string          `json:"email"`
+	EmailVerified                    bool            `json:"email_verified"`
+	Language                         UserLanguage    `json:"language"`
+	Location                         sql.NullString  `json:"location"`
+	CreatedAt                        time.Time       `json:"created_at"`
+	UpdatedAt                        time.Time       `json:"updated_at"`
+	Bio                              sql.NullString  `json:"bio"`
+	Description                      sql.NullString  `json:"description"`
+	Pnl7days                         sql.NullFloat64 `json:"pnl_7days"`
+	Roi7days                         sql.NullFloat64 `json:"roi_7days"`
+	WinRate7days                     sql.NullFloat64 `json:"win_rate_7days"`
+	Pnl30days                        sql.NullFloat64 `json:"pnl_30days"`
+	Roi30days                        sql.NullFloat64 `json:"roi_30days"`
+	WinRate30days                    sql.NullFloat64 `json:"win_rate_30days"`
+	PnlTotal                         sql.NullFloat64 `json:"pnl_total"`
+	RoiTotal                         sql.NullFloat64 `json:"roi_total"`
+	WinRateTotal                     sql.NullFloat64 `json:"win_rate_total"`
+	MoniestSubscriptionInfoID        sql.NullString  `json:"moniest_subscription_info_id"`
+	Fee                              sql.NullFloat64 `json:"fee"`
+	Message                          sql.NullString  `json:"message"`
+	MoniestSubscriptionInfoUpdatedAt sql.NullTime    `json:"moniest_subscription_info_updated_at"`
+	ProfilePhotoLink                 interface{}     `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink        interface{}     `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink              interface{}     `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink     interface{}     `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) ADMIN_GetAllUsers(ctx context.Context, arg ADMIN_GetAllUsersParams) ([]ADMIN_GetAllUsersRow, error) {
+	rows, err := q.db.QueryContext(ctx, aDMIN_GetAllUsers, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ADMIN_GetAllUsersRow{}
+	for rows.Next() {
+		var i ADMIN_GetAllUsersRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.MoniestID,
+			&i.Fullname,
+			&i.Username,
+			&i.Email,
+			&i.EmailVerified,
+			&i.Language,
+			&i.Location,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Bio,
+			&i.Description,
+			&i.Pnl7days,
+			&i.Roi7days,
+			&i.WinRate7days,
+			&i.Pnl30days,
+			&i.Roi30days,
+			&i.WinRate30days,
+			&i.PnlTotal,
+			&i.RoiTotal,
+			&i.WinRateTotal,
+			&i.MoniestSubscriptionInfoID,
+			&i.Fee,
+			&i.Message,
+			&i.MoniestSubscriptionInfoUpdatedAt,
+			&i.ProfilePhotoLink,
+			&i.ProfilePhotoThumbnailLink,
+			&i.BackgroundPhotoLink,
+			&i.BackgroundPhotoThumbnailLink,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const feedbackMetrics = `-- name: FeedbackMetrics :many
 SELECT COALESCE(COUNT(*), 0) AS num_all_feedbacks,
     COALESCE(

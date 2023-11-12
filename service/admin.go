@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util/clientError"
 	"github.com/moniesto/moniesto-be/util/system"
@@ -50,6 +51,18 @@ func (service *Service) ADMIN_Metrics(ctx *gin.Context) (model.ADMIN_MetricsResp
 	return model.NewADMIN_MetricsResponse(userMetrics[0], postMetrics[0], paymentMetrics[0], payoutMetrics[0], feedbackMetrics[0], feedbacks), nil
 }
 
-// func (service *Service) ADMIN_Data(ctx *gin.Context, dataType string) (any, error) {
+func (service *Service) ADMIN_DataUser(ctx *gin.Context, limit, offset int) (any, error) {
+	params := db.ADMIN_GetAllUsersParams{
+		Limit:  int32(limit),
+		Offset: int32(offset),
+	}
 
-// }
+	usersFromDB, err := service.Store.ADMIN_GetAllUsers(ctx, params)
+	if err != nil {
+		return model.ADMIN_MetricsResponse{}, clientError.CreateError(http.StatusInternalServerError, clientError.Admin_GetData_ServerErrorGetData)
+	}
+
+	users := model.NewADMIN_DataUserResponse(usersFromDB)
+
+	return users, nil
+}

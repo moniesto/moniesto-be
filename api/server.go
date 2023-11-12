@@ -130,11 +130,9 @@ func (server *Server) setupRouter() {
 	// Admin routes
 	adminRouters := router.Group("/admin").Use(authMiddleware(server.tokenMaker))
 	{
-		adminRouters.POST("/update_posts_status", server.ADMIN_UpdatePostsStatusManual)
-		adminRouters.POST("/update_moniest_post_crypto_statistics", server.ADMIN_UpdateMoniestPostCryptoStatisticsManual)
 		adminRouters.GET("/metrics", server.ADMIN_Metrics)
 		adminRouters.POST("/run/:runner", server.ADMIN_Runner)
-		// adminRouters.GET("/data/:data_type", server.ADMIN_Data)
+		adminRouters.GET("/data/:data_type", server.ADMIN_Data)
 		// adminRouters.GET("/test", server.ADMIN_Test)
 	}
 
