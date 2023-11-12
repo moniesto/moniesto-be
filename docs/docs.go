@@ -589,7 +589,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "response for data_type: 'users'",
+                        "description": "response for data_type: users",
                         "schema": {
                             "type": "array",
                             "items": {

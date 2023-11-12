@@ -1133,7 +1133,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: 'response for data_type: ''users'''
+          description: 'response for data_type: users'
           schema:
             items:
               $ref: '#/definitions/model.OwnUser'
