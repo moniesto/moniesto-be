@@ -2,6 +2,7 @@ package storage
 
 import (
 	"fmt"
+	"net/url"
 
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
@@ -11,6 +12,11 @@ import (
 )
 
 // docs: https://cloudinary.com/documentation/go_integration
+
+func isURL(s string) bool {
+	u, err := url.Parse(s)
+	return err == nil && u.Scheme != "" && u.Host != ""
+}
 
 type CloudinaryUploader struct {
 	cloudinary cloudinary.Cloudinary
@@ -28,6 +34,15 @@ func NewCloudinaryUploader(cloudUrl string) (Uploader, error) {
 
 // UploadProfilePhoto upload profile photo and return url & thumbnail_url of it
 func (cloudinaryUploader *CloudinaryUploader) UploadProfilePhoto(ctx *gin.Context, base64 string) (model.ProfilePhoto, error) {
+
+	// STEP: check the str is already a url -> yes -> return url
+	if isURL(base64) {
+		return model.ProfilePhoto{
+			URL:          base64,
+			ThumbnailURL: base64,
+		}, nil
+	}
+
 	publicID := core.CreateID()
 	publicIDThumbnail := publicID + "_thumbnail"
 
@@ -64,6 +79,15 @@ func (cloudinaryUploader *CloudinaryUploader) UploadProfilePhoto(ctx *gin.Contex
 
 // UploadBackgroundPhoto upload background photo and return url & thumbnail_url of it
 func (cloudinaryUploader *CloudinaryUploader) UploadBackgroundPhoto(ctx *gin.Context, base64 string) (model.BackgroundPhoto, error) {
+
+	// STEP: check the str is already a url -> yes -> return url
+	if isURL(base64) {
+		return model.BackgroundPhoto{
+			URL:          base64,
+			ThumbnailURL: base64,
+		}, nil
+	}
+
 	publicID := core.CreateID()
 	publicIDThumbnail := publicID + "_thumbnail"
 
