@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/model"
@@ -39,6 +40,7 @@ func (server *Server) ADMIN_Metrics(ctx *gin.Context) {
 // @Description Running key operations [`post-analyzer`, `moniest-analyzer`, `payout`, `detect-expired-pending-transaction`, `detect-expired-active-subscriptions`]
 // @Security bearerAuth
 // @Tags Admin
+// @Param runner path string true "runner type"
 // @Success 200
 // @Failure 403 {object} clientError.ErrorResponse "not admin"
 // @Failure 404 "runner type not found"
@@ -149,6 +151,56 @@ func (server *Server) ADMIN_Data(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, data)
+}
+
+// @Summary Operation: Subscribe
+// @Description Make subscribtion to any moniesto for any user
+// @Security bearerAuth
+// @Tags Admin
+// @Param username path string true "user username"
+// @Param moniest_username path string true "moniest username"
+// @Success 200
+// @Failure 400 {object} clientError.ErrorResponse "already subscribed"
+// @Failure 403 {object} clientError.ErrorResponse "not admin"
+// @Failure 404 {object} clientError.ErrorResponse "user or moniest not found"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /admin/operations/:username/subscribe/:moniest_username [post]
+func (server *Server) ADMIN_OPERATIONS_Subscribe(ctx *gin.Context) {
+	// STEP: get params [username, moniest_username]
+	username := ctx.Param("username")
+	moniestUsername := ctx.Param("moniest_username")
+
+	user, err := server.service.GetUserByUsername(ctx, username)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+	}
+
+	moniest, err := server.service.GetMoniestByUsername(ctx, moniestUsername)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+	}
+
+	latestTransactionID := ""
+	subscriptionStartDate := time.Now()
+	subscriptionEndDate := subscriptionStartDate.AddDate(2, 0, 0)
+
+	fmt.Println("user.ID", user.ID)
+	fmt.Println("moniest.MoniestID", moniest.MoniestID)
+
+	err = server.service.SubscribeMoniest(
+		ctx,
+		moniest.MoniestID,
+		user.ID,
+		latestTransactionID,
+		subscriptionStartDate,
+		subscriptionEndDate,
+	)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.Status(http.StatusOK)
 }
 
 func (server *Server) ADMIN_Test(ctx *gin.Context) {

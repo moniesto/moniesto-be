@@ -133,6 +133,7 @@ func (server *Server) setupRouter() {
 		adminRouters.GET("/metrics", server.ADMIN_Metrics)
 		adminRouters.POST("/run/:runner", server.ADMIN_Runner)
 		adminRouters.GET("/data/:data_type", server.ADMIN_Data)
+		adminRouters.POST("/operations/:username/subscribe/:moniest_username", server.ADMIN_OPERATIONS_Subscribe)
 		// adminRouters.GET("/test", server.ADMIN_Test)
 	}
 

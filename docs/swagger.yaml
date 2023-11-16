@@ -1178,10 +1178,54 @@ paths:
       summary: Get Metrics
       tags:
       - Admin
+  /admin/operations/:username/subscribe/:moniest_username:
+    post:
+      description: Make subscribtion to any moniesto for any user
+      parameters:
+      - description: user username
+        in: path
+        name: username
+        required: true
+        type: string
+      - description: moniest username
+        in: path
+        name: moniest_username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: already subscribed
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "403":
+          description: not admin
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "404":
+          description: user or moniest not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: 'Operation: Subscribe'
+      tags:
+      - Admin
   /admin/run/:runner:
     post:
       description: Running key operations [`post-analyzer`, `moniest-analyzer`, `payout`,
         `detect-expired-pending-transaction`, `detect-expired-active-subscriptions`]
+      parameters:
+      - description: runner type
+        in: path
+        name: runner
+        required: true
+        type: string
       responses:
         "200":
           description: OK

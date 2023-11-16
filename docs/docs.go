@@ -655,6 +655,65 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/operations/:username/subscribe/:moniest_username": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Make subscribtion to any moniesto for any user",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Operation: Subscribe",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "moniest username",
+                        "name": "moniest_username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "already subscribed",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "not admin",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "user or moniest not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/run/:runner": {
             "post": {
                 "security": [
@@ -667,6 +726,15 @@ const docTemplate = `{
                     "Admin"
                 ],
                 "summary": "Runner",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "runner type",
+                        "name": "runner",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
