@@ -511,62 +511,83 @@ func (q *Queries) PayoutMetrics(ctx context.Context, operationFeePercentage sql.
 
 const postMetrics = `-- name: PostMetrics :many
 SELECT COUNT(*) AS num_total_posts,
-    SUM(
-        CASE
-            WHEN finished = true THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN finished = true THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_finished_posts,
-    SUM(
-        CASE
-            WHEN finished = false THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN finished = false THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_unfinished_posts,
-    SUM(
-        CASE
-            WHEN status = 'success' THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN status = 'success' THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_success_posts,
-    SUM(
-        CASE
-            WHEN status = 'fail' THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN status = 'fail' THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_fail_posts,
-    SUM(
-        CASE
-            WHEN status = 'pending' THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN status = 'pending' THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_pending_posts,
-    SUM(
-        CASE
-            WHEN market_type = 'futures' THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN market_type = 'futures' THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_futures_posts,
-    SUM(
-        CASE
-            WHEN market_type = 'spot' THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN market_type = 'spot' THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_spot_posts,
-    COUNT(DISTINCT moniest_id) AS num_unique_moniests
+    COALESCE(COUNT(DISTINCT moniest_id), 0) AS num_unique_moniests
 FROM post_crypto
 `
 
 type PostMetricsRow struct {
-	NumTotalPosts      int64 `json:"num_total_posts"`
-	NumFinishedPosts   int64 `json:"num_finished_posts"`
-	NumUnfinishedPosts int64 `json:"num_unfinished_posts"`
-	NumSuccessPosts    int64 `json:"num_success_posts"`
-	NumFailPosts       int64 `json:"num_fail_posts"`
-	NumPendingPosts    int64 `json:"num_pending_posts"`
-	NumFuturesPosts    int64 `json:"num_futures_posts"`
-	NumSpotPosts       int64 `json:"num_spot_posts"`
-	NumUniqueMoniests  int64 `json:"num_unique_moniests"`
+	NumTotalPosts      int64       `json:"num_total_posts"`
+	NumFinishedPosts   interface{} `json:"num_finished_posts"`
+	NumUnfinishedPosts interface{} `json:"num_unfinished_posts"`
+	NumSuccessPosts    interface{} `json:"num_success_posts"`
+	NumFailPosts       interface{} `json:"num_fail_posts"`
+	NumPendingPosts    interface{} `json:"num_pending_posts"`
+	NumFuturesPosts    interface{} `json:"num_futures_posts"`
+	NumSpotPosts       interface{} `json:"num_spot_posts"`
+	NumUniqueMoniests  interface{} `json:"num_unique_moniests"`
 }
 
 func (q *Queries) PostMetrics(ctx context.Context) ([]PostMetricsRow, error) {

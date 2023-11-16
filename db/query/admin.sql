@@ -15,49 +15,70 @@ SELECT (
 
 -- name: PostMetrics :many
 SELECT COUNT(*) AS num_total_posts,
-    SUM(
-        CASE
-            WHEN finished = true THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN finished = true THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_finished_posts,
-    SUM(
-        CASE
-            WHEN finished = false THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN finished = false THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_unfinished_posts,
-    SUM(
-        CASE
-            WHEN status = 'success' THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN status = 'success' THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_success_posts,
-    SUM(
-        CASE
-            WHEN status = 'fail' THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN status = 'fail' THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_fail_posts,
-    SUM(
-        CASE
-            WHEN status = 'pending' THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN status = 'pending' THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_pending_posts,
-    SUM(
-        CASE
-            WHEN market_type = 'futures' THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN market_type = 'futures' THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_futures_posts,
-    SUM(
-        CASE
-            WHEN market_type = 'spot' THEN 1
-            ELSE 0
-        END
+    COALESCE(
+        SUM(
+            CASE
+                WHEN market_type = 'spot' THEN 1
+                ELSE 0
+            END
+        ),
+        0
     ) AS num_spot_posts,
-    COUNT(DISTINCT moniest_id) AS num_unique_moniests
+    COALESCE(COUNT(DISTINCT moniest_id), 0) AS num_unique_moniests
 FROM post_crypto;
 
 -- name: PaymentMetrics :many
