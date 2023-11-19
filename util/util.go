@@ -91,6 +91,15 @@ func SafeSQLNullToFloat(sqlNull sql.NullFloat64) *float64 {
 	return &sqlNull.Float64
 }
 
+// SafeSQLNullToTime converts sql object to time pointer
+func SafeSQLNullToTime(sqlNull sql.NullTime) *time.Time {
+	if !sqlNull.Valid {
+		return nil
+	}
+
+	return &sqlNull.Time
+}
+
 func DateToTimestamp(date time.Time) int64 {
 	return date.UnixNano() / int64(time.Millisecond)
 }

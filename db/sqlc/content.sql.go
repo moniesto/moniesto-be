@@ -28,6 +28,8 @@ SELECT "pc"."id",
     "pc"."status",
     "pc"."pnl",
     "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
@@ -120,6 +122,8 @@ type GetDeactivePostsByCreatedAtRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -172,6 +176,8 @@ func (q *Queries) GetDeactivePostsByCreatedAt(ctx context.Context, arg GetDeacti
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,
@@ -227,6 +233,8 @@ SELECT "pc"."id",
     "pc"."status",
     "pc"."pnl",
     "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
@@ -319,6 +327,8 @@ type GetDeactivePostsByPNLRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -371,6 +381,8 @@ func (q *Queries) GetDeactivePostsByPNL(ctx context.Context, arg GetDeactivePost
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,
@@ -588,6 +600,8 @@ SELECT "pc"."id",
     "pc"."status",
     "pc"."pnl",
     "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
@@ -681,6 +695,8 @@ type GetSubscribedActivePostsRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -733,6 +749,8 @@ func (q *Queries) GetSubscribedActivePosts(ctx context.Context, arg GetSubscribe
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,
@@ -789,6 +807,8 @@ const getSubscribedActivePostsWithOwn = `-- name: GetSubscribedActivePostsWithOw
         "pc"."status",
         "pc"."pnl",
         "pc"."roi",
+        "pc"."hit_price",
+        "pc"."finished_at",
         "pc"."created_at",
         "pc"."updated_at",
         "m"."id" as "moniest_id",
@@ -874,6 +894,8 @@ UNION ALL
         "pc"."status",
         "pc"."pnl",
         "pc"."roi",
+        "pc"."hit_price",
+        "pc"."finished_at",
         "pc"."created_at",
         "pc"."updated_at",
         "m"."id" as "moniest_id",
@@ -966,6 +988,8 @@ type GetSubscribedActivePostsWithOwnRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -1018,6 +1042,8 @@ func (q *Queries) GetSubscribedActivePostsWithOwn(ctx context.Context, arg GetSu
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,
@@ -1073,6 +1099,8 @@ SELECT "pc"."id",
     "pc"."status",
     "pc"."pnl",
     "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
@@ -1168,6 +1196,8 @@ type GetSubscribedDeactivePostsRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -1220,6 +1250,8 @@ func (q *Queries) GetSubscribedDeactivePosts(ctx context.Context, arg GetSubscri
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,
@@ -1276,6 +1308,8 @@ const getSubscribedDeactivePostsWithOwn = `-- name: GetSubscribedDeactivePostsWi
         "pc"."status",
         "pc"."pnl",
         "pc"."roi",
+        "pc"."hit_price",
+        "pc"."finished_at",
         "pc"."created_at",
         "pc"."updated_at",
         "m"."id" as "moniest_id",
@@ -1363,6 +1397,8 @@ UNION ALL
         "pc"."status",
         "pc"."pnl",
         "pc"."roi",
+        "pc"."hit_price",
+        "pc"."finished_at",
         "pc"."created_at",
         "pc"."updated_at",
         "m"."id" as "moniest_id",
@@ -1457,6 +1493,8 @@ type GetSubscribedDeactivePostsWithOwnRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -1509,6 +1547,8 @@ func (q *Queries) GetSubscribedDeactivePostsWithOwn(ctx context.Context, arg Get
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,

@@ -169,6 +169,8 @@ SELECT "pc"."id",
     "pc"."status",
     "pc"."pnl",
     "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
@@ -260,6 +262,8 @@ type GetMoniestActivePostsByUsernameRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -312,6 +316,8 @@ func (q *Queries) GetMoniestActivePostsByUsername(ctx context.Context, arg GetMo
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,
@@ -367,6 +373,8 @@ SELECT "pc"."id",
     "pc"."status",
     "pc"."pnl",
     "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
@@ -456,6 +464,8 @@ type GetMoniestAllPostsByUsernameRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -508,6 +518,8 @@ func (q *Queries) GetMoniestAllPostsByUsername(ctx context.Context, arg GetMonie
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,
@@ -563,6 +575,8 @@ SELECT "pc"."id",
     "pc"."status",
     "pc"."pnl",
     "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
@@ -656,6 +670,8 @@ type GetMoniestDeactivePostsByUsernameRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -708,6 +724,8 @@ func (q *Queries) GetMoniestDeactivePostsByUsername(ctx context.Context, arg Get
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,
@@ -763,6 +781,8 @@ SELECT "pc"."id",
     "pc"."status",
     "pc"."pnl",
     "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
@@ -854,6 +874,8 @@ type GetOwnActivePostsByUsernameRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -906,6 +928,8 @@ func (q *Queries) GetOwnActivePostsByUsername(ctx context.Context, arg GetOwnAct
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,
@@ -961,6 +985,8 @@ SELECT "pc"."id",
     "pc"."status",
     "pc"."pnl",
     "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
     "pc"."created_at",
     "pc"."updated_at",
     "m"."id" as "moniest_id",
@@ -1050,6 +1076,8 @@ type GetOwnAllPostsByUsernameRow struct {
 	Status                       PostCryptoStatus     `json:"status"`
 	Pnl                          float64              `json:"pnl"`
 	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
 	CreatedAt                    time.Time            `json:"created_at"`
 	UpdatedAt                    time.Time            `json:"updated_at"`
 	MoniestID                    string               `json:"moniest_id"`
@@ -1102,6 +1130,8 @@ func (q *Queries) GetOwnAllPostsByUsername(ctx context.Context, arg GetOwnAllPos
 			&i.Status,
 			&i.Pnl,
 			&i.Roi,
+			&i.HitPrice,
+			&i.FinishedAt,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.MoniestID,

@@ -2287,33 +2287,17 @@ const docTemplate = `{
         "db.PostMetricsRow": {
             "type": "object",
             "properties": {
-                "num_fail_posts": {
-                    "type": "integer"
-                },
-                "num_finished_posts": {
-                    "type": "integer"
-                },
-                "num_futures_posts": {
-                    "type": "integer"
-                },
-                "num_pending_posts": {
-                    "type": "integer"
-                },
-                "num_spot_posts": {
-                    "type": "integer"
-                },
-                "num_success_posts": {
-                    "type": "integer"
-                },
+                "num_fail_posts": {},
+                "num_finished_posts": {},
+                "num_futures_posts": {},
+                "num_pending_posts": {},
+                "num_spot_posts": {},
+                "num_success_posts": {},
                 "num_total_posts": {
                     "type": "integer"
                 },
-                "num_unfinished_posts": {
-                    "type": "integer"
-                },
-                "num_unique_moniests": {
-                    "type": "integer"
-                }
+                "num_unfinished_posts": {},
+                "num_unique_moniests": {}
             }
         },
         "db.UserLanguage": {
@@ -2686,6 +2670,12 @@ const docTemplate = `{
                 },
                 "finished": {
                     "type": "boolean"
+                },
+                "finished_at": {
+                    "type": "string"
+                },
+                "hit_price": {
+                    "type": "number"
                 },
                 "id": {
                     "type": "string"

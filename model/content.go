@@ -71,6 +71,8 @@ type GetContentPostResponse struct {
 	Roi         float64                 `json:"roi"`
 	Finished    bool                    `json:"finished"`
 	Status      db.PostCryptoStatus     `json:"status"`
+	HitPrice    *float64                `json:"hit_price,omitempty"`
+	FinishedAt  *time.Time              `json:"finished_at,omitempty"`
 	CreatedAt   time.Time               `json:"created_at"`
 	UpdatedAt   time.Time               `json:"updated_at"`
 	Description string                  `json:"description,omitempty"`
@@ -95,6 +97,8 @@ type GetOwnPostResponse struct {
 	Roi         float64                 `json:"roi"`
 	Finished    bool                    `json:"finished"`
 	Status      db.PostCryptoStatus     `json:"status"`
+	HitPrice    *float64                `json:"hit_price,omitempty"`
+	FinishedAt  *time.Time              `json:"finished_at,omitempty"`
 	CreatedAt   time.Time               `json:"created_at"`
 	UpdatedAt   time.Time               `json:"updated_at"`
 	Description string                  `json:"description,omitempty"`
@@ -134,6 +138,8 @@ func NewGetContentPostResponse(posts PostDBResponse) []GetContentPostResponse {
 			Roi:         post.Roi,
 			Finished:    post.Finished,
 			Status:      post.Status,
+			HitPrice:    util.SafeSQLNullToFloat(post.HitPrice),
+			FinishedAt:  util.SafeSQLNullToTime(post.FinishedAt),
 			CreatedAt:   post.CreatedAt,
 			UpdatedAt:   post.UpdatedAt,
 			Description: post.PostDescription.String,
@@ -189,6 +195,8 @@ func NewGetOwnPostResponse(posts OwnPostDBResponse) []GetOwnPostResponse {
 			Roi:         post.Roi,
 			Finished:    post.Finished,
 			Status:      post.Status,
+			HitPrice:    util.SafeSQLNullToFloat(post.HitPrice),
+			FinishedAt:  util.SafeSQLNullToTime(post.FinishedAt),
 			CreatedAt:   post.CreatedAt,
 			UpdatedAt:   post.UpdatedAt,
 			Description: post.PostDescription.String,
