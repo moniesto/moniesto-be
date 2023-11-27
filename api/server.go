@@ -134,7 +134,7 @@ func (server *Server) setupRouter() {
 		adminRouters.POST("/run/:runner", server.ADMIN_Runner)
 		adminRouters.GET("/data/:data_type", server.ADMIN_Data)
 		adminRouters.POST("/operations/:username/subscribe/:moniest_username", server.ADMIN_OPERATIONS_Subscribe)
-		// adminRouters.GET("/test", server.ADMIN_Test)
+		adminRouters.GET("/test", server.ADMIN_Test)
 	}
 
 	// Payment routes
@@ -181,7 +181,8 @@ func (server *Server) setupCRONJobs() {
 	// JOB: checking ended subscription
 	job.AddFunc(util.JOB_TYPE_EVERY_HOUR, server.DetectExpiredActiveSubscriptions)
 
-	job.Start()
+	// JOB: Moniest ROBOTS
+	job.AddFunc(util.JOB_TYPE_EVERY_HOUR, server.MoniestRobot)
 }
 
 // Start runs the HTTP server on a specific address.

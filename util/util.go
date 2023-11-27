@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"strconv"
 	"strings"
 	"time"
 
@@ -125,6 +126,15 @@ func Contains[T comparable](slice []T, element T) bool {
 	return false
 }
 
+func Remove[T comparable](slice []T, element T) []T {
+	for i, v := range slice {
+		if v == element {
+			return append(slice[:i], slice[i+1:]...)
+		}
+	}
+	return slice
+}
+
 // emailWithoutLocal returns email without local(part after + sign) part
 func EmailWithoutLocal(email string) (string, error) {
 	// Split the email address at the "@" symbol to separate the local part and domain part
@@ -171,4 +181,38 @@ func StructToJSON(data any) string {
 	}
 
 	return string(str)
+}
+
+func IsNight() bool {
+	currentTime := Now()
+	hour := currentTime.Hour()
+
+	// Check if the hour is between 11 PM (23) and 8 AM (8)
+	return hour >= 23 || hour < 8
+}
+
+// SimplifyRandomPrices -> mainPrice=1.0001, randomPrice=1.00009999999 -> turns randomPrice -> 1.00009
+func SimplifyRandomPrices(mainPrice, randomPrice float64) float64 {
+	decimalPlacesA := numDecPlaces(mainPrice)
+
+	maxDecimalPlaces := decimalPlacesA + 1
+
+	simplifiedB := cutDecimal(randomPrice, maxDecimalPlaces)
+
+	return simplifiedB
+}
+
+func numDecPlaces(v float64) int {
+	s := strconv.FormatFloat(v, 'f', -1, 64)
+	i := strings.IndexByte(s, '.')
+	if i > -1 {
+		return len(s) - i - 1
+	}
+	return 0
+}
+
+func cutDecimal(A float64, B int) float64 {
+	pow := math.Pow(10, float64(B))
+	result := math.Floor(A*pow) / pow
+	return result
 }

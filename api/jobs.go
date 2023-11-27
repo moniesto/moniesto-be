@@ -51,7 +51,7 @@ func (server *Server) Analyzer() {
 }
 
 func (server *Server) UpdateMoniestPostCryptoStatistics() {
-	system.Log("JOB TRIGGER: Update Post Status")
+	system.Log("JOB TRIGGER: Update Moniest Stats")
 	defer system.Timer("Updating All Moniests Post Crypto Statistics")()
 
 	ctx := gin.Context{}
@@ -122,5 +122,12 @@ func (server *Server) DetectExpiredPendingTransaction() {
 		if err != nil {
 			system.LogError(fmt.Sprintf("JOB ERROR: EXPIRED PENDING BINANCE TRANSACTIONS => %s", err.Error()))
 		}
+	}
+}
+
+func (server *Server) MoniestRobot() {
+	err := server.service.CreateRandomPost()
+	if err != nil {
+		system.LogError(err.Error())
 	}
 }

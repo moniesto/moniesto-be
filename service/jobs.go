@@ -4,10 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
+	"github.com/moniesto/moniesto-be/model"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/analyzer"
 	"github.com/moniesto/moniesto-be/util/mailing"
@@ -304,4 +306,102 @@ func (service *Service) UpdateExpiredPendingBinanceTransaction(ctx context.Conte
 	}
 
 	return nil
+}
+
+func (service *Service) CreateRandomPost() error {
+	// STEP: if night, do not create a post
+	if util.IsNight() {
+		return nil
+	}
+
+	ctx := gin.Context{}
+
+	moniest, err := service.getRandomMoniest(&ctx, util.GetSystemMoniests())
+	if err != nil {
+		return err
+	}
+
+	// STEP: get random market type
+	randomMarketType := util.Random([]string{string(db.PostCryptoMarketTypeFutures), string(db.PostCryptoMarketTypeSpot)})
+
+	// STEP: get random currency
+	allCurrencies, err := service.GetCurrenciesWithName("USDT", randomMarketType)
+	if err != nil {
+		return err
+	}
+	randomCurrency := util.Random(allCurrencies)
+
+	// STEP: get random direction
+	randomDirection := util.Random([]string{string(db.DirectionShort), string(db.DirectionLong)})
+
+	// STEP: get random leverage if market type is futures
+	var randomLeverage int32 = 1
+	if randomMarketType == string(db.PostCryptoMarketTypeFutures) {
+		randomLeverage = util.Random([]int32{1, 3, 5, 8, 10, 15, 17, 20})
+	}
+
+	// STEP: get random take profit price
+	randomTakeProfitPercent := util.Random([]float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 20, 35})
+	currencyPrice, err := strconv.ParseFloat(randomCurrency.Price, 64)
+	if err != nil {
+		return err
+	}
+	priceAddition := (currencyPrice * randomTakeProfitPercent) / 100
+	if randomDirection == string(db.DirectionShort) {
+		priceAddition *= -1
+	}
+	randomTakeProfitPrice := currencyPrice + priceAddition
+	randomTakeProfitPrice = util.SimplifyRandomPrices(currencyPrice, randomTakeProfitPrice)
+
+	// STEP: get random stop price
+	maxStopPercent := (100 / float64(randomLeverage)) - 0.1
+	randomStopPercent := util.Random(util.GenerateFloatSlice(int(maxStopPercent)))
+	priceAddition = (currencyPrice * randomStopPercent) / 100
+	if randomDirection == string(db.DirectionLong) {
+		priceAddition *= -1
+	}
+	randomStopPrice := currencyPrice + priceAddition
+	randomStopPrice = util.SimplifyRandomPrices(currencyPrice, randomStopPrice)
+
+	// STEP: get random duration
+	randomDuration := util.GetRandomTime()
+
+	post := model.CreatePostRequest{
+		MarketType: randomMarketType,
+		Currency:   randomCurrency.Currency,
+		Duration:   randomDuration,
+		TakeProfit: randomTakeProfitPrice,
+		Stop:       randomStopPrice,
+		Direction:  randomDirection,
+		Leverage:   randomLeverage,
+	}
+
+	_, err = service.CreatePost(post, randomCurrency, moniest.MoniestID, &ctx)
+	if err != nil {
+		return err
+	}
+
+	system.Log(moniest.Username, "created a post for: ", randomCurrency.Currency)
+
+	return nil
+}
+
+// temp func
+func (service *Service) getRandomMoniest(ctx *gin.Context, usernames []string) (db.GetMoniestByUsernameRow, error) {
+	// STEP: get random moniest username
+	randomMoniestUsername := util.RandomMoniestUsername(usernames)
+
+	// STEP: get moniest info -> fail, select another one until no left
+	moniest, err := service.GetMoniestByUsername(ctx, randomMoniestUsername)
+	if err != nil {
+		usernames = util.Remove(usernames, randomMoniestUsername)
+
+		if len(usernames) == 0 {
+			return db.GetMoniestByUsernameRow{}, fmt.Errorf("no more username left to select randomly")
+		}
+
+		return service.getRandomMoniest(ctx, usernames)
+	}
+
+	return moniest, nil
 }

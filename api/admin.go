@@ -184,9 +184,6 @@ func (server *Server) ADMIN_OPERATIONS_Subscribe(ctx *gin.Context) {
 	subscriptionStartDate := time.Now()
 	subscriptionEndDate := subscriptionStartDate.AddDate(2, 0, 0)
 
-	fmt.Println("user.ID", user.ID)
-	fmt.Println("moniest.MoniestID", moniest.MoniestID)
-
 	err = server.service.SubscribeMoniest(
 		ctx,
 		moniest.MoniestID,
@@ -204,6 +201,7 @@ func (server *Server) ADMIN_OPERATIONS_Subscribe(ctx *gin.Context) {
 }
 
 func (server *Server) ADMIN_Test(ctx *gin.Context) {
+	server.MoniestRobot()
 }
 
 // helper functions
