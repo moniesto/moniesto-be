@@ -125,8 +125,8 @@ func (server *Server) DetectExpiredPendingTransaction() {
 	}
 }
 
-func (server *Server) MoniestRobot() {
-	err := server.service.CreateRandomPost()
+func (server *Server) CreatePostRobot() {
+	err := server.service.CreateRandomPost("")
 	if err != nil {
 		system.LogError(err.Error())
 	}

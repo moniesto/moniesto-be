@@ -66,3 +66,10 @@ func (service *Service) ADMIN_DataUser(ctx *gin.Context, limit, offset int) (any
 
 	return users, nil
 }
+
+func (service *Service) ADMIN_CreatePost(username string) {
+	err := service.CreateRandomPost(username)
+	if err != nil {
+		system.LogError(err.Error())
+	}
+}

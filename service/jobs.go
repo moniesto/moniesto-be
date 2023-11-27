@@ -308,7 +308,7 @@ func (service *Service) UpdateExpiredPendingBinanceTransaction(ctx context.Conte
 	return nil
 }
 
-func (service *Service) CreateRandomPost() error {
+func (service *Service) CreateRandomPost(username string) error {
 	// STEP: if night, do not create a post
 	if util.IsNight() {
 		return nil
@@ -316,7 +316,13 @@ func (service *Service) CreateRandomPost() error {
 
 	ctx := gin.Context{}
 
-	moniest, err := service.getRandomMoniest(&ctx, util.GetSystemMoniests())
+	// STEP: get moniest, if username is specified, get only that moniest
+	allSystemMoniests := util.GetSystemMoniests()
+	if username != "" {
+		allSystemMoniests = []string{username}
+	}
+
+	moniest, err := service.getRandomMoniest(&ctx, allSystemMoniests)
 	if err != nil {
 		return err
 	}

@@ -655,6 +655,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/operations/:username/create-post": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "or ` + "`" + `admin/operations/:username/create-post` + "`" + ` for specific moniest",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Operation: Create Post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "not admin",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/operations/:username/subscribe/:moniest_username": {
             "post": {
                 "security": [
@@ -701,6 +741,46 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "user or moniest not found",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "server error",
+                        "schema": {
+                            "$ref": "#/definitions/clientError.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/operations/create-post": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "or ` + "`" + `admin/operations/:username/create-post` + "`" + ` for specific moniest",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Operation: Create Post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user username",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "not admin",
                         "schema": {
                             "$ref": "#/definitions/clientError.ErrorResponse"
                         }

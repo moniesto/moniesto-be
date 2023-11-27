@@ -1174,6 +1174,31 @@ paths:
       summary: Get Metrics
       tags:
       - Admin
+  /admin/operations/:username/create-post:
+    post:
+      description: or `admin/operations/:username/create-post` for specific moniest
+      parameters:
+      - description: user username
+        in: path
+        name: username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: not admin
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: 'Operation: Create Post'
+      tags:
+      - Admin
   /admin/operations/:username/subscribe/:moniest_username:
     post:
       description: Make subscribtion to any moniesto for any user
@@ -1210,6 +1235,31 @@ paths:
       security:
       - bearerAuth: []
       summary: 'Operation: Subscribe'
+      tags:
+      - Admin
+  /admin/operations/create-post:
+    post:
+      description: or `admin/operations/:username/create-post` for specific moniest
+      parameters:
+      - description: user username
+        in: path
+        name: username
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: not admin
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: 'Operation: Create Post'
       tags:
       - Admin
   /admin/run/:runner:

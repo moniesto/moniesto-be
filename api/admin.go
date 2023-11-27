@@ -166,6 +166,10 @@ func (server *Server) ADMIN_Data(ctx *gin.Context) {
 // @Failure 500 {object} clientError.ErrorResponse "server error"
 // @Router /admin/operations/:username/subscribe/:moniest_username [post]
 func (server *Server) ADMIN_OPERATIONS_Subscribe(ctx *gin.Context) {
+	if !server.isAdmin(ctx) {
+		return
+	}
+
 	// STEP: get params [username, moniest_username]
 	username := ctx.Param("username")
 	moniestUsername := ctx.Param("moniest_username")
@@ -200,8 +204,29 @@ func (server *Server) ADMIN_OPERATIONS_Subscribe(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+// @Summary Operation: Create Post
+// @Description or `admin/operations/:username/create-post` for specific moniest
+// @Security bearerAuth
+// @Tags Admin
+// @Param username path string true "user username"
+// @Success 200
+// @Failure 403 {object} clientError.ErrorResponse "not admin"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /admin/operations/:username/create-post [post]
+// @Router /admin/operations/create-post [post]
+func (server *Server) ADMIN_OPERATIONS_CreatePost(ctx *gin.Context) {
+	if !server.isAdmin(ctx) {
+		return
+	}
+
+	// STEP: get params [username, moniest_username]
+	username := ctx.Param("username")
+
+	server.service.ADMIN_CreatePost(username)
+}
+
 func (server *Server) ADMIN_Test(ctx *gin.Context) {
-	server.MoniestRobot()
+	// server.MoniestRobot()
 }
 
 // helper functions
