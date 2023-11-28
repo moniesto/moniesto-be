@@ -343,7 +343,7 @@ func (service *Service) CreateRandomPost(username string) error {
 	// STEP: get random leverage if market type is futures
 	var randomLeverage int32 = 1
 	if randomMarketType == string(db.PostCryptoMarketTypeFutures) {
-		randomLeverage = util.Random([]int32{1, 3, 5, 8, 10, 15, 17, 20})
+		randomLeverage = util.Random([]int32{2, 3, 4, 5, 6, 7, 8, 10, 12, 14})
 	}
 
 	// STEP: get random take profit price
