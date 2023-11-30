@@ -1427,6 +1427,35 @@ paths:
       summary: Search Moniest
       tags:
       - Content
+  /content/post/:post_id:
+    get:
+      description: Get Post by post id
+      parameters:
+      - description: post id
+        in: path
+        name: post_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.GetContentPostResponse'
+        "404":
+          description: not found
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+        "500":
+          description: server error
+          schema:
+            $ref: '#/definitions/clientError.ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get Content Post
+      tags:
+      - Content
   /content/posts:
     get:
       consumes:

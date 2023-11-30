@@ -86,6 +86,90 @@ FROM "post_crypto" AS pc
 ORDER BY "pc"."created_at" DESC
 LIMIT $2 OFFSET $3;
 
+-- name: GetPostByID :one
+SELECT "pc"."id",
+    "pc"."market_type",
+    "pc"."currency",
+    "pc"."start_price",
+    "pc"."duration",
+    "pc"."take_profit",
+    "pc"."stop",
+    "pc"."target1",
+    "pc"."target2",
+    "pc"."target3",
+    "pc"."direction",
+    "pc"."leverage",
+    "pc"."finished",
+    "pc"."status",
+    "pc"."pnl",
+    "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
+    "pc"."created_at",
+    "pc"."updated_at",
+    "m"."id" AS "moniest_id",
+    "m"."bio",
+    "m"."description",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
+    "u"."id" AS "user_id",
+    "u"."fullname",
+    "u"."username",
+    "u"."email_verified",
+    "u"."location",
+    "pcd"."description" AS "post_description",
+    COALESCE(
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE(
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE(
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE(
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "post_crypto" AS pc
+    INNER JOIN "user_subscription" AS us ON "pc"."moniest_id" = "us"."moniest_id"
+    INNER JOIN "moniest" AS m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "user" AS u ON "m"."user_id" = "u"."id"
+    INNER JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "m"."id"
+    LEFT JOIN "post_crypto_description" AS pcd ON "pcd"."post_id" = "pc"."id"
+WHERE "pc"."id" = $1
+LIMIT 1;
+
 -- name: GetSubscribedActivePostsWithOwn :many
 (
     SELECT "pc"."id",

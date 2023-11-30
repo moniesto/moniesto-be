@@ -117,6 +117,23 @@ func (service *Service) GetContentPosts(ctx *gin.Context, userID string, subscri
 	return model.NewGetContentPostResponse(posts), nil
 }
 
+func (service *Service) GetContentPostByID(ctx *gin.Context, postID string) ([]model.GetContentPostResponse, error) {
+
+	postFromDB, err := service.Store.GetPostByID(ctx, postID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, clientError.CreateError(http.StatusNotFound, clientError.Content_GetPost_PostNotFound)
+		}
+
+		return nil, clientError.CreateError(http.StatusInternalServerError, clientError.Content_GetPost_ServerErrorGetPost)
+	}
+
+	postsFromDB := []db.GetPostByIDRow{postFromDB}
+
+	posts := *(*model.PostDBResponse)(unsafe.Pointer(&postsFromDB))
+	return model.NewGetContentPostResponse(posts), nil
+}
+
 func (service *Service) GetContentMoniests(ctx *gin.Context, user_id string, limit, offset int) ([]model.UserAsContent, error) {
 	// STEP: get all moniests -> highest pnl first
 	params := db.GetMoniestsParams{

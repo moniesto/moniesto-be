@@ -59,6 +59,29 @@ func (server *Server) getContentPosts(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, posts)
 }
 
+// @Summary Get Content Post
+// @Description Get Post by post id
+// @Security bearerAuth
+// @Tags Content
+// @Produce json
+// @Param post_id path string true "post id"
+// @Success 200 {object} model.GetContentPostResponse
+// @Failure 404 {object} clientError.ErrorResponse "not found"
+// @Failure 500 {object} clientError.ErrorResponse "server error"
+// @Router /content/post/:post_id [get]
+func (server *Server) getContentPost(ctx *gin.Context) {
+	// STEP: get params [username, moniest_username]
+	postId := ctx.Param("post_id")
+
+	posts, err := server.service.GetContentPostByID(ctx, postId)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, posts[0])
+}
+
 // @Summary Get Content Moniests
 // @Description Get All moniests
 // @Security bearerAuth

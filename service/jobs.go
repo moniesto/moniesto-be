@@ -90,6 +90,8 @@ func (service *Service) UpdateFinishedPostStatus(ctx *context.Context, activePos
 
 	system.Log("post", activePost.ID, "status:", status, "pnl", pnl, "roi(%)", roi)
 
+	// TODO: on success status -> trigger success post activities (share on X-twitter)
+
 	return nil
 }
 

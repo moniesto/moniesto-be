@@ -7,8 +7,12 @@ import (
 var systemMoniests = []string{
 	"astrader",
 	"parvin",
+	"cryptofamily",
+	"lowriskman",
 	"onebull",
 	"booster_group",
+	"cryptomonster",
+	"astrader",
 }
 
 func GetSystemMoniests() []string {

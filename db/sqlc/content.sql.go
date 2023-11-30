@@ -583,6 +583,186 @@ func (q *Queries) GetMoniests(ctx context.Context, arg GetMoniestsParams) ([]Get
 	return items, nil
 }
 
+const getPostByID = `-- name: GetPostByID :one
+SELECT "pc"."id",
+    "pc"."market_type",
+    "pc"."currency",
+    "pc"."start_price",
+    "pc"."duration",
+    "pc"."take_profit",
+    "pc"."stop",
+    "pc"."target1",
+    "pc"."target2",
+    "pc"."target3",
+    "pc"."direction",
+    "pc"."leverage",
+    "pc"."finished",
+    "pc"."status",
+    "pc"."pnl",
+    "pc"."roi",
+    "pc"."hit_price",
+    "pc"."finished_at",
+    "pc"."created_at",
+    "pc"."updated_at",
+    "m"."id" AS "moniest_id",
+    "m"."bio",
+    "m"."description",
+    "mpcs"."pnl_7days",
+    "mpcs"."roi_7days",
+    "mpcs"."win_rate_7days",
+    "mpcs"."pnl_30days",
+    "mpcs"."roi_30days",
+    "mpcs"."win_rate_30days",
+    "mpcs"."pnl_total",
+    "mpcs"."roi_total",
+    "mpcs"."win_rate_total",
+    "u"."id" AS "user_id",
+    "u"."fullname",
+    "u"."username",
+    "u"."email_verified",
+    "u"."location",
+    "pcd"."description" AS "post_description",
+    COALESCE(
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_link",
+    COALESCE(
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'profile_photo'
+        ),
+        ''
+    ) AS "profile_photo_thumbnail_link",
+    COALESCE(
+        (
+            SELECT "image"."link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_link",
+    COALESCE(
+        (
+            SELECT "image"."thumbnail_link"
+            FROM "image"
+            WHERE "image"."user_id" = "u"."id"
+                AND "image"."type" = 'background_photo'
+        ),
+        ''
+    ) AS "background_photo_thumbnail_link"
+FROM "post_crypto" AS pc
+    INNER JOIN "user_subscription" AS us ON "pc"."moniest_id" = "us"."moniest_id"
+    INNER JOIN "moniest" AS m ON "pc"."moniest_id" = "m"."id"
+    INNER JOIN "user" AS u ON "m"."user_id" = "u"."id"
+    INNER JOIN "moniest_post_crypto_statistics" AS mpcs ON "mpcs"."moniest_id" = "m"."id"
+    LEFT JOIN "post_crypto_description" AS pcd ON "pcd"."post_id" = "pc"."id"
+WHERE "pc"."id" = $1
+LIMIT 1
+`
+
+type GetPostByIDRow struct {
+	ID                           string               `json:"id"`
+	MarketType                   PostCryptoMarketType `json:"market_type"`
+	Currency                     string               `json:"currency"`
+	StartPrice                   float64              `json:"start_price"`
+	Duration                     time.Time            `json:"duration"`
+	TakeProfit                   float64              `json:"take_profit"`
+	Stop                         float64              `json:"stop"`
+	Target1                      sql.NullFloat64      `json:"target1"`
+	Target2                      sql.NullFloat64      `json:"target2"`
+	Target3                      sql.NullFloat64      `json:"target3"`
+	Direction                    Direction            `json:"direction"`
+	Leverage                     int32                `json:"leverage"`
+	Finished                     bool                 `json:"finished"`
+	Status                       PostCryptoStatus     `json:"status"`
+	Pnl                          float64              `json:"pnl"`
+	Roi                          float64              `json:"roi"`
+	HitPrice                     sql.NullFloat64      `json:"hit_price"`
+	FinishedAt                   sql.NullTime         `json:"finished_at"`
+	CreatedAt                    time.Time            `json:"created_at"`
+	UpdatedAt                    time.Time            `json:"updated_at"`
+	MoniestID                    string               `json:"moniest_id"`
+	Bio                          sql.NullString       `json:"bio"`
+	Description                  sql.NullString       `json:"description"`
+	Pnl7days                     sql.NullFloat64      `json:"pnl_7days"`
+	Roi7days                     sql.NullFloat64      `json:"roi_7days"`
+	WinRate7days                 sql.NullFloat64      `json:"win_rate_7days"`
+	Pnl30days                    sql.NullFloat64      `json:"pnl_30days"`
+	Roi30days                    sql.NullFloat64      `json:"roi_30days"`
+	WinRate30days                sql.NullFloat64      `json:"win_rate_30days"`
+	PnlTotal                     sql.NullFloat64      `json:"pnl_total"`
+	RoiTotal                     sql.NullFloat64      `json:"roi_total"`
+	WinRateTotal                 sql.NullFloat64      `json:"win_rate_total"`
+	UserID                       string               `json:"user_id"`
+	Fullname                     string               `json:"fullname"`
+	Username                     string               `json:"username"`
+	EmailVerified                bool                 `json:"email_verified"`
+	Location                     sql.NullString       `json:"location"`
+	PostDescription              sql.NullString       `json:"post_description"`
+	ProfilePhotoLink             interface{}          `json:"profile_photo_link"`
+	ProfilePhotoThumbnailLink    interface{}          `json:"profile_photo_thumbnail_link"`
+	BackgroundPhotoLink          interface{}          `json:"background_photo_link"`
+	BackgroundPhotoThumbnailLink interface{}          `json:"background_photo_thumbnail_link"`
+}
+
+func (q *Queries) GetPostByID(ctx context.Context, id string) (GetPostByIDRow, error) {
+	row := q.db.QueryRowContext(ctx, getPostByID, id)
+	var i GetPostByIDRow
+	err := row.Scan(
+		&i.ID,
+		&i.MarketType,
+		&i.Currency,
+		&i.StartPrice,
+		&i.Duration,
+		&i.TakeProfit,
+		&i.Stop,
+		&i.Target1,
+		&i.Target2,
+		&i.Target3,
+		&i.Direction,
+		&i.Leverage,
+		&i.Finished,
+		&i.Status,
+		&i.Pnl,
+		&i.Roi,
+		&i.HitPrice,
+		&i.FinishedAt,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.MoniestID,
+		&i.Bio,
+		&i.Description,
+		&i.Pnl7days,
+		&i.Roi7days,
+		&i.WinRate7days,
+		&i.Pnl30days,
+		&i.Roi30days,
+		&i.WinRate30days,
+		&i.PnlTotal,
+		&i.RoiTotal,
+		&i.WinRateTotal,
+		&i.UserID,
+		&i.Fullname,
+		&i.Username,
+		&i.EmailVerified,
+		&i.Location,
+		&i.PostDescription,
+		&i.ProfilePhotoLink,
+		&i.ProfilePhotoThumbnailLink,
+		&i.BackgroundPhotoLink,
+		&i.BackgroundPhotoThumbnailLink,
+	)
+	return i, err
+}
+
 const getSubscribedActivePosts = `-- name: GetSubscribedActivePosts :many
 SELECT "pc"."id",
     "pc"."market_type",

@@ -122,6 +122,7 @@ func (server *Server) setupRouter() {
 	// Content routes
 	contentRouters := router.Group("/content").Use(authMiddleware(server.tokenMaker))
 	{
+		contentRouters.GET("/post/:post_id", server.getContentPost)
 		contentRouters.GET("/posts", server.getContentPosts)
 		contentRouters.GET("/moniests", server.getContentMoniests)
 		contentRouters.GET("/moniests/search", server.searchMoniest)
