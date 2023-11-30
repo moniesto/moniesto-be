@@ -187,6 +187,8 @@ func (server *Server) setupCRONJobs() {
 
 	// JOB: Moniest ROBOTS
 	job.AddFunc(util.JOB_TYPE_EVERY_HOUR, server.CreatePostRobot)
+
+	job.Start()
 }
 
 // Start runs the HTTP server on a specific address.
