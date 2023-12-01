@@ -13,6 +13,19 @@ var systemMoniests = []string{
 	"booster_group",
 	"cryptomonster",
 	"astrader",
+
+	"kainpainter",
+	"layneschmitz",
+	"sukrukara",
+	"mustafayuksel",
+	"danabarnhill",
+	"johnnamunn",
+	"lizetpoirier8",
+	"journeyfarr2",
+	"gregoriobreen",
+	"rosalindaher",
+	"milesricketts",
+	"yusufcan7",
 }
 
 func GetSystemMoniests() []string {
