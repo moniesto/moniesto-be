@@ -225,6 +225,87 @@ func (server *Server) ADMIN_OPERATIONS_CreatePost(ctx *gin.Context) {
 	server.service.ADMIN_CreatePost(username)
 }
 
+func (server *Server) ADMIN_OPERATIONS_BeMoniest(ctx *gin.Context) {
+	if !server.isAdmin(ctx) {
+		return
+	}
+
+	var req model.CreateMoniestRequest
+
+	// STEP: bind/validation
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusNotAcceptable, clientError.GetError(clientError.Moniest_CreateMoniest_InvalidBody))
+		return
+	}
+
+	// STEP: get params [username, moniest_username]
+	username := ctx.Param("username")
+
+	user, err := server.service.GetUserByUsername(ctx, username)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: check user is already moniest or not
+	userIsMoniest, err := server.service.CheckUserIsMoniestByUserID(ctx, user.ID)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+	if userIsMoniest {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, clientError.GetError(clientError.Moniest_CreateMoniest_UserIsAlreadyMoniest))
+		return
+	}
+
+	// STEP: verify user email
+	err = server.service.VerifyEmail(ctx, user.ID)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: create moniest
+	moniest, err := server.service.CreateMoniest(ctx, user.ID, req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: create subscription info
+	_, err = server.service.CreateSubsriptionInfo(ctx, moniest.ID, req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: create payout info
+	_, err = server.service.CreatePayoutInfo(ctx, moniest.ID, req)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: create moniest post crypto statistics
+	_, err = server.service.CreateMoniestPostCryptoStatistics(ctx, moniest.ID)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: get created moniest data [+ user data]
+	createdMoniest, err := server.service.GetMoniestByMoniestID(ctx, moniest.ID)
+	if err != nil {
+		ctx.AbortWithStatusJSON(clientError.ParseError(err))
+		return
+	}
+
+	// STEP: update data form
+	response := model.NewCreateMoniestResponse(createdMoniest)
+
+	ctx.JSON(http.StatusOK, response)
+}
+
 func (server *Server) ADMIN_Test(ctx *gin.Context) {
 	// server.MoniestRobot()
 }

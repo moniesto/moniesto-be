@@ -137,6 +137,7 @@ func (server *Server) setupRouter() {
 		adminRouters.POST("/operations/:username/subscribe/:moniest_username", server.ADMIN_OPERATIONS_Subscribe)
 		adminRouters.POST("/operations/:username/create-post", server.ADMIN_OPERATIONS_CreatePost)
 		adminRouters.POST("/operations/create-post", server.ADMIN_OPERATIONS_CreatePost)
+		adminRouters.POST("/operations/:username/be-moniest", server.ADMIN_OPERATIONS_BeMoniest)
 
 		// adminRouters.GET("/test", server.ADMIN_Test)
 	}
