@@ -187,7 +187,7 @@ func (server *Server) setupCRONJobs() {
 	job.AddFunc(util.JOB_TYPE_EVERY_HOUR, server.DetectExpiredActiveSubscriptions)
 
 	// JOB: Moniest ROBOTS
-	job.AddFunc(util.JOB_TYPE_EVERY_30TH_MINUTE, server.CreatePostRobot)
+	job.AddFunc(util.JOB_TYPE_EVERY_10TH_MINUTE, server.CreatePostRobot)
 
 	job.Start()
 }
