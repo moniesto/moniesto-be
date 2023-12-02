@@ -11,6 +11,7 @@ import (
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
+	"github.com/moniesto/moniesto-be/util/system"
 	"github.com/moniesto/moniesto-be/util/validation"
 )
 
@@ -306,8 +307,28 @@ func (server *Server) ADMIN_OPERATIONS_BeMoniest(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+func (server *Server) ADMIN_OPERATIONS_ShareTwitterPost(ctx *gin.Context) {
+	if !server.isAdmin(ctx) {
+		return
+	}
+
+	// STEP: get params [username, moniest_username]
+	postID := ctx.Param("post_id")
+
+	fmt.Println("post ID", postID)
+
+	err := server.service.ShareTwitterPost(ctx, postID)
+	if err != nil {
+		system.LogError("share twitter post error", err)
+		ctx.Status(http.StatusInternalServerError)
+
+		return
+	}
+
+	ctx.Status(http.StatusOK)
+}
+
 func (server *Server) ADMIN_Test(ctx *gin.Context) {
-	// server.MoniestRobot()
 }
 
 // helper functions

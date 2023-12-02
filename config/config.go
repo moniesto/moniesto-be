@@ -31,6 +31,7 @@ type Config struct {
 	MinFee                             float64       `mapstructure:"MIN_FEE"`
 	MaxFee                             float64       `mapstructure:"MAX_FEE"`
 	OperationFeePercentage             float64       `mapstructure:"OPERATION_FEE_PERCENTAGE"`
+	ShareTwitterPost                   bool          `mapstructure:"SHARE_TWITTER_POST"`
 
 	// CREDENTIALS
 	TokenKey        string `mapstructure:"TOKEN_KEY"`
@@ -41,6 +42,11 @@ type Config struct {
 
 	BinanceApiKey    string `mapstructure:"BINANCE_API_KEY"`
 	BinanceSecretKey string `mapstructure:"BINANCE_SECRET_KEY"`
+
+	TwitterAccessToken       string `mapstructure:"TWITTER_ACCESS_TOKEN"`
+	TwitterAccessTokenSecret string `mapstructure:"TWITTER_ACCESS_TOKEN_SECRET"`
+	TwitterApiKey            string `mapstructure:"TWITTER_API_KEY"`
+	TwitterApiKeySecret      string `mapstructure:"TWITTER_API_KEY_SECRET"`
 }
 
 // LoadConfig reads configuration from file
@@ -61,7 +67,7 @@ func LoadConfig(path string) (config Config, err error) {
 		return Config{}, err
 	}
 
-	// check configs is valid
+	// check configs are valid
 	err = config.Valid()
 	if err != nil {
 		return Config{}, err

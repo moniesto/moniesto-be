@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/core"
@@ -13,6 +14,7 @@ import (
 	"github.com/moniesto/moniesto-be/pkg/analyzer"
 	"github.com/moniesto/moniesto-be/pkg/mailing"
 	"github.com/moniesto/moniesto-be/pkg/payment/binance"
+	"github.com/moniesto/moniesto-be/pkg/twitter"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/system"
 )
@@ -390,6 +392,36 @@ func (service *Service) CreateRandomPost(username string) error {
 	}
 
 	system.Log(moniest.Username, "created a post for: ", randomCurrency.Currency)
+
+	return nil
+}
+
+// TODO: update media part
+func (service *Service) ShareTwitterPost(ctx context.Context, postID string) error {
+	post, err := service.Store.GetPostByID(ctx, postID)
+	if err != nil {
+		return err
+	}
+
+	content := util.TwitterPostContent
+
+	// replace username
+	content = strings.ReplaceAll(content, "$trader_username", post.Username)
+
+	// replace coin name
+	content = strings.ReplaceAll(content, "$coin_name", post.Currency)
+
+	// replace coin name
+	pnlStr := strconv.FormatFloat(post.Pnl, 'f', -1, 64)
+	content = strings.ReplaceAll(content, "$pnl", pnlStr)
+
+	// TODO: update
+	medias := []string{}
+
+	err = twitter.ShareTweet(service.config, content, medias)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

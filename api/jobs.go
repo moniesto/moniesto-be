@@ -15,6 +15,7 @@ func (server *Server) Analyzer() {
 	defer system.Timer("Analyzer")()
 
 	ctx := gin.Context{}
+	ctxContext := context.Background()
 
 	// STEP: get active posts
 	activePosts, err := server.service.GetAllActivePosts()
@@ -39,6 +40,14 @@ func (server *Server) Analyzer() {
 		if status == db.PostCryptoStatusFail || status == db.PostCryptoStatusSuccess {
 			if !util.Contains(moniestIDs, post.MoniestID) {
 				moniestIDs = append(moniestIDs, post.MoniestID)
+			}
+		}
+
+		// STEP: share twitter post if it is successful
+		if server.config.ShareTwitterPost && status == db.PostCryptoStatusSuccess {
+			err = server.service.ShareTwitterPost(ctxContext, post.ID)
+			if err != nil {
+				system.LogError("JOB ERROR: SHARE TWITTER POST", err)
 			}
 		}
 	}

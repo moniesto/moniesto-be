@@ -28,6 +28,15 @@ var systemMoniests = []string{
 	"yusufcan7",
 }
 
+var TwitterPostContent string = `🚀 Check out #$trader_username's #$coin_name analysis! 📈
+	
+Earned extra $$pnl on a $1000 investment 💰
+
+https://moniesto.com/$trader_username
+
+#$coin_name #BTC #Binance #CryptoInsights #Crypto #CryptoAnalyze
+`
+
 func GetSystemMoniests() []string {
 	return systemMoniests
 }
