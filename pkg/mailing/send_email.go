@@ -17,7 +17,7 @@ import (
 
 const MAX_ATTEMPTS = 10
 
-const mainTemplatePath = "util/mailing/templates/main.html"
+const mainTemplatePath = "pkg/mailing/templates/main.html"
 
 func send(toEmails []string, fromEmail, fromPassword, smtpHost, smtpPort, templatePath, subject string, data any) error {
 	var err error

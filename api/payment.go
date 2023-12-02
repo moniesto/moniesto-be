@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/moniesto/moniesto-be/pkg/payment/binance"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/payment/binance"
 	"github.com/moniesto/moniesto-be/util/system"
 )
 

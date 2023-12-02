@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
-	"github.com/moniesto/moniesto-be/util/storage"
+	"github.com/moniesto/moniesto-be/pkg/storage"
 )
 
 // Service serves logic methods/functions

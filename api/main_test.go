@@ -9,8 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
+	"github.com/moniesto/moniesto-be/pkg/storage"
 	"github.com/moniesto/moniesto-be/service"
-	"github.com/moniesto/moniesto-be/util/storage"
 	"github.com/moniesto/moniesto-be/util/system"
 	"github.com/stretchr/testify/require"
 

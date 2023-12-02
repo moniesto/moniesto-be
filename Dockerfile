@@ -8,7 +8,7 @@ RUN go build -o main cmd/main.go
 FROM alpine:3.15
 WORKDIR /app
 COPY --from=builder /app/main .
-COPY --from=builder /app/util/mailing/templates ./util/mailing/templates
+COPY --from=builder /app/pkg/mailing/templates ./pkg/mailing/templates
 COPY app.env .
 COPY start.sh .
 COPY wait-for.sh .

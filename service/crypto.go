@@ -6,9 +6,9 @@ import (
 
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
+	"github.com/moniesto/moniesto-be/pkg/crypto"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/crypto"
 	"github.com/moniesto/moniesto-be/util/system"
 )
 

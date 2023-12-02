@@ -11,8 +11,8 @@ import (
 	"github.com/moniesto/moniesto-be/config"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/docs"
+	"github.com/moniesto/moniesto-be/pkg/storage"
 	"github.com/moniesto/moniesto-be/service"
-	"github.com/moniesto/moniesto-be/util/storage"
 
 	_ "github.com/lib/pq"
 )

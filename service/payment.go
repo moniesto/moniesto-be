@@ -11,11 +11,11 @@ import (
 	"github.com/moniesto/moniesto-be/core"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
 	"github.com/moniesto/moniesto-be/model"
+	"github.com/moniesto/moniesto-be/pkg/mailing"
+	"github.com/moniesto/moniesto-be/pkg/payment/binance"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/mailing"
 	"github.com/moniesto/moniesto-be/util/message"
-	"github.com/moniesto/moniesto-be/util/payment/binance"
 	"github.com/moniesto/moniesto-be/util/system"
 )
 

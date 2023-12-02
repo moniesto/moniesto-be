@@ -8,9 +8,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/moniesto/moniesto-be/model"
+	"github.com/moniesto/moniesto-be/pkg/mailing"
 	"github.com/moniesto/moniesto-be/token"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/mailing"
 	"github.com/moniesto/moniesto-be/util/system"
 )
 

@@ -6,10 +6,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	db "github.com/moniesto/moniesto-be/db/sqlc"
+	"github.com/moniesto/moniesto-be/pkg/mailing"
+	"github.com/moniesto/moniesto-be/pkg/payment/binance"
 	"github.com/moniesto/moniesto-be/util"
 	"github.com/moniesto/moniesto-be/util/clientError"
-	"github.com/moniesto/moniesto-be/util/mailing"
-	"github.com/moniesto/moniesto-be/util/payment/binance"
 	"github.com/moniesto/moniesto-be/util/system"
 )
 
