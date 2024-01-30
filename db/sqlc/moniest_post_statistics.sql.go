@@ -318,16 +318,6 @@ SET pnl_30days = COALESCE(
         ),
         0
     ),
-    posts_30days = COALESCE(
-        (
-            SELECT ARRAY_AGG(id)
-            FROM post_crypto AS pc
-            WHERE pc.moniest_id = mpcs.moniest_id
-                AND pc.finished = true
-                AND pc.finished_at >= NOW() - INTERVAL '30 days'
-        ),
-        '{}'
-    ),
     updated_at = now()
 WHERE "mpcs"."moniest_id" = ANY($1::varchar [])
 `
@@ -380,16 +370,6 @@ SET pnl_7days = COALESCE(
                 AND pc.finished_at >= NOW() - INTERVAL '7 days'
         ),
         0
-    ),
-    posts_7days = COALESCE(
-        (
-            SELECT ARRAY_AGG(id)
-            FROM post_crypto AS pc
-            WHERE pc.moniest_id = mpcs.moniest_id
-                AND pc.finished = TRUE
-                AND pc.finished_at >= NOW() - INTERVAL '7 days'
-        ),
-        '{}'
     ),
     updated_at = now()
 WHERE "mpcs"."moniest_id" = ANY($1::varchar [])
